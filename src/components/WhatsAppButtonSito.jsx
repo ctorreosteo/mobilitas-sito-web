@@ -4,7 +4,7 @@ import WhatsAppTooltip from './WhatsAppTooltip'
 export default function WhatsAppButtonSito() {
   const handleWhatsAppClick = () => {
     const phoneNumber = '393518198457' // Numero senza + e spazi
-    const message = encodeURIComponent('Ciao, vorrei avere maggiori informazioni sui vostri servizi di osteopatia')
+    const message = encodeURIComponent('Ciao, vorrei avere maggiori informazioni sui vostri trattamenti osteopatici. Grazie e a presto!')
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
     window.open(whatsappUrl, '_blank')
   }
