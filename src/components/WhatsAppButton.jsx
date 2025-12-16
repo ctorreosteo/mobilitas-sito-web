@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import WhatsAppTooltip from './WhatsAppTooltip'
 
 export default function WhatsAppButton() {
   const handleWhatsAppClick = () => {
@@ -9,14 +10,16 @@ export default function WhatsAppButton() {
   }
 
   return (
-    <motion.button
-      onClick={handleWhatsAppClick}
-      className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group"
+    <div className="fixed bottom-6 right-6 z-50">
+      <WhatsAppTooltip />
+      <motion.button
+        onClick={handleWhatsAppClick}
+        className="relative bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group"
       style={{
         backgroundColor: '#25D366',
         boxShadow: '0 8px 25px rgba(37, 211, 102, 0.4)',
-        width: '60px',
-        height: '60px'
+        width: '72px',
+        height: '72px'
       }}
       whileHover={{ 
         scale: 1.1,
@@ -34,8 +37,8 @@ export default function WhatsAppButton() {
     >
       {/* WhatsApp Icon */}
       <svg
-        width="28"
-        height="28"
+        width="34"
+        height="34"
         viewBox="0 0 24 24"
         fill="currentColor"
         className="text-white"
@@ -63,5 +66,6 @@ export default function WhatsAppButton() {
         <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
       </div>
     </motion.button>
+    </div>
   )
 }
