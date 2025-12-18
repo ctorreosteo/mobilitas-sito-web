@@ -113,12 +113,11 @@ export default function OfferSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center px-3 py-1.5 md:px-6 md:py-3 mb-4 md:mb-6"
+            className="inline-flex items-center px-3 py-1.5 md:px-6 md:py-3 mb-4 md:mb-6 mt-9 md:mt-20"
             style={{
               background: 'linear-gradient(to right, rgba(114, 250, 147, 0.1), rgba(0, 191, 255, 0.1))',
               border: '1px solid rgba(114, 250, 147, 0.2)',
-              borderRadius: '50px',
-              marginTop: '36px'
+              borderRadius: '50px'
             }}
           >
             <div 
