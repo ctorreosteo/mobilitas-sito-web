@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, User } from 'lucide-react'
 import Sidebar from './Sidebar'
 
-const Header = () => {
+const Header = ({ topOffset = 0 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
@@ -31,7 +31,10 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-blue-dark shadow-lg border-b border-green fixed top-0 left-0 right-0 z-50 w-full">
+      <header 
+        className="bg-blue-dark shadow-lg border-b border-green fixed left-0 right-0 z-50 w-full" 
+        style={topOffset !== 0 ? { top: `${topOffset}px` } : { top: '0' }}
+      >
         <div className="container mx-auto px-4 w-full max-w-full">
           <div className="flex justify-between items-center h-16 sm:h-20">
             {/* Menu Hamburger - Sinistra */}

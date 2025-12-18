@@ -7,7 +7,7 @@ export default function WhatsAppTooltip() {
   const hideTimerRef = useRef(null)
 
   useEffect(() => {
-    // Mostra la nuvoletta dopo 5 secondi
+    // Mostra la nuvoletta dopo 20 secondi
     const showTimer = setTimeout(() => {
       setIsVisible(true)
       setHasShown(true)
@@ -16,7 +16,7 @@ export default function WhatsAppTooltip() {
       hideTimerRef.current = setTimeout(() => {
         setIsVisible(false)
       }, 6000)
-    }, 5000)
+    }, 20000)
 
     return () => {
       clearTimeout(showTimer)
