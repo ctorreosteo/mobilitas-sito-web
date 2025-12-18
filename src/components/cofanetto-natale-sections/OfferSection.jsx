@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { CheckCircle, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function OfferSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [posterImage, setPosterImage] = useState(null)
+  const videoRef = useRef(null)
   
   const boxImages = [
     '/natale25/box1.jpg',
@@ -34,6 +36,66 @@ export default function OfferSection() {
     }
   }
 
+  // Extract first frame from video to use as poster
+  useEffect(() => {
+    if (videoRef.current) {
+      const video = videoRef.current
+      
+      const extractFirstFrame = () => {
+        try {
+          const canvas = document.createElement('canvas')
+          canvas.width = video.videoWidth || 1920
+          canvas.height = video.videoHeight || 1080
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+          const dataUrl = canvas.toDataURL('image/jpeg')
+          setPosterImage(dataUrl)
+        } catch (error) {
+          console.log('Could not extract first frame:', error)
+        }
+      }
+
+      const loadFirstFrame = () => {
+        if (video.readyState >= 2) {
+          // Video data is loaded, seek to first frame
+          video.currentTime = 0.1
+          video.pause()
+          // Try to extract frame after a short delay
+          setTimeout(() => {
+            if (video.videoWidth > 0 && video.videoHeight > 0) {
+              extractFirstFrame()
+            }
+          }, 100)
+        }
+      }
+
+      video.addEventListener('loadeddata', loadFirstFrame)
+      video.addEventListener('loadedmetadata', () => {
+        video.currentTime = 0.1
+        video.pause()
+        setTimeout(() => {
+          if (video.videoWidth > 0 && video.videoHeight > 0) {
+            extractFirstFrame()
+          }
+        }, 200)
+      })
+
+      video.addEventListener('seeked', () => {
+        if (video.videoWidth > 0 && video.videoHeight > 0 && !posterImage) {
+          extractFirstFrame()
+        }
+      })
+
+      // Force load
+      video.load()
+
+      return () => {
+        video.removeEventListener('loadeddata', loadFirstFrame)
+        video.removeEventListener('seeked', extractFirstFrame)
+      }
+    }
+  }, [posterImage])
+
   return (
     <section id="offer-section" style={{background: 'linear-gradient(to bottom right, #002552, rgba(0, 37, 82, 0.9))', paddingTop: '64px', paddingBottom: '80px', paddingLeft: '16px', paddingRight: '16px', position: 'relative'}} className="sm:pt-20">
       <div style={{maxWidth: '1200px', margin: '0 auto', padding: '0 8px'}}>
@@ -46,10 +108,36 @@ export default function OfferSection() {
           className="text-left md:text-center"
           style={{marginBottom: '24px'}}
         >
-          <h2 className="text-left md:text-center" style={{fontSize: '48px', fontWeight: '900', lineHeight: '1.1', marginBottom: '16px', marginTop: '64px'}}>
+          {/* Badge "Regalo di Natale" */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center px-3 py-1.5 md:px-6 md:py-3 mb-4 md:mb-6"
+            style={{
+              background: 'linear-gradient(to right, rgba(114, 250, 147, 0.1), rgba(0, 191, 255, 0.1))',
+              border: '1px solid rgba(114, 250, 147, 0.2)',
+              borderRadius: '50px',
+              marginTop: '36px'
+            }}
+          >
+            <div 
+              className="w-2 h-2 md:w-3 md:h-3 rounded-full mr-1.5 md:mr-3"
+              style={{
+                background: 'linear-gradient(to right, #72fa93, #00BFFF)'
+              }}
+            ></div>
+            <span 
+              className="font-semibold text-xs md:text-sm uppercase tracking-wider"
+              style={{ color: '#72fa93' }}
+            >
+              Regalo di Natale
+            </span>
+          </motion.div>
+
+          <h2 className="text-left md:text-center" style={{fontSize: '48px', fontWeight: '900', lineHeight: '1.1', marginBottom: '16px', marginTop: '0px'}}>
             <div style={{color: '#F4F4F4', display: 'block'}}>🎁 IL REGALO PERFETTO</div>
-            <div style={{color: '#72fa93', display: 'block'}}>AL PREZZO PERFETTO</div>
-            <div style={{color: '#F4F4F4', display: 'block'}}>PER NATALE 🎄</div>
+            <div style={{color: '#72fa93', display: 'block'}}>AL PREZZO PERFETTO 🎄</div>
           </h2>
           
           <p className="text-left md:text-center" style={{color: '#F4F4F4', fontSize: '20px', marginTop: '16px', opacity: 0.9}}>
@@ -57,11 +145,62 @@ export default function OfferSection() {
           </p>
         </motion.div>
 
-        {/* Image Carousel */}
+        {/* VSL Video */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-8 text-left md:text-center relative max-w-4xl md:mx-auto"
+        >
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <video 
+              ref={videoRef}
+              src="http://d3t9xqw34vp9a0.cloudfront.net/video/VSL_NATALE_01.mp4"
+              poster={posterImage || undefined}
+              controls
+              playsInline
+              webkit-playsinline="true"
+              preload="auto"
+              className="w-full rounded-2xl"
+              style={{ maxHeight: '80vh', objectFit: 'contain', backgroundColor: '#000' }}
+            >
+              Il tuo browser non supporta il tag video.
+            </video>
+          </div>
+        </motion.div>
+
+        {/* "Ecco la nostra soluzione" Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mb-8 text-left md:text-center"
+        >
+          <h3 style={{
+            color: '#F4F4F4',
+            fontSize: '48px',
+            fontWeight: '700',
+            marginTop: '48px',
+            marginBottom: '16px',
+            textTransform: 'uppercase'
+          }}>
+            Ecco la <span style={{ color: '#72fa93', fontWeight: '900' }}>soluzione</span> che desideravi 😁
+          </h3>
+          <p className="text-left md:text-center" style={{
+            color: '#F4F4F4',
+            fontSize: '20px',
+            marginBottom: '24px',
+            opacity: 0.9
+          }}>
+            Scegli l'offerta che preferisci
+          </p>
+        </motion.div>
+
+        {/* Image Carousel */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
           className="mb-12 text-left md:text-center relative max-w-4xl md:mx-auto"
         >
           <div className="relative rounded-2xl overflow-hidden shadow-2xl">

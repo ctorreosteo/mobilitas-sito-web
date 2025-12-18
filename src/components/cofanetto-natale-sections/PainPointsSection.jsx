@@ -112,7 +112,7 @@ export default function PainPointsSection() {
           className="mb-16"
         >
           <h3 className="text-2xl md:text-3xl font-bold text-blue-dark mb-8 text-left">
-            I problemi di chi deve fare regali a Natale
+            Ogni anno la stessa storia...
           </h3>
           
           {/* Scroll hint text - Mobile only */}
