@@ -1,5 +1,5 @@
 import React from 'react'
-import { Star, Users, Award, TrendingUp, ExternalLink, MessageCircle, ThumbsUp } from 'lucide-react'
+import { Star, Users, Award, TrendingUp, ExternalLink, MessageCircle, ThumbsUp, ChevronLeft, ChevronRight } from 'lucide-react'
 import SectionDivider from '../SectionDivider'
 
 const TestimonialsSection = () => {
@@ -8,6 +8,72 @@ const TestimonialsSection = () => {
     { number: "95%", label: "Soddisfazione clienti", icon: Star },
     { number: "3 anni", label: "Media durata risultati", icon: Award },
     { number: "85%", label: "Riduzione farmaci", icon: TrendingUp }
+  ]
+
+  // Recensioni images from public/recensioni folder
+  const recensioniImages = [
+    '/recensioni/Screenshot 2025-12-17 alle 17.45.18.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.46.03.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.47.25.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.47.37.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.47.46.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.48.12.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.48.28.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.48.38.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.48.49.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.48.58.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.49.18.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.49.37.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.49.46.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.49.56.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.50.58.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.51.24.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.51.33.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.51.40.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.53.20.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.53.41.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.53.51.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.54.29.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.55.43.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.55.53.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.56.06.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.56.17.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.58.38.png',
+    '/recensioni/Screenshot 2025-12-17 alle 17.58.48.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.25.45.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.25.54.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.26.02.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.26.14.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.27.25.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.27.34.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.27.42.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.27.51.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.28.06.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.28.13.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.28.28.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.28.48.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.29.47.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.29.56.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.30.05.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.30.12.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.30.28.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.31.54.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.32.04.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.32.17.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.33.22.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.33.32.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.33.44.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.39.27.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.39.40.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.39.47.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.39.56.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.40.26.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.40.42.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.41.17.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.41.49.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.42.23.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.42.31.png',
+    '/recensioni/Screenshot 2025-12-17 alle 18.42.40.png'
   ]
 
   return (
@@ -78,7 +144,7 @@ const TestimonialsSection = () => {
                   </div>
                   <span className="text-2xl font-bold text-blue-dark font-montserrat">5.0/5</span>
                 </div>
-                <p className="text-blue-dark/80 font-montserrat">+420 recensioni verificate</p>
+                <p className="text-blue-dark/80 font-montserrat">Oltre 600 storie vere</p>
               </div>
             </div>
             
@@ -90,6 +156,41 @@ const TestimonialsSection = () => {
               Non credere solo alle nostre parole. 
               <span className="font-semibold text-sky-400"> Leggi le recensioni autentiche</span> di chi ha già scelto di riprendere il controllo della propria salute su Google.
             </p>
+
+            {/* Reviews Carousel */}
+            <div className="relative py-4 mb-8">
+              {/* Scrollable carousel */}
+              <div className="flex overflow-x-auto space-x-4 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <style>{`
+                  .reviews-carousel::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+                <div className="reviews-carousel flex space-x-4">
+                  {recensioniImages.map((image, index) => (
+                    <div key={index} className="flex-shrink-0">
+                      <div className="w-72 md:w-96 h-auto rounded-2xl shadow-xl overflow-hidden bg-white p-3 hover:shadow-2xl transition-shadow duration-300">
+                        <img 
+                          src={image} 
+                          alt={`Recensione ${index + 1}`}
+                          className="w-full h-auto rounded-xl object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Scroll hint */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                <div className="flex items-center gap-2 text-blue-dark/60 text-sm font-medium">
+                  <ChevronLeft className="w-4 h-4 animate-pulse" />
+                  <span>Scorri per vedere tutte le recensioni</span>
+                  <ChevronRight className="w-4 h-4 animate-pulse" />
+                </div>
+              </div>
+            </div>
 
             {/* CTA Button */}
             <div className="flex justify-center mb-8">
