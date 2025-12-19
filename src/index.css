@@ -526,3 +526,13 @@
       transform: translateY(10px) translateX(-10px);
     }
   }
+
+  /* Nascondi il banner iubenda quando la classe hide-iubenda-banner è presente sul body */
+  body.hide-iubenda-banner #iubenda-cs-banner,
+  body.hide-iubenda-banner .iubenda-cs-banner,
+  body.hide-iubenda-banner [id*="iubenda"],
+  body.hide-iubenda-banner [class*="iubenda-cs"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }

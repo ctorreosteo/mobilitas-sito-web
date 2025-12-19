@@ -71,7 +71,20 @@ const Home = () => {
 
   const handleLoadingComplete = () => {
     setShowContent(true)
+    // Rimuovi la classe che nasconde il banner iubenda dopo che l'animazione è completata
+    document.body.classList.remove('hide-iubenda-banner')
   }
+
+  // Nascondi il banner iubenda all'inizio se siamo nella homepage
+  useEffect(() => {
+    // Aggiungi la classe per nascondere il banner all'inizio
+    document.body.classList.add('hide-iubenda-banner')
+    
+    // Cleanup: rimuovi la classe quando il componente viene smontato
+    return () => {
+      document.body.classList.remove('hide-iubenda-banner')
+    }
+  }, [])
 
   return (
     <>
