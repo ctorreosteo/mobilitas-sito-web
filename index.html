@@ -20,69 +20,7 @@
       gtag('js', new Date());
 
       gtag('config', 'AW-16532564533');
-    </script>
-    
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    
-    // Initialize first pixel
-    fbq('init', '2672732213087780');
-    fbq('track', 'PageView');
-    
-    // Initialize second pixel for Mentorship
-    // Ensure both pixels are initialized - fbq queue handles async loading
-    (function() {
-      function initSecondPixel() {
-        if (typeof fbq !== 'undefined') {
-          try {
-            fbq('init', '751362634658136');
-            fbq('track', 'PageView');
-          } catch(e) {
-            // Retry if initialization fails
-            setTimeout(initSecondPixel, 200);
-          }
-        } else {
-          // Retry if fbq is not ready
-          setTimeout(initSecondPixel, 100);
-        }
-      }
-      // Initialize immediately and also on window load as backup
-      initSecondPixel();
-      if (window.addEventListener) {
-        window.addEventListener('load', initSecondPixel);
-      } else if (window.attachEvent) {
-        window.attachEvent('onload', initSecondPixel);
-      }
-    })();
-    </script>
-    <!-- End Meta Pixel Code -->
-
-    <!-- Meta Pixel Code | DS OT 4 - 10/03/2025-->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '557039873372559');
-      fbq('track', 'PageView');
-      </script>
-      <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=557039873372559&ev=PageView&noscript=1"
-      /></noscript>
-  <!-- End Meta Pixel Code -->
-    
+    </script>    
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
         // Carica Clarity solo se non siamo in ambiente locale
@@ -103,19 +41,27 @@
     </script>
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/3583637.js"></script>
     <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+
+    <!-- Meta Pixel Code | DS OT 4 - 10/03/2025-->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '557039873372559');
+      fbq('track', 'PageView');
+      </script>
+      <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=557039873372559&ev=PageView&noscript=1"
+      /></noscript>
+  <!-- End Meta Pixel Code -->
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    
-    <!-- Meta Pixel Noscript -->
-    <noscript>
-      <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=2672732213087780&ev=PageView&noscript=1"
-      />
-      <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=751362634658136&ev=PageView&noscript=1"
-      />
-    </noscript>
   </body>
 </html>
