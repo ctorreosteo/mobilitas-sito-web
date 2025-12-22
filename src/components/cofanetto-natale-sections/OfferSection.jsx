@@ -21,9 +21,20 @@ export default function OfferSection() {
   }
 
   const handlePurchaseClick = (type) => {
-    // Redirect to Stripe checkout
-    const stripeCheckoutUrl = 'https://buy.stripe.com/14A7sN3wX3HzbEX24tdIA01'
-    window.open(stripeCheckoutUrl, '_blank')
+    // Redirect to WhatsApp with pre-filled message
+    const phoneNumber = '393518198457' // Numero senza + e spazi
+    
+    let message = ''
+    if (type === 'single') {
+      message = 'Ciao! Vorrei acquistare il Cofanetto Natalizio Mobilitas (1 cofanetto a €29). Come posso procedere?'
+    } else if (type === 'triple') {
+      message = 'Ciao! Vorrei acquistare l\'offerta speciale del Cofanetto Natalizio Mobilitas (3 cofanetti + 1 in omaggio a €87). Come posso procedere?'
+    } else {
+      message = 'Ciao! Vorrei avere maggiori informazioni sul Cofanetto Natalizio Mobilitas. Come funziona e come posso acquistarlo?'
+    }
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
   }
 
   // Extract first frame from video to use as poster
