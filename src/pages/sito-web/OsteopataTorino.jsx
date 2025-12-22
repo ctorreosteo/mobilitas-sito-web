@@ -28,6 +28,26 @@ const OsteopataTorino = () => {
   const [announcementBarHeight, setAnnouncementBarHeight] = useState(40)
   const [openFAQIndex, setOpenFAQIndex] = useState(null)
   
+  // Testi comuni per i bottoni CTA
+  const CTA_TEXTS = {
+    prenotaTrattamento: {
+      line1: 'PRENOTA IL TRATTAMENTO',
+      line2: "CON L'OFFERTA",
+      subtitle: '(clicca qui)'
+    },
+    prenotaPrimaVisita: {
+      line1: 'PRENOTA LA TUA PRIMA',
+      line2: 'VISITA CON OFFERTA',
+      subtitle: '(clicca qui)'
+    },
+    richiediConsulto: {
+      line1: 'RICHIEDI UN BREVE',
+      line2: 'CONSULTO GRATUITO',
+      subtitle: '(per avere maggiori informazioni)'
+    },
+    oppure: 'oppure'
+  }
+  
   const homeImages = [
     '/home/home7.png',
     '/home/home4.png',
@@ -403,6 +423,13 @@ const OsteopataTorino = () => {
     }))
   }
 
+  const handleWhatsAppClick = () => {
+    const phoneNumber = '393518198457'
+    const message = 'Ciao, vorrei richiedere un breve consulto telefonico gratuito per avere maggiori informazioni. Grazie e a presto!'
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+  }
+
   const bodyAreas = [
     {
       icon: "🧠",
@@ -624,7 +651,7 @@ const OsteopataTorino = () => {
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="button-shake w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-600 transition-all font-montserrat text-lg"
+                  className="button-shake w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-lg hover:from-blue-700 hover:to-green-600 transition-all font-montserrat text-lg"
                 >
                   Prenota con sconto
                 </button>
@@ -783,22 +810,34 @@ const OsteopataTorino = () => {
           {/* Offer Details */}
           <div className={`mt-8 transition-all duration-1500 delay-1200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
             <p className="text-3xl text-blue-dark font-bold text-center font-montserrat">
-              Da <span className="line-through text-red-500 font-black text-4xl">90€</span> a <span className="text-green-600 font-black text-5xl">49€</span> <span className="block md:inline">in offerta di {currentMonth.toLowerCase()}</span>
+              Da <span className="line-through text-red-500 font-black text-4xl">90€</span> a <span className="text-green-600 font-black text-5xl">49€</span> <span className="block md:inline">in offerta per {currentMonth.toLowerCase()}</span> 👇🏼
             </p>
           </div>
 
-          {/* CTA Button */}
-          <div className={`mt-8 flex justify-center transition-all duration-1500 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+          {/* CTA Buttons */}
+          <div className={`mt-8 flex flex-col md:flex-row justify-center items-center gap-4 transition-all duration-1500 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
             <button 
               onClick={() => setShowForm(true)}
-              className="button-shake group relative inline-flex items-center px-8 py-6 bg-blue-dark text-green font-bold text-xl rounded-full shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat"
+              className="button-shake group relative inline-flex items-center justify-center px-8 py-6 bg-blue-dark text-green font-bold text-xl rounded-xl shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
             >
               <span className="relative z-10 text-center uppercase">
-                <div>PRENOTA IL TRATTAMENTO</div>
-                <div>CON L'OFFERTA</div>
-                <div className="text-sm normal-case mt-1 text-white">(clicca qui)</div>
+                <div>{CTA_TEXTS.prenotaTrattamento.line1}</div>
+                <div>{CTA_TEXTS.prenotaTrattamento.line2}</div>
+                <div className="text-sm normal-case mt-1 text-white">{CTA_TEXTS.prenotaTrattamento.subtitle}</div>
               </span>
-              <div className="absolute inset-0 bg-blue-dark/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-blue-dark/90 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+            <span className="text-blue-dark font-semibold text-lg font-montserrat">{CTA_TEXTS.oppure}</span>
+            <button 
+              onClick={handleWhatsAppClick}
+              className="group relative inline-flex items-center justify-center px-8 py-6 bg-green-700 text-white font-bold text-xl rounded-xl shadow-2xl hover:shadow-green-700/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
+            >
+              <span className="relative z-10 text-center uppercase">
+                <div>{CTA_TEXTS.richiediConsulto.line1}</div>
+                <div>{CTA_TEXTS.richiediConsulto.line2}</div>
+                <div className="text-sm normal-case mt-1 text-white/90">{CTA_TEXTS.richiediConsulto.subtitle}</div>
+              </span>
+              <div className="absolute inset-0 bg-green-800 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </div>
 
@@ -979,17 +1018,31 @@ const OsteopataTorino = () => {
 
           {/* CTA */}
           <div className="text-center mt-12">
-            <button 
-              onClick={() => setShowForm(true)}
-              className="button-shake group relative inline-flex items-center px-12 py-6 bg-blue-dark text-green font-bold text-lg rounded-full shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat"
-            >
-              <span className="relative z-10 text-center uppercase">
-                <div>PRENOTA LA TUA PRIMA</div>
-                <div>VISITA CON OFFERTA</div>
-                <div className="text-sm normal-case mt-1 text-white">(clicca qui)</div>
-              </span>
-              <div className="absolute inset-0 bg-blue-dark/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+              <button 
+                onClick={() => setShowForm(true)}
+                className="button-shake group relative inline-flex items-center justify-center px-12 py-6 bg-blue-dark text-green font-bold text-lg rounded-xl shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
+              >
+                <span className="relative z-10 text-center uppercase">
+                  <div>{CTA_TEXTS.prenotaPrimaVisita.line1}</div>
+                  <div>{CTA_TEXTS.prenotaPrimaVisita.line2}</div>
+                  <div className="text-sm normal-case mt-1 text-white">{CTA_TEXTS.prenotaPrimaVisita.subtitle}</div>
+                </span>
+                <div className="absolute inset-0 bg-blue-dark/90 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+              <span className="text-blue-dark font-semibold text-lg font-montserrat">{CTA_TEXTS.oppure}</span>
+              <button 
+                onClick={handleWhatsAppClick}
+                className="group relative inline-flex items-center justify-center px-12 py-6 bg-green-700 text-white font-bold text-lg rounded-xl shadow-2xl hover:shadow-green-700/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
+              >
+                <span className="relative z-10 text-center uppercase">
+                  <div>{CTA_TEXTS.richiediConsulto.line1}</div>
+                  <div>{CTA_TEXTS.richiediConsulto.line2}</div>
+                  <div className="text-sm normal-case mt-1 text-white/90">{CTA_TEXTS.richiediConsulto.subtitle}</div>
+                </span>
+                <div className="absolute inset-0 bg-green-800 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1067,17 +1120,29 @@ const OsteopataTorino = () => {
               </div>
 
               {/* CTA */}
-              <div className="flex justify-center md:justify-start">
+              <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-4">
                 <button 
                   onClick={() => setShowForm(true)}
-                  className="button-shake group relative inline-flex items-center px-8 py-6 md:py-5 bg-cream text-blue-900 font-bold rounded-2xl hover:bg-cream/90 transition-all duration-300 hover:scale-105 font-montserrat text-lg md:text-base"
+                  className="button-shake group relative inline-flex items-center justify-center px-8 py-6 md:py-5 bg-cream text-blue-900 font-bold rounded-lg hover:bg-cream/90 transition-all duration-300 hover:scale-105 font-montserrat text-lg md:text-base w-full md:w-auto"
                 >
                   <span className="relative z-10 text-center uppercase">
-                    <div>PRENOTA LA TUA PRIMA</div>
-                    <div>VISITA CON OFFERTA</div>
-                    <div className="text-sm normal-case mt-1 text-blue-900">(clicca qui)</div>
+                    <div>{CTA_TEXTS.prenotaPrimaVisita.line1}</div>
+                    <div>{CTA_TEXTS.prenotaPrimaVisita.line2}</div>
+                    <div className="text-sm normal-case mt-1 text-blue-900">{CTA_TEXTS.prenotaPrimaVisita.subtitle}</div>
                   </span>
-                  <div className="absolute inset-0 bg-cream/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-cream/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
+                <span className="text-white font-semibold text-lg font-montserrat">{CTA_TEXTS.oppure}</span>
+                <button 
+                  onClick={handleWhatsAppClick}
+                  className="group relative inline-flex items-center justify-center px-8 py-6 md:py-5 bg-green-700 text-white font-bold rounded-lg hover:bg-green-800 transition-all duration-300 hover:scale-105 font-montserrat text-lg md:text-base w-full md:w-auto"
+                >
+                  <span className="relative z-10 text-center uppercase">
+                    <div>{CTA_TEXTS.richiediConsulto.line1}</div>
+                    <div>{CTA_TEXTS.richiediConsulto.line2}</div>
+                    <div className="text-sm normal-case mt-1 text-white/90">{CTA_TEXTS.richiediConsulto.subtitle}</div>
+                  </span>
+                  <div className="absolute inset-0 bg-green-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
               </div>
             </div>
@@ -1197,17 +1262,31 @@ const OsteopataTorino = () => {
 
           {/* CTA */}
           <div className="text-center mt-12">
-            <button 
-              onClick={() => setShowForm(true)}
-              className="button-shake group relative inline-flex items-center px-12 py-6 bg-blue-dark text-green font-bold text-lg rounded-full shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat"
-            >
-              <span className="relative z-10 text-center uppercase">
-                <div>PRENOTA LA TUA PRIMA</div>
-                <div>VISITA CON OFFERTA</div>
-                <div className="text-sm normal-case mt-1 text-white">(clicca qui)</div>
-              </span>
-              <div className="absolute inset-0 bg-blue-dark/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+              <button 
+                onClick={() => setShowForm(true)}
+                className="button-shake group relative inline-flex items-center justify-center px-12 py-6 bg-blue-dark text-green font-bold text-lg rounded-xl shadow-2xl hover:shadow-blue-dark/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
+              >
+                <span className="relative z-10 text-center uppercase">
+                  <div>{CTA_TEXTS.prenotaPrimaVisita.line1}</div>
+                  <div>{CTA_TEXTS.prenotaPrimaVisita.line2}</div>
+                  <div className="text-sm normal-case mt-1 text-white">{CTA_TEXTS.prenotaPrimaVisita.subtitle}</div>
+                </span>
+                <div className="absolute inset-0 bg-blue-dark/90 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+              <span className="text-blue-dark font-semibold text-lg font-montserrat">{CTA_TEXTS.oppure}</span>
+              <button 
+                onClick={handleWhatsAppClick}
+                className="group relative inline-flex items-center justify-center px-12 py-6 bg-green-700 text-white font-bold text-lg rounded-xl shadow-2xl hover:shadow-green-700/25 transition-all duration-300 hover:scale-105 font-montserrat w-full md:w-auto"
+              >
+                <span className="relative z-10 text-center uppercase">
+                  <div>{CTA_TEXTS.richiediConsulto.line1}</div>
+                  <div>{CTA_TEXTS.richiediConsulto.line2}</div>
+                  <div className="text-sm normal-case mt-1 text-white/90">{CTA_TEXTS.richiediConsulto.subtitle}</div>
+                </span>
+                <div className="absolute inset-0 bg-green-800 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
