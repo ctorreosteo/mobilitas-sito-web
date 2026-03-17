@@ -2,6 +2,18 @@
 
 Sito web per Mobilitas con landing pages e sezioni informative.
 
+## Variabili d'ambiente
+
+In **locale**: copia `.env.example` in `.env` e compila i valori.
+
+| Variabile | Obbligatoria | Uso |
+|-----------|--------------|-----|
+| `VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE` | No | Video Stream |
+
+L'API richieste (popup prenotazione/consulto) è pubblica e non richiede credenziali.
+
+---
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh

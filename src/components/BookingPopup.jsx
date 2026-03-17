@@ -18,21 +18,6 @@ const cleanPhone = (phone) => {
 // In prod: base completa (se il backend abilita CORS per il tuo dominio, altrimenti serve proxy lato server)
 const API_BASE = import.meta.env.DEV ? '' : 'https://hq.studiomobilitas.it'
 
-const HQ_USERNAME = import.meta.env.VITE_HQ_USERNAME ?? ''
-const HQ_PASSWORD = import.meta.env.VITE_HQ_PASSWORD ?? ''
-
-/** Login su HQ, restituisce il JWT per le chiamate protette */
-async function loginHQ() {
-  const res = await fetch(`${API_BASE}/api/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username: HQ_USERNAME, password: HQ_PASSWORD }),
-  })
-  const json = await res.json()
-  if (!json.success) throw new Error(json.message || json.error || 'Login fallito')
-  return json.data.token
-}
-
 /** Estrae prefisso (es. +39) e numero solo cifre per l'API richieste */
 function parseCellulare(raw) {
   const s = cleanPhone(raw).replace(/[-.]/g, '')
@@ -147,18 +132,9 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     }
 
     try {
-      if (!HQ_USERNAME || !HQ_PASSWORD) {
-        throw new Error('Configurazione mancante: imposta VITE_HQ_USERNAME e VITE_HQ_PASSWORD in .env')
-      }
-
-      const token = await loginHQ()
-
       const response = await fetch(`${API_BASE}/api/richieste`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
 
