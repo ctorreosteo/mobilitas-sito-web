@@ -48,6 +48,7 @@ import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
 import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
 import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
+import Cervicalgia from './pages/Cervicalgia'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -80,6 +81,7 @@ function App() {
         <Route path="/offerta-influencer" element={<Layout><OffertaInfluencer /></Layout>} />
         <Route path="/offerta-influencer-conferma" element={<Layout><OffertaInfluencerConferma /></Layout>} />
         <Route path="/mentorship" element={<Layout><Mentorship /></Layout>} />
+        <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
