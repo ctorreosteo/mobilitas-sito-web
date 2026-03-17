@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, User, Phone } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // Utility functions for data cleaning
 const cleanName = (name) => {
@@ -11,6 +12,41 @@ const cleanName = (name) => {
 
 const cleanPhone = (phone) => {
   return phone.trim().replace(/\s+/g, '')
+}
+
+// In dev: '' così le chiamate vanno a /api/... (stesso origin) e il proxy Vite le inoltra a hq.studiomobilitas.it/api/...
+// In prod: base completa (se il backend abilita CORS per il tuo dominio, altrimenti serve proxy lato server)
+const API_BASE = import.meta.env.DEV ? '' : 'https://hq.studiomobilitas.it'
+
+const HQ_USERNAME = import.meta.env.VITE_HQ_USERNAME ?? ''
+const HQ_PASSWORD = import.meta.env.VITE_HQ_PASSWORD ?? ''
+
+/** Login su HQ, restituisce il JWT per le chiamate protette */
+async function loginHQ() {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: HQ_USERNAME, password: HQ_PASSWORD }),
+  })
+  const json = await res.json()
+  if (!json.success) throw new Error(json.message || json.error || 'Login fallito')
+  return json.data.token
+}
+
+/** Estrae prefisso (es. +39) e numero solo cifre per l'API richieste */
+function parseCellulare(raw) {
+  const s = cleanPhone(raw).replace(/[-.]/g, '')
+  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
+  if (s.startsWith('+')) {
+    const match = s.match(/^(\+\d{1,4})(\d+)$/)
+    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
+    const digits = s.replace(/\D/g, '')
+    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
+    const num = digits.slice(2).replace(/^0+/, '') || digits
+    return { prefissoCellulare: pref, cellulare: num }
+  }
+  const digits = s.replace(/\D/g, '')
+  return { prefissoCellulare: '+39', cellulare: digits }
 }
 
 const formatCurrentDate = () => {
@@ -24,7 +60,48 @@ const formatCurrentDate = () => {
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
-export default function BookingPopup({ isOpen, onClose, packageType }) {
+// Contesto "visita" = prima visita / cervicalgia (senza pacchetto camminata)
+const isVisitaContext = (packageType, pageContext) =>
+  !packageType || pageContext === 'cervicalgia'
+
+// ctaType: 'consulto' = consulto gratuito, 'primaVisita' = prima visita con sconto (solo se pageContext === 'cervicalgia')
+function getPopupCopy(packageType, pageContext, ctaType) {
+  const isCervicalgia = pageContext === 'cervicalgia'
+  const isConsulto = isCervicalgia && ctaType === 'consulto'
+  const isPrimaVisita = isCervicalgia && (ctaType === 'primaVisita' || !ctaType)
+  const isVisita = isVisitaContext(packageType, pageContext) && !isConsulto
+
+  if (isConsulto) {
+    return {
+      title: 'Richiedi consulto telefonico gratuito',
+      subtitle: 'Consulenza gratuita',
+      subtext: 'La nostra segreteria ti chiamerà per un breve colloquio gratuito e darti tutte le informazioni.',
+      cta: 'Richiedi consulto gratuito',
+      pacchettoLabel: 'Consulto gratuito',
+    }
+  }
+
+  if (isPrimaVisita) {
+    return {
+      title: 'Richiedi prima visita con sconto',
+      subtitle: 'Prima visita a 49€',
+      subtext: 'La nostra segreteria ti chiamerà per confermare l\'appuntamento e darti tutte le informazioni.',
+      cta: 'Richiedi prima visita con sconto',
+      pacchettoLabel: 'Prima visita',
+    }
+  }
+
+  return {
+    title: 'Prenota il tuo posto',
+    subtitle: packageType === 'base' ? 'Pacchetto Base - 5€' : 'Pacchetto Premium - 39€',
+    subtext: 'La nostra segreteria ti chiamerà per darti tutti i dettagli della camminata.',
+    cta: 'Sì, voglio partecipare alla camminata',
+    pacchettoLabel: packageType === 'base' ? 'Pacchetto Base - 5€' : packageType === 'premium' ? 'Pacchetto Premium - 39€' : 'Pacchetto non specificato',
+  }
+}
+
+export default function BookingPopup({ isOpen, onClose, packageType, pageContext, ctaType }) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
@@ -34,6 +111,8 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState(null)
+
+  const copy = getPopupCopy(packageType, pageContext, ctaType)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -47,49 +126,57 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
-    
-    try {
-      // Get the selected option text
-      const orarioSelect = document.getElementById('orarioChiamata')
-      const selectedOption = orarioSelect.options[orarioSelect.selectedIndex]
-      const orarioText = selectedOption ? selectedOption.text : formData.orarioChiamata
 
-      // Clean and format the form data
-      const cleanedData = {
-        data: formatCurrentDate(),
-        nome: cleanName(formData.nome),
-        cognome: cleanName(formData.cognome),
-        cellulare: cleanPhone(formData.cellulare),
-        orario: orarioText,
-        pacchetto: packageType === 'base' ? 'Pacchetto Base - 5€' : (packageType === 'premium' ? 'Pacchetto Premium - 39€' : 'Pacchetto non specificato')
+    const orarioSelect = document.getElementById('orarioChiamata')
+    const selectedOption = orarioSelect?.options[orarioSelect.selectedIndex]
+    const orarioText = selectedOption ? selectedOption.text : formData.orarioChiamata
+
+    const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
+    const leadMagnetString = pageContext === 'cervicalgia' && ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
+
+    const body = {
+      nome: cleanName(formData.nome),
+      cognome: cleanName(formData.cognome),
+      prefissoCellulare,
+      cellulare,
+      statusRichiesta: 'LEAD',
+      fonteString: 'GOOGLE_ADS',
+      leadMagnetString,
+      ...(pageContext === 'cervicalgia' && { tag: 'Cervicalgia' }),
+      note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
+    }
+
+    try {
+      if (!HQ_USERNAME || !HQ_PASSWORD) {
+        throw new Error('Configurazione mancante: imposta VITE_HQ_USERNAME e VITE_HQ_PASSWORD in .env')
       }
-      
-      // Send data to Zapier webhook
-      const response = await fetch('https://hooks.zapier.com/hooks/catch/19401274/ud03yay/', {
+
+      const token = await loginHQ()
+
+      const response = await fetch(`${API_BASE}/api/richieste`, {
         method: 'POST',
-        body: JSON.stringify(cleanedData)
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
       })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+
+      const json = await response.json()
+
+      if (!json.success) {
+        throw new Error(json.error || json.message || `Errore ${response.status}`)
       }
-      
-      const result = await response.json()
-      console.log('Zapier webhook response:', result)
-      
+
       setIsSubmitting(false)
-      setIsSubmitted(true)
-      
-      // Chiudi popup dopo 3 secondi
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setFormData({ nome: '', cognome: '', cellulare: '', orarioChiamata: '' })
-        onClose()
-      }, 3000)
-      
-    } catch (error) {
-      console.error('Error sending data to Zapier:', error)
-      setError('Si è verificato un errore durante l\'invio. Riprova più tardi.')
+      setFormData({ nome: '', cognome: '', cellulare: '', orarioChiamata: '' })
+      setIsSubmitted(false)
+      setError(null)
+      onClose()
+      navigate(pageContext === 'cervicalgia' ? '/cervicalgia/conferma' : '/conferma')
+    } catch (err) {
+      console.error('API richieste:', err)
+      setError(err.message || 'Si è verificato un errore. Riprova più tardi.')
       setIsSubmitting(false)
     }
   }
@@ -110,7 +197,7 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 font-montserrat"
           onClick={handleClose}
         >
           <motion.div
@@ -118,40 +205,38 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="bg-cream rounded-xl shadow-2xl max-w-md w-full max-h-[85vh] overflow-hidden"
-            style={{ maxWidth: '90%' }}
+            className="bg-blue-dark border border-green rounded-2xl shadow-2xl w-full max-w-[92vw] sm:max-w-[400px] max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header - Minimal */}
-            <div className="relative bg-cream p-4 border-b border-blue-dark/10">
+            {/* Header - compatto su mobile */}
+            <div className="relative bg-blue-dark p-3 pb-2 sm:p-5 sm:pb-4 border-b border-green/20">
               <button
                 onClick={handleClose}
                 disabled={isSubmitting}
-                className="absolute top-4 right-4 w-8 h-8 bg-blue-dark/10 hover:bg-blue-dark/20 rounded-full flex items-center justify-center transition-colors duration-200 disabled:opacity-50"
+                className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors duration-200 disabled:opacity-50 bg-black/30 border-2 border-green text-cream hover:bg-green/20"
               >
-                <X className="w-4 h-4" style={{ color: '#002552' }} />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              
-              <div className="text-center">
-                <h2 className="text-xl font-black mb-1" style={{ color: '#002552' }}>
-                  Prenota il tuo posto
+
+              <div className="text-center pr-7 sm:pr-8">
+                <h2 className="text-lg sm:text-xl font-black text-green mb-0.5 sm:mb-1 leading-tight">
+                  {copy.title}
                 </h2>
-                <p className="text-sm font-semibold mb-1" style={{ color: '#002552' }}>
-                  {packageType === 'base' ? 'Pacchetto Base - 5€' : 'Pacchetto Premium - 39€'}
+                <p className="text-sm sm:text-sm font-bold text-cream/90 mb-0.5 sm:mb-1">
+                  {copy.subtitle}
                 </p>
-                <p className="text-xs italic font-bold" style={{ color: '#0ea5e9' }}>
-                  La nostra segreteria ti chiamerà per darti tutti i dettagli della camminata.
+                <p className="text-xs sm:text-xs text-cream/80 font-medium italic leading-snug">
+                  {copy.subtext}
                 </p>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="p-4">
+            {/* Content - form compatto su mobile */}
+            <div className="p-3 sm:p-8">
               {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  {/* Nome */}
-                  <div>
-                    <label htmlFor="nome" className="block text-xs font-bold text-blue-dark mb-1">
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
+                  <div className="space-y-1 sm:space-y-1.5">
+                    <label htmlFor="nome" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
                       Nome *
                     </label>
                     <input
@@ -161,15 +246,13 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
                       value={formData.nome}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-blue-dark/20 rounded-lg focus:border-blue-dark focus:outline-none transition-colors duration-200 text-blue-dark font-medium bg-cream/30 text-sm"
-                      style={{ maxWidth: '70%' }}
-                      placeholder="Il tuo nome"
+                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
+                      placeholder="Mario"
                     />
                   </div>
 
-                  {/* Cognome */}
-                  <div>
-                    <label htmlFor="cognome" className="block text-xs font-bold text-blue-dark mb-1">
+                  <div className="space-y-1 sm:space-y-1.5">
+                    <label htmlFor="cognome" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
                       Cognome *
                     </label>
                     <input
@@ -179,16 +262,14 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
                       value={formData.cognome}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-blue-dark/20 rounded-lg focus:border-blue-dark focus:outline-none transition-colors duration-200 text-blue-dark font-medium bg-cream/30 text-sm"
-                      style={{ maxWidth: '70%' }}
-                      placeholder="Il tuo cognome"
+                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
+                      placeholder="Rossi"
                     />
                   </div>
 
-                  {/* Cellulare */}
-                  <div>
-                    <label htmlFor="cellulare" className="block text-xs font-bold text-blue-dark mb-1">
-                      Numero di cellulare *
+                  <div className="space-y-1 sm:space-y-1.5">
+                    <label htmlFor="cellulare" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
+                      Cellulare *
                     </label>
                     <input
                       type="tel"
@@ -197,16 +278,14 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
                       value={formData.cellulare}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-blue-dark/20 rounded-lg focus:border-blue-dark focus:outline-none transition-colors duration-200 text-blue-dark font-medium bg-cream/30 text-sm"
-                      style={{ maxWidth: '70%' }}
-                      placeholder="+39 123 456 7890"
+                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
+                      placeholder="+39 333 123 4567"
                     />
                   </div>
 
-                  {/* Orario Chiamata */}
-                  <div>
-                    <label htmlFor="orarioChiamata" className="block text-xs font-bold text-blue-dark mb-1">
-                      Orario in cui vuoi essere chiamato/a *
+                  <div className="space-y-1 sm:space-y-1.5">
+                    <label htmlFor="orarioChiamata" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
+                      Orario *
                     </label>
                     <select
                       id="orarioChiamata"
@@ -214,84 +293,79 @@ export default function BookingPopup({ isOpen, onClose, packageType }) {
                       value={formData.orarioChiamata}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-blue-dark/20 rounded-lg focus:border-blue-dark focus:outline-none transition-colors duration-200 text-blue-dark font-medium bg-cream/30 text-sm"
-                      style={{ maxWidth: '85%' }}
+                      className="input-premium select-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] transition-all duration-300 appearance-none cursor-pointer [&>option]:bg-[#001a3d] [&>option]:text-cream"
                     >
-                      <option value="">Seleziona un orario</option>
-                      <option value="mattina">Mattina (9:00 - 12:00)</option>
-                      <option value="pausa-pranzo">Pausa pranzo (13:00 - 14:00)</option>
-                      <option value="pomeriggio">Pomeriggio (14:00 - 18:00)</option>
-                      <option value="sera">Sera (18:00 - 20:00)</option>
+                      <option value="">Seleziona fascia oraria</option>
+                      <option value="mattina">Mattina (9:00 – 12:00)</option>
+                      <option value="pausa-pranzo">Pausa pranzo (13:00 – 14:00)</option>
+                      <option value="pomeriggio">Pomeriggio (14:00 – 18:00)</option>
+                      <option value="sera">Sera (18:00 – 20:00)</option>
                       <option value="qualsiasi">Qualsiasi orario</option>
                     </select>
                   </div>
 
-                  {/* Error Message */}
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-red-50 border border-red-200 rounded-xl p-4"
+                      className="rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-400/30 bg-red-500/10"
                     >
-                      <p className="text-red-600 text-sm font-medium">{error}</p>
+                      <p className="text-red-200/90 text-xs sm:text-sm font-medium">{error}</p>
                     </motion.div>
                   )}
 
-                  {/* CTA Button */}
                   <motion.button
                     type="submit"
                     disabled={isSubmitting || !formData.nome.trim() || !formData.cognome.trim() || !formData.cellulare.trim() || !formData.orarioChiamata}
-                    className="w-full bg-blue-dark text-green font-black py-3 px-4 rounded-lg text-sm shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] uppercase tracking-wide disabled:cursor-not-allowed disabled:transform-none"
-                    style={{ backgroundColor: '#002552', color: '#72fa93' }}
+                    className="cta-popup-brand w-full text-blue-dark py-3 px-4 sm:py-4 sm:px-6 rounded-xl sm:rounded-2xl text-sm sm:text-base tracking-wide shadow-[0_4px_20px_rgba(114,250,147,0.25)] hover:shadow-[0_6px_28px_rgba(114,250,147,0.35)] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center justify-center space-x-2">
-                        <div className="w-5 h-5 border-2 border-green border-t-transparent rounded-full animate-spin" style={{ borderColor: '#72fa93', borderTopColor: 'transparent' }}></div>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 border-2 border-blue-dark border-t-transparent rounded-full animate-spin" />
                         <span>Invio in corso...</span>
                       </div>
                     ) : (
-                      'Sì, voglio partecipare alla camminata'
+                      copy.cta
                     )}
                   </motion.button>
                 </form>
               ) : (
-                /* Success Message */
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-8"
+                  className="text-center py-4 sm:py-8"
                 >
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#72fa93' }}>
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-green flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2, type: "spring", damping: 15 }}
-                      className="text-white text-2xl font-bold"
+                      className="text-blue-dark text-xl sm:text-2xl font-bold"
                     >
                       ✓
                     </motion.div>
                   </div>
-                  
-                  <h3 className="text-2xl font-black text-blue-dark mb-4">
+
+                  <h3 className="text-lg sm:text-2xl font-black text-cream mb-2 sm:mb-4">
                     Prenotazione confermata!
                   </h3>
-                  
-                  <p className="text-blue-dark/80 mb-6">
-                    Grazie <strong>{formData.nome}</strong>! Ti contatteremo al numero <strong>{formData.cellulare}</strong> entro 24 ore.
+
+                  <p className="text-cream/80 text-sm sm:text-base mb-4 sm:mb-6">
+                    Grazie <strong className="text-green">{formData.nome}</strong>! Ti contatteremo al numero <strong className="text-green">{formData.cellulare}</strong> entro 24 ore.
                     {formData.orarioChiamata && (
-                      <span className="block mt-2">
-                        Ti chiameremo preferibilmente <strong>{formData.orarioChiamata}</strong>.
+                      <span className="block mt-1 sm:mt-2">
+                        Ti chiameremo preferibilmente <strong className="text-green">{formData.orarioChiamata}</strong>.
                       </span>
                     )}
                   </p>
-                  
+
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
-                    className="text-sm text-blue-dark/60"
+                    className="text-xs sm:text-sm text-cream/50"
                   >
                     Questo popup si chiuderà automaticamente...
                   </motion.div>

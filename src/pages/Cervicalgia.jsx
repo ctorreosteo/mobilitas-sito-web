@@ -144,6 +144,7 @@ const STREAM_IFRAME_SRC = STREAM_CUSTOMER_CODE
 
 function Cervicalgia() {
   const [showBooking, setShowBooking] = useState(false)
+  const [bookingCtaType, setBookingCtaType] = useState('primaVisita') // 'consulto' | 'primaVisita'
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [activeRecensioneIndex, setActiveRecensioneIndex] = useState(0)
   const [recensioniCarouselHeight, setRecensioniCarouselHeight] = useState(null)
@@ -262,13 +263,13 @@ function Cervicalgia() {
     }
   }, [])
 
-  const openConsulto = () => setShowBooking(true)
+  const openConsulto = () => {
+    setBookingCtaType('consulto')
+    setShowBooking(true)
+  }
   const openPrimaVisita = () => {
-    const phone = '393518198457'
-    const msg = encodeURIComponent(
-      'Ciao, vorrei prenotare una prima visita con sconto per il dolore cervicale. Grazie.'
-    )
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank')
+    setBookingCtaType('primaVisita')
+    setShowBooking(true)
   }
 
   const goToSlide = (segmentIndex) => {
@@ -1496,7 +1497,8 @@ function Cervicalgia() {
         <BookingPopup
           isOpen={showBooking}
           onClose={() => setShowBooking(false)}
-          packageType={undefined}
+          pageContext="cervicalgia"
+          ctaType={bookingCtaType}
         />
       </AnimatePresence>
       <WhatsAppButton />

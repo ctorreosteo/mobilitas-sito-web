@@ -44,6 +44,7 @@ import Emicrania from './pages/landing-pages/Emicrania'
 import MalDiSchiena from './pages/landing-pages/MalDiSchiena'
 import Gravidanza from './pages/landing-pages/Gravidanza'
 import ThankYou from './pages/landing-pages/ThankYou'
+import ThankYouCervicalgia from './pages/landing-pages/ThankYouCervicalgia'
 import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
 import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
@@ -82,6 +83,7 @@ function App() {
         <Route path="/offerta-influencer-conferma" element={<Layout><OffertaInfluencerConferma /></Layout>} />
         <Route path="/mentorship" element={<Layout><Mentorship /></Layout>} />
         <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
+        <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
