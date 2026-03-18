@@ -61,7 +61,7 @@ const PAIN_IMAGES = [
   '/cervicalgia/cerv4.JPG',
   '/cervicalgia/cerv5.JPG',
   '/cervicalgia/cerv7.JPG',
-  '/cervicalgia/cerv8.JPG',
+  '/cervicalgia/cerv6.JPG',
   '/cervicalgia/cerv9.JPG',
 ]
 
@@ -582,7 +582,7 @@ function Cervicalgia() {
                       className="cervicalgia-carousel flex-shrink-0 w-[280px] sm:w-[320px] snap-center"
                       data-recensione-card={i}
                     >
-                      <div className="rounded-2xl overflow-hidden border border-green/20 bg-blue-dark/80 shadow-xl">
+                      <div className="rounded-2xl overflow-hidden bg-blue-dark/80 shadow-xl">
                         <img
                           src={src}
                           alt={`Recensione ${i + 1}`}
@@ -632,7 +632,7 @@ function Cervicalgia() {
                 transition={{ duration: 0.5, delay: 0.65 }}
                 className="mb-10 lg:mb-12"
               >
-                <div className="relative max-w-2xl overflow-hidden rounded-2xl border border-green/20 shadow-xl">
+                <div className="relative max-w-2xl overflow-hidden rounded-2xl shadow-xl">
                   <img
                     src="/cervicalgia/cerv13.JPG"
                     alt="Trattamento osteopatico per il benessere del collo e della postura"
@@ -736,7 +736,7 @@ function Cervicalgia() {
                       <h3 className="text-green font-bold text-base sm:text-lg leading-snug mb-1 min-h-[2.75rem] sm:min-h-[3rem] flex-shrink-0">
                         {pain.title}
                       </h3>
-                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border border-green/20 mb-3 flex-shrink-0">
+                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 flex-shrink-0">
                         <img
                           src={PAIN_IMAGES[i]}
                           alt=""
@@ -789,9 +789,9 @@ function Cervicalgia() {
                 <br />
                 <span className="text-green">Diventa più <strong>frequente</strong>, più intenso, più limitante.</span>
               </h3>
-              <div className="mb-8 max-w-2xl overflow-hidden rounded-2xl border border-green/20 shadow-xl">
+              <div className="mb-8 max-w-2xl overflow-hidden rounded-2xl shadow-xl">
                 <img
-                  src="/cervicalgia/cerv14.JPG"
+                  src="/cervicalgia/cerv16.JPG"
                   alt="Dolore cervicale che peggiora nel tempo - Mobilitas Torino"
                   className="w-full aspect-[16/10] sm:aspect-[21/9] object-cover object-center"
                   loading="lazy"
@@ -829,7 +829,7 @@ function Cervicalgia() {
       </section>
 
       {/* Trattamento osteopatico - Benefici */}
-      <section className="relative py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-blue-dark overflow-hidden">
+      <section className="relative pt-12 pb-24 lg:pt-32 lg:pb-32 px-4 sm:px-6 lg:px-8 bg-blue-dark overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-green/5 rounded-full blur-[120px] -translate-x-1/2 translate-y-1/2" />
           <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-green/5 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2" />
@@ -885,7 +885,7 @@ function Cervicalgia() {
                           {String(i + 1).padStart(2, '0')}
                         </span>
                       </div>
-                      <div className="w-full aspect-[4/3] rounded-xl overflow-hidden border border-green/20 mb-3 flex-shrink-0">
+                      <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 flex-shrink-0">
                         <img
                           src={PAIN_IMAGES[i % PAIN_IMAGES.length]}
                           alt=""
@@ -1015,7 +1015,7 @@ function Cervicalgia() {
             <p className="text-cream/75 text-base lg:text-lg max-w-3xl">
               Risposte chiare su costi, durata, dove siamo e come funziona la prima visita. Zero giri di parole.
             </p>
-            <div className="mt-8 max-w-2xl overflow-hidden rounded-2xl border border-green/20 shadow-xl">
+            <div className="mt-8 max-w-2xl overflow-hidden rounded-2xl shadow-xl">
               <img
                 src="/cervicalgia/cerv15.JPG"
                 alt="Prima visita osteopatica - Mobilitas Torino"
