@@ -1447,31 +1447,7 @@ function Cervicalgia() {
           </div>
 
           {/* Micro-CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="mt-10 lg:mt-12"
-          >
-            <div className="rounded-3xl border border-green/25 bg-green/10 px-6 py-6 sm:px-8 sm:py-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-              <div className="min-w-0">
-                <p className="text-green text-sm font-semibold uppercase tracking-[0.2em]">
-                  Inizia nel modo giusto
-                </p>
-                <p className="text-cream text-lg sm:text-xl font-black leading-snug mt-2">
-                  Se vuoi capire qual è <span className="text-green">la causa</span> del tuo dolore cervicale, partiamo da una <strong>valutazione chiara</strong>.
-                </p>
-              </div>
-              <button
-                onClick={openConsulto}
-                className="group inline-flex items-center justify-center gap-2 text-lg bg-green text-blue-dark font-black py-4 px-7 rounded-2xl shadow-lg hover:shadow-green/30 transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
-              >
-                <Phone className="w-5 h-5" />
-                Consulenza gratuita
-              </button>
-            </div>
-          </motion.div>
+          {/* Micro-CTA rimosso su richiesta */}
 
           {/* CTAs fine sezione */}
           <div className="mt-10 lg:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
