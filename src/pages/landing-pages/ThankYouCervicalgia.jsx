@@ -27,6 +27,16 @@ export default function ThankYouCervicalgia() {
     }
   }, [])
 
+  // Google Ads conversion tracking (lead on confirmation page)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-16532564533/0OVwCJWk4oscELXUq8s9',
+      })
+      console.log('Conversion tracked: LEAD - Cervicalgia')
+    }
+  }, [])
+
   const goToSlide = (segmentIndex) => {
     setCarouselIndex(segmentIndex)
     if (carouselRef.current) {
