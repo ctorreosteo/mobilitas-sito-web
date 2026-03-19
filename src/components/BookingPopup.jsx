@@ -16,7 +16,8 @@ const cleanPhone = (phone) => {
 
 // In dev: '' così le chiamate vanno a /api/... (stesso origin) e il proxy Vite le inoltra a hq.studiomobilitas.it/api/...
 // In prod: base completa (se il backend abilita CORS per il tuo dominio, altrimenti serve proxy lato server)
-const API_BASE = import.meta.env.DEV ? '' : 'https://hq.studiomobilitas.it'
+// Nota: usiamo VITE_API_BASE per poter cambiare rapidamente endpoint senza toccare il codice.
+const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
 /** Estrae prefisso (es. +39) e numero solo cifre per l'API richieste */
 function parseCellulare(raw) {
