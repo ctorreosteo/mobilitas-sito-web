@@ -10,6 +10,9 @@ export default {
                     // Colori principali del brand
                     'blue-dark': '#002552',
                     'green': '#72fa93',
+                    // Alias legacy usati dalla pagina /links
+                    'brand-blue': '#002552',
+                    'brand-green': '#72fa93',
                     'cream': '#F4F4F4',
                     'red': '#FF6869',
                     
