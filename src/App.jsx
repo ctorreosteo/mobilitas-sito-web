@@ -23,6 +23,8 @@ import OffertaInfluencer from './pages/sito-web/OffertaInfluencer'
 import OffertaInfluencerConferma from './pages/sito-web/OffertaInfluencerConferma'
 import Mentorship from './pages/sito-web/Mentorship'
 import Links from './pages/sito-web/Links'
+import PrivacyPolicyApplicazione from './pages/sito-web/PrivacyPolicyApplicazione'
+import SupportoApp from './pages/sito-web/SupportoApp'
 
 // Job position pages
 import Segretaria from './pages/sito-web/posizioni/Segretaria'
@@ -84,6 +86,8 @@ function App() {
         <Route path="/offerta-influencer-conferma" element={<Layout><OffertaInfluencerConferma /></Layout>} />
         <Route path="/mentorship" element={<Layout><Mentorship /></Layout>} />
         <Route path="/links" element={<Layout><Links /></Layout>} />
+        <Route path="/privacy-policy-applicazione" element={<Layout><PrivacyPolicyApplicazione /></Layout>} />
+        <Route path="/supporto-app" element={<Layout><SupportoApp /></Layout>} />
         <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         
