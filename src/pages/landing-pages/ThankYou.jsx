@@ -6,12 +6,7 @@ export default function ThankYou() {
   // Track purchase event with Meta Pixel
   useEffect(() => {
     if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'Lead', {
-        value: 69.00,
-        currency: 'EUR',
-        content_name: 'Trattamento osteopatico per Emicrania',
-        content_category: 'Osteopatia'
-      });
+      window.fbq('track', 'Lead');
     }
   }, []);
   return (

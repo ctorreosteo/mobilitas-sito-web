@@ -20,10 +20,7 @@ export default function ThankYouCervicalgia() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'Lead', {
-        content_name: 'Richiesta cervicalgia / prima visita',
-        content_category: 'Cervicalgia',
-      })
+      window.fbq('track', 'Lead')
     }
   }, [])
 
