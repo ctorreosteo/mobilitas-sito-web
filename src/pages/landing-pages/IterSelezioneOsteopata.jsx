@@ -488,7 +488,7 @@ export default function IterSelezioneOsteopata() {
       <section className="relative z-10 px-4 py-20 md:py-28">
         <div className="max-w-6xl mx-auto">
           <motion.div {...fadeUp} className="text-left md:text-center mb-14 md:mb-20">
-            <SectionBadge variant="red">Prima di noi</SectionBadge>
+            <SectionBadge variant="red">Le altre realtà</SectionBadge>
             <h2 className="text-3xl md:text-5xl font-black mb-5">
               Gli altri studi sono così.{' '}
               <span style={{ color: '#72fa93' }}>Noi no.</span>
@@ -497,7 +497,7 @@ export default function IterSelezioneOsteopata() {
               className="text-lg md:text-xl max-w-3xl md:mx-auto leading-relaxed"
               style={{ color: 'rgba(244, 244, 244, 0.75)' }}
             >
-              Se hai già lavorato in studio, riconoscerai almeno uno di questi scenari. Sono
+              Se hai già cercato lavoro in altri studi, riconoscerai almeno uno di questi scenari. Sono
               esattamente ciò che abbiamo scelto di non replicare 😔
             </p>
           </motion.div>
