@@ -3,7 +3,7 @@ import Header from './Header'
 import Footer from './Footer'
 import WhatsAppButtonSito from './WhatsAppButtonSito'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, hideWhatsApp = false }) => {
   return (
     <div className="min-h-screen bg-cream w-full max-w-full overflow-x-hidden">
       {/* Header */}
@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       <Footer />
       
       {/* WhatsApp Button */}
-      <WhatsAppButtonSito />
+      {!hideWhatsApp && <WhatsAppButtonSito />}
     </div>
   )
 }
