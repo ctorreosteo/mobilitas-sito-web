@@ -140,6 +140,13 @@
     -ms-hyphens: none;
     word-break: normal;
   }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
   
   /* Disabilita la sillabazione automatica per tutti gli elementi di testo */
   p, span, div, a, li, td, th, label, button {
@@ -152,6 +159,13 @@
   }
   
   .font-montserrat {
+    font-family: var(--font-primary) !important;
+  }
+
+  .font-montserrat button,
+  .font-montserrat input,
+  .font-montserrat select,
+  .font-montserrat textarea {
     font-family: var(--font-primary) !important;
   }
 }

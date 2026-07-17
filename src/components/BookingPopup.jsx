@@ -46,15 +46,18 @@ const formatCurrentDate = () => {
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
-// Contesto "visita" = prima visita / cervicalgia (senza pacchetto camminata)
-const isVisitaContext = (packageType, pageContext) =>
-  !packageType || pageContext === 'cervicalgia'
+// Contesto "visita" = prima visita / landing cliniche (senza pacchetto camminata)
+const isLandingVisita = (pageContext) =>
+  pageContext === 'cervicalgia' || pageContext === 'reflusso'
 
-// ctaType: 'consulto' = consulto gratuito, 'primaVisita' = prima visita con sconto (solo se pageContext === 'cervicalgia')
+const isVisitaContext = (packageType, pageContext) =>
+  !packageType || isLandingVisita(pageContext)
+
+// ctaType: 'consulto' = consulto gratuito, 'primaVisita' = prima visita con sconto
 function getPopupCopy(packageType, pageContext, ctaType) {
-  const isCervicalgia = pageContext === 'cervicalgia'
-  const isConsulto = isCervicalgia && ctaType === 'consulto'
-  const isPrimaVisita = isCervicalgia && (ctaType === 'primaVisita' || !ctaType)
+  const isLanding = isLandingVisita(pageContext)
+  const isConsulto = isLanding && ctaType === 'consulto'
+  const isPrimaVisita = isLanding && (ctaType === 'primaVisita' || !ctaType)
   const isVisita = isVisitaContext(packageType, pageContext) && !isConsulto
 
   if (isConsulto) {
@@ -118,7 +121,13 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     const orarioText = selectedOption ? selectedOption.text : formData.orarioChiamata
 
     const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
-    const leadMagnetString = pageContext === 'cervicalgia' && ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
+    const leadMagnetString =
+      isLandingVisita(pageContext) && ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
+
+    const tagByContext = {
+      cervicalgia: 'Cervicalgia',
+      reflusso: 'Reflusso',
+    }
 
     const body = {
       nome: cleanName(formData.nome),
@@ -128,7 +137,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       statusRichiesta: 'LEAD',
       fonteString: 'GOOGLE_ADS',
       leadMagnetString,
-      ...(pageContext === 'cervicalgia' && { tag: 'Cervicalgia' }),
+      ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
 
