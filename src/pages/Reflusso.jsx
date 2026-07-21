@@ -2046,10 +2046,10 @@ function Reflusso() {
             className="mb-10 lg:mb-12 text-left"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              FAQ
+              Hai domande?
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Le domande che bloccano
+              Le domande che ci fate più spesso
               <span className="text-green"> prima della prenotazione.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
