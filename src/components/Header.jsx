@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, User } from 'lucide-react'
+import { Menu, Phone, User } from 'lucide-react'
 import Sidebar from './Sidebar'
+
+const PHONE_HREF = 'tel:+393518198457'
+
+const iconBtnClass =
+  'inline-flex h-11 w-11 shrink-0 items-center justify-center border-none bg-transparent p-0 text-cream outline-none transition-colors hover:text-green focus-visible:text-green [-webkit-tap-highlight-color:transparent] appearance-none cursor-pointer'
 
 const Header = ({ topOffset = 0 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
+    setIsSidebarOpen((open) => !open)
   }
 
   const closeSidebar = () => {
@@ -19,64 +32,84 @@ const Header = ({ topOffset = 0 }) => {
   const handleLogoClick = (e) => {
     e.preventDefault()
     window.scrollTo(0, 0)
-    
-    // Se siamo già sulla home, forza il reload completo
+
     if (location.pathname === '/') {
       window.location.href = '/'
     } else {
-      // Altrimenti naviga normalmente
       navigate('/')
     }
   }
 
   return (
     <>
-      <header 
-        className="bg-blue-dark shadow-lg border-b border-green fixed left-0 right-0 z-50 w-full" 
-        style={topOffset !== 0 ? { top: `${topOffset}px` } : { top: '0' }}
+      <header
+        className={`fixed left-0 right-0 z-50 w-full bg-blue-dark transition-shadow duration-300 ${
+          scrolled ? 'shadow-lg' : ''
+        }`}
+        style={{
+          top: topOffset !== 0 ? `${topOffset}px` : '0',
+          borderBottom: '1px solid rgba(114, 250, 147, 0.28)',
+        }}
       >
-        <div className="container mx-auto px-4 w-full max-w-full">
-          <div className="flex justify-between items-center h-16 sm:h-20">
-            {/* Menu Hamburger - Sinistra */}
+        <div className="container mx-auto w-full max-w-full px-2 sm:px-4">
+          <div className="grid h-16 grid-cols-[2.75rem_1fr_2.75rem] items-center sm:h-20 sm:grid-cols-[2.75rem_1fr_auto]">
             <button
+              type="button"
               onClick={toggleSidebar}
-              className="text-cream hover:text-green transition-colors bg-transparent border-none outline-none cursor-pointer"
+              className={iconBtnClass}
               aria-label="Apri menu"
+              aria-expanded={isSidebarOpen}
             >
-              <Menu size={24} />
+              <Menu size={24} strokeWidth={2} />
             </button>
 
-            {/* Logo - Centro */}
-            <a 
-              href="/" 
-              className="flex items-center cursor-pointer"
+            <a
+              href="/"
+              className="flex items-center justify-center justify-self-center"
               onClick={handleLogoClick}
             >
-              <img 
-                src="/logo_verde.png" 
-                alt="Mobilitas Logo" 
-                className="h-6 sm:h-7.5 w-auto"
+              <img
+                src="/logo_verde.png"
+                alt="Mobilitas"
+                className="h-6 w-auto sm:h-[1.875rem]"
+                decoding="async"
               />
             </a>
 
-            {/* Icona Utente - Destra */}
-            <Link 
-              to="/login" 
-              className="text-cream hover:text-green transition-colors bg-transparent border-none outline-none cursor-pointer"
-              aria-label="Accedi al tuo account"
-              onClick={() => window.scrollTo(0, 0)}
-            >
-              <User size={24} />
-            </Link>
+            <div className="flex items-center justify-end gap-1 justify-self-end">
+              <a
+                href={PHONE_HREF}
+                className={`${iconBtnClass} sm:hidden`}
+                aria-label="Chiama Mobilitas"
+              >
+                <Phone size={22} strokeWidth={2} />
+              </a>
+
+              <a
+                href={PHONE_HREF}
+                className="hidden items-center gap-2 border-none bg-transparent px-2 py-2 text-cream no-underline outline-none transition-colors hover:text-green focus-visible:text-green sm:inline-flex"
+                aria-label="Chiama Mobilitas"
+              >
+                <Phone size={18} strokeWidth={2} />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Chiama
+                </span>
+              </a>
+
+              <Link
+                to="/login"
+                className={`${iconBtnClass} hidden sm:inline-flex`}
+                aria-label="Accedi al tuo account"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                <User size={22} strokeWidth={2} />
+              </Link>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Sidebar */}
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        onClose={closeSidebar}
-      />
+      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
     </>
   )
 }

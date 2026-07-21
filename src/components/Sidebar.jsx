@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { X, ChevronRight, ChevronDown } from 'lucide-react'
+import { X, ChevronRight, ChevronDown, User, Phone, Mail, MessageCircle } from 'lucide-react'
+
+const PHONE_HREF = 'tel:+393518198457'
+const EMAIL_HREF = 'mailto:studio@studiomobilitas.it'
+const WHATSAPP_HREF =
+  'https://wa.me/393518198457?text=' +
+  encodeURIComponent('Ciao Mobilitas, vorrei avere maggiori informazioni.')
 
 const Sidebar = ({ isOpen, onClose }) => {
   const [expandedItems, setExpandedItems] = useState({})
@@ -105,11 +111,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <div className="fixed left-0 top-0 h-full w-72 bg-blue-dark shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-green flex-shrink-0">
-          <h2 className="text-cream font-bold text-xl font-montserrat">Menu</h2>
+        <div className="flex flex-shrink-0 items-center justify-between border-b border-cream/10 p-6">
+          <h2 className="font-montserrat text-xl font-bold text-cream">Menu</h2>
           <button
+            type="button"
             onClick={onClose}
-            className="text-cream hover:text-green transition-colors bg-transparent border-none outline-none cursor-pointer"
+            className="inline-flex h-10 w-10 appearance-none items-center justify-center border-none bg-transparent p-0 text-cream outline-none transition-colors hover:text-green"
             aria-label="Chiudi menu"
           >
             <X size={20} />
@@ -117,28 +124,28 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Menu Items */}
-        <nav className="flex-1 overflow-y-auto py-4 sidebar-scroll min-h-0">
-          <div className="px-4 space-y-1">
+        <nav className="sidebar-scroll min-h-0 flex-1 overflow-y-auto py-4">
+          <div className="space-y-1 px-4">
             {menuItems.map((item, index) => (
               <div key={index}>
                 {/* Main Item */}
                 {item.href ? (
                   <Link
                     to={item.href}
-                    className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors hover:bg-green/10 hover:text-green text-cream font-medium font-montserrat no-underline w-full`}
+                    className="flex w-full cursor-pointer items-center justify-between rounded-lg px-4 py-3 font-montserrat font-medium text-cream no-underline transition-colors hover:bg-green/10 hover:text-green"
                     onClick={handleSubItemClick}
                   >
                     <span>{item.name}</span>
                   </Link>
                 ) : (
                   <div
-                    className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors hover:bg-green/10`}
+                    className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-3 transition-colors hover:bg-green/10"
                     onClick={() => handleItemClick(item)}
                   >
-                    <span className="text-cream font-medium font-montserrat">
+                    <span className="font-montserrat font-medium text-cream">
                       {item.name}
                     </span>
-                    
+
                     {item.subItems && (
                       <div className="text-green">
                         {expandedItems[item.name] ? (
@@ -158,7 +165,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       <Link
                         key={subIndex}
                         to={subItem.href}
-                        className="block w-full px-4 py-2 text-sm text-cream hover:text-green hover:bg-green/10 rounded-lg transition-colors font-montserrat italic no-underline"
+                        className="block w-full rounded-lg px-4 py-2 font-montserrat text-sm italic text-cream no-underline transition-colors hover:bg-green/10 hover:text-green"
                         onClick={handleSubItemClick}
                       >
                         {subItem.name}
@@ -170,6 +177,52 @@ const Sidebar = ({ isOpen, onClose }) => {
             ))}
           </div>
         </nav>
+
+        {/* Contatti + account */}
+        <div
+          className="flex-shrink-0 space-y-2 p-4"
+          style={{ borderTop: '1px solid rgba(244, 244, 244, 0.1)' }}
+        >
+          <a
+            href={PHONE_HREF}
+            className="flex items-center gap-3 rounded-xl px-4 py-3 font-montserrat text-sm font-bold uppercase tracking-wide text-cream no-underline transition-colors hover:text-green"
+            style={{ border: '1px solid rgba(244, 244, 244, 0.16)' }}
+            onClick={onClose}
+          >
+            <Phone size={18} strokeWidth={2.5} />
+            Chiama ora
+          </a>
+          <a
+            href={EMAIL_HREF}
+            className="flex items-center gap-3 rounded-xl px-4 py-3 font-montserrat text-sm font-bold uppercase tracking-wide text-cream no-underline transition-colors hover:text-green"
+            style={{ border: '1px solid rgba(244, 244, 244, 0.16)' }}
+            onClick={onClose}
+          >
+            <Mail size={18} strokeWidth={2.25} />
+            Invia email
+          </a>
+          <a
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 rounded-xl bg-green px-4 py-3 font-montserrat text-sm font-bold uppercase tracking-wide text-blue-dark no-underline transition-opacity hover:opacity-90"
+            onClick={onClose}
+          >
+            <MessageCircle size={18} strokeWidth={2.25} />
+            Scrivici su WhatsApp
+          </a>
+          <Link
+            to="/login"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 font-montserrat text-sm font-medium text-cream no-underline transition-colors hover:text-green"
+            onClick={() => {
+              window.scrollTo(0, 0)
+              onClose()
+            }}
+          >
+            <User size={18} strokeWidth={2} />
+            Accedi
+          </Link>
+        </div>
       </div>
     </>
   )
