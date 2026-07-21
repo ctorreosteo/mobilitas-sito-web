@@ -384,10 +384,16 @@ function Reflusso() {
     return () => window.clearTimeout(timer)
   }, [heroVideo])
 
+  // SEO locale – metadata + JSON-LD ottimizzati per Google (Torino / San Donato / Crocetta)
   useEffect(() => {
     const prevTitle = document.title
-    const pageUrl = `${window.location.origin}/reflusso`
-    document.title = 'Reflusso Gastroesofageo: Trattamento Osteopatico a Torino | Mobilitas'
+    const origin = window.location.origin
+    const pageUrl = `${origin}/reflusso`
+    const ogImage = `${origin}/home/home5.png`
+
+    const title =
+      'Osteopata Reflusso Torino | Reflusso Gastroesofageo e Diaframma | Mobilitas'
+    document.title = title
 
     const ensureMetaByName = (name, content) => {
       let tag = document.querySelector(`meta[name="${name}"]`)
@@ -420,23 +426,286 @@ function Reflusso() {
     }
 
     const description =
-      'Reflusso gastroesofageo a Torino: approccio osteopatico integrato su diaframma, postura e meccanica. In affiancamento al medico. Prima visita 49€.'
+      'Osteopata per reflusso gastroesofageo a Torino (San Donato e Crocetta). Lavoriamo su diaframma, postura e meccanica, in affiancamento al medico. Prima visita 49€.'
 
+    // Standard SEO
     ensureMetaByName('description', description)
-    ensureMetaByName('robots', 'index, follow')
+    ensureMetaByName('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')
     ensureMetaByName(
       'keywords',
-      'reflusso gastroesofageo, reflusso torino, osteopata reflusso, pirosi, diaframma, ernia iatale, osteopatia stomaco'
+      [
+        'osteopata reflusso torino',
+        'reflusso gastroesofageo torino',
+        'osteopatia reflusso',
+        'trattamento reflusso osteopata',
+        'diaframma reflusso',
+        'ernia iatale osteopata torino',
+        'bruciore di stomaco osteopata',
+        'pirosi gastrica torino',
+        'osteopata stomaco torino',
+        'reflusso notturno trattamento',
+        'osteopata san donato torino',
+        'osteopata crocetta torino',
+        'studio osteopatico mobilitas',
+      ].join(', ')
     )
-    ensureMetaByProperty('og:title', 'Reflusso Gastroesofageo | Mobilitas Osteopata Torino')
+    ensureMetaByName('author', 'Mobilitas – Studio Osteopatico Torino')
+    ensureMetaByName('geo.region', 'IT-TO')
+    ensureMetaByName('geo.placename', 'Torino, San Donato, Crocetta')
+    // Coordinate sede principale (San Donato); Crocetta è nel JSON-LD department
+    ensureMetaByName('geo.position', '45.0802312;7.6577188')
+    ensureMetaByName('ICBM', '45.0802312, 7.6577188')
+
+    // Open Graph (Facebook, LinkedIn, WhatsApp)
+    ensureMetaByProperty('og:title', title)
     ensureMetaByProperty('og:description', description)
     ensureMetaByProperty('og:type', 'website')
     ensureMetaByProperty('og:url', pageUrl)
+    ensureMetaByProperty('og:image', ogImage)
+    ensureMetaByProperty('og:image:alt', 'Trattamento osteopatico per reflusso gastroesofageo – Studio Mobilitas Torino')
+    ensureMetaByProperty('og:image:width', '1200')
+    ensureMetaByProperty('og:image:height', '630')
     ensureMetaByProperty('og:site_name', 'Mobilitas – Studio Osteopatico Torino')
+    ensureMetaByProperty('og:locale', 'it_IT')
+
+    // Twitter Card
+    ensureMetaByName('twitter:card', 'summary_large_image')
+    ensureMetaByName('twitter:title', 'Osteopata Reflusso Torino | Mobilitas')
+    ensureMetaByName('twitter:description', description)
+    ensureMetaByName('twitter:image', ogImage)
+    ensureMetaByName('twitter:image:alt', 'Trattamento osteopatico per reflusso – Mobilitas Torino')
+
     ensureCanonical(pageUrl)
 
-    return () => { g
+    const businessShared = {
+      '@type': 'MedicalBusiness',
+      name: 'Mobilitas – Studio Osteopatico',
+      url: origin,
+      telephone: '+393518198457',
+      email: 'studio@studiomobilitas.it',
+      image: `${origin}/logo_blu.png`,
+      priceRange: '€€',
+      medicalSpecialty: 'Osteopathic',
+      areaServed: [
+        { '@type': 'City', name: 'Torino' },
+        { '@type': 'AdministrativeArea', name: 'Piemonte' },
+      ],
+      sameAs: [
+        'https://www.facebook.com/studiomobilitas',
+        'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z',
+      ],
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5.0',
+        reviewCount: String(RECENSIONI_TOTAL),
+        bestRating: '5',
+        worstRating: '1',
+      },
+    }
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'MedicalWebPage',
+          '@id': `${pageUrl}#webpage`,
+          url: pageUrl,
+          name: title,
+          description,
+          inLanguage: 'it-IT',
+          isPartOf: { '@id': `${origin}/#website` },
+          about: { '@id': `${pageUrl}#condition` },
+          mainEntity: { '@id': `${pageUrl}#service` },
+          primaryImageOfPage: {
+            '@type': 'ImageObject',
+            url: ogImage,
+          },
+          speakable: {
+            '@type': 'SpeakableSpecification',
+            cssSelector: ['h1', 'meta[name="description"]'],
+          },
+        },
+        {
+          '@type': 'MedicalCondition',
+          '@id': `${pageUrl}#condition`,
+          name: 'Reflusso gastroesofageo',
+          alternateName: [
+            'Malattia da reflusso gastroesofageo',
+            'MRGE',
+            'GERD',
+            'Pirosi',
+            'Bruciore di stomaco',
+            'Reflusso acido',
+          ],
+          associatedAnatomy: {
+            '@type': 'AnatomicalStructure',
+            name: 'Esofago e stomaco',
+          },
+        },
+        {
+          '@type': 'MedicalTherapy',
+          '@id': `${pageUrl}#service`,
+          name: 'Trattamento osteopatico per reflusso gastroesofageo',
+          description:
+            'Approccio osteopatico integrato su diaframma, torace, postura e respirazione, in affiancamento al percorso medico gastroenterologico.',
+          url: pageUrl,
+          provider: { '@id': `${origin}/#organization` },
+          offers: {
+            '@type': 'Offer',
+            price: '49',
+            priceCurrency: 'EUR',
+            availability: 'https://schema.org/InStock',
+            url: pageUrl,
+            name: 'Prima visita osteopatica per reflusso',
+          },
+        },
+        {
+          ...businessShared,
+          '@id': `${origin}/#organization`,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Via Peyron 54',
+            addressLocality: 'Torino',
+            addressRegion: 'Piemonte',
+            postalCode: '10143',
+            addressCountry: 'IT',
+          },
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: 45.0802312,
+            longitude: 7.6577188,
+          },
+          hasMap:
+            'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z',
+          department: [
+            {
+              '@type': 'MedicalBusiness',
+              '@id': `${origin}/#sede-san-donato`,
+              name: 'Mobilitas – San Donato',
+              telephone: '+393518198457',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Via Peyron 54',
+                addressLocality: 'Torino',
+                addressRegion: 'Piemonte',
+                postalCode: '10143',
+                addressCountry: 'IT',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 45.0802312,
+                longitude: 7.6577188,
+              },
+            },
+            {
+              '@type': 'MedicalBusiness',
+              '@id': `${origin}/#sede-crocetta`,
+              name: 'Mobilitas – Crocetta',
+              telephone: '+393518198457',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Via Lamarmora 35',
+                addressLocality: 'Torino',
+                addressRegion: 'Piemonte',
+                postalCode: '10128',
+                addressCountry: 'IT',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 45.0593749,
+                longitude: 7.6660428,
+              },
+            },
+          ],
+        },
+        {
+          '@type': 'BreadcrumbList',
+          '@id': `${pageUrl}#breadcrumb`,
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: origin,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Reflusso gastroesofageo',
+              item: pageUrl,
+            },
+          ],
+        },
+        {
+          '@type': 'FAQPage',
+          '@id': `${pageUrl}#faq`,
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: "Cosa c'entra l'osteopatia con il reflusso?",
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: "Il reflusso è una condizione medica e il gastroenterologo resta il riferimento clinico. L'osteopatia non sostituisce esami o terapia farmacologica: lavora in affiancamento su diaframma, torace, postura e respirazione, fattori che possono influenzare la dinamica meccanica della risalita.",
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Prendo già i farmaci: ha senso fare anche un percorso da voi?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: "Spesso sì, se i sintomi persistono nonostante terapia e attenzione alimentare. I farmaci riducono l'acidità e possono essere indispensabili; noi valutiamo se esiste una componente funzionale su cui intervenire. Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.",
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Se la gastroscopia è nella norma, perché ho ancora sintomi?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Una gastroscopia negativa è una buona notizia: esclude molte criticità. Tuttavia non misura tutto il comportamento funzionale del sistema esofago-stomaco. In alcuni casi servono altri esami e un lavoro complementare sulla parte meccanica.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Ho già eliminato molti cibi, ma il reflusso resta. Che senso ha continuare?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Ridurre trigger alimentari è utile, ma non sempre sufficiente. Se la dieta non basta, può significare che bisogna integrare altri livelli di intervento, con un piano personalizzato e realistico.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'È solo stress oppure no?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Lo stress incide davvero su digestione e percezione dei sintomi, ma ridurre tutto a “ansia” è spesso semplicistico. Nel nostro approccio consideriamo insieme fattori emotivi, biomeccanici e clinici.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Quando è necessario prima un controllo medico?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'In presenza di difficoltà a deglutire, calo di peso involontario, sangue nel vomito o nelle feci, dolore toracico da sforzo, vomito persistente o comparsa recente dei sintomi dopo i 50 anni, la priorità è la valutazione medica tempestiva.',
+              },
+            },
+          ],
+        },
+      ],
+    }
+
+    let scriptLd = document.querySelector('script[type="application/ld+json"][data-page="reflusso"]')
+    if (!scriptLd) {
+      scriptLd = document.createElement('script')
+      scriptLd.setAttribute('type', 'application/ld+json')
+      scriptLd.setAttribute('data-page', 'reflusso')
+      document.head.appendChild(scriptLd)
+    }
+    scriptLd.textContent = JSON.stringify(jsonLd)
+
+    return () => {
       document.title = prevTitle
+      const toRemove = document.querySelector('script[type="application/ld+json"][data-page="reflusso"]')
+      if (toRemove) toRemove.remove()
     }
   }, [])
 
