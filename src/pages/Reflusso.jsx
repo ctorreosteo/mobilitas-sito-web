@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import {
   Phone,
   CalendarCheck,
@@ -9,9 +9,7 @@ import {
   Moon,
   Utensils,
   Pill,
-  Wind,
   Users,
-  Hand,
   Car,
   Check,
   Coffee,
@@ -23,107 +21,201 @@ import { RECENSIONI_IMAGES } from '../data/recensioni'
 import BookingPopup from '../components/BookingPopup'
 import SectionDivider from '../components/SectionDivider'
 
+// In dev: '' così la chiamata va a /api/... e il proxy Vite la inoltra al backend locale.
+// In prod: base completa del backend HQ (CORS pubblico abilitato per studiomobilitas.it).
+const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
+
+// Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
+const HERO_VIDEO_CODICE = 'REFLUSSO_VSL'
+
+// Avvia subito il fetch (prima del mount) per ridurre il tempo a primo frame.
+const heroVideoPromise = fetch(`${API_BASE}/api/sito/video/codice/${HERO_VIDEO_CODICE}`, {
+  priority: 'high',
+})
+  .then((res) => {
+    if (res.status === 404) return null
+    return res.ok ? res.json() : null
+  })
+  .then((json) => (json?.data?.cloudflareUid ? json.data : null))
+  .catch(() => null)
+
+function ensureCloudflarePreconnect() {
+  const origins = ['https://iframe.videodelivery.net', 'https://videodelivery.net']
+  origins.forEach((href) => {
+    if (document.querySelector(`link[rel="preconnect"][href="${href}"]`)) return
+    const link = document.createElement('link')
+    link.rel = 'preconnect'
+    link.href = href
+    link.crossOrigin = 'anonymous'
+    document.head.appendChild(link)
+  })
+}
+
+function preloadHeroPoster(url) {
+  if (!url || document.querySelector(`link[rel="preload"][href="${url}"]`)) return
+  const link = document.createElement('link')
+  link.rel = 'preload'
+  link.as = 'image'
+  link.href = url
+  document.head.appendChild(link)
+}
+
+function useVideoReflussoVsl() {
+  const [video, setVideo] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    ensureCloudflarePreconnect()
+    let cancelled = false
+    heroVideoPromise.then((data) => {
+      if (cancelled) return
+      if (data?.anteprimaUrl) preloadHeroPoster(data.anteprimaUrl)
+      setVideo(data)
+      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { video, loading }
+}
+
 const HERO_BENEFITS = [
-  'Lavoriamo sul diaframma: l’anello che aiuta la valvola a chiudersi',
-  'Torni a dormire sdraiato, senza passare la notte semi-seduto',
-  'Mangi senza calcoli: meno ansia a tavola, meno dipendenza dalla pastiglia',
+  <>
+    Respira più liberamente e senti meno <strong className="font-bold">tensione</strong> in{' '}
+    <strong className="font-bold">petto</strong> e addome
+  </>,
+  <>
+    Riduci <strong className="font-bold">bruciore notturno</strong>, risvegli e{' '}
+    <strong className="font-bold">fastidio</strong> in gola al mattino
+  </>,
+  <>
+    Torna a vivere i <strong className="font-bold">pasti</strong> con più serenità e meno{' '}
+    <strong className="font-bold">rinunce</strong>
+  </>,
 ]
 
 const RECENSIONI_PREVIEW = RECENSIONI_IMAGES.slice(0, 18)
-const RECENSIONI_TOTAL = 830
+const RECENSIONI_TOTAL = 850
 const GOOGLE_RECENSIONI_URL =
   'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z/data=!4m8!3m7!1s0xfe2e29f381fdc93:0x97eee174cab07ada!8m2!3d45.0802312!4d7.6577188!9m1!1b1!16s%2Fg%2F11kqfhtyvd?entry=ttu'
 
 const PAIN_POINTS = [
   {
     icon: Pill,
-    title: 'La pastiglia che apre e chiude la giornata',
-    body: 'La prendi da mesi, forse da anni. E sai benissimo che non sta curando niente: spegne il bruciore per qualche ora, poi tutto ricomincia come prima.',
+    title: 'La giornata scandita dalla pastiglia',
+    body: 'La prendi per funzionare, non per stare davvero bene. Ti protegge per qualche ora, poi il reflusso torna a dettare regole.',
   },
   {
     icon: Moon,
-    title: 'La notte semi-seduto',
-    body: 'Ti sdrai e l’acido risale. Dormi con due cuscini, quasi in piedi. Ti svegli con la gola che brucia, la bocca amara e la sensazione di non aver riposato.',
+    title: 'La notte è diventata una strategia di sopravvivenza',
+    body: 'Ti corichi e l’acido risale. Due cuscini, sonno leggero, risvegli con gola irritata e bocca amara.',
   },
   {
     icon: Coffee,
-    title: 'La dieta ferrea che non è servita a niente',
-    body: 'Hai tolto caffè, vino, cioccolato, pomodoro, sughi. Mangi in bianco da una vita. E il reflusso torna lo stesso, come se non contasse nulla di quello che hai sacrificato.',
+    title: 'Hai tolto quasi tutto, ma non è cambiato quasi niente',
+    body: 'Caffè, vino, pomodoro, fritti: eliminati. Eppure il bruciore resta. Quando succede, la causa non è solo nel piatto.',
   },
   {
     icon: Utensils,
-    title: 'Ogni pasto è un calcolo',
-    body: 'Non mangi più con piacere: mangi con l’ansia. Cosa posso? A che ora? Quanto? E se stanotte sto male di nuovo?',
+    title: 'Ogni pasto è una trattativa con la paura',
+    body: 'Non mangi con appetito: mangi facendo calcoli. Orario, porzioni, rischio notturno.',
   },
   {
     icon: Users,
-    title: 'Le rinunce che gli altri non capiscono',
-    body: 'Niente pizza con gli amici, niente brindisi, niente caffè dopo pranzo. Mentre loro ordinano quello che vogliono, tu ti accontenti, sorridi e fingi che vada bene così.',
+    title: 'Le rinunce sociali che nessuno vede',
+    body: 'Eviti cene, brindisi, spontaneità. Fuori sembri sereno, dentro stai gestendo sintomi e imbarazzo.',
   },
   {
     icon: Mic,
-    title: 'Sintomi che non sembrano reflusso',
-    body: 'Tosse secca, nodo in gola, voce che va via, a volte un dolore al petto che ti ha fatto pensare al cuore. E nessuno li ha collegati al reflusso.',
+    title: 'Sintomi “strani” che restano senza nome',
+    body: 'Tosse secca, nodo in gola, voce roca, pressione retrosternale: segnali che spesso non vengono collegati in un quadro unico.',
+  },
+]
+
+const MECHANISM_STEPS = [
+  {
+    k: '01',
+    t: 'Il diaframma perde elasticità',
+    b: 'Stress, postura rigida e respiro superficiale possono alterare il lavoro del muscolo respiratorio.',
+  },
+  {
+    k: '02',
+    t: 'La valvola è meno supportata',
+    b: 'Quando il diaframma lavora male, la pressione addominale può favorire la risalita del contenuto gastrico.',
+  },
+  {
+    k: '03',
+    t: 'I sintomi si riaccendono',
+    b: 'Per questo puoi mangiare leggero e avere comunque bruciore: non dipende solo dagli alimenti.',
   },
 ]
 
 const BENEFITS = [
   {
-    icon: Moon,
-    title: 'Tornare a dormire sdraiato',
-    body: 'Senza passare le notti semi-seduto con due cuscini.',
+    image: '/home/home5.png',
+    alt: 'Trattamento osteopatico sull’addome per il reflusso',
+    title: 'Quando ti sdrai, il reflusso prende il controllo',
+    body: 'Se i sintomi peggiorano appena ti corichi, si valuta la componente meccanica che può influenzare pressione e risalita notturna.',
   },
   {
-    icon: Utensils,
-    title: 'Mangiare senza fare calcoli',
-    body: 'Sederti a tavola con appetito, non con l’ansia di cosa succederà dopo.',
+    image: '/home/home2.png',
+    alt: 'Osteopata che lavora sulla pancia e sulla dinamica digestiva',
+    title: 'Dieta impeccabile, risultato insufficiente',
+    body: 'Quando i trigger alimentari sono già ridotti ma i sintomi persistono, ha senso approfondire diaframma, torace e dinamica digestiva.',
   },
   {
-    icon: Pill,
-    title: 'Ridurre la pastiglia quotidiana',
-    body: 'Se si affronta la causa, il tampone quotidiano può pesare meno.',
+    image: '/home/home4.png',
+    alt: 'Manovra osteopatica sull’addome in studio a Torino',
+    title: 'Farmaco utile, ma non sempre risolutivo',
+    body: 'La terapia prescritta dal medico resta centrale. In parallelo, si può lavorare su ciò che i farmaci non affrontano direttamente: la parte funzionale e meccanica.',
   },
   {
-    icon: Wind,
-    title: 'Liberare il diaframma',
-    body: 'Lavoriamo sulle tensioni che aumentano la pressione sullo stomaco.',
+    image: '/cervicalgia/cerv12.JPG',
+    alt: 'Trattamento osteopatico manuale su diaframma e zona gastrica',
+    title: 'Il diaframma è un pezzo chiave del problema',
+    body: 'Il diaframma contribuisce alla continenza della valvola gastroesofagea. Se è rigido o poco coordinato, i sintomi possono amplificarsi.',
   },
   {
-    icon: Users,
-    title: 'Riprenderti le cene',
-    body: 'Smettere di rinunciare mentre gli altri ordinano.',
+    image: '/home/home7.png',
+    alt: 'Osteopata che tratta la pancia durante la visita',
+    title: 'Il reflusso non colpisce solo lo stomaco',
+    body: 'Impatta sonno, relazioni, lavoro e sicurezza a tavola. Un percorso efficace deve considerare anche questo impatto quotidiano.',
   },
   {
-    icon: Hand,
-    title: 'Affiancare il gastroenterologo',
-    body: 'Il percorso medico resta: noi lavoriamo su diaframma, postura e sistema neurovegetativo.',
+    image: '/home/home4.png',
+    imageClassName: 'object-[center_75%]',
+    alt: 'Lavoro osteopatico sull’addome in affiancamento al percorso medico',
+    title: 'Approccio integrato: medico + osteopatico',
+    body: 'Gastroscopia, pH-impedenzometria e manometria restano riferimenti medici. Noi lavoriamo in affiancamento sulla componente posturale, respiratoria e meccanica.',
   },
 ]
 
 const VISIT_STEPS = [
   {
-    title: 'Chiamata con la segreteria',
-    body: 'La segreteria ti ascolta, capisce bene il tuo problema e ti assegna l’osteopata più adatto alla tua esigenza.',
+    title: 'Primo contatto con la segreteria',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
-    title: 'Accettazione',
-    body: 'Quando arrivi in studio, facciamo l’accettazione e compili il modulo necessario prima di iniziare.',
+    title: 'Accettazione in studio',
+    body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Inizio del trattamento',
-    body: 'Il dottore raccoglie l’anamnesi: tante domande per capire con precisione l’origine del tuo problema.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Valutazione posturale',
-    body: 'L’osteopata effettua un esame obiettivo e una valutazione posturale per capire come si muove il tuo corpo nello spazio e individuare l’origine del problema.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo respirazione, diaframma, torace e dinamica corporea per individuare fattori che possono alimentare il reflusso.',
   },
   {
-    title: 'Trattamento manuale',
-    body: 'Dopo aver studiato il tuo caso specifico, esegue il trattamento manuale per migliorare la tua problematica.',
+    title: 'Tratamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Consigli finali',
-    body: 'L’osteopata ti lascia una serie di indicazioni pratiche per mantenere i risultati ottenuti.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su respiro, posture e gestione dei pasti, da integrare con il percorso medico.',
   },
 ]
 
@@ -132,26 +224,15 @@ const FAQ_ITEMS = [
     id: 'osteopata-stomaco',
     question: (
       <>
-        Ma l’<strong>osteopata</strong> che c’entra con lo <em>stomaco</em>? Non è una{' '}
-        <u className="decoration-green/50 underline-offset-2">presa in giro</u>?
+        Cosa c’entra l’<strong>osteopatia</strong> con il <em>reflusso</em>?
       </>
     ),
     answer: (
       <>
-        Capisco lo scetticismo: se ti brucia lo stomaco, ti aspetti un{' '}
-        <strong className="text-cream">gastroenterologo</strong>, non qualcuno che lavora con le
-        mani. Il punto è che la <em>valvola</em> tra stomaco ed esofago{' '}
-        <u className="decoration-green/40 underline-offset-2">non lavora da sola</u>. È aiutata
-        dal <strong className="text-cream">diaframma</strong>, il muscolo del respiro, che le fa
-        da anello intorno. Quando quel muscolo è bloccato — <em>postura chiusa</em>, stress,
-        respiro corto — l’anello stringe male e la pressione sulla pancia aumenta: l’acido trova
-        la porta socchiusa. Su <strong className="text-cream">diaframma, torace e postura</strong>{' '}
-        le mani lavorano eccome. Non sostituiamo il tuo medico né i suoi esami:{' '}
-        <em>affianchiamo</em> il percorso lavorando sulla{' '}
-        <u className="decoration-green/40 underline-offset-2">parte meccanica</u> che la pastiglia
-        e la dieta spesso non toccano. Se hai già fatto gastroscopia e controlli, tanto meglio:
-        significa che possiamo concentrarci su{' '}
-        <strong className="text-cream">ciò che quegli esami non valutano</strong>.
+        Il reflusso e una condizione medica e il gastroenterologo resta il riferimento clinico.
+        L’osteopatia non sostituisce esami o terapia farmacologica: lavora in{' '}
+        <em>affiancamento</em> su diaframma, torace, postura e respirazione, fattori che possono
+        influenzare la dinamica meccanica della risalita.
       </>
     ),
   },
@@ -159,26 +240,15 @@ const FAQ_ITEMS = [
     id: 'pastiglia-anni',
     question: (
       <>
-        Prendo già la <strong>pastiglia da anni</strong>. Perché dovrei{' '}
-        <em>sprecare</em> tempo e soldi da voi?
+        Prendo gia i farmaci: ha senso fare anche un percorso da voi?
       </>
     ),
     answer: (
       <>
-        Proprio perché la prendi <u className="decoration-green/40 underline-offset-2">da anni</u>.
-        Gli inibitori di pompa e gli antiacidi agiscono sul{' '}
-        <strong className="text-cream">contenuto</strong>: riducono l’acidità e danno sollievo
-        reale. Ma <em>non cambiano la meccanica</em> che fa risalire l’acido. Continua secondo le
-        indicazioni del tuo medico: non siamo qui per toglierti la terapia. Siamo qui per lavorare
-        su ciò che la pastiglia <strong className="text-cream">non copre</strong> — diaframma,
-        pressione addominale, torace chiuso, sistema nervoso della digestione. Molte persone
-        arrivano da noi proprio perché la pastiglia “tiene” ma{' '}
-        <u className="decoration-green/40 underline-offset-2">non basta più</u>: notti semi-seduti,
-        pasti calcolati, dieta ferrea. Se il tampone quotidiano è diventato l’
-        <em>unica strategia</em>, ha senso valutare anche la{' '}
-        <strong className="text-cream">causa meccanica</strong>. La prima visita a{' '}
-        <strong className="text-cream">49€</strong> serve proprio a capire se c’è qualcosa su cui
-        possiamo intervenire, senza promettere miracoli e senza sostituire il gastroenterologo.
+        Spesso si, se i sintomi persistono nonostante terapia e attenzione alimentare. I farmaci
+        riducono l’acidita e possono essere indispensabili; noi valutiamo se esiste una componente
+        funzionale su cui intervenire. Qualsiasi modifica terapeutica resta sempre in capo al medico
+        prescrittore.
       </>
     ),
   },
@@ -186,27 +256,15 @@ const FAQ_ITEMS = [
     id: 'gastroscopia',
     question: (
       <>
-        La <strong>gastroscopia</strong> è a posto. Quindi non ho niente e{' '}
-        <em>sto esagerando</em>, no?
+        Se la <strong>gastroscopia</strong> e nella norma, perche ho ancora sintomi?
       </>
     ),
     answer: (
       <>
-        <strong className="text-cream">No.</strong> Una gastroscopia nella norma è una buona
-        notizia: esclude problemi seri e valuta l’esofago. Ma{' '}
-        <u className="decoration-green/40 underline-offset-2">non spiega perché la valvola non tenga</u>
-        , non misura il diaframma e non guarda la pressione da fuori. Ecco perché puoi avere esami
-        “puliti” e bruciare lo stesso: il problema non è sempre ciò che si vede{' '}
-        <em>dentro</em>, ma ciò che comprime da <strong className="text-cream">fuori</strong>.
-        pH-impedenzometria e manometria approfondiscono il reflusso in altri modi; noi entriamo sul
-        piano <em>meccanico e posturale</em>. Non stai esagerando se la notte ti svegli con la gola
-        che brucia, se ogni pasto è un calcolo, se hai rinunciato alle cene. Stai descrivendo una{' '}
-        <strong className="text-cream">vita limitata</strong>. E se gli esami hanno escluso
-        l’emergenza, è il momento migliore per affrontare la parte che resta:{' '}
-        <u className="decoration-green/40 underline-offset-2">
-          quella che nessuno ha ancora toccato
-        </u>
-        .
+        Una gastroscopia negativa e una buona notizia: esclude molte criticita. Tuttavia non misura
+        tutto il comportamento funzionale del sistema esofago-stomaco. In alcuni casi servono altri
+        esami (come pH-impedenzometria o manometria) e un lavoro complementare sulla parte
+        meccanica.
       </>
     ),
   },
@@ -214,25 +272,14 @@ const FAQ_ITEMS = [
     id: 'dieta-tutto',
     question: (
       <>
-        Ho già tolto <strong>TUTTO</strong>. Caffè, vino, pomodoro, vita sociale. E ancora brucio.
-        Allora <em>cosa mi resta</em>?
+        Ho gia eliminato molti cibi, ma il reflusso resta. Che senso ha continuare?
       </>
     ),
     answer: (
       <>
-        Ti resta la parte che la dieta{' '}
-        <u className="decoration-green/40 underline-offset-2">non risolve</u>. Eliminare cibi
-        riduce gli <em>scatenanti</em>, non sempre la <strong className="text-cream">causa</strong>.
-        Se hai mangiato in bianco per mesi e il reflusso torna “come se non contasse nulla”, è un
-        segnale chiaro: <strong className="text-cream">non era solo nel piatto</strong>. Cena presto
-        e cuscino rialzato aiutano la notte, ma sono <em>adattamenti</em>. Noi lavoriamo sul
-        diaframma e sulla pressione che può tenere la valvola socchiusa. Non ti chiediamo di
-        buttare via i consigli del medico: ti chiediamo di aggiungere un{' '}
-        <u className="decoration-green/40 underline-offset-2">pezzo mancante</u>. Molti arrivano
-        esausti dalle rinunce e dall’imbarazzo a tavola. L’obiettivo non è venderti un’altra lista
-        di divieti: è capire se liberare torace, diaframma e sistema della digestione può ridurre
-        il bisogno di <strong className="text-cream">vivere a metà</strong>. Se la dieta ferrea non
-        è bastata, è il motivo migliore per valutare la parte meccanica.
+        Ridurre trigger alimentari e utile, ma non sempre sufficiente. Se la dieta non basta, non
+        significa che “non c’e nulla da fare”: puo significare che bisogna integrare altri livelli
+        di intervento, con un piano personalizzato e realistico.
       </>
     ),
   },
@@ -240,74 +287,84 @@ const FAQ_ITEMS = [
     id: 'solo-stress',
     question: (
       <>
-        Non è solo <strong>stress</strong>? Me l’hanno detto tutti. Quindi dovrei solo{' '}
-        <em>“rilassarmi”</em>?
+        E solo <strong>stress</strong> oppure no?
       </>
     ),
     answer: (
       <>
-        Lo stress <strong className="text-cream">incide davvero</strong> sulla digestione: non è
-        una scusa. Ma “è ansia, mangi leggero” spesso{' '}
-        <u className="decoration-green/40 underline-offset-2">chiude la conversazione</u> senza
-        risolvere niente. Lo stress si scarica su <em>strutture concrete</em> — diaframma
-        bloccato, respiro corto, torace chiuso, sistema nervoso in allarme. Il corpo digerisce
-        meglio quando non è in modalità difesa. Noi non neghiamo il fattore emotivo: lo traduciamo
-        in qualcosa di <strong className="text-cream">lavorabile</strong> con le mani e con
-        consigli su respiro e postura. Se ti hanno solo detto di rilassarti e intanto dormi
-        semi-seduto da mesi, <em>non ti hanno ascoltato</em> fino in fondo. Un supporto psicologico
-        può aiutare; l’osteopatia affianca lavorando sul pezzo fisico che lo stress lascia sul
-        corpo. Non è “tutto nella tua testa”: è anche nella{' '}
-        <u className="decoration-green/40 underline-offset-2">meccanica</u> che la testa e il corpo
-        condividono.
+        Lo stress incide davvero su digestione e percezione dei sintomi, ma ridurre tutto a “ansia”
+        e spesso semplicistico. Nel nostro approccio consideriamo insieme fattori emotivi, biomeccanici
+        e clinici, senza negare nessuno di questi livelli.
       </>
     ),
   },
   {
-    id: 'prezzo-fregatura',
+    id: 'red-flags',
     question: (
       <>
-        <strong>49€</strong> la prima visita: qual è la <em>fregatura</em>? Poi mi rifilate un
-        pacchetto da mille euro?
+        Quando e necessario prima un controllo medico?
       </>
     ),
     answer: (
       <>
-        Nessuna fregatura nascosta nella pagina. La prima visita ha uno{' '}
-        <strong className="text-cream">sconto dedicato</strong>: da 90€ a{' '}
-        <u className="decoration-green/40 underline-offset-2">49€</u>, dura circa{' '}
-        <em>60 minuti</em> tra colloquio, valutazione e primo trattamento. Serve a capire il tuo
-        caso — da quanto brucia, cosa lo accende, cosa hai già fatto — e a iniziare un lavoro
-        mirato. Le sedute successive si valutano in struttura, in base a quello che emerge:{' '}
-        <strong className="text-cream">non vendiamo pacchetti miracolosi</strong> in automatico. Se
-        non c’è bisogno di un percorso, te lo diciamo. Se c’è, ne parliamo con chiarezza.
-        Affianchiamo il gastroenterologo, <em>non lo sostituiamo</em>; non chiediamo di sospendere
-        farmaci senza il tuo medico. La polarizzazione vera è questa: o continui solo a{' '}
-        <u className="decoration-green/40 underline-offset-2">tamponare</u>, o valuti anche la{' '}
-        <strong className="text-cream">causa meccanica</strong>. La prima visita a 49€ è il modo
-        più onesto per decidere, con i fatti sul tuo corpo e non con una promessa da landing page.
+        In presenza di difficolta a deglutire, calo di peso involontario, sangue nel vomito o nelle
+        feci, dolore toracico da sforzo, vomito persistente o comparsa recente dei sintomi dopo i 50
+        anni, la priorita e la valutazione medica tempestiva. Noi interveniamo solo quando il quadro
+        e appropriato a un supporto osteopatico.
       </>
     ),
   },
 ]
 
+const AMBIENT_ORBS = [
+  { left: '7%', top: '12%', size: 'h-20 w-20', delay: 0, duration: 7.5 },
+  { left: '88%', top: '19%', size: 'h-16 w-16', delay: 0.6, duration: 9.2 },
+  { left: '18%', top: '54%', size: 'h-14 w-14', delay: 1.2, duration: 8.4 },
+  { left: '82%', top: '66%', size: 'h-24 w-24', delay: 0.2, duration: 10.2 },
+  { left: '50%', top: '87%', size: 'h-16 w-16', delay: 1.7, duration: 8.8 },
+]
+const _MOTION = motion
+
 function Reflusso() {
+  const { video: heroVideo, loading: heroVideoLoading } = useVideoReflussoVsl()
   const [showBooking, setShowBooking] = useState(false)
   const [bookingCtaType, setBookingCtaType] = useState('primaVisita')
   const [painIndex, setPainIndex] = useState(0)
-  const [benefitIndex, setBenefitIndex] = useState(0)
   const [recensioniIndex, setRecensioniIndex] = useState(0)
   const [openFaqIndex, setOpenFaqIndex] = useState(null)
+  const [heroVideoCover, setHeroVideoCover] = useState(true)
   const painRef = useRef(null)
-  const benefitRef = useRef(null)
   const recensioniRef = useRef(null)
+  const showHeroMedia = heroVideoLoading || Boolean(heroVideo)
+  const heroVideoSrc = heroVideo
+    ? `https://iframe.videodelivery.net/${heroVideo.cloudflareUid}?autoplay=true&muted=true&loop=true&controls=false&preload=auto&letterboxColor=%23002552&poster=${encodeURIComponent(heroVideo.anteprimaUrl ?? '')}`
+    : ''
+  const { scrollYProgress } = useScroll()
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.15 })
+  const pageGlowY = useTransform(scrollYProgress, [0, 1], ['0%', '42%'])
+  const pageGlowRotate = useTransform(scrollYProgress, [0, 1], [0, 14])
+  const heroMediaY = useTransform(scrollYProgress, [0, 0.24], [0, 46])
+  const heroMediaRotateX = useTransform(scrollYProgress, [0, 0.2], [0, -4.8])
+  const heroMediaScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.06])
+  const titleGlowX = useTransform(scrollYProgress, [0, 1], ['-22%', '24%'])
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const spotlightX = useSpring(mouseX, { stiffness: 120, damping: 20, mass: 0.25 })
+  const spotlightY = useSpring(mouseY, { stiffness: 120, damping: 20, mass: 0.25 })
 
   const PAIN_W = 300
-  const BENEFIT_W = 280
   const RECENSIONI_W = 280
   const GAP = 16
   const RECENSIONI_SLIDES = RECENSIONI_PREVIEW.length + 1 // + card “tutte le recensioni”
   // Ultima foto del preview oppure card Google: su mobile lo snap spesso si ferma una slide prima
   const showGoogleRecensioniCta = recensioniIndex >= RECENSIONI_PREVIEW.length - 2
+
+  useEffect(() => {
+    if (!heroVideo) return
+    setHeroVideoCover(true)
+    const timer = window.setTimeout(() => setHeroVideoCover(false), 500)
+    return () => window.clearTimeout(timer)
+  }, [heroVideo])
 
   useEffect(() => {
     const prevTitle = document.title
@@ -345,7 +402,7 @@ function Reflusso() {
     }
 
     const description =
-      'Reflusso gastroesofageo a Torino: approccio osteopatico su diaframma e valvola. Non solo antiacidi — lavora sulla meccanica. Prima visita 49€. Prenota ora.'
+      'Reflusso gastroesofageo a Torino: approccio osteopatico integrato su diaframma, postura e meccanica. In affiancamento al medico. Prima visita 49€.'
 
     ensureMetaByName('description', description)
     ensureMetaByName('robots', 'index, follow')
@@ -371,17 +428,6 @@ function Reflusso() {
     const onScroll = () => {
       const i = Math.round(el.scrollLeft / (PAIN_W + GAP))
       setPainIndex(Math.min(Math.max(0, i), PAIN_POINTS.length - 1))
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    return () => el.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    const el = benefitRef.current
-    if (!el) return
-    const onScroll = () => {
-      const i = Math.round(el.scrollLeft / (BENEFIT_W + GAP))
-      setBenefitIndex(Math.min(Math.max(0, i), BENEFITS.length - 1))
     }
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => el.removeEventListener('scroll', onScroll)
@@ -420,6 +466,18 @@ function Reflusso() {
       window.removeEventListener('resize', updateFromScroll)
     }
   }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    mouseX.set(window.innerWidth * 0.5)
+    mouseY.set(window.innerHeight * 0.25)
+    const onMove = (event) => {
+      mouseX.set(event.clientX)
+      mouseY.set(event.clientY)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [mouseX, mouseY])
 
   const openConsulto = () => {
     setBookingCtaType('consulto')
@@ -471,10 +529,13 @@ function Reflusso() {
       <div
         className={`flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full px-1 ${className}`}
       >
-        <button
+        <motion.button
           type="button"
           onClick={openConsulto}
-          className={`group inline-flex items-center gap-2.5 sm:gap-3 w-fit max-w-full rounded-full font-black uppercase tracking-tight text-blue-dark bg-[linear-gradient(90deg,#3dd968_0%,#72fa93_45%,#a8ffbf_100%)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_14px_34px_-12px_rgba(114,250,147,0.55)] active:translate-y-0 ${primaryCls}`}
+          whileHover={{ y: -3, scale: 1.01 }}
+          whileTap={{ y: 0, scale: 0.985 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+          className={`group inline-flex items-center gap-2.5 sm:gap-3 w-fit max-w-full rounded-full font-black uppercase tracking-tight text-blue-dark border-2 border-cream bg-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_34px_-12px_rgba(244,244,244,0.35)] active:translate-y-0 ${primaryCls}`}
         >
           <span className="inline-flex items-center gap-2 sm:gap-2.5 min-w-0">
             <Phone className={`${iconCls} shrink-0`} strokeWidth={2.5} />
@@ -482,34 +543,72 @@ function Reflusso() {
             <span className="hidden sm:inline whitespace-nowrap">Consulto telefonico gratuito</span>
           </span>
           <span
-            className={`grid place-items-center rounded-full bg-blue-dark text-green shrink-0 ${arrowCls}`}
+            className={`grid place-items-center rounded-full bg-blue-dark text-cream shrink-0 ${arrowCls}`}
           >
             <ArrowRight className={arrowIconCls} strokeWidth={2.25} />
           </span>
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           type="button"
           onClick={openPrimaVisita}
-          className={`group inline-flex items-center gap-2.5 sm:gap-3 w-fit max-w-full rounded-full font-black uppercase tracking-tight text-blue-dark border-2 border-cream bg-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_34px_-12px_rgba(244,244,244,0.35)] active:translate-y-0 ${secondaryCls}`}
+          whileHover={{ y: -3, scale: 1.01 }}
+          whileTap={{ y: 0, scale: 0.985 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+          className={`group inline-flex items-center gap-2.5 sm:gap-3 w-fit max-w-full rounded-full font-black uppercase tracking-tight text-blue-dark bg-[linear-gradient(90deg,#3dd968_0%,#72fa93_45%,#a8ffbf_100%)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_14px_34px_-12px_rgba(114,250,147,0.55)] active:translate-y-0 ${secondaryCls}`}
         >
           <span className="inline-flex items-center gap-2 sm:gap-2.5 min-w-0 whitespace-nowrap">
             <CalendarCheck className={`${iconCls} shrink-0`} strokeWidth={2.5} />
             Prima visita a 49€
           </span>
           <span
-            className={`grid place-items-center rounded-full bg-blue-dark text-cream shrink-0 ${arrowCls}`}
+            className={`grid place-items-center rounded-full bg-blue-dark text-green shrink-0 ${arrowCls}`}
           >
             <ArrowRight className={arrowIconCls} strokeWidth={2.25} />
           </span>
-        </button>
+        </motion.button>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-blue-dark text-cream font-montserrat overflow-x-hidden">
+      <motion.div
+        className="fixed left-0 right-0 top-0 z-[70] h-1 origin-left bg-green shadow-[0_0_16px_rgba(114,250,147,0.8)]"
+        style={{ scaleX: smoothProgress }}
+      />
+      <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden" aria-hidden>
+        {AMBIENT_ORBS.map((orb, i) => (
+          <motion.span
+            key={`orb-${i}`}
+            className={`absolute ${orb.size} rounded-full bg-green/15 blur-2xl`}
+            style={{ left: orb.left, top: orb.top, y: pageGlowY, rotate: pageGlowRotate }}
+            animate={{ x: [0, i % 2 ? -16 : 18, 0], scale: [1, 1.08, 1], opacity: [0.2, 0.45, 0.2] }}
+            transition={{ duration: orb.duration, delay: orb.delay, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+        <motion.div
+          className="absolute h-[28rem] w-[28rem] rounded-full blur-3xl"
+          style={{
+            x: spotlightX,
+            y: spotlightY,
+            translateX: '-50%',
+            translateY: '-50%',
+            background:
+              'radial-gradient(circle, rgba(114,250,147,0.36) 0%, rgba(114,250,147,0.13) 30%, rgba(114,250,147,0) 72%)',
+          }}
+        />
+        <motion.div
+          className="absolute inset-0 opacity-[0.17]"
+          animate={{ backgroundPositionX: ['0%', '100%'] }}
+          transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(115deg, rgba(114,250,147,0.18) 0px, rgba(114,250,147,0.18) 1px, transparent 1px, transparent 26px)',
+          }}
+        />
+      </div>
       {/* ——— OFFERTA ——— */}
-      <section className="relative pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
+      <section className="relative z-[2] pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv11.JPG"
@@ -540,69 +639,113 @@ function Reflusso() {
             transition={{ duration: 0.6, delay: 0.06 }}
             className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-black leading-[1.02] tracking-[-0.03em] mb-6 sm:mb-8"
           >
-            Il reflusso non è
+            Soffri di reflusso e
             <br className="hidden sm:block" />{' '}
-            solo acidità.
+            ogni pasto è una rinuncia?
             <br />
-            <span className="text-green">È una valvola che non tiene.</span>
+            <span className="relative inline-block text-green">
+              <motion.span
+                className="absolute inset-y-0 -left-10 w-20 rounded-full bg-green/40 blur-xl"
+                style={{ x: titleGlowX }}
+              />
+              <span className="relative">Prenota il tuo trattamento specifico.</span>
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.14 }}
-            className="text-cream/55 text-lg sm:text-lg leading-relaxed max-w-lg sm:mx-auto mb-10 sm:mb-12 font-medium"
+            className="text-cream/60 text-lg sm:text-lg leading-relaxed max-w-lg sm:mx-auto mb-10 sm:mb-12 font-medium"
           >
-            Lavoriamo sul diaframma — l’anello che aiuta la valvola a restare chiusa.
-            Affianchiamo il tuo gastroenterologo, non lo sostituiamo.
+            Interveniamo in modo specifico su{' '}
+            <strong className="font-bold text-cream">diaframma</strong>,{' '}
+            <strong className="font-bold text-cream">postura</strong> e{' '}
+            <strong className="font-bold text-cream">zona gastrica</strong> per ridurre l’impatto
+            del reflusso su sonno, pasti e vita sociale.
           </motion.p>
 
+          {showHeroMedia && (
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.18 }}
             className="relative w-full max-w-3xl sm:mx-auto mb-6 sm:mb-12"
+            style={{
+              y: heroMediaY,
+              rotateX: heroMediaRotateX,
+              scale: heroMediaScale,
+              transformPerspective: 1200,
+            }}
           >
             {/* Ambient glow */}
             <div
-              className="absolute -inset-6 sm:-inset-10 bg-[radial-gradient(ellipse_at_center,rgba(114,250,147,0.18),transparent_65%)] blur-2xl pointer-events-none"
+              className="absolute -inset-6 sm:-inset-10 bg-[radial-gradient(ellipse_at_center,rgba(114,250,147,0.28),transparent_65%)] blur-2xl pointer-events-none"
+              aria-hidden
+            />
+            <div
+              className="absolute -inset-2 sm:-inset-4 bg-[radial-gradient(ellipse_at_center,rgba(0,37,82,0.55),transparent_70%)] blur-xl pointer-events-none"
               aria-hidden
             />
 
             {/* Offset accent frame */}
             <div
-              className="absolute inset-3 sm:inset-4 rounded-[1.15rem] sm:rounded-[1.5rem] border border-green/20 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 pointer-events-none"
+              className="absolute inset-3 sm:inset-4 rounded-[1.15rem] sm:rounded-[1.5rem] border border-green/30 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 pointer-events-none shadow-[0_0_30px_-8px_rgba(114,250,147,0.35)]"
               aria-hidden
             />
 
             {/* Soft contact + cast shadows under the frame */}
             <div
-              className="absolute left-6 right-6 -bottom-3 sm:left-10 sm:right-10 sm:-bottom-4 h-8 sm:h-10 rounded-[100%] bg-black/50 blur-xl pointer-events-none"
+              className="absolute left-5 right-5 -bottom-4 sm:left-8 sm:right-8 sm:-bottom-5 h-10 sm:h-12 rounded-[100%] bg-black/60 blur-2xl pointer-events-none"
               aria-hidden
             />
             <div
-              className="absolute left-12 right-12 -bottom-1 sm:left-16 sm:right-16 sm:-bottom-2 h-4 rounded-[100%] bg-black/40 blur-md pointer-events-none"
+              className="absolute left-10 right-10 -bottom-1.5 sm:left-14 sm:right-14 sm:-bottom-2.5 h-5 rounded-[100%] bg-black/45 blur-md pointer-events-none"
               aria-hidden
             />
 
             {/* Gradient border shell */}
-            <div className="relative p-[1px] rounded-2xl sm:rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.55)_0%,rgba(244,244,244,0.18)_35%,rgba(114,250,147,0.12)_70%,rgba(0,37,82,0.4)_100%)] shadow-[0_20px_40px_-20px_rgba(0,0,0,0.7),0_40px_90px_-30px_rgba(0,0,0,0.55),0_8px_24px_-8px_rgba(114,250,147,0.18),0_0_0_1px_rgba(114,250,147,0.08)]">
-              <div className="relative overflow-hidden rounded-[calc(1rem-1px)] sm:rounded-[calc(1.35rem-1px)] aspect-[16/9] bg-blue-dark">
-                <motion.img
-                  initial={{ scale: 1.06 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-                  src="/cervicalgia/cerv12.JPG"
-                  alt="Trattamento osteopatico sul diaframma per il reflusso gastroesofageo - Mobilitas Torino"
-                  className="w-full h-full object-cover object-center"
-                />
-                {/* Soft cinematic overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-dark/55 via-transparent to-blue-dark/15 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-dark/25 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute inset-0 ring-1 ring-inset ring-cream/10 rounded-[inherit] pointer-events-none" />
+            <motion.div
+              className="relative p-[1px] rounded-2xl sm:rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.7)_0%,rgba(244,244,244,0.22)_35%,rgba(114,250,147,0.18)_70%,rgba(0,37,82,0.45)_100%)] shadow-[0_24px_50px_-18px_rgba(0,0,0,0.85),0_48px_100px_-28px_rgba(0,0,0,0.65),0_12px_32px_-10px_rgba(114,250,147,0.28),0_0_0_1px_rgba(114,250,147,0.14)]"
+              whileHover={{ rotateY: 3.5, rotateX: -1.5, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 210, damping: 20 }}
+            >
+              <div className="relative overflow-hidden rounded-[calc(1rem-1px)] sm:rounded-[calc(1.35rem-1px)] aspect-[16/9] bg-[#002552]">
+                {heroVideo ? (
+                  <>
+                    {heroVideo.anteprimaUrl ? (
+                      <img
+                        src={heroVideo.anteprimaUrl}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover object-center"
+                        decoding="async"
+                        fetchPriority="high"
+                      />
+                    ) : null}
+                    <iframe
+                      src={heroVideoSrc}
+                      title={heroVideo.titolo || 'Video trattamento reflusso - Mobilitas Torino'}
+                      className="absolute inset-0 h-full w-full border-0 pointer-events-none bg-[#002552]"
+                      style={{ backgroundColor: '#002552', colorScheme: 'normal' }}
+                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                      allowFullScreen
+                    />
+                    {/* Copre il flash nero iniziale del player con il blu aziendale */}
+                    <div
+                      className={`absolute inset-0 z-[1] bg-[#002552] transition-opacity duration-300 ${
+                        heroVideoCover ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      aria-hidden
+                    />
+                    {/* Blocca interazione: il video deve comportarsi come un'immagine in loop */}
+                    <div className="absolute inset-0 z-[1]" aria-hidden />
+                  </>
+                ) : null}
+                <div className="absolute inset-0 ring-1 ring-inset ring-cream/10 rounded-[inherit] pointer-events-none z-[2]" />
               </div>
-            </div>
+            </motion.div>
           </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -613,13 +756,13 @@ function Reflusso() {
             <ul className="w-full max-w-xl min-w-0 px-4 sm:px-5 space-y-2.5 sm:space-y-3.5 text-left">
               {HERO_BENEFITS.map((benefit, i) => (
                 <motion.li
-                  key={benefit}
+                  key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.28 + i * 0.08 }}
-                  className="flex items-start gap-3 min-w-0"
+                  className="flex items-center gap-3 min-w-0"
                 >
-                  <span className="mt-0.5 grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
+                  <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
                     <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
                   </span>
                   <span className="min-w-0 flex-1 text-cream/85 text-base sm:text-base leading-snug font-medium break-words">
@@ -632,16 +775,16 @@ function Reflusso() {
             <div className="flex flex-col items-center gap-2 sm:gap-5 w-full">
               <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:gap-8">
                 <div className="flex items-baseline gap-2.5 sm:gap-3">
-                  <span className="text-green font-black text-4xl sm:text-5xl tracking-tight leading-none">
+                  <span className="text-green font-black text-5xl sm:text-6xl tracking-tight leading-none">
                     49€
                   </span>
-                  <span className="text-cream/55 text-sm sm:text-sm font-medium self-end pb-1">
-                    prima visita
+                  <span className="text-cream/55 text-base sm:text-base font-medium self-end pb-1">
+                    visita di 1h
                   </span>
                 </div>
                 <div className="hidden sm:block w-px h-10 bg-cream/15" aria-hidden />
-                <p className="text-cream/70 text-base sm:text-[15px] font-medium tracking-wide leading-none">
-                  Solo <span className="text-cream font-black">15 posti</span> al mese
+                <p className="text-[#ff6b6b] italic text-base sm:text-[15px] font-medium tracking-wide leading-none">
+                  Solo <span className="font-black">40 posti</span> al mese
                 </p>
               </div>
 
@@ -667,7 +810,7 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— PAIN POINTS ——— */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv15.JPG"
@@ -689,29 +832,34 @@ function Reflusso() {
             className="relative z-10 mb-8 lg:mb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              Ti riconosci?
+              I sintomi più comuni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
-              Il reflusso ti ha tolto pezzi di vita.
-              <span className="text-green"> Non solo lo stomaco.</span>
+              Il reflusso non ti limita solo nei sintomi.
+              <br />
+              <span className="text-green">Ti limita nelle scelte.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              Se anche una sola di queste situazioni ti suona familiare, non sei solo —
-              e non è “nella tua testa”.
+              Non e fragilita: e usura quotidiana. E merita un approccio piu completo.
             </p>
           </motion.div>
 
           <div className="relative z-10">
             <div
               ref={painRef}
-              className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 px-4 sm:px-6 lg:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] scroll-smooth"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory gap-4 pb-3 px-4 sm:px-6 lg:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}
             >
               {PAIN_POINTS.map((pain, i) => {
                 const Icon = pain.icon
                 return (
-                  <article
+                  <motion.article
                     key={pain.title}
+                    initial={{ opacity: 0, y: 22 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.45, delay: i * 0.05 }}
+                    whileHover={{ y: -4 }}
                     className="flex-shrink-0 w-[280px] sm:w-[300px] snap-center"
                   >
                     <div className="group relative h-full overflow-hidden rounded-2xl border border-[#c47a7a]/35 bg-[#c47a7a]/28 backdrop-blur-md p-5 sm:p-6 shadow-[0_12px_40px_-20px_rgba(196,122,122,0.35)] hover:bg-[#c47a7a]/38 hover:border-[#c47a7a]/50 transition-all duration-500">
@@ -730,7 +878,7 @@ function Reflusso() {
                         <div className="mb-4 grid place-items-center w-11 h-11 rounded-xl bg-[#c47a7a]/25 border border-[#c47a7a]/40 text-[#e8b4b4]">
                           <Icon className="w-5 h-5" strokeWidth={1.75} />
                         </div>
-                        <h3 className="text-cream font-bold text-base sm:text-lg leading-snug mb-2.5 pr-10">
+                        <h3 className="text-cream font-bold text-base sm:text-lg leading-snug mb-2.5 pr-10 mt-0">
                           {pain.title}
                         </h3>
                         <p className="text-cream/60 text-sm leading-relaxed">
@@ -738,7 +886,7 @@ function Reflusso() {
                         </p>
                       </div>
                     </div>
-                  </article>
+                  </motion.article>
                 )
               })}
             </div>
@@ -784,80 +932,251 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— MECCANISMO + BENEFICI ——— */}
-      <section className="relative py-16 lg:py-24">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-green/[0.04] blur-[100px] rounded-full" />
+          <img
+            src="/cervicalgia/cerv10.JPG"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-[center_45%] opacity-[0.24] scale-105"
+          />
+          <div className="absolute inset-0 bg-blue-dark/82" />
+          <div className="absolute inset-0 bg-[linear-gradient(165deg,rgba(0,21,48,0.88)_0%,rgba(0,37,82,0.72)_40%,rgba(0,58,110,0.65)_70%,rgba(0,26,61,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_20%,rgba(114,250,147,0.10),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_45%_at_100%_80%,rgba(114,250,147,0.07),transparent_50%)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-blue-dark to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mb-14 lg:mb-16">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-14 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
+            className="max-w-3xl mb-12 lg:mb-16"
           >
-            <p className="text-green text-xs font-semibold uppercase tracking-[0.28em] mb-3">
-              Il meccanismo
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-black leading-tight mb-8">
-              Perché puoi mangiare in bianco
-              <span className="text-green"> e bruciare lo stesso</span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
+              Il trattamento
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4 sm:mb-5">
+              Perche puoi fare “tutto giusto”
+              <span className="text-green"> e stare comunque male</span>
             </h2>
-            <div className="space-y-5 text-cream/70 text-base sm:text-lg leading-relaxed">
-              <p>
-                Tra stomaco ed esofago c’è una valvola che dovrebbe restare chiusa. Ma non lavora da sola:
-                è aiutata dal <strong className="text-cream font-semibold">diaframma</strong>, il muscolo
-                del respiro, che le fa da anello intorno.
-              </p>
-              <p>
-                Quando il diaframma è bloccato — postura chiusa, stress, respiro corto — l’anello stringe
-                male e la pressione sulla pancia aumenta: l’acido trova la porta socchiusa.
-              </p>
-              <p className="text-cream/90 font-medium">
-                Il problema non è solo cosa metti nello stomaco, ma cosa lo comprime da fuori.
-              </p>
-            </div>
+            <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
+              <strong className="font-bold text-cream">Il cibo conta</strong>.{' '}
+              <strong className="font-bold text-cream">I farmaci contano</strong>. Ma non sono
+              l’unico livello del problema: la{' '}
+              <strong className="font-bold text-cream">componente meccanica</strong> puo mantenere
+              attivi i sintomi anche quando sei attentissimo.
+            </p>
           </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-16 items-center">
+            {/* — Emblema animato: l’anello del diaframma — */}
+            <motion.figure
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="relative mx-auto w-full max-w-[300px] sm:max-w-[380px] lg:max-w-[420px]"
+            >
+              <div
+                className="absolute -inset-4 sm:-inset-5 bg-[radial-gradient(ellipse_at_center,rgba(114,250,147,0.16),transparent_65%)] blur-2xl pointer-events-none"
+                aria-hidden
+              />
+              <div
+                className="absolute inset-2 sm:inset-3 rounded-[1.75rem] border border-green/20 translate-x-2 translate-y-2 pointer-events-none"
+                aria-hidden
+              />
+              <div className="relative p-[1px] rounded-[1.75rem] sm:rounded-[2rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.45)_0%,rgba(244,244,244,0.12)_40%,rgba(114,250,147,0.08)_75%,rgba(0,37,82,0.35)_100%)] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(114,250,147,0.08)]">
+              <div className="relative aspect-square rounded-[calc(1.75rem-1px)] sm:rounded-[calc(2rem-1px)] border border-cream/[0.06] bg-blue-dark/60 backdrop-blur-md overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(114,250,147,0.16),transparent_62%)]" />
+
+                <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
+                  <defs>
+                    <linearGradient id="reflusso-tube" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0" />
+                      <stop offset="46%" stopColor="#72fa93" stopOpacity="0.16" />
+                      <stop offset="54%" stopColor="#72fa93" stopOpacity="0.16" />
+                      <stop offset="100%" stopColor="#72fa93" stopOpacity="0" />
+                    </linearGradient>
+                    <radialGradient id="reflusso-core" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0.85" />
+                      <stop offset="100%" stopColor="#72fa93" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+
+                  {/* condotto esofago → stomaco */}
+                  <rect x="171" y="16" width="58" height="368" rx="29" fill="url(#reflusso-tube)" />
+
+                  {/* anello esterno tratteggiato in rotazione */}
+                  <motion.circle
+                    cx="200" cy="200" r="152"
+                    fill="none" stroke="#F4F4F4" strokeOpacity="0.09"
+                    strokeWidth="1" strokeDasharray="2 11"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+                    style={{ transformOrigin: '200px 200px', transformBox: 'view-box' }}
+                  />
+
+                  {/* diaframma: l’anello che respira */}
+                  <motion.g
+                    animate={{ scale: [1, 1.045, 1] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '200px 200px', transformBox: 'view-box' }}
+                  >
+                    <circle cx="200" cy="200" r="106" fill="none" stroke="#72fa93" strokeOpacity="0.22" strokeWidth="20" />
+                    <circle cx="200" cy="200" r="106" fill="none" stroke="#72fa93" strokeOpacity="0.85" strokeWidth="1.5" />
+                  </motion.g>
+
+                  {/* valvola centrale */}
+                  <circle cx="200" cy="200" r="46" fill="url(#reflusso-core)" />
+                  <motion.circle
+                    cx="200" cy="200" r="31"
+                    fill="none" stroke="#72fa93" strokeWidth="2.5"
+                    animate={{ scale: [1, 0.9, 1], opacity: [0.85, 1, 0.85] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '200px 200px', transformBox: 'view-box' }}
+                  />
+                  {/* apertura chiusa */}
+                  <path
+                    d="M200 180 C212 200 212 200 200 220 C188 200 188 200 200 180 Z"
+                    fill="#002552" stroke="#72fa93" strokeWidth="2"
+                  />
+                </svg>
+
+                {/* etichette */}
+                <span className="absolute top-4 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-[0.2em] text-cream/40">
+                  Esofago
+                </span>
+                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-[0.2em] text-cream/40">
+                  Stomaco
+                </span>
+                <span className="absolute top-[33%] right-4 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_rgba(114,250,147,0.7)]" />
+                  Diaframma
+                </span>
+                <span className="absolute top-[54%] left-4 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
+                  Valvola
+                </span>
+              </div>
+              </div>
+              <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
+                In equilibrio, l’anello del diaframma tiene la valvola chiusa.
+              </figcaption>
+            </motion.figure>
+
+            {/* — Narrazione + catena causale — */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="p-[1px] rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.16)_0%,rgba(244,244,244,0.05)_50%,rgba(114,250,147,0.14)_100%)]"
+            >
+              <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
+              <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
+                Tra stomaco ed esofago c’e una valvola. A sostenerla c’e anche il{' '}
+                <strong className="text-cream font-semibold">diaframma</strong>. Se questo sistema
+                perde coordinazione, la risalita puo diventare piu probabile: e qui che un lavoro
+                manuale mirato puo affiancare il percorso medico.
+              </p>
+
+              <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
+                <span
+                  className="absolute left-[18px] top-5 bottom-5 w-px bg-gradient-to-b from-green/50 via-green/20 to-transparent"
+                  aria-hidden
+                />
+                {MECHANISM_STEPS.map((s) => (
+                  <li
+                    key={s.k}
+                    className="relative flex items-start gap-4 rounded-xl border border-cream/10 bg-cream/[0.03] px-4 py-3.5 sm:px-4 sm:py-4"
+                  >
+                    <div className="relative z-10 flex-shrink-0 grid place-items-center w-9 h-9 rounded-full border border-green/35 bg-blue-dark text-green text-[11px] font-black tabular-nums shadow-[0_0_18px_rgba(114,250,147,0.15)]">
+                      {s.k}
+                    </div>
+                    <div className="min-w-0 pt-0.5">
+                      <h4 className="text-cream font-bold text-[15px] sm:text-base leading-snug mb-1 mt-0">
+                        {s.t}
+                      </h4>
+                      <p className="text-cream/55 text-sm leading-relaxed">{s.b}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="p-[1px] rounded-2xl bg-[linear-gradient(135deg,rgba(114,250,147,0.55)_0%,rgba(114,250,147,0.12)_100%)]">
+                <blockquote className="relative overflow-hidden rounded-[calc(1rem-1px)] bg-green/[0.08] px-5 py-4 sm:px-6 sm:py-5">
+                  <span
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-green shadow-[0_0_16px_rgba(114,250,147,0.5)]"
+                    aria-hidden
+                  />
+                  <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
+                    Non sempre serve “tagliare ancora cibi”.
+                    <span className="text-green"> A volte serve cambiare il contesto meccanico.</span>
+                  </p>
+                </blockquote>
+              </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="relative z-10 mb-4">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-cream">
-              Cosa cambia quando si lavora sulla causa
-            </h3>
-          </div>
-          <div
-            ref={benefitRef}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 px-4 sm:px-6 lg:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-8">
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-cream/15 to-transparent mb-12 lg:mb-16" aria-hidden />
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5 }}
+            className="max-w-3xl mb-10 lg:mb-14"
           >
-            {BENEFITS.map((item, i) => {
-              const Icon = item.icon
-              return (
-                <article
-                  key={i}
-                  className="flex-shrink-0 w-[260px] sm:w-[280px] snap-center"
-                >
-                  <div className="h-full p-6 rounded-2xl border border-cream/[0.08] bg-cream/[0.02] hover:border-green/25 hover:bg-green/[0.04] transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-green mb-5" strokeWidth={1.5} />
-                    <h4 className="text-cream font-bold text-base mb-2 leading-snug">{item.title}</h4>
-                    <p className="text-cream/50 text-sm leading-relaxed">{item.body}</p>
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-cream mb-4">
+              Ecco perché è fondamentale intervenire
+              <span className="text-green"> sulla componente meccanica.</span>
+            </h3>
+            <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
+              Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’impatto del reflusso
+              sulla tua vita quotidiana, con un percorso serio e misurabile.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {BENEFITS.map((item, i) => (
+              <motion.article
+                key={item.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+                className="group"
+              >
+                <div className="relative p-[1px] rounded-[1.25rem] sm:rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.14)_0%,rgba(244,244,244,0.04)_45%,rgba(114,250,147,0.18)_100%)] shadow-[0_16px_48px_-28px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:shadow-[0_24px_56px_-24px_rgba(114,250,147,0.22)] group-hover:bg-[linear-gradient(145deg,rgba(114,250,147,0.35)_0%,rgba(244,244,244,0.08)_50%,rgba(114,250,147,0.22)_100%)]">
+                  <div className="overflow-hidden rounded-[calc(1.25rem-1px)] sm:rounded-[calc(1.35rem-1px)] bg-blue-dark/80 backdrop-blur-md">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.alt}
+                        loading="lazy"
+                        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05] ${item.imageClassName || 'object-center'}`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-dark/80 via-blue-dark/10 to-blue-dark/20 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-green/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+                      <span className="absolute top-3 left-3 grid place-items-center min-w-[2.35rem] h-9 px-2.5 rounded-full border border-cream/20 bg-blue-dark text-xs font-black tabular-nums text-green shadow-[0_0_18px_rgba(114,250,147,0.15)]">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    <div className="px-4 py-4 sm:px-5 sm:py-6 border-t border-cream/10">
+                      <h4 className="text-cream font-bold text-base sm:text-[1.05rem] leading-snug mb-2.5 transition-colors duration-300 group-hover:text-green">
+                        {item.title}
+                      </h4>
+                      <p className="text-cream/55 text-sm sm:text-[15px] leading-relaxed">{item.body}</p>
+                    </div>
                   </div>
-                </article>
-              )
-            })}
-          </div>
-          <div className="flex justify-center gap-1.5 mt-6">
-            {BENEFITS.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => scrollTo(benefitRef, i, BENEFIT_W)}
-                className={`rounded-full transition-all duration-300 ${
-                  i === benefitIndex ? 'bg-green w-5 h-1.5' : 'bg-cream/25 w-1.5 h-1.5 hover:bg-cream/40'
-                }`}
-                aria-label={`Benefit ${i + 1}`}
-              />
+                </div>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -870,7 +1189,7 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— RECENSIONI ——— */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv9.JPG"
@@ -895,11 +1214,13 @@ function Reflusso() {
               Recensioni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Oltre 830 recensioni.
-              <span className="text-green"> Reali.</span>
+              Oltre 850 recensioni tra i nostri due studi.
+              <br />
+              <span className="text-green">Recensioni reali.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Non sono frasi di circostanza: sono persone che, come te, cercavano un modo concreto di uscire dal ciclo pastiglia–dieta–bruciore.
+              Prima di iniziare meriti certezze: centinaia di pazienti hanno già percorso la stessa
+              strada e condiviso la loro esperienza, così puoi affidarti con più tranquillità.
             </p>
           </motion.div>
         </div>
@@ -1014,8 +1335,9 @@ function Reflusso() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
-            Se ti riconosci in queste storie, non serve aspettare ancora un altro mese di antiacidi.
-            <span className="text-cream"> Il passo successivo è semplice:</span> un consulto o la prima visita.
+            Se ti riconosci in queste storie, rimandare significa spesso prolungare lo stesso schema.
+            <span className="text-cream"> Il passo successivo e semplice:</span> consulto telefonico
+            o prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
@@ -1026,7 +1348,7 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— PRIMA VISITA ——— */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv14.JPG"
@@ -1048,14 +1370,15 @@ function Reflusso() {
             className="mb-14 lg:mb-20 text-left lg:text-center"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              Prima visita
+              Come funziona
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
               Cosa succede quando
-              <span className="text-green"> vieni</span>
+              <span className="text-green"> prenoti</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl lg:mx-auto">
-              Dalla chiamata alla segreteria fino ai consigli finali: un percorso chiaro, passo dopo passo.
+              Niente percorsi nebulosi: sai esattamente cosa facciamo, in che ordine e con quale
+              razionale clinico.
             </p>
           </motion.div>
 
@@ -1273,7 +1596,7 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— DOVE SIAMO ——— */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv16.JPG"
@@ -1295,16 +1618,15 @@ function Reflusso() {
             className="mb-10 lg:mb-12"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              Dove siamo
+              le nostre sedi.
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
               Due studi a
               <span className="text-green"> Torino</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Due posizioni centrali, facili da raggiungere:{' '}
-              <span className="text-cream/85">metro, mezzi pubblici e auto</span>.
-              Scegli San Donato o Crocetta — quella più comoda per te.
+              Scegli la sede piu comoda tra San Donato e Crocetta: accesso rapido con metro, mezzi
+              e auto.
             </p>
           </motion.div>
 
@@ -1321,8 +1643,13 @@ function Reflusso() {
                 src: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2818.3024747731265!2d7.666042812749457!3d45.0593748602363!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47886d57f00fa44f%3A0x510e3404feb8af98!2sMobilitas%20-%20Studio%20Osteopatico%20-%20Crocetta!5e0!3m2!1sit!2sit!4v1784309089765!5m2!1sit!2sit',
               },
             ].map((map) => (
-              <div
+              <motion.div
                 key={map.label}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45 }}
+                whileHover={{ y: -5 }}
                 className="rounded-[1.35rem] overflow-hidden border border-cream/10 shadow-[0_20px_60px_-28px_rgba(0,0,0,0.55)] bg-blue-dark/40"
               >
                 <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-cream/10 bg-cream/[0.04]">
@@ -1345,12 +1672,13 @@ function Reflusso() {
                   referrerPolicy="strict-origin-when-cross-origin"
                   className="block w-full"
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
 
           <p className="text-cream/65 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto text-center my-10 sm:my-12">
-            Entrambe le sedi sono raggiungibili in metro: San Donato con Bernini o Principi d’Acaja, Crocetta con la fermata Crocetta. In auto trovi posto senza problemi.
+              Entrambe le sedi sono raggiungibili in metro: San Donato (Bernini o Principi d’Acaja),
+              Crocetta (fermata Crocetta).
           </p>
 
           <div className="p-[1px] rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.16)_0%,rgba(244,244,244,0.05)_50%,rgba(114,250,147,0.14)_100%)]">
@@ -1378,7 +1706,7 @@ function Reflusso() {
       <SectionDivider overlap />
 
       {/* ——— FAQ ——— */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
             src="/cervicalgia/cerv13.JPG"
@@ -1400,14 +1728,14 @@ function Reflusso() {
             className="mb-10 lg:mb-12 text-left"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              Domande frequenti
+              FAQ
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Le obiezioni che sentiamo
-              <span className="text-green"> prima che qualcuno prenoti.</span>
+              Le domande che bloccano
+              <span className="text-green"> prima della prenotazione.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              Se te le stai facendo anche tu, meglio risponderti qui — con chiarezza, senza giri di parole.
+              Risposte dirette, senza promesse facili e senza scorciatoie comunicative.
             </p>
           </motion.div>
 
@@ -1415,7 +1743,14 @@ function Reflusso() {
             {FAQ_ITEMS.map((item, index) => {
               const isOpen = openFaqIndex === index
               return (
-                <div key={item.id} className="group/card">
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ duration: 0.35, delay: index * 0.04 }}
+                  className="group/card"
+                >
                   <div
                     className={`p-[1px] rounded-2xl sm:rounded-[1.25rem] transition-all duration-500 ${
                       isOpen
@@ -1484,7 +1819,7 @@ function Reflusso() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               )
             })}
           </div>
@@ -1496,12 +1831,12 @@ function Reflusso() {
             transition={{ duration: 0.45 }}
             className="mt-10 sm:mt-12 text-cream/65 text-base sm:text-lg leading-relaxed text-left max-w-2xl"
           >
-            Se anche una sola di queste risposte ti ha fatto dire “è proprio la mia situazione”,
-            non restare fermo sulla pastiglia e sulle rinunce.{' '}
+            Se anche una sola di queste risposte ti rappresenta, non restare fermo in una gestione
+            solo “al bisogno”.{' '}
             <span className="text-cream font-semibold">
               Prenota un consulto o la prima visita
             </span>{' '}
-            e valutiamo insieme la parte meccanica che finora nessuno ha toccato.
+            e valutiamo insieme se c’e margine reale di miglioramento nel tuo caso.
           </motion.p>
 
           <div className="mt-8 sm:mt-10 flex justify-center">
