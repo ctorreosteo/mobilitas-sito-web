@@ -87,8 +87,8 @@ const HERO_BENEFITS = [
     <strong className="font-bold">petto</strong> e addome
   </>,
   <>
-    Riduci <strong className="font-bold">bruciore notturno</strong>, risvegli e{' '}
-    <strong className="font-bold">fastidio</strong> in gola al mattino
+    Riduci <strong className="font-bold">bruciore notturno</strong>, risvegli, {' '}
+    <strong className="font-bold">fastidio</strong> in gola al mattino e raceudine
   </>,
   <>
     Torna a vivere i <strong className="font-bold">pasti</strong> con più serenità e meno{' '}
@@ -108,14 +108,14 @@ const PAIN_POINTS = [
     body: 'La prendi per funzionare, non per stare davvero bene. Ti protegge per qualche ora, poi il reflusso torna a dettare regole.',
   },
   {
-    icon: Moon,
-    title: 'La notte è diventata una strategia di sopravvivenza',
-    body: 'Ti corichi e l’acido risale. Due cuscini, sonno leggero, risvegli con gola irritata e bocca amara.',
-  },
-  {
     icon: Coffee,
     title: 'Hai tolto quasi tutto, ma non è cambiato quasi niente',
     body: 'Caffè, vino, pomodoro, fritti: eliminati. Eppure il bruciore resta. Quando succede, la causa non è solo nel piatto.',
+  },
+  {
+    icon: Moon,
+    title: 'La notte è diventata una strategia di sopravvivenza',
+    body: 'Ti corichi e l’acido risale. Due cuscini, sonno leggero, risvegli con gola irritata e bocca amara.',
   },
   {
     icon: Utensils,
@@ -192,6 +192,24 @@ const BENEFITS = [
   },
 ]
 
+const AFTER_IMAGES_BENEFITS = [
+  <>
+    Lavoriamo sulla <strong className="font-bold">componente meccanica</strong> che dieta e pastiglia
+    non affrontano
+  </>,
+  <>
+    Torni a coricarti con più <strong className="font-bold">tranquillità</strong>, senza
+    strategizzare ogni notte
+  </>,
+  <>
+    Riprendi <strong className="font-bold">serenità a tavola</strong>, con meno calcoli e meno
+    rinunce
+  </>,
+  <>
+    Segui un percorso <strong className="font-bold">chiaro e misurabile</strong> per stare meglio
+  </>,
+]
+
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
@@ -229,7 +247,7 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Il reflusso e una condizione medica e il gastroenterologo resta il riferimento clinico.
+        Il reflusso è una condizione medica e il gastroenterologo resta il riferimento clinico.
         L’osteopatia non sostituisce esami o terapia farmacologica: lavora in{' '}
         <em>affiancamento</em> su diaframma, torace, postura e respirazione, fattori che possono
         influenzare la dinamica meccanica della risalita.
@@ -240,13 +258,13 @@ const FAQ_ITEMS = [
     id: 'pastiglia-anni',
     question: (
       <>
-        Prendo gia i farmaci: ha senso fare anche un percorso da voi?
+        Prendo già i farmaci: ha senso fare anche un percorso da voi?
       </>
     ),
     answer: (
       <>
-        Spesso si, se i sintomi persistono nonostante terapia e attenzione alimentare. I farmaci
-        riducono l’acidita e possono essere indispensabili; noi valutiamo se esiste una componente
+        Spesso sì, se i sintomi persistono nonostante terapia e attenzione alimentare. I farmaci
+        riducono l’acidità e possono essere indispensabili; noi valutiamo se esiste una componente
         funzionale su cui intervenire. Qualsiasi modifica terapeutica resta sempre in capo al medico
         prescrittore.
       </>
@@ -256,12 +274,12 @@ const FAQ_ITEMS = [
     id: 'gastroscopia',
     question: (
       <>
-        Se la <strong>gastroscopia</strong> e nella norma, perche ho ancora sintomi?
+        Se la <strong>gastroscopia</strong> è nella norma, perché ho ancora sintomi?
       </>
     ),
     answer: (
       <>
-        Una gastroscopia negativa e una buona notizia: esclude molte criticita. Tuttavia non misura
+        Una gastroscopia negativa è una buona notizia: esclude molte criticità. Tuttavia non misura
         tutto il comportamento funzionale del sistema esofago-stomaco. In alcuni casi servono altri
         esami (come pH-impedenzometria o manometria) e un lavoro complementare sulla parte
         meccanica.
@@ -272,13 +290,13 @@ const FAQ_ITEMS = [
     id: 'dieta-tutto',
     question: (
       <>
-        Ho gia eliminato molti cibi, ma il reflusso resta. Che senso ha continuare?
+        Ho già eliminato molti cibi, ma il reflusso resta. Che senso ha continuare?
       </>
     ),
     answer: (
       <>
-        Ridurre trigger alimentari e utile, ma non sempre sufficiente. Se la dieta non basta, non
-        significa che “non c’e nulla da fare”: puo significare che bisogna integrare altri livelli
+        Ridurre trigger alimentari è utile, ma non sempre sufficiente. Se la dieta non basta, non
+        significa che “non c’è nulla da fare”: può significare che bisogna integrare altri livelli
         di intervento, con un piano personalizzato e realistico.
       </>
     ),
@@ -287,13 +305,13 @@ const FAQ_ITEMS = [
     id: 'solo-stress',
     question: (
       <>
-        E solo <strong>stress</strong> oppure no?
+        È solo <strong>stress</strong> oppure no?
       </>
     ),
     answer: (
       <>
         Lo stress incide davvero su digestione e percezione dei sintomi, ma ridurre tutto a “ansia”
-        e spesso semplicistico. Nel nostro approccio consideriamo insieme fattori emotivi, biomeccanici
+        è spesso semplicistico. Nel nostro approccio consideriamo insieme fattori emotivi, biomeccanici
         e clinici, senza negare nessuno di questi livelli.
       </>
     ),
@@ -302,15 +320,15 @@ const FAQ_ITEMS = [
     id: 'red-flags',
     question: (
       <>
-        Quando e necessario prima un controllo medico?
+        Quando è necessario prima un controllo medico?
       </>
     ),
     answer: (
       <>
-        In presenza di difficolta a deglutire, calo di peso involontario, sangue nel vomito o nelle
+        In presenza di difficoltà a deglutire, calo di peso involontario, sangue nel vomito o nelle
         feci, dolore toracico da sforzo, vomito persistente o comparsa recente dei sintomi dopo i 50
-        anni, la priorita e la valutazione medica tempestiva. Noi interveniamo solo quando il quadro
-        e appropriato a un supporto osteopatico.
+        anni, la priorità è la valutazione medica tempestiva. Noi interveniamo solo quando il quadro
+        è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -417,7 +435,7 @@ function Reflusso() {
     ensureMetaByProperty('og:site_name', 'Mobilitas – Studio Osteopatico Torino')
     ensureCanonical(pageUrl)
 
-    return () => {
+    return () => { g
       document.title = prevTitle
     }
   }, [])
@@ -837,10 +855,13 @@ function Reflusso() {
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
               Il reflusso non ti limita solo nei sintomi.
               <br />
-              <span className="text-green">Ti limita nelle scelte.</span>
+              <span className="text-green">Ti limita nelle scelte quotidiane.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              Non e fragilita: e usura quotidiana. E merita un approccio piu completo.
+              Ignorarlo non lo fa sparire: lo normalizza. E più lo normalizzi, più ti toglie{' '}
+              <strong className="font-bold text-cream">sonno</strong>,{' '}
+              <strong className="font-bold text-cream">serenità a tavola</strong> e{' '}
+              <strong className="font-bold text-cream">spontaneità</strong> nella vita sociale.
             </p>
           </motion.div>
 
@@ -958,7 +979,7 @@ function Reflusso() {
               Il trattamento
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4 sm:mb-5">
-              Perche puoi fare “tutto giusto”
+              Perché puoi fare “tutto giusto”
               <span className="text-green"> e stare comunque male</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
@@ -1137,8 +1158,9 @@ function Reflusso() {
               <span className="text-green"> sulla componente meccanica.</span>
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’impatto del reflusso
-              sulla tua vita quotidiana, con un percorso serio e misurabile.
+              Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
+              <strong className="font-bold text-cream">impatto</strong> del reflusso sulla tua vita
+              quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
@@ -1179,6 +1201,32 @@ function Reflusso() {
               </motion.article>
             ))}
           </div>
+
+          <motion.ul
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45 }}
+            className="w-full max-w-xl min-w-0 mt-10 lg:mt-14 space-y-2.5 sm:space-y-3.5 text-left"
+          >
+            {AFTER_IMAGES_BENEFITS.map((benefit, i) => (
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-20px' }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="flex items-center gap-3 min-w-0"
+              >
+                <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
+                  <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
+                </span>
+                <span className="min-w-0 flex-1 text-cream/85 text-base sm:text-base leading-snug font-medium break-words">
+                  {benefit}
+                </span>
+              </motion.li>
+            ))}
+          </motion.ul>
         </div>
 
         <div className="relative z-10 flex justify-center mt-12 px-4">
@@ -1335,9 +1383,10 @@ function Reflusso() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
-            Se ti riconosci in queste storie, rimandare significa spesso prolungare lo stesso schema.
-            <span className="text-cream"> Il passo successivo e semplice:</span> consulto telefonico
-            o prima visita.
+            Se queste storie ti somigliano, il prossimo passo può restituirti più{' '}
+            <strong className="font-bold text-cream">sonno</strong>, più{' '}
+            <strong className="font-bold text-cream">serenità a tavola</strong> e meno rinunce
+            quotidiane. Inizia con un consulto telefonico o la prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
@@ -1836,7 +1885,8 @@ function Reflusso() {
             <span className="text-cream font-semibold">
               Prenota un consulto o la prima visita
             </span>{' '}
-            e valutiamo insieme se c’e margine reale di miglioramento nel tuo caso.
+            e iniziamo a costruire un percorso concreto per ridurre l’impatto del reflusso sulla
+            tua vita quotidiana.
           </motion.p>
 
           <div className="mt-8 sm:mt-10 flex justify-center">
