@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, Phone, User } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Menu, Phone } from 'lucide-react'
 import Sidebar from './Sidebar'
 
 const PHONE_HREF = 'tel:+393518198457'
@@ -52,7 +52,7 @@ const Header = ({ topOffset = 0 }) => {
         }}
       >
         <div className="container mx-auto w-full max-w-full px-2 sm:px-4">
-          <div className="grid h-16 grid-cols-[2.75rem_1fr_2.75rem] items-center sm:h-20 sm:grid-cols-[2.75rem_1fr_auto]">
+          <div className="grid h-16 grid-cols-[2.75rem_1fr_2.75rem] items-center sm:h-20">
             <button
               type="button"
               onClick={toggleSidebar}
@@ -76,7 +76,7 @@ const Header = ({ topOffset = 0 }) => {
               />
             </a>
 
-            <div className="flex items-center justify-end gap-1 justify-self-end">
+            <div className="flex items-center justify-end justify-self-end">
               <a
                 href={PHONE_HREF}
                 className={`${iconBtnClass} sm:hidden`}
@@ -95,15 +95,6 @@ const Header = ({ topOffset = 0 }) => {
                   Chiama
                 </span>
               </a>
-
-              <Link
-                to="/login"
-                className={`${iconBtnClass} hidden sm:inline-flex`}
-                aria-label="Accedi al tuo account"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                <User size={22} strokeWidth={2} />
-              </Link>
             </div>
           </div>
         </div>
