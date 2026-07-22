@@ -55,7 +55,8 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'cicatrici-cesareo' ||
   pageContext === 'cicatrici-seno' ||
   pageContext === 'ciclo-doloroso' ||
-  pageContext === 'fibromialgia'
+  pageContext === 'fibromialgia' ||
+  pageContext === 'menopausa'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -140,6 +141,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'cicatrici-seno': 'CicatriciSeno',
       'ciclo-doloroso': 'CicloDoloroso',
       fibromialgia: 'Fibromialgia',
+      menopausa: 'Menopausa',
     }
 
     const body = {
