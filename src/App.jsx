@@ -58,6 +58,7 @@ import Reflusso from './pages/Reflusso'
 import Vertigini from './pages/Vertigini'
 import Bruxismo from './pages/Bruxismo'
 import CicatriciCesareo from './pages/CicatriciCesareo'
+import CicatriciSeno from './pages/CicatriciSeno'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -99,6 +100,7 @@ function App() {
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />
+        <Route path="/cicatrici-seno" element={<Layout hideWhatsApp><CicatriciSeno /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />

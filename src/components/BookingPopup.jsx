@@ -52,7 +52,8 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'reflusso' ||
   pageContext === 'vertigini' ||
   pageContext === 'bruxismo' ||
-  pageContext === 'cicatrici-cesareo'
+  pageContext === 'cicatrici-cesareo' ||
+  pageContext === 'cicatrici-seno'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -134,6 +135,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       vertigini: 'Vertigini',
       bruxismo: 'Bruxismo',
       'cicatrici-cesareo': 'CicatriciCesareo',
+      'cicatrici-seno': 'CicatriciSeno',
     }
 
     const body = {
