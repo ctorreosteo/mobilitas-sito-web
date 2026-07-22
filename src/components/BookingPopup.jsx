@@ -48,7 +48,7 @@ const formatCurrentDate = () => {
 
 // Contesto "visita" = prima visita / landing cliniche (senza pacchetto camminata)
 const isLandingVisita = (pageContext) =>
-  pageContext === 'cervicalgia' || pageContext === 'reflusso'
+  pageContext === 'cervicalgia' || pageContext === 'reflusso' || pageContext === 'vertigini'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -127,6 +127,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     const tagByContext = {
       cervicalgia: 'Cervicalgia',
       reflusso: 'Reflusso',
+      vertigini: 'Vertigini',
     }
 
     const body = {

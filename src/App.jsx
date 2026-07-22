@@ -55,6 +55,7 @@ import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
 import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata'
 import Cervicalgia from './pages/Cervicalgia'
 import Reflusso from './pages/Reflusso'
+import Vertigini from './pages/Vertigini'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -93,6 +94,7 @@ function App() {
         <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
+        <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
