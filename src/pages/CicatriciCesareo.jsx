@@ -178,38 +178,43 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/home/home5.png',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png',
+    imageClassName: 'object-[58%_42%]',
     alt: 'Trattamento osteopatico sulla cicatrice da cesareo',
     title: 'Creme, oli e silicone: solo in superficie',
     body: 'Lavorano sull’aspetto della cicatrice. Non sciolgono le aderenze in profondità né restituiscono lo scorrimento tra gli strati.',
   },
   {
-    image: '/home/home2.png',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.8.JPG',
+    imageClassName: 'object-[55%_52%]',
     alt: 'Valutazione della cicatrice cesarea e dei tessuti intorno',
     title: '“Pensa a tuo figlio, il resto è estetica”',
     body: 'La frase che ti zittisce. Ma non è estetica: è che il tuo corpo non funziona come prima.',
   },
   {
-    image: '/home/home4.png',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.2.png',
+    imageClassName: 'object-[40%_45%]',
     alt: 'Lavoro manuale sulle aderenze della cicatrice addominale',
     title: 'Il controllo dei quaranta giorni e poi via',
     body: 'Verifica che la ferita sia chiusa. Poi il percorso finisce, e nessuno ti chiede più niente sul come sta il tuo corpo.',
   },
   {
-    image: '/cervicalgia/cerv12.JPG',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.5.JPG',
+    imageClassName: 'object-[42%_48%]',
     alt: 'Trattamento osteopatico post-parto su pancia e postura',
     title: 'Ginnastica, addominali e massaggio fai da te',
     body: 'Utile come intuizione o inizio, ma senza direzioni e piani giusti la zona che non si attiva resta spenta.',
   },
   {
-    image: '/home/home7.png',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.11.png',
+    imageClassName: 'object-center',
     alt: 'Approccio integrato su cicatrice, schiena e pavimento pelvico',
     title: 'Mal di schiena e pavimento pelvico senza collegamento',
     body: 'Si tratta la lombare o si propone la riabilitazione pelvica, ma quasi mai si collega il dolore alla cicatrice sul davanti.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
-    imageClassName: 'object-[center_75%]',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.7.JPG',
+    imageClassName: 'object-[48%_52%]',
     alt: 'Valutazione clinica della cicatrice da cesareo senza esami di routine',
     title: 'Nessun farmaco scioglie un’aderenza',
     body: 'È una condizione di tessuto. Ecografia e RM restano per casi selezionati: lo scorrimento si valuta — e si lavora — con le mani.',
@@ -394,7 +399,7 @@ function CicatriciCesareo() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/cicatrici-cesareo`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png`
 
     const title =
       'Osteopata Cicatrice Cesareo Torino | Aderenze e Post-Parto | Mobilitas'
