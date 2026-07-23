@@ -154,38 +154,43 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/home/home5.png',
+    image: '/reflusso/reflusso1.JPG',
+    imageClassName: 'object-[58%_55%]',
     alt: 'Trattamento osteopatico sull’addome per il reflusso',
     title: 'Quando ti sdrai, il reflusso prende il controllo',
     body: 'Se i sintomi peggiorano appena ti corichi, si valuta la componente meccanica che può influenzare pressione e risalita notturna.',
   },
   {
-    image: '/home/home2.png',
+    image: '/reflusso/reflusso2.JPG',
+    imageClassName: 'object-[52%_58%]',
     alt: 'Osteopata che lavora sulla pancia e sulla dinamica digestiva',
     title: 'Dieta impeccabile, risultato insufficiente',
     body: 'Quando i trigger alimentari sono già ridotti ma i sintomi persistono, ha senso approfondire diaframma, torace e dinamica digestiva.',
   },
   {
-    image: '/home/home4.png',
+    image: '/reflusso/reflusso3.JPG',
+    imageClassName: 'object-[42%_52%]',
     alt: 'Manovra osteopatica sull’addome in studio a Torino',
     title: 'Farmaco utile, ma non sempre risolutivo',
     body: 'La terapia prescritta dal medico resta centrale. In parallelo, si può lavorare su ciò che i farmaci non affrontano direttamente: la parte funzionale e meccanica.',
   },
   {
-    image: '/cervicalgia/cerv12.JPG',
+    image: '/reflusso/reflusso4.JPG',
+    imageClassName: 'object-[45%_52%]',
     alt: 'Trattamento osteopatico manuale su diaframma e zona gastrica',
     title: 'Il diaframma è un pezzo chiave del problema',
     body: 'Il diaframma contribuisce alla continenza della valvola gastroesofagea. Se è rigido o poco coordinato, i sintomi possono amplificarsi.',
   },
   {
-    image: '/home/home7.png',
+    image: '/reflusso/reflusso5.JPG',
+    imageClassName: 'object-[48%_55%]',
     alt: 'Osteopata che tratta la pancia durante la visita',
     title: 'Il reflusso non colpisce solo lo stomaco',
     body: 'Impatta sonno, relazioni, lavoro e sicurezza a tavola. Un percorso efficace deve considerare anche questo impatto quotidiano.',
   },
   {
-    image: '/home/home4.png',
-    imageClassName: 'object-[center_75%]',
+    image: '/reflusso/reflusso6.JPG',
+    imageClassName: 'object-[50%_55%]',
     alt: 'Lavoro osteopatico sull’addome in affiancamento al percorso medico',
     title: 'Approccio integrato: medico + osteopatico',
     body: 'Gastroscopia, pH-impedenzometria e manometria restano riferimenti medici. Noi lavoriamo in affiancamento sulla componente posturale, respiratoria e meccanica.',
@@ -389,7 +394,7 @@ function Reflusso() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/reflusso`
-    const ogImage = `${origin}/home/home5.png`
+    const ogImage = `${origin}/reflusso/reflusso1.JPG`
 
     const title =
       'Osteopata Reflusso Torino | Reflusso Gastroesofageo e Diaframma | Mobilitas'
