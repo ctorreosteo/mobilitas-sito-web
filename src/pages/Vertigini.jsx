@@ -251,7 +251,7 @@ const VISIT_STEPS = [
     body: 'Analizziamo collo, mandibola, postura e dinamica corporea per individuare fattori che possono alimentare le vertigini.',
   },
   {
-    title: 'Tratamento specifico',
+    title: 'Trattamento specifico',
     body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {

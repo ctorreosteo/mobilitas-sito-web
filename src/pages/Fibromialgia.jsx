@@ -258,7 +258,7 @@ const VISIT_STEPS = [
     body: 'Analizziamo tensioni, respiro, diaframma e dinamica corporea per individuare fattori che possono alimentare il dolore.',
   },
   {
-    title: 'Tratamento specifico',
+    title: 'Trattamento specifico',
     body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {

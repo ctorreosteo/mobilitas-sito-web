@@ -233,7 +233,7 @@ const VISIT_STEPS = [
     body: 'Analizziamo respirazione, diaframma, torace e dinamica corporea per individuare fattori che possono alimentare il reflusso.',
   },
   {
-    title: 'Tratamento specifico',
+    title: 'Trattamento specifico',
     body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
