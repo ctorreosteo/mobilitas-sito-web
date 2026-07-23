@@ -87,16 +87,16 @@ function useVideoFibromialgiaVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Farti finalmente <strong className="font-bold">credere</strong>: il tuo dolore è reale, non
-    è nella tua testa
+    Il tuo <strong className="font-bold">dolore</strong> è reale: smetti di doverlo{' '}
+    <strong className="font-bold">giustificare</strong>
   </>,
   <>
-    Ridurre le <strong className="font-bold">tensioni</strong> che entrano nell’amplificatore
-    del dolore — senza sostituire il percorso medico
+    Riduci <strong className="font-bold">tensioni</strong> e rigidità che tengono alto il volume
+    del <strong className="font-bold">dolore</strong>
   </>,
   <>
-    Lavorare su <strong className="font-bold">sonno</strong>, respiro e zone più cariche, con
-    pressioni calibrate su di te
+    Torna a vivere con più <strong className="font-bold">energia</strong> e meno{' '}
+    <strong className="font-bold">rinunce</strong>
   </>,
 ]
 
@@ -162,7 +162,7 @@ const MECHANISM_STEPS = [
   {
     k: '01',
     t: 'Il volume del dolore è alzato',
-    b: 'Nella fibromialgia il sistema del dolore funziona come un impianto con il volume alto: stimoli normali per te suonano fortissimo. Ed è reale.',
+    b: 'Uno stimolo normale — un tocco, il freddo, uno sforzo — per te può diventare fortissimo. Non è inventato: è il sistema che risponde troppo.',
   },
   {
     k: '02',
@@ -189,7 +189,7 @@ const BENEFITS = [
     imageClassName: 'object-left',
     alt: 'Trattamento osteopatico cervicale delicato per fibromialgia',
     title: '“È nella tua testa”',
-    body: 'Il momento peggiore di tutto il percorso, e la cosa che ti ha fatto perdere più anni. Qui si parte dal crederti.',
+    body: 'La frase più dura di tutte le visite — e quella che ti ha fatto perdere più anni. Qui si parte dal crederti.',
   },
   {
     image: '/fibromialgia/fibromialgia3.JPG',
@@ -223,46 +223,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Lavoriamo dove il <strong className="font-bold">carico è maggiore</strong>, con tecniche
-    dolcissime e graduali
+    Sciogliamo le <strong className="font-bold">tensioni</strong> dove il carico è maggiore, con
+    tecniche dolci e graduali
   </>,
   <>
-    Affrontiamo <strong className="font-bold">sonno</strong>, diaframma e rigidità mattutina —
-    pezzi centrali del quadro
+    Torni a un <strong className="font-bold">sonno</strong> più riposante, con meno{' '}
+    <strong className="font-bold">rigidità</strong> al mattino
   </>,
   <>
-    Dosiamo le sedute perché il giorno dopo <strong className="font-bold">non presenti il
-    conto</strong>
+    Lavoriamo al tuo ritmo: niente sedute che ti lasciano{' '}
+    <strong className="font-bold">peggio di prima</strong>
   </>,
   <>
-    Affianchiamo il tuo percorso medico: <strong className="font-bold">non lo sostituiamo</strong>
+    Non sostituiamo il medico: lavoriamo su ciò che i{' '}
+    <strong className="font-bold">farmaci</strong> non raggiungono
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sul tuo quadro e fissiamo il professionista più adatto.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'La tua mappa del dolore, i tuoi limiti, il tuo percorso medico: è il punto di partenza di tutto.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Tecniche dolcissime e graduali',
-    body: 'La pressione si calibra su di te, mai standard. Sciogliamo le zone più cariche, un pezzo alla volta.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo tensioni, respiro, diaframma e dinamica corporea per individuare fattori che possono alimentare il dolore.',
   },
   {
-    title: 'Lavoro su diaframma, respiro e sonno',
-    body: 'Un sistema in allerta cronica ha bisogno di quel segnale di calma. Il sonno che non ripara è metà del problema.',
+    title: 'Tratamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Ritmo e dosaggio su misura',
-    body: 'Sedute calibrate perché il giorno dopo non presenti il conto. Il ritmo lo decide il tuo corpo.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su respiro, sonno e posture, da integrare con il percorso medico.',
   },
 ]
 
@@ -271,13 +272,15 @@ const FAQ_ITEMS = [
     id: 'nella-testa',
     question: (
       <>
-        Mi hanno detto che è nella mia <strong>testa</strong>.
+        Mi hanno detto che è nella mia <strong>testa</strong>: è vero?
       </>
     ),
     answer: (
       <>
-        Non lo è: è un sistema del dolore con il volume alzato, ed è documentato. Qui si parte
-        dal crederti.
+        No: il tuo dolore è reale. Nella fibromialgia il sistema del dolore ha il volume alzato —
+        stimoli normali ti arrivano fortissimi — ed è un quadro documentato, non un’invenzione.
+        Lo stress può peggiorarlo, ma non lo spiega da solo. Qui non partiamo dal sospetto: partiamo
+        dal crederti, e lavoriamo sulle tensioni che continuano ad alimentare quel volume.
       </>
     ),
   },
@@ -285,27 +288,30 @@ const FAQ_ITEMS = [
     id: 'massaggi-male',
     question: (
       <>
-        I massaggi normali mi fanno male.
+        I massaggi normali mi fanno male: come lavorate voi?
       </>
     ),
     answer: (
       <>
-        Perché usano pressioni standard: qui la pressione si calibra su di te, e comanda il tuo
-        corpo, non il protocollo.
+        Perché i massaggi “normali” usano pressioni standard su un corpo che ha già il volume del
+        dolore alzato: per te diventano troppo. Qui la pressione si calibra su di te, seduta dopo
+        seduta: tecniche dolci e graduali, al tuo ritmo. Comanda il tuo corpo, non un protocollo
+        uguale per tutti.
       </>
     ),
   },
   {
-    id: 'volume-alto',
+    id: 'a-cosa-serve',
     question: (
       <>
-        Se il volume resta alto, a cosa serve?
+        Se la fibromialgia non si guarisce, a cosa serve il trattamento?
       </>
     ),
     answer: (
       <>
-        A ridurre quello che entra nell’amplificatore: meno tensioni, meno segnali, meno rumore.
-        È un margine reale, non una promessa di guarigione.
+        Non promettiamo la guarigione. Lavoriamo sulle tensioni che caricano il corpo ogni giorno:
+        meno rigidità, sonno più riposante, più energia nelle giornate. Un miglioramento concreto
+        e misurabile, pezzo dopo pezzo — non una soluzione totale.
       </>
     ),
   },
@@ -313,13 +319,15 @@ const FAQ_ITEMS = [
     id: 'giorno-dopo',
     question: (
       <>
-        Ho paura di pagare la seduta il giorno dopo.
+        Dopo la seduta rischio di stare <strong>peggio</strong>?
       </>
     ),
     answer: (
       <>
-        È il rischio noto, e si gestisce: sedute brevi, dolci, dosate. Il ritmo lo decide il tuo
-        corpo.
+        È una paura legittima, e in fibromialgia va presa sul serio. Per questo lavoriamo con
+        tecniche dolci e graduali, dosate sul tuo corpo: niente pressioni standard. Se qualcosa non
+        ti convince, ci fermiamo. L’obiettivo non è “fare tanto”, è avanzare senza lasciarti
+        peggio di prima.
       </>
     ),
   },
@@ -332,12 +340,11 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Articolazioni gonfie, calde e rosse: valutazione reumatologica, non è il quadro tipico.
-        Febbre persistente o febbricola continua: prima il medico. Calo di peso involontario:
-        inquadramento medico. Debolezza vera che peggiora, o disturbi neurologici precisi: prima
-        il medico. Esami infiammatori alterati (VES, PCR alte): il quadro va rivisto dal
-        reumatologo. Noi interveniamo solo quando il quadro è appropriato a un supporto
-        osteopatico.
+        In presenza di articolazioni gonfie, calde e rosse, febbre persistente, calo di peso
+        involontario, debolezza vera che peggiora, disturbi neurologici precisi o esami
+        infiammatori alterati (VES, PCR alte), la priorità è la valutazione medica o
+        reumatologica tempestiva: non è il quadro tipico su cui interveniamo noi. Noi lavoriamo
+        solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -651,34 +658,34 @@ function Fibromialgia() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Mi hanno detto che è nella mia testa.',
+              name: 'Mi hanno detto che è nella mia testa: è vero?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Non lo è: è un sistema del dolore con il volume alzato, ed è documentato. Qui si parte dal crederti.',
+                text: 'No: il tuo dolore è reale. Nella fibromialgia il sistema del dolore ha il volume alzato — stimoli normali ti arrivano fortissimi — ed è un quadro documentato, non un’invenzione. Lo stress può peggiorarlo, ma non lo spiega da solo. Qui non partiamo dal sospetto: partiamo dal crederti, e lavoriamo sulle tensioni che continuano ad alimentare quel volume.',
               },
             },
             {
               '@type': 'Question',
-              name: 'I massaggi normali mi fanno male.',
+              name: 'I massaggi normali mi fanno male: come lavorate voi?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Perché usano pressioni standard: qui la pressione si calibra su di te, e comanda il tuo corpo, non il protocollo.',
+                text: 'Perché i massaggi “normali” usano pressioni standard su un corpo che ha già il volume del dolore alzato: per te diventano troppo. Qui la pressione si calibra su di te, seduta dopo seduta: tecniche dolci e graduali, al tuo ritmo. Comanda il tuo corpo, non un protocollo uguale per tutti.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Se il volume resta alto, a cosa serve?',
+              name: 'Se la fibromialgia non si guarisce, a cosa serve il trattamento?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'A ridurre quello che entra nell’amplificatore: meno tensioni, meno segnali, meno rumore. È un margine reale, non una promessa di guarigione.',
+                text: 'Non promettiamo la guarigione. Lavoriamo sulle tensioni che caricano il corpo ogni giorno: meno rigidità, sonno più riposante, più energia nelle giornate. Un miglioramento concreto e misurabile, pezzo dopo pezzo — non una soluzione totale.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Ho paura di pagare la seduta il giorno dopo.',
+              name: 'Dopo la seduta rischio di stare peggio?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'È il rischio noto, e si gestisce: sedute brevi, dolci, dosate. Il ritmo lo decide il tuo corpo.',
+                text: 'È una paura legittima, e in fibromialgia va presa sul serio. Per questo lavoriamo con tecniche dolci e graduali, dosate sul tuo corpo: niente pressioni standard. Se qualcosa non ti convince, ci fermiamo. L’obiettivo non è “fare tanto”, è avanzare senza lasciarti peggio di prima.',
               },
             },
             {
@@ -686,7 +693,7 @@ function Fibromialgia() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Articolazioni gonfie, calde e rosse: valutazione reumatologica. Febbre persistente: prima il medico. Calo di peso involontario: inquadramento medico. Debolezza vera o disturbi neurologici precisi: prima il medico. Esami infiammatori alterati: il quadro va rivisto dal reumatologo.',
+                text: 'In presenza di articolazioni gonfie, calde e rosse, febbre persistente, calo di peso involontario, debolezza vera che peggiora, disturbi neurologici precisi o esami infiammatori alterati (VES, PCR alte), la priorità è la valutazione medica o reumatologica tempestiva: non è il quadro tipico su cui interveniamo noi. Noi lavoriamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -927,9 +934,9 @@ function Fibromialgia() {
             transition={{ duration: 0.6, delay: 0.06 }}
             className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-black leading-[1.02] tracking-[-0.03em] mb-6 sm:mb-8"
           >
-            Hai fibromialgia e
+            Soffri di fibromialgia e
             <br className="hidden sm:block" />{' '}
-            il dolore non ti lascia mai?
+            il dolore decide ogni tua giornata?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -946,11 +953,11 @@ function Fibromialgia() {
             transition={{ duration: 0.5, delay: 0.14 }}
             className="text-cream/60 text-lg sm:text-lg leading-relaxed max-w-lg sm:mx-auto mb-10 sm:mb-12 font-medium"
           >
-            Interveniamo in modo specifico sulle{' '}
-            <strong className="font-bold text-cream">tensioni</strong>, sul{' '}
-            <strong className="font-bold text-cream">sonno</strong> e sul{' '}
-            <strong className="font-bold text-cream">respiro</strong> — con tecniche dolci
-            calibrate — per ridurre ciò che entra nell’amplificatore del dolore.
+            Interveniamo in modo specifico su{' '}
+            <strong className="font-bold text-cream">tensioni</strong>,{' '}
+            <strong className="font-bold text-cream">sonno</strong> e{' '}
+            <strong className="font-bold text-cream">respiro</strong> per ridurre l’impatto della
+            fibromialgia su dolore, energia e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1123,7 +1130,7 @@ function Fibromialgia() {
               I sintomi più comuni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
-              La fibromialgia non ti limita solo nel dolore.
+              La fibromialgia non è solo un dolore da sopportare.
               <br />
               <span className="text-green">Ti toglie energia, chiarezza e controllo.</span>
             </h2>
@@ -1255,9 +1262,9 @@ function Fibromialgia() {
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               <strong className="font-bold text-cream">I farmaci contano</strong>.{' '}
               <strong className="font-bold text-cream">Il reumatologo conta</strong>. Ma non sono
-              l’unico livello: le{' '}
-              <strong className="font-bold text-cream">tensioni del corpo</strong> continuano a
-              mandare segnali dentro un sistema del dolore già alzato.
+              l’unico livello del problema: le{' '}
+              <strong className="font-bold text-cream">tensioni</strong> possono tenere alto il
+              volume del dolore anche quando stai già facendo tutto.
             </p>
           </motion.div>
 
@@ -1358,11 +1365,11 @@ function Fibromialgia() {
             >
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
-                Nella fibromialgia il sistema del dolore funziona come un impianto con il{' '}
+                Nella fibromialgia il sistema del dolore ha il{' '}
                 <strong className="text-cream font-semibold">volume alzato</strong>: stimoli
-                normali per te suonano fortissimo. Questo è il quadro, ed è reale. Un corpo pieno
-                di <strong className="text-cream font-semibold">tensioni</strong> manda
-                continuamente segnali dentro quell’impianto: più ingressi, più rumore.
+                normali ti arrivano fortissimi — ed è reale. Un corpo pieno di{' '}
+                <strong className="text-cream font-semibold">tensioni</strong> continua ad
+                alimentarlo: più tensioni, più dolore.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1395,8 +1402,8 @@ function Fibromialgia() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    Non è la guarigione.
-                    <span className="text-green"> È togliere legna da un fuoco che brucia troppo forte.</span>
+                    Non sempre serve sopportare di più.
+                    <span className="text-green"> A volte serve ridurre le tensioni che tengono alto il volume.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1422,7 +1429,7 @@ function Fibromialgia() {
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
               <strong className="font-bold text-cream">impatto</strong> delle tensioni su dolore,
-              sonno e giornate, con un percorso serio e misurabile.
+              sonno e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
@@ -1646,9 +1653,9 @@ function Fibromialgia() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
             Se queste storie ti somigliano, il prossimo passo può restituirti più{' '}
-            <strong className="font-bold text-cream">margine</strong>, meno{' '}
-            <strong className="font-bold text-cream">rumore</strong> nel sistema e qualcuno che
-            ti guarda tutta intera. Inizia con un consulto telefonico o la prima visita.
+            <strong className="font-bold text-cream">energia</strong>, più{' '}
+            <strong className="font-bold text-cream">riposo</strong> e meno dolore a comandare le
+            tue giornate. Inizia con un consulto telefonico o la prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
