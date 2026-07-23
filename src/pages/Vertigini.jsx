@@ -178,38 +178,37 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
+    image: '/vertigini/vertigini1.JPG',
     alt: 'Trattamento osteopatico sul collo per vertigini e instabilità',
     title: 'Farmaci utili in crisi, ma non sulla causa',
     body: 'Antivertiginosi e antiemetici gestiscono l’attacco acuto. In parallelo si può lavorare su tensioni e segnali confusi che i farmaci non correggono.',
   },
   {
-    image: '/home/home2.png',
+    image: '/vertigini/vertigini2.JPG',
     alt: 'Valutazione osteopatica di collo e postura per l’equilibrio',
     title: 'ORL e esami vestibolari negativi: e adesso?',
     body: 'Escludere l’orecchio interno è fondamentale. Quando gli esami sono a posto e l’instabilità resta, il collo è spesso il posto giusto dove guardare.',
   },
   {
-    image: '/home/home4.png',
+    image: '/vertigini/vertigini3.JPG',
     alt: 'Manovra osteopatica delicata su collo e base del cranio',
     title: 'Manovre liberatorie: efficaci solo in certi casi',
     body: 'Quando la causa è specifica e riconosciuta funzionano. Se il tuo quadro è diverso, servono un altro razionale e un altro lavoro.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
+    image: '/vertigini/vertigini4.JPG',
     alt: 'Lavoro osteopatico sulle tensioni cervicali legate alle vertigini',
     title: '“Sarà la cervicale”: un’intuizione da tradurre in pratica',
     body: 'Spesso è un’ipotesi giusta. Quasi nessuno, però, la traduce in un lavoro concreto su collo, mandibola e base del cranio.',
   },
   {
-    image: '/home/home7.png',
+    image: '/vertigini/vertigini5.JPG',
     alt: 'Percorso osteopatico per recuperare autonomia dalla vertigine',
     title: 'La vertigine non è solo un sintomo: restringe la vita',
     body: 'Guida, folla, scale, lavoro, riposo: l’obiettivo è togliere la paura permanente e riallargare le scelte quotidiane.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
+    image: '/vertigini/vertigini6.JPG',
     alt: 'Approccio integrato osteopatico in affiancamento al percorso medico',
     title: 'Approccio integrato: medico + osteopatico',
     body: 'Esami ORL, neurologici e vestibolari restano il riferimento clinico. Noi partiamo da dove finiscono: sulla componente meccanica di collo e postura.',
@@ -395,7 +394,7 @@ function Vertigini() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/vertigini`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/vertigini/vertigini1.JPG`
 
     const title =
       'Osteopata Vertigini Torino | Instabilità, Collo ed Equilibrio | Mobilitas'
