@@ -91,12 +91,12 @@ const HERO_BENEFITS = [
     <strong className="font-bold">attacco</strong>
   </>,
   <>
-    Recupera <strong className="font-bold">autonomia</strong>: guida, scale, uscite senza chiedere
-    di essere accompagnato
+    Torna a <strong className="font-bold">guidare</strong>, salire le{' '}
+    <strong className="font-bold">scale</strong> e uscire senza chiedere di essere accompagnato
   </>,
   <>
-    Togli la testa dalla <strong className="font-bold">bolla</strong> e torna a decidere tu dove
-    andare, non la paura
+    Torna a <strong className="font-bold">scegliere</strong> tu dove andare, non la{' '}
+    <strong className="font-bold">paura</strong>
   </>,
 ]
 
@@ -204,7 +204,7 @@ const BENEFITS = [
   {
     image: '/vertigini/vertigini5.JPG',
     alt: 'Percorso osteopatico per recuperare autonomia dalla vertigine',
-    title: 'La vertigine non è solo un sintomo: restringe la vita',
+    title: 'Le vertigini non sono solo un sintomo: restringono la vita',
     body: 'Guida, folla, scale, lavoro, riposo: l’obiettivo è togliere la paura permanente e riallargare le scelte quotidiane.',
   },
   {
@@ -221,12 +221,12 @@ const AFTER_IMAGES_BENEFITS = [
     possono confondere l’equilibrio
   </>,
   <>
-    Torni ad <strong className="font-bold">alzarti e guidare</strong> senza calcolare ogni
-    movimento
+    Torni ad alzarti e a guidare con più <strong className="font-bold">sicurezza</strong>, senza
+    dover calcolare ogni movimento
   </>,
   <>
-    Riallarghi la tua vita: <strong className="font-bold">supermercato, folla, scale</strong>,
-    senza far decidere la paura
+    Torni al <strong className="font-bold">supermercato</strong> e nei{' '}
+    <strong className="font-bold">posti affollati</strong>, senza far decidere la paura
   </>,
   <>
     Segui un percorso <strong className="font-bold">chiaro e misurabile</strong> per stare meglio
@@ -236,27 +236,27 @@ const AFTER_IMAGES_BENEFITS = [
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sul tipo di instabilità e fissiamo il professionista più adatto al tuo quadro.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'Capire che tipo di instabilità è, quando arriva e cosa la accende: è il punto di partenza di tutto il percorso.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Valutazione di collo, mandibola e postura',
-    body: 'Analizziamo i segnali che possono confondere l’equilibrio: collo, base del cranio, mandibola e appoggio.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo collo, mandibola, postura e dinamica corporea per individuare fattori che possono alimentare le vertigini.',
   },
   {
-    title: 'Trattamento specifico e graduale',
-    body: 'Se indicato, lavoriamo con tecniche dolci su collo, prime vertebre e zone che parlano con l’equilibrio, dentro i limiti di ciò che tolleri.',
+    title: 'Tratamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Esercizi e indicazioni pratiche',
-    body: 'Ti diamo esercizi dolci di sguardo e movimento, più strategie concrete da integrare con il percorso medico.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su sguardo, posture e movimento, da integrare con il percorso medico.',
   },
 ]
 
@@ -265,15 +265,15 @@ const FAQ_ITEMS = [
     id: 'orecchio-a-posto',
     question: (
       <>
-        L’otorino dice che l’orecchio è a posto: cosa c’entrate voi?
+        Se l’<strong>orecchio</strong> è a posto, cosa c’entra l’<em>osteopatia</em>?
       </>
     ),
     answer: (
       <>
-        Proprio per questo: l’equilibrio usa anche i segnali del <strong>collo</strong>. Se
-        l’orecchio è sano e l’instabilità resta, il collo è il posto giusto dove guardare. Non
-        sostituiamo ORL o neurologia: lavoriamo in <em>affiancamento</em> sulla componente
-        meccanica.
+        Le vertigini sono una condizione clinica e ORL e neurologo restano il riferimento. L’osteopatia
+        non sostituisce esami o terapia: lavora in <em>affiancamento</em> su collo, mandibola e
+        postura, fattori che possono influenzare i segnali dell’equilibrio — proprio quando
+        l’orecchio è a posto e l’instabilità resta.
       </>
     ),
   },
@@ -281,7 +281,7 @@ const FAQ_ITEMS = [
     id: 'ansia',
     question: (
       <>
-        Mi hanno detto che è <strong>ansia</strong>.
+        Mi hanno detto che è <strong>ansia</strong>: e adesso?
       </>
     ),
     answer: (
@@ -295,13 +295,13 @@ const FAQ_ITEMS = [
     id: 'paura-toccare-collo',
     question: (
       <>
-        Ho paura che toccandomi il collo mi venga la vertigine.
+        Se mi toccate il collo, rischio un attacco di <strong>vertigini</strong>?
       </>
     ),
     answer: (
       <>
-        Si lavora con tecniche <strong>dolci e graduali</strong>, dentro i limiti di quello che
-        tolleri: niente di brusco. Se qualcosa non è appropriato, lo diciamo subito.
+        È una paura legittima. Si lavora con tecniche <strong>dolci e graduali</strong>, al tuo
+        ritmo: niente di brusco. Se qualcosa non ti convince, ci fermiamo subito.
       </>
     ),
   },
@@ -328,12 +328,12 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Vertigine con parola impastata, visione doppia, perdita di forza o incoordinazione:
-        chiamare subito i soccorsi. Impossibilità assoluta a stare in piedi o camminare: urgenza
-        medica. Vertigine con mal di testa improvviso e violento: pronto soccorso. Calo improvviso
-        dell’udito da un orecchio: urgenza da otorino entro pochi giorni. Vertigine con dolore al
-        petto, battito irregolare o svenimento: prima il medico. Noi interveniamo solo quando il
-        quadro è appropriato a un supporto osteopatico.
+        In presenza di vertigini con parola impastata, visione doppia, perdita di forza o
+        incoordinazione, oppure se non riesci a stare in piedi o a camminare, con mal di testa
+        improvviso e violento, dolore al petto, battito irregolare o svenimento, la priorità è
+        chiamare subito i soccorsi o andare al pronto soccorso. Un calo improvviso dell’udito da
+        un solo orecchio richiede invece una valutazione urgente da otorino entro pochi giorni. Noi
+        interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -647,15 +647,15 @@ function Vertigini() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: "L'otorino dice che l'orecchio è a posto: cosa c'entrate voi?",
+              name: "Se l'orecchio è a posto, cosa c'entra l'osteopatia?",
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: "Proprio per questo: l'equilibrio usa anche i segnali del collo. Se l'orecchio è sano e l'instabilità resta, il collo è il posto giusto dove guardare. Non sostituiamo ORL o neurologia: lavoriamo in affiancamento sulla componente meccanica.",
+                text: "Le vertigini sono una condizione clinica e ORL e neurologo restano il riferimento. L'osteopatia non sostituisce esami o terapia: lavora in affiancamento su collo, mandibola e postura, fattori che possono influenzare i segnali dell'equilibrio — proprio quando l'orecchio è a posto e l'instabilità resta.",
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi hanno detto che è ansia.',
+              name: 'Mi hanno detto che è ansia: e adesso?',
               acceptedAnswer: {
                 '@type': 'Answer',
                 text: 'La paura c’è, ed è comprensibile: ma spesso è la conseguenza degli attacchi, non la causa. Meritano entrambe una risposta, senza liquidarti con un’etichetta vaga.',
@@ -663,10 +663,10 @@ function Vertigini() {
             },
             {
               '@type': 'Question',
-              name: 'Ho paura che toccandomi il collo mi venga la vertigine.',
+              name: 'Se mi toccate il collo, rischio un attacco di vertigini?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Si lavora con tecniche dolci e graduali, dentro i limiti di quello che tolleri: niente di brusco. Se qualcosa non è appropriato, lo diciamo subito.',
+                text: 'È una paura legittima. Si lavora con tecniche dolci e graduali, al tuo ritmo: niente di brusco. Se qualcosa non ti convince, ci fermiamo subito.',
               },
             },
             {
@@ -682,7 +682,7 @@ function Vertigini() {
               name: 'Quando è necessario prima un controllo medico urgente?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Vertigine con parola impastata, visione doppia, perdita di forza o incoordinazione: chiamare subito i soccorsi. Impossibilità assoluta a stare in piedi o camminare: urgenza medica. Vertigine con mal di testa improvviso e violento: pronto soccorso. Calo improvviso dell’udito da un orecchio: urgenza da otorino. Vertigine con dolore al petto, battito irregolare o svenimento: prima il medico.',
+                text: 'In presenza di vertigini con parola impastata, visione doppia, perdita di forza o incoordinazione, oppure se non riesci a stare in piedi o a camminare, con mal di testa improvviso e violento, dolore al petto, battito irregolare o svenimento, la priorità è chiamare subito i soccorsi o andare al pronto soccorso. Un calo improvviso dell’udito da un solo orecchio richiede invece una valutazione urgente da otorino entro pochi giorni. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -1125,8 +1125,8 @@ function Vertigini() {
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Ignorarla non la fa sparire: la normalizza. E più la normalizzi, più ti toglie{' '}
-              <strong className="font-bold text-cream">autonomia</strong>,{' '}
-              <strong className="font-bold text-cream">guida</strong> e{' '}
+              <strong className="font-bold text-cream">sicurezza nel movimento</strong>,{' '}
+              <strong className="font-bold text-cream">serenità alla guida</strong> e{' '}
               <strong className="font-bold text-cream">spontaneità</strong> fuori casa.
             </p>
           </motion.div>
@@ -1252,8 +1252,8 @@ function Vertigini() {
               <strong className="font-bold text-cream">L’orecchio conta</strong>.{' '}
               <strong className="font-bold text-cream">I farmaci contano</strong>. Ma non sono
               l’unico livello del problema: la{' '}
-              <strong className="font-bold text-cream">componente meccanica del collo</strong> può
-              mantenere attiva l’instabilità anche quando gli esami sono a posto.
+              <strong className="font-bold text-cream">componente meccanica</strong> del collo può
+              mantenere attivi i sintomi anche quando gli esami sono a posto.
             </p>
           </motion.div>
 
@@ -2159,7 +2159,7 @@ function Vertigini() {
             <span className="text-cream font-semibold">
               Prenota un consulto o la prima visita
             </span>{' '}
-            e iniziamo a costruire un percorso concreto per ridurre l’impatto della vertigine sulla
+            e iniziamo a costruire un percorso concreto per ridurre l’impatto delle vertigini sulla
             tua vita quotidiana.
           </motion.p>
 
