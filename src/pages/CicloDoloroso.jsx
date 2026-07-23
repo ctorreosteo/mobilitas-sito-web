@@ -179,39 +179,44 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
-    alt: 'Trattamento osteopatico per ciclo doloroso e dismenorrea',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.3.JPG',
+    imageClassName: 'object-[52%_58%]',
+    alt: 'Trattamento osteopatico sull’addome per ciclo doloroso e dismenorrea',
     title: 'Antidolorifici e borsa calda: resistere, non curare',
     body: 'Reggono la giornata e danno sollievo vero. Ma dal blister mensile da vent’anni non si esce: agiscono sul dolore, non su cosa lo produce.',
   },
   {
-    image: '/home/home2.png',
-    alt: 'Valutazione osteopatica di bacino e zona lombare nel ciclo doloroso',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.7.JPG',
+    imageClassName: 'object-[48%_52%]',
+    alt: 'Valutazione osteopatica di bacino e anca nel ciclo doloroso',
     title: '“È normale, sei una donna”',
     body: 'Non è una soluzione ed è la frase che, da quando avevi quindici anni, ti impedisce di cercarne una.',
   },
   {
-    image: '/home/home4.png',
-    alt: 'Lavoro osteopatico in affiancamento alla visita ginecologica',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.9.JPG',
+    imageClassName: 'object-[54%_58%]',
+    alt: 'Lavoro osteopatico su bacino e addome in affiancamento alla visita ginecologica',
     title: 'Pillola come prima e unica risposta',
     body: 'Gestisce l’ormone, e quando la smetti il quadro tende a tornare. Nessuno ti ha spiegato perché fa male.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
-    alt: 'Ecografia e valutazione ginecologica con supporto osteopatico',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.10.JPG',
+    imageClassName: 'object-[68%_55%]',
+    alt: 'Trattamento osteopatico su bacino e anca per ciclo doloroso',
     title: 'Ecografia e visita ginecologica a posto',
     body: 'Passaggio necessario per escludere cause strutturali. Quando è tutto a posto, resti senza spiegazione — e senza un lavoro sul bacino.',
   },
   {
-    image: '/home/home7.png',
-    alt: 'Approccio integrato su bacino, diaframma e zona lombare',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png',
+    imageClassName: 'object-[58%_42%]',
+    alt: 'Approccio osteopatico delicato su tensione e carico nel ciclo doloroso',
     title: 'Integratori, stretching e dieta: pezzi del puzzle',
     body: 'Possono aiutare sul lungo periodo, ma raramente affrontano da soli bacino, diaframma e zona lombare.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
-    alt: 'Percorso osteopatico per ridurre l’impatto del ciclo doloroso',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.8.JPG',
+    imageClassName: 'object-[55%_52%]',
+    alt: 'Percorso osteopatico sulla zona lombare per ridurre l’impatto del ciclo doloroso',
     title: 'Farmaci e esami: un pezzo del quadro',
     body: 'FANS, pillola ed ecografia restano riferimenti medici. Noi lavoriamo sulla parte meccanica che la visita ginecologica non valuta.',
   },
@@ -395,7 +400,7 @@ function CicloDoloroso() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/ciclo-doloroso`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.3.JPG`
 
     const title =
       'Osteopata Ciclo Doloroso Torino | Dismenorrea, Bacino e Lombare | Mobilitas'
