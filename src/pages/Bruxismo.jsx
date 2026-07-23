@@ -178,38 +178,37 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
+    image: '/bruxismo/bruxismo1.JPG',
     alt: 'Trattamento osteopatico su mandibola e masseteri per il bruxismo',
     title: 'Il bite che costa e non risolve tutto',
     body: 'Protegge i denti dallo scontro, ed è utile. Ma la mascella può far male uguale: protegge lo smalto, non spiega perché stringi.',
   },
   {
-    image: '/home/home2.png',
+    image: '/bruxismo/bruxismo2.JPG',
     alt: 'Valutazione osteopatica di collo e mandibola per il serramento',
     title: '“È lo stress, devi rilassarti”',
     body: 'Contiene del vero, e non è un’indicazione: nessuno ti spiega come si dice a un muscolo di mollare mentre dormi.',
   },
   {
-    image: '/home/home4.png',
+    image: '/bruxismo/bruxismo3.JPG',
     alt: 'Lavoro osteopatico sui muscoli della masticazione',
     title: 'Visita odontoiatrica e gnatologica',
     body: 'Passaggi necessari sul danno e sull’occlusione. Collo, postura e sistema di allerta restano spesso fuori dal quadro.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
+    image: '/bruxismo/bruxismo4.JPG',
     alt: 'Trattamento manuale per ridurre la tensione dei masseteri',
     title: 'Farmaci utili, ma non sulla causa',
     body: 'Miorilassanti, FANS o benzodiazepine a basso dosaggio possono spezzare dolore e contrattura. Non cambiano il motivo per cui stringi di notte.',
   },
   {
-    image: '/home/home7.png',
+    image: '/bruxismo/bruxismo5.JPG',
     alt: 'Percorso osteopatico per bruxismo e serramento diurno',
     title: 'Botulino e ricostruzioni: pezzi del puzzle',
     body: 'La tossina riduce la forza del muscolo; corone e ricostruzioni riparano il danno già fatto. Restano parallele al lavoro sul perché spingi.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
+    image: '/bruxismo/bruxismo6.JPG',
     alt: 'Approccio integrato osteopatico in affiancamento a dentista e gnatologo',
     title: 'Approccio integrato: dentista + osteopatico',
     body: 'Polisonnografia, panoramica, RM dell’ATM e valutazione gnatologica restano riferimenti clinici. Noi lavoriamo su muscoli, collo e pressione da scaricare.',
@@ -394,7 +393,7 @@ function Bruxismo() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/bruxismo`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/bruxismo/bruxismo1.JPG`
 
     const title =
       'Osteopata Bruxismo Torino | Serramento, Mandibola e Masseteri | Mobilitas'
