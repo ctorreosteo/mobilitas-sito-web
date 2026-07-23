@@ -179,39 +179,44 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
-    alt: 'Trattamento osteopatico per menopausa e rigidità dei tessuti',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png',
+    imageClassName: 'object-[58%_42%]',
+    alt: 'Trattamento osteopatico delicato su tensioni in menopausa',
     title: '“È la menopausa, è normale”',
     body: 'La frase che ricevono tutte. Non è una cura: è una spiegazione che chiude la ricerca. Normale non vuol dire che non c’è niente da fare.',
   },
   {
-    image: '/home/home2.png',
-    alt: 'Valutazione osteopatica in affiancamento al ginecologo in menopausa',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.4.JPG',
+    imageClassName: 'object-[58%_48%]',
+    alt: 'Lavoro osteopatico su bacino e zona lombare in menopausa',
     title: 'Terapia ormonale: un pezzo del quadro',
     body: 'Prescritta dal ginecologo con indicazioni precise: agisce sugli ormoni, non sui dolori muscoloscheletrici che senti oggi.',
   },
   {
-    image: '/home/home4.png',
-    alt: 'Lavoro osteopatico su dolori articolari in menopausa',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.2.png',
+    imageClassName: 'object-[40%_45%]',
+    alt: 'Trattamento osteopatico su collo e mandibola in menopausa',
     title: 'Antinfiammatori e fisioterapia a zona',
     body: 'Tamponano o trattano la singola zona. Raramente affrontano tutto quello che è cambiato insieme.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
-    alt: 'Approccio integrato su sonno e tensioni in menopausa',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.5.JPG',
+    imageClassName: 'object-[42%_48%]',
+    alt: 'Approccio osteopatico su schiena e tensioni in menopausa',
     title: 'Integratori, melatonina e alimentazione',
     body: 'Contributo variabile e spesso parziale. Se il corpo è in tensione, il sonno resta spezzato e il quadro non cambia da solo.',
   },
   {
-    image: '/home/home7.png',
-    alt: 'Attività fisica e movimento su misura in menopausa',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.6.JPG',
+    imageClassName: 'object-[58%_48%]',
+    alt: 'Tecniche manuali su mandibola e collo in menopausa',
     title: 'Attività fisica: utile, difficile da iniziare',
     body: 'Tra le cose più utili in assoluto — e difficile da avviare quando ti fa male tutto. Il movimento giusto va dosato.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
-    alt: 'Densitometria e controlli ginecologici con supporto osteopatico',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.7.JPG',
+    imageClassName: 'object-[48%_52%]',
+    alt: 'Valutazione osteopatica di bacino e anca in menopausa',
     title: 'Esami e densitometria: pezzi importanti',
     body: 'MOC, ecografie e dosaggi ormonali restano riferimenti medici. Spiegano le ossa e gli ormoni, non la rigidità che senti oggi.',
   },
@@ -394,7 +399,7 @@ function Menopausa() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/menopausa`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png`
 
     const title =
       'Osteopata Menopausa Torino | Rigidità, Dolori e Sonno | Mobilitas'
