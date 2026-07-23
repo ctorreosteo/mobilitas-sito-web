@@ -87,17 +87,16 @@ function useVideoMenopausaVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Farti guardare <strong className="font-bold">tutta intera</strong>: non solo ormoni, ma
-    muscoli, tessuti e sonno
+    Smetti di sentirti dire che il <strong className="font-bold">dolore</strong> è{' '}
+    <strong className="font-bold">normale</strong>
   </>,
   <>
-    Non accettare “
-    <strong className="font-bold">è la menopausa, è normale</strong>”: sul rigidizzarsi dei
-    tessuti si lavora
+    Riduci <strong className="font-bold">rigidità</strong> e tensioni che ti bloccano al{' '}
+    <strong className="font-bold">risveglio</strong>
   </>,
   <>
-    Riprenderti <strong className="font-bold">notti</strong>, scioltezza al risveglio ed
-    energia — in affiancamento al ginecologo
+    Torna a vivere con più <strong className="font-bold">energia</strong> e meno{' '}
+    <strong className="font-bold">rinunce</strong>
   </>,
 ]
 
@@ -163,17 +162,17 @@ const MECHANISM_STEPS = [
   {
     k: '01',
     t: 'Gli ormoni nutrono anche i tessuti',
-    b: 'Non lavorano solo sul ciclo: nutrono muscoli, tendini e tessuti. Quando calano, tutto cambia.',
+    b: 'Muscoli, tendini e fasce dipendono da quel nutrimento. Quando cala, rigidità e dolori possono arrivare tutti insieme.',
   },
   {
     k: '02',
     t: 'I tessuti diventano più rigidi',
-    b: 'Meno idratati, meno elastici: il sonno ripara meno e il corpo intero si fa sentire — schiena, spalle, mani, tutto insieme.',
+    b: 'Meno elastici, meno idratati: al mattino sei dura, il collo si irrigidisce e i gesti che prima erano facili pesano di più.',
   },
   {
     k: '03',
-    t: 'Il cambiamento si accompagna',
-    b: 'Non si annulla. Ma un corpo si può accompagnare mantenendo sciolto ciò che tende a irrigidirsi.',
+    t: 'Si lavora sulla parte meccanica',
+    b: 'Non si annulla la menopausa. Si può ridurre rigidità e tensioni, pezzo dopo pezzo, in affiancamento al ginecologo.',
   },
 ]
 
@@ -224,46 +223,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Mettiamo in fila i <strong className="font-bold">dolori arrivati tutti insieme</strong>:
-    non sono cinque problemi diversi
+    Sciogliamo <strong className="font-bold">tensioni</strong> e rigidità che arrivano tutte
+    insieme
   </>,
   <>
-    Lavoriamo su <strong className="font-bold">tessuti, sonno e respiro</strong> — la parte
-    che la terapia ormonale non tocca
+    Torni a un <strong className="font-bold">sonno</strong> più riposante, con meno{' '}
+    <strong className="font-bold">rigidità</strong> al mattino
   </>,
   <>
-    Riduciamo rigidità mattutina, pesantezza e la <strong className="font-bold">stanchezza
-    di fondo</strong>
+    Torni a muoverti con più <strong className="font-bold">scioltezza</strong> e meno stanchezza
+    di fondo
   </>,
   <>
-    Affianchiamo il tuo <strong className="font-bold">ginecologo</strong>: non lo sostituiamo
+    Non sostituiamo il ginecologo: lavoriamo su ciò che gli{' '}
+    <strong className="font-bold">ormoni</strong> non risolvono da soli
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali su cosa è cambiato e fissiamo il professionista più adatto.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'Cosa è cambiato, dove, e cosa il ginecologo sta già seguendo: è il punto di partenza di tutto.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Scioglimento delle zone più irrigidite',
-    body: 'Schiena, spalle, anche: dove il cambiamento si sente di più. Sblocco di bacino e schiena bassa.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo tessuti, rigidità, postura e dinamica corporea per individuare fattori che possono alimentare i dolori.',
   },
   {
-    title: 'Lavoro su respiro, torace e qualità del sonno',
-    body: 'Un corpo che respira pieno dorme e recupera meglio. Il recupero notturno è metà della partita.',
+    title: 'Trattamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Piano di movimento su misura',
-    body: 'Il movimento giusto è il miglior alleato dei tessuti che cambiano — dosato sul tuo corpo.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su respiro, movimento e posture, da integrare con il percorso medico.',
   },
 ]
 
@@ -272,13 +272,14 @@ const FAQ_ITEMS = [
     id: 'normale',
     question: (
       <>
-        È la menopausa: mi hanno detto che è <strong>normale</strong>.
+        Mi hanno detto che è <strong>normale</strong>: è vero?
       </>
     ),
     answer: (
       <>
-        Che il corpo cambi è normale; che tu debba solo sopportare no. Sulla rigidità dei
-        tessuti si lavora, a qualsiasi età.
+        Che il corpo cambi in menopausa è normale; che tu debba solo sopportare dolore e rigidità
+        no. Gli ormoni spiegano una parte del quadro, non tutto. Sulla rigidità dei tessuti si
+        lavora — a qualsiasi età — in affiancamento al ginecologo, non al posto suo.
       </>
     ),
   },
@@ -286,13 +287,14 @@ const FAQ_ITEMS = [
     id: 'tos',
     question: (
       <>
-        Prendo già la <strong>terapia ormonale</strong>.
+        Prendo già la <strong>terapia ormonale</strong>: ha senso venire da voi?
       </>
     ),
     answer: (
       <>
-        E continua secondo il tuo ginecologo: lavora sugli ormoni. Noi lavoriamo su muscoli e
-        tessuti, la parte che la terapia non tocca.
+        Sì, se rigidità e dolori restano. La terapia ormonale, prescritta dal ginecologo, lavora
+        sugli ormoni. Noi lavoriamo su muscoli, tendini e tessuti: la parte meccanica che la
+        terapia non tocca. Non sostituiamo il percorso medico, lo affianchiamo.
       </>
     ),
   },
@@ -300,13 +302,14 @@ const FAQ_ITEMS = [
     id: 'male-tutto',
     question: (
       <>
-        Mi fa male tutto: da dove volete iniziare?
+        Mi fa male tutto: da dove iniziate?
       </>
     ),
     answer: (
       <>
-        Dalla valutazione: dolori diffusi hanno quasi sempre pochi punti di origine comuni. Si
-        parte da lì, non da tutto insieme.
+        Dalla valutazione. Quando i dolori arrivano tutti insieme, raramente sono cinque problemi
+        separati: spesso condividono pochi punti di origine. Si parte da lì, con un ordine chiaro,
+        non tentando di trattare tutto in una volta.
       </>
     ),
   },
@@ -314,13 +317,15 @@ const FAQ_ITEMS = [
     id: 'conviverci',
     question: (
       <>
-        Non è che ormai devo conviverci?
+        Ormai devo solo <strong>conviverci</strong>?
       </>
     ),
     answer: (
       <>
-        Con il cambiamento sì, con la rigidità no: sono due cose diverse. La prima visita serve
-        a separarle onestamente.
+        Con il cambiamento ormonale sì: non si annulla. Con la rigidità e i dolori muscoloscheletrici
+        no: sono due cose diverse. Non promettiamo di far sparire la menopausa; lavoriamo per
+        ridurre rigidità, migliorare sonno e scioltezza, pezzo dopo pezzo. La prima visita serve
+        a separare onestamente ciò che resta da ciò su cui si può intervenire.
       </>
     ),
   },
@@ -333,12 +338,11 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Qualsiasi sanguinamento vaginale dopo la menopausa: sempre dal ginecologo, senza
-        eccezioni. Nodulo al seno o cambiamenti della pelle del seno: prima il medico. Dolore
-        osseo localizzato, fisso e persistente: inquadramento medico. Vampate con cardiopalmo
-        forte, tremori e calo di peso: prima escludere la tiroide dal medico. Umore molto a terra
-        con pensieri cupi: parlarne subito con il proprio medico. Noi interveniamo solo quando
-        il quadro è appropriato a un supporto osteopatico.
+        In presenza di sanguinamento vaginale dopo la menopausa, nodulo o cambiamenti della pelle
+        del seno, dolore osseo localizzato e persistente, vampate con cardiopalmo forte, tremori e
+        calo di peso, oppure umore molto a terra con pensieri cupi, la priorità è la valutazione
+        medica o ginecologica tempestiva. Noi lavoriamo solo quando il quadro è appropriato a un
+        supporto osteopatico.
       </>
     ),
   },
@@ -652,34 +656,34 @@ function Menopausa() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'È la menopausa: mi hanno detto che è normale.',
+              name: 'Mi hanno detto che è normale: è vero?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Che il corpo cambi è normale; che tu debba solo sopportare no. Sulla rigidità dei tessuti si lavora, a qualsiasi età.',
+                text: 'Che il corpo cambi in menopausa è normale; che tu debba solo sopportare dolore e rigidità no. Gli ormoni spiegano una parte del quadro, non tutto. Sulla rigidità dei tessuti si lavora — a qualsiasi età — in affiancamento al ginecologo, non al posto suo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Prendo già la terapia ormonale.',
+              name: 'Prendo già la terapia ormonale: ha senso venire da voi?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'E continua secondo il tuo ginecologo: lavora sugli ormoni. Noi lavoriamo su muscoli e tessuti, la parte che la terapia non tocca.',
+                text: 'Sì, se rigidità e dolori restano. La terapia ormonale, prescritta dal ginecologo, lavora sugli ormoni. Noi lavoriamo su muscoli, tendini e tessuti: la parte meccanica che la terapia non tocca. Non sostituiamo il percorso medico, lo affianchiamo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi fa male tutto: da dove volete iniziare?',
+              name: 'Mi fa male tutto: da dove iniziate?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Dalla valutazione: dolori diffusi hanno quasi sempre pochi punti di origine comuni. Si parte da lì, non da tutto insieme.',
+                text: 'Dalla valutazione. Quando i dolori arrivano tutti insieme, raramente sono cinque problemi separati: spesso condividono pochi punti di origine. Si parte da lì, con un ordine chiaro, non tentando di trattare tutto in una volta.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Non è che ormai devo conviverci?',
+              name: 'Ormai devo solo conviverci?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Con il cambiamento sì, con la rigidità no: sono due cose diverse. La prima visita serve a separarle onestamente.',
+                text: 'Con il cambiamento ormonale sì: non si annulla. Con la rigidità e i dolori muscoloscheletrici no: sono due cose diverse. Non promettiamo di far sparire la menopausa; lavoriamo per ridurre rigidità, migliorare sonno e scioltezza, pezzo dopo pezzo. La prima visita serve a separare onestamente ciò che resta da ciò su cui si può intervenire.',
               },
             },
             {
@@ -687,7 +691,7 @@ function Menopausa() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Qualsiasi sanguinamento vaginale dopo la menopausa: sempre dal ginecologo. Nodulo al seno o cambiamenti della pelle del seno: prima il medico. Dolore osseo localizzato e persistente: inquadramento medico. Vampate con cardiopalmo forte, tremori e calo di peso: prima escludere la tiroide. Umore molto a terra con pensieri cupi: parlarne subito con il proprio medico.',
+                text: 'In presenza di sanguinamento vaginale dopo la menopausa, nodulo o cambiamenti della pelle del seno, dolore osseo localizzato e persistente, vampate con cardiopalmo forte, tremori e calo di peso, oppure umore molto a terra con pensieri cupi, la priorità è la valutazione medica o ginecologica tempestiva. Noi lavoriamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -930,7 +934,7 @@ function Menopausa() {
           >
             Sei in menopausa e
             <br className="hidden sm:block" />{' '}
-            il corpo fa male tutto insieme?
+            ti dicono che il dolore è normale?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -950,8 +954,8 @@ function Menopausa() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">tessuti</strong>,{' '}
             <strong className="font-bold text-cream">rigidità</strong> e{' '}
-            <strong className="font-bold text-cream">sonno</strong> — in affiancamento al
-            ginecologo — perché “è normale” non vuol dire che non c’è niente da fare.
+            <strong className="font-bold text-cream">sonno</strong> per ridurre l’impatto della
+            menopausa su dolore, riposo e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1124,7 +1128,7 @@ function Menopausa() {
               I sintomi più comuni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
-              La menopausa non ti limita solo negli ormoni.
+              La menopausa non è solo qualcosa da sopportare.
               <br />
               <span className="text-green">Ti cambia come ti muovi e come riposi.</span>
             </h2>
@@ -1256,9 +1260,9 @@ function Menopausa() {
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               <strong className="font-bold text-cream">Gli ormoni contano</strong>.{' '}
               <strong className="font-bold text-cream">Il ginecologo conta</strong>. Ma non sono
-              l’unico livello: i{' '}
-              <strong className="font-bold text-cream">tessuti che si irrigidiscono</strong>{' '}
-              continuano a farsi sentire anche quando la terapia ormonale è impostata.
+              l’unico livello del problema: i{' '}
+              <strong className="font-bold text-cream">tessuti</strong> possono irrigidirsi e far
+              male anche quando la terapia ormonale è già impostata.
             </p>
           </motion.div>
 
@@ -1359,12 +1363,10 @@ function Menopausa() {
             >
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
-                Gli <strong className="text-cream font-semibold">ormoni</strong> che stanno
-                cambiando non lavorano solo sul ciclo: nutrono anche muscoli, tendini e tessuti.
-                Quando calano, i tessuti diventano più{' '}
-                <strong className="text-cream font-semibold">rigidi</strong> e meno idratati, il
-                sonno ripara meno, e il corpo intero si fa sentire — schiena, spalle, mani, tutto
-                insieme.
+                Gli <strong className="text-cream font-semibold">ormoni</strong> nutrono anche
+                muscoli, tendini e tessuti. Quando calano, i tessuti diventano più{' '}
+                <strong className="text-cream font-semibold">rigidi</strong>, il sonno ripara meno
+                e il corpo intero si fa sentire: schiena, spalle, mani, tutto insieme.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1397,8 +1399,8 @@ function Menopausa() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    “È la menopausa, è normale” descrive e non risponde.
-                    <span className="text-green"> Un corpo si può accompagnare nel cambiamento.</span>
+                    Non sempre serve solo accettare che “è normale”.
+                    <span className="text-green"> A volte serve lavorare sulla rigidità dei tessuti.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1423,8 +1425,8 @@ function Menopausa() {
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> della rigidità su dolori,
-              sonno ed energia, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> della rigidità su dolore,
+              sonno e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
@@ -1648,9 +1650,9 @@ function Menopausa() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
             Se queste storie ti somigliano, il prossimo passo può restituirti più{' '}
-            <strong className="font-bold text-cream">scioltezza</strong>, meno{' '}
-            <strong className="font-bold text-cream">rigidità</strong> e qualcuno che ti guarda
-            tutta intera. Inizia con un consulto telefonico o la prima visita.
+            <strong className="font-bold text-cream">scioltezza</strong>, più{' '}
+            <strong className="font-bold text-cream">riposo</strong> e meno rigidità al
+            mattino. Inizia con un consulto telefonico o la prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
@@ -2144,12 +2146,13 @@ function Menopausa() {
             transition={{ duration: 0.45 }}
             className="mt-10 sm:mt-12 text-cream/65 text-base sm:text-lg leading-relaxed text-left max-w-2xl"
           >
-            Se anche una sola di queste risposte ti rappresenta, non restare ferma in una gestione
-            solo “al bisogno”.{' '}
+            Se anche una sola di queste risposte ti rappresenta, non restare ferma ad accettare
+            che “è normale”.{' '}
             <span className="text-cream font-semibold">
               Prenota un consulto o la prima visita
             </span>{' '}
-            e iniziamo a costruire un percorso concreto sui tessuti — oltre a “è normale”.
+            e iniziamo a costruire un percorso concreto per ridurre rigidità e dolore sulla tua
+            vita quotidiana.
           </motion.p>
 
           <div className="mt-8 sm:mt-10 flex justify-center">
