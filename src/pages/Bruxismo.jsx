@@ -87,16 +87,16 @@ function useVideoBruxismoVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Svegliarti avendo davvero <strong className="font-bold">riposato</strong>, senza mandibola
-    stanca e tempie che pulsano
+    Smetti di svegliarti con la <strong className="font-bold">mandibola</strong> stanca e le{' '}
+    <strong className="font-bold">tempie</strong> che pulsano
   </>,
   <>
-    Andare oltre il <strong className="font-bold">bite</strong>: proteggere i denti e lavorare
-    sul <strong className="font-bold">perché</strong> stringi
+    Riduci la <strong className="font-bold">tensione</strong> che il{' '}
+    <strong className="font-bold">bite</strong> da solo non toglie
   </>,
   <>
-    Fermare il <strong className="font-bold">consumo dello smalto</strong> e la tensione che
-    scende a collo e spalle
+    Torna a <strong className="font-bold">riposare</strong> davvero, con meno{' '}
+    <strong className="font-bold">rinunce</strong> al risveglio
   </>,
 ]
 
@@ -171,8 +171,8 @@ const MECHANISM_STEPS = [
   },
   {
     k: '03',
-    t: 'Il bite protegge, ma il muscolo continua',
-    b: 'Il bite fa il suo mestiere sui denti. Sul muscolo che spinge, e sul motivo per cui spinge, spesso nessuno ha ancora lavorato.',
+    t: 'Si lavora sul muscolo che spinge',
+    b: 'Il bite fa il suo mestiere sui denti. Sul muscolo — e sul perché spinge — spesso nessuno ha ancora lavorato.',
   },
 ]
 
@@ -217,47 +217,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Andiamo oltre il <strong className="font-bold">bite</strong>: lavoriamo sul perché la
-    mandibola stringe
+    Sciogliamo <strong className="font-bold">masseteri</strong> e tensione che il bite da solo
+    non toglie
   </>,
   <>
-    Riduciamo le <strong className="font-bold">tempie che pulsano</strong> al mattino e la
-    mandibola che scrocchia
+    Torni a un <strong className="font-bold">sonno</strong> più riposante, senza{' '}
+    <strong className="font-bold">tempie</strong> che pulsano
   </>,
   <>
-    Affrontiamo anche il <strong className="font-bold">serramento diurno</strong>, non solo
-    quello notturno
+    Torni a masticare e parlare con più <strong className="font-bold">scioltezza</strong>, anche
+    di giorno
   </>,
   <>
-    Sciogliamo <strong className="font-bold">collo e spalle</strong>, perché la contrattura non
-    resta solo nella mascella
+    Non sostituiamo il dentista: lavoriamo su ciò che il{' '}
+    <strong className="font-bold">bite</strong> non risolve da solo
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sul serramento e fissiamo il professionista più adatto al tuo quadro.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'Quando stringi, cosa ti sveglia, cosa dice il tuo dentista: è il punto di partenza di tutto il percorso.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Scioglimento dei muscoli della masticazione',
-    body: 'Lavoriamo fuori e, se serve e con il tuo consenso, dentro la bocca — sui masseteri che hanno lavorato tutta la notte.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo masseteri, mandibola, collo e dinamica corporea per individuare fattori che possono alimentare il serramento.',
   },
   {
-    title: 'Lavoro su collo, base del cranio e ATM',
-    body: 'La mandibola e il collo stringono insieme. Tecniche dolci sull’articolazione per aiutarla a lavorare dritta dopo mesi di superlavoro.',
+    title: 'Trattamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Riequilibrio, respiro e routine serale',
-    body: 'Abbassiamo il bisogno del corpo di scaricare sui denti e impostiamo la notte con meno pressione da smaltire.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su respiro, posture e routine serale, da integrare con il percorso medico.',
   },
 ]
 
@@ -266,13 +266,14 @@ const FAQ_ITEMS = [
     id: 'bite',
     question: (
       <>
-        Ho già il <strong>bite</strong>: non basta?
+        Ho già il <strong>bite</strong>: perché non basta?
       </>
     ),
     answer: (
       <>
         Il bite protegge i denti dallo scontro, e va tenuto. Ma il muscolo dietro continua a
-        spingere: è l’altra metà del lavoro.
+        spingere: è l’altra metà del lavoro. Noi lavoriamo su masseteri, mandibola e collo — in
+        affiancamento al dentista, non al posto suo.
       </>
     ),
   },
@@ -280,13 +281,14 @@ const FAQ_ITEMS = [
     id: 'denti-a-posto',
     question: (
       <>
-        Il dentista dice che i denti sono a posto.
+        Se i <strong>denti</strong> sono a posto, cosa c’entra l’<em>osteopatia</em>?
       </>
     ),
     answer: (
       <>
         Ottimo: il danno è sotto controllo. Resta il motivo per cui stringi, che non è nei denti:
-        è nei muscoli e nel sistema di allerta.
+        è nei muscoli e nel sistema di allerta. Lì lavoriamo noi, in parallelo al percorso
+        odontoiatrico.
       </>
     ),
   },
@@ -294,13 +296,13 @@ const FAQ_ITEMS = [
     id: 'controllo-sonno',
     question: (
       <>
-        Come faccio a controllarmi mentre dormo?
+        Come faccio a controllarmi mentre <strong>dormo</strong>?
       </>
     ),
     answer: (
       <>
-        Non puoi, ed è il punto: non si lavora sulla volontà, si lavora sul muscolo e sulla
-        pressione che scarichi di notte.
+        Non puoi, ed è il punto: non si lavora sulla volontà. Si lavora sul muscolo e sulla
+        pressione che scarichi di notte, così il corpo ha meno bisogno di stringere.
       </>
     ),
   },
@@ -308,13 +310,14 @@ const FAQ_ITEMS = [
     id: 'botulino',
     question: (
       <>
-        Mi hanno proposto il <strong>botulino</strong>.
+        Mi hanno proposto il <strong>botulino</strong>: ha senso?
       </>
     ),
     answer: (
       <>
         Ha le sue indicazioni, su prescrizione specialistica: indebolisce il muscolo. Noi
-        lavoriamo sul perché spinge: le due strade si possono anche valutare insieme.
+        lavoriamo sul perché spinge. Le due strade si possono anche valutare insieme, senza
+        sostituirsi.
       </>
     ),
   },
@@ -327,12 +330,11 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Mandibola bloccata che non si apre o non si chiude: valutazione medica rapida. Dolore con
-        gonfiore caldo davanti all’orecchio e febbre: subito il medico. Denti che si fratturano
-        ripetutamente: il danno va gestito dal dentista, in parallelo. Dolore al viso con perdita
-        di sensibilità o formicolii: prima l’inquadramento medico. Russamento forte con pause del
-        respiro riferite dal partner: valutazione medica per le apnee. Noi interveniamo solo quando
-        il quadro è appropriato a un supporto osteopatico.
+        In presenza di mandibola bloccata che non si apre o non si chiude, dolore con gonfiore
+        caldo davanti all’orecchio e febbre, denti che si fratturano ripetutamente, dolore al viso
+        con perdita di sensibilità o formicolii, oppure russamento forte con pause del respiro
+        riferite dal partner, la priorità è la valutazione medica o dentistica tempestiva. Noi
+        interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -646,18 +648,18 @@ function Bruxismo() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Ho già il bite: non basta?',
+              name: 'Ho già il bite: perché non basta?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Il bite protegge i denti dallo scontro, e va tenuto. Ma il muscolo dietro continua a spingere: è l’altra metà del lavoro.',
+                text: 'Il bite protegge i denti dallo scontro, e va tenuto. Ma il muscolo dietro continua a spingere: è l’altra metà del lavoro. Noi lavoriamo su masseteri, mandibola e collo — in affiancamento al dentista, non al posto suo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Il dentista dice che i denti sono a posto.',
+              name: 'Se i denti sono a posto, cosa c’entra l’osteopatia?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Ottimo: il danno è sotto controllo. Resta il motivo per cui stringi, che non è nei denti: è nei muscoli e nel sistema di allerta.',
+                text: 'Ottimo: il danno è sotto controllo. Resta il motivo per cui stringi, che non è nei denti: è nei muscoli e nel sistema di allerta. Lì lavoriamo noi, in parallelo al percorso odontoiatrico.',
               },
             },
             {
@@ -665,15 +667,15 @@ function Bruxismo() {
               name: 'Come faccio a controllarmi mentre dormo?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Non puoi, ed è il punto: non si lavora sulla volontà, si lavora sul muscolo e sulla pressione che scarichi di notte.',
+                text: 'Non puoi, ed è il punto: non si lavora sulla volontà. Si lavora sul muscolo e sulla pressione che scarichi di notte, così il corpo ha meno bisogno di stringere.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi hanno proposto il botulino.',
+              name: 'Mi hanno proposto il botulino: ha senso?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Ha le sue indicazioni, su prescrizione specialistica: indebolisce il muscolo. Noi lavoriamo sul perché spinge: le due strade si possono anche valutare insieme.',
+                text: 'Ha le sue indicazioni, su prescrizione specialistica: indebolisce il muscolo. Noi lavoriamo sul perché spinge. Le due strade si possono anche valutare insieme, senza sostituirsi.',
               },
             },
             {
@@ -681,7 +683,7 @@ function Bruxismo() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Mandibola bloccata che non si apre o non si chiude: valutazione medica rapida. Dolore con gonfiore caldo davanti all’orecchio e febbre: subito il medico. Denti che si fratturano ripetutamente: il danno va gestito dal dentista, in parallelo. Dolore al viso con perdita di sensibilità o formicolii: prima l’inquadramento medico. Russamento forte con pause del respiro riferite dal partner: valutazione medica per le apnee.',
+                text: 'In presenza di mandibola bloccata che non si apre o non si chiude, dolore con gonfiore caldo davanti all’orecchio e febbre, denti che si fratturano ripetutamente, dolore al viso con perdita di sensibilità o formicolii, oppure russamento forte con pause del respiro riferite dal partner, la priorità è la valutazione medica o dentistica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -922,7 +924,7 @@ function Bruxismo() {
             transition={{ duration: 0.6, delay: 0.06 }}
             className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-black leading-[1.02] tracking-[-0.03em] mb-6 sm:mb-8"
           >
-            Stringi i denti e
+            Soffri di bruxismo e
             <br className="hidden sm:block" />{' '}
             ti svegli già stanco?
             <br />
@@ -944,8 +946,8 @@ function Bruxismo() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">masseteri</strong>,{' '}
             <strong className="font-bold text-cream">mandibola</strong> e{' '}
-            <strong className="font-bold text-cream">collo</strong> per lavorare sul perché
-            stringi — oltre al bite che protegge i denti.
+            <strong className="font-bold text-cream">collo</strong> per ridurre l’impatto del
+            bruxismo su sonno, denti e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1118,15 +1120,15 @@ function Bruxismo() {
               I sintomi più comuni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
-              Il bruxismo non ti limita solo nei sintomi.
+              Il bruxismo non è solo un problema di denti.
               <br />
-              <span className="text-green">Ti limita nel riposo e nei denti.</span>
+              <span className="text-green">Ti limita nel riposo e al risveglio.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Ignorarlo non lo fa sparire: lo normalizza. E più lo normalizzi, più ti toglie{' '}
-              <strong className="font-bold text-cream">sonno</strong>,{' '}
-              <strong className="font-bold text-cream">smalto</strong> e{' '}
-              <strong className="font-bold text-cream">serenità</strong> al risveglio.
+              <strong className="font-bold text-cream">riposo</strong>,{' '}
+              <strong className="font-bold text-cream">serenità al risveglio</strong> e{' '}
+              <strong className="font-bold text-cream">scioltezza</strong> a collo e mandibola.
             </p>
           </motion.div>
 
@@ -1250,9 +1252,9 @@ function Bruxismo() {
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               <strong className="font-bold text-cream">Il bite conta</strong>.{' '}
               <strong className="font-bold text-cream">Il dentista conta</strong>. Ma non sono
-              l’unico livello del problema: il{' '}
-              <strong className="font-bold text-cream">muscolo che spinge</strong> e il motivo per
-              cui spinge possono mantenere attivo il serramento anche con i denti protetti.
+              l’unico livello del problema: i{' '}
+              <strong className="font-bold text-cream">masseteri</strong> possono mantenere attivo
+              il serramento anche quando i denti sono già protetti.
             </p>
           </motion.div>
 
@@ -1370,7 +1372,7 @@ function Bruxismo() {
               </div>
               </div>
               <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
-                La mandibola è la valvola di sfogo: di notte il freno è spento.
+                Il bite protegge i denti. Il muscolo può continuare a stringere.
               </figcaption>
             </motion.figure>
 
@@ -1384,12 +1386,11 @@ function Bruxismo() {
             >
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
-                Stringere i denti è il modo che il corpo ha trovato per scaricare la pressione: la{' '}
+                Stringere i denti è il modo che il corpo ha trovato per scaricare la{' '}
+                <strong className="text-cream font-semibold">pressione</strong>: la{' '}
                 <strong className="text-cream font-semibold">mandibola</strong> è la sua valvola di
-                sfogo. Di giorno un po’ ti controlli; di notte il freno è spento, e il{' '}
-                <strong className="text-cream font-semibold">muscolo</strong> lavora per ore — per
-                questo ti svegli con la mascella stanca e la testa che stringe, come dopo un
-                allenamento che non hai scelto.
+                sfogo. Di notte il freno è spento — e per questo ti svegli con la mascella stanca e
+                la testa che stringe.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1422,8 +1423,8 @@ function Bruxismo() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    Il bite protegge i denti dallo scontro.
-                    <span className="text-green"> È sul muscolo che spinge che spesso nessuno ha ancora lavorato.</span>
+                    Non sempre basta il bite.
+                    <span className="text-green"> A volte serve lavorare sul muscolo che continua a stringere.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1448,8 +1449,8 @@ function Bruxismo() {
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> del bruxismo su sonno,
-              denti e mandibola, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> del serramento su sonno,
+              mandibola e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
@@ -1673,9 +1674,9 @@ function Bruxismo() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
             Se queste storie ti somigliano, il prossimo passo può restituirti più{' '}
-            <strong className="font-bold text-cream">riposo</strong>, meno{' '}
-            <strong className="font-bold text-cream">tensione mandibolare</strong> e un freno al
-            consumo dei denti. Inizia con un consulto telefonico o la prima visita.
+            <strong className="font-bold text-cream">riposo</strong>, più{' '}
+            <strong className="font-bold text-cream">scioltezza</strong> e meno tensione al
+            risveglio. Inizia con un consulto telefonico o la prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
