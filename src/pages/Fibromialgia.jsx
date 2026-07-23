@@ -178,39 +178,44 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
-    alt: 'Trattamento osteopatico dolce per fibromialgia',
+    image: '/fibromialgia/fibromialgia1.JPG',
+    imageClassName: 'object-[75%_52%]',
+    alt: 'Trattamento osteopatico sul dorso per fibromialgia',
     title: 'Antidolorifici comuni: spesso poco efficaci',
     body: 'Presi per anni su un dolore che risponde poco. FANS e paracetamolo sono tra i meno efficaci proprio su questo tipo di dolore.',
   },
   {
-    image: '/home/home2.png',
-    alt: 'Valutazione osteopatica integrata per paziente con fibromialgia',
+    image: '/fibromialgia/fibromialgia2.JPG',
+    imageClassName: 'object-left',
+    alt: 'Trattamento osteopatico cervicale delicato per fibromialgia',
     title: '“È nella tua testa”',
     body: 'Il momento peggiore di tutto il percorso, e la cosa che ti ha fatto perdere più anni. Qui si parte dal crederti.',
   },
   {
-    image: '/home/home4.png',
-    alt: 'Affiancamento al percorso reumatologico e neurologico',
+    image: '/fibromialgia/fibromialgia3.JPG',
+    imageClassName: 'object-left',
+    alt: 'Lavoro osteopatico sulla base del cranio per fibromialgia',
     title: 'Anni di visite per avere un nome',
     body: 'Reumatologo, neurologo, decine di analisi: sono serviti a dare un nome, non una soluzione. Tutti un pezzo, nessuno te intera.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
+    image: '/fibromialgia/fibromialgia4.2.JPG',
+    imageClassName: 'object-[38%_55%]',
     alt: 'Tecniche manuali calibrate per sensibilità fibromialgica',
     title: 'Farmaci specifici e massaggi standard',
     body: 'Pregabalin, duloxetina, amitriptilina gestiscono una parte dei casi. I massaggi normali a volte fanno male: la pressione va calibrata su di te.',
   },
   {
-    image: '/home/home7.png',
-    alt: 'Percorso osteopatico su sonno, tensione e respiro nella fibromialgia',
+    image: '/fibromialgia/fibromialgia5.JPG',
+    imageClassName: 'object-[36%_46%]',
+    alt: 'Trattamento osteopatico su mandibola e collo nella fibromialgia',
     title: 'Attività fisica, integratori e calore',
     body: 'Tra le poche cose con evidenza, o di sollievo momentaneo — ma difficili da sostenere quando ogni sforzo si paga.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
-    alt: 'Approccio osteopatico in affiancamento alla diagnosi clinica di fibromialgia',
+    image: '/fibromialgia/fibromialgia6.JPG',
+    imageClassName: 'object-[75%_55%]',
+    alt: 'Approccio osteopatico su braccio e tensioni periferiche nella fibromialgia',
     title: 'Nessun esame la dimostra: è clinica',
     body: 'Sangue, radiografie e risonanze servono a escludere altro. Lo scorrimento delle tensioni e il carico sul sistema si valutano con le mani.',
   },
@@ -393,7 +398,7 @@ function Fibromialgia() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/fibromialgia`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/fibromialgia/fibromialgia1.JPG`
 
     const title =
       'Osteopata Fibromialgia Torino | Dolore Diffuso, Tensione e Sonno | Mobilitas'
