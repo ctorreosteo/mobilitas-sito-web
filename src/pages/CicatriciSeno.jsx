@@ -178,39 +178,44 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/cervicalgia/cerv12.JPG',
-    alt: 'Trattamento osteopatico su cicatrici del seno e torace',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png',
+    imageClassName: 'object-[58%_42%]',
+    alt: 'Trattamento osteopatico delicato su cicatrici del seno e torace',
     title: 'Creme, oli e silicone: solo in superficie',
     body: 'Migliorano l’aspetto della cicatrice. Non sciolgono le aderenze in profondità né la tensione del torace.',
   },
   {
-    image: '/home/home2.png',
-    alt: 'Valutazione osteopatica post-intervento al seno',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.8.JPG',
+    imageClassName: 'object-[55%_52%]',
+    alt: 'Valutazione osteopatica post-intervento al seno sulla schiena e torace',
     title: '“L’hai voluto tu”',
     body: 'La frase che ti blocca in gola tutto il resto. Non è un’obiezione medica: è un giudizio. Qui non c’è.',
   },
   {
-    image: '/home/home4.png',
-    alt: 'Lavoro manuale sulle aderenze toraciche post-chirurgiche',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.2.png',
+    imageClassName: 'object-[40%_45%]',
+    alt: 'Lavoro manuale su collo e tensioni collegate alle cicatrici del seno',
     title: 'Controlli dal chirurgo: tutto perfetto',
     body: 'Verificano risultato estetico e guarigione. E tu annuisci, perché esteticamente ha ragione — ma quello che senti addosso resta fuori.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.5.JPG',
+    imageClassName: 'object-[42%_48%]',
     alt: 'Trattamento su spalla e torace collegato alla cicatrice',
     title: 'Fisioterapia spalla e mobilità del braccio',
     body: 'Utili, però se il tessuto davanti non scorre l’allungamento trova sempre lo stesso blocco. La causa resta sul torace.',
   },
   {
-    image: '/home/home7.png',
-    alt: 'Lavoro posturale e respiratorio dopo mastoplastica',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.6.JPG',
+    imageClassName: 'object-[58%_48%]',
+    alt: 'Lavoro posturale e sulle tensioni dopo mastoplastica',
     title: 'Ginnastica posturale e “dai tempo”',
     body: 'Lavora sulle spalle chiuse, che sono la conseguenza. Il tempo lo hai dato: da solo non scioglie un tessuto aderente.',
   },
   {
-    image: '/home/home5.png',
-    imageClassName: 'object-[center_75%]',
-    alt: 'Valutazione manuale dello scorrimento tessutale del torace',
+    image: '/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.7.JPG',
+    imageClassName: 'object-[48%_52%]',
+    alt: 'Valutazione manuale dello scorrimento tessutale del torace e bacino',
     title: 'Esami e protesi: un pezzo del quadro',
     body: 'Ecografia, RM e mammografia restano riferimenti chirurgici. Nessuno valuta lo scorrimento del tessuto: è una valutazione manuale.',
   },
@@ -393,7 +398,7 @@ function CicatriciSeno() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/cicatrici-seno`
-    const ogImage = `${origin}/cervicalgia/cerv12.JPG`
+    const ogImage = `${origin}/ciclo-menopausa-cicatricix2/ciclo-menopausa-cicatricix2.1.png`
 
     const title =
       'Osteopata Cicatrici Seno Torino | Torace, Aderenze e Post-Chirurgia | Mobilitas'
