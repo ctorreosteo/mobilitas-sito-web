@@ -87,17 +87,15 @@ function useVideoCicloDolorosoVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Riprenderti i <strong className="font-bold">venti giorni all’anno</strong> che perdi per il
-    dolore
+    Smetti di sentirti dire che il <strong className="font-bold">dolore</strong> è{' '}
+    <strong className="font-bold">normale</strong>
   </>,
   <>
-    Andare oltre <strong className="font-bold">borsa calda</strong> e pastiglia: lavorare su
-    bacino, diaframma e zona lombare
+    Riduci <strong className="font-bold">crampi</strong> e tensioni di{' '}
+    <strong className="font-bold">bacino</strong> e lombare
   </>,
   <>
-    Non accettare “
-    <strong className="font-bold">è normale, sei una donna</strong>”: farti guardare tutta
-    intera
+    Torna a vivere i tuoi giorni con meno <strong className="font-bold">rinunce</strong>
   </>,
 ]
 
@@ -163,7 +161,7 @@ const MECHANISM_STEPS = [
   {
     k: '01',
     t: 'L’utero si contrae nel bacino',
-    b: 'È un muscolo ancorato da legamenti a ossa e tessuti intorno: durante il ciclo si contrae, ed è normale.',
+    b: 'È un muscolo ancorato da legamenti a ossa e tessuti intorno. Durante il ciclo si contrae: è fisiologico.',
   },
   {
     k: '02',
@@ -172,8 +170,8 @@ const MECHANISM_STEPS = [
   },
   {
     k: '03',
-    t: 'Due cicli uguali, due esperienze opposte',
-    b: 'La differenza spesso è nel bacino che ospita l’utero — e lì nessuno ti aveva mai guardata.',
+    t: 'Si lavora sulla parte meccanica',
+    b: 'Il ciclo resta. Sul bacino che ospita l’utero — e sulla resistenza che amplifica il dolore — spesso nessuno ha ancora lavorato.',
   },
 ]
 
@@ -224,47 +222,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Lavoriamo su <strong className="font-bold">bacino, diaframma e zona lombare</strong> perché
-    le contrazioni trovino meno resistenza
+    Sciogliamo <strong className="font-bold">tensioni</strong> di bacino e lombare che
+    amplificano i crampi
   </>,
   <>
-    Andiamo oltre <strong className="font-bold">borsa calda</strong> e “è normale, sei una
-    donna”
+    Torni a vivere i giorni del flusso con meno <strong className="font-bold">dolore</strong> e{' '}
+    <strong className="font-bold">rinunce</strong>
   </>,
   <>
-    Riduciamo i giorni in cui <strong className="font-bold">non esisti</strong> e il peso del
-    blister mensile
+    Torni a muoverti con più <strong className="font-bold">scioltezza</strong> di bacino e
+    schiena
   </>,
   <>
-    Pianifichiamo le sedute sul <strong className="font-bold">tuo calendario</strong>, nei
-    giorni giusti del mese
+    Non sostituiamo il ginecologo: lavoriamo su ciò che{' '}
+    <strong className="font-bold">farmaci</strong> e pillola non risolvono da soli
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sul tuo ciclo e fissiamo il professionista più adatto al tuo quadro.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'Com’è il tuo ciclo, dove fa male, cosa è già stato escluso: è il punto di partenza di tutto il percorso.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Lavoro su bacino, osso sacro e zona lombare',
-    body: 'Ridiamo movimento alla casa dell’utero e sciogliamo la schiena che “si spacca” nei giorni del ciclo.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo bacino, diaframma, zona lombare e dinamica corporea per individuare fattori che possono amplificare i crampi.',
   },
   {
-    title: 'Tecniche dolci sulla pancia bassa e sul diaframma',
-    body: 'Per migliorare scorrimento e circolazione della zona — meno pressione dall’alto, più spazio sotto.',
+    title: 'Trattamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Pianificazione delle sedute sul tuo calendario',
-    body: 'Si lavora nei giorni giusti del mese, con un piano chiaro e misurabile.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su respiro, movimento e posture, da integrare con il percorso medico.',
   },
 ]
 
@@ -273,13 +271,14 @@ const FAQ_ITEMS = [
     id: 'normale',
     question: (
       <>
-        È normale, sono fatta così.
+        Mi hanno detto che è <strong>normale</strong>: è vero?
       </>
     ),
     answer: (
       <>
-        Che il ciclo si senta è normale; che ti cancelli due giorni al mese no. Vale la pena
-        capire quanta parte è meccanica.
+        Che il ciclo si senta è normale; che ti cancelli giornate intere no. Una parte del dolore
+        può essere meccanica — bacino, diaframma, zona lombare — e su quella si lavora, in
+        affiancamento al ginecologo, non al posto suo.
       </>
     ),
   },
@@ -287,13 +286,13 @@ const FAQ_ITEMS = [
     id: 'ginecologo-ok',
     question: (
       <>
-        Il ginecologo dice che è tutto a posto.
+        Il ginecologo dice che è tutto a posto: perché venire da voi?
       </>
     ),
     answer: (
       <>
         Ottimo: esclude le cause organiche. Resta la parte meccanica del bacino, che la visita
-        ginecologica non valuta.
+        ginecologica non valuta. Lì lavoriamo noi, in parallelo al percorso medico.
       </>
     ),
   },
@@ -301,13 +300,13 @@ const FAQ_ITEMS = [
     id: 'imbarazzo',
     question: (
       <>
-        Mi imbarazza la zona.
+        Mi imbarazza la <strong>zona</strong>: come lavorate?
       </>
     ),
     answer: (
       <>
-        Si lavora dall’esterno, con abbigliamento comodo, spiegando tutto prima: niente avviene
-        senza il tuo consenso.
+        Si lavora dall’esterno, con abbigliamento comodo, spiegando ogni passaggio. Niente
+        avviene senza il tuo consenso: ti fermi quando vuoi.
       </>
     ),
   },
@@ -315,13 +314,14 @@ const FAQ_ITEMS = [
     id: 'gia-prendo',
     question: (
       <>
-        Prendo già qualcosa nei giorni peggiori.
+        Prendo già qualcosa nei giorni peggiori: ha senso venire?
       </>
     ),
     answer: (
       <>
-        E ha senso, secondo le indicazioni del medico. Noi lavoriamo perché quei giorni pesino
-        meno in partenza.
+        Sì, se il dolore resta invalidante. Gli antidolorifici, secondo le indicazioni del medico,
+        gestiscono il sintomo. Noi lavoriamo sulla resistenza del bacino, perché quei giorni
+        pesino meno in partenza — senza sostituire la terapia.
       </>
     ),
   },
@@ -334,12 +334,11 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Dolore improvviso e violentissimo al basso ventre, diverso dal solito: pronto soccorso.
-        Febbre con perdite maleodoranti: subito il medico. Test di gravidanza positivo con dolore
-        forte: urgenza medica. Sanguinamenti abbondanti fuori dal ciclo che si ripetono: prima il
-        ginecologo. Dolore che peggiora ciclo dopo ciclo, anno dopo anno: serve un inquadramento
-        ginecologico approfondito. Noi interveniamo solo quando il quadro è appropriato a un
-        supporto osteopatico.
+        In presenza di dolore improvviso e violentissimo al basso ventre diverso dal solito,
+        febbre con perdite maleodoranti, test di gravidanza positivo con dolore forte,
+        sanguinamenti abbondanti fuori dal ciclo che si ripetono, oppure dolore che peggiora
+        ciclo dopo ciclo, la priorità è la valutazione medica o ginecologica tempestiva. Noi
+        interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -653,34 +652,34 @@ function CicloDoloroso() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'È normale, sono fatta così.',
+              name: 'Mi hanno detto che è normale: è vero?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Che il ciclo si senta è normale; che ti cancelli due giorni al mese no. Vale la pena capire quanta parte è meccanica.',
+                text: 'Che il ciclo si senta è normale; che ti cancelli giornate intere no. Una parte del dolore può essere meccanica — bacino, diaframma, zona lombare — e su quella si lavora, in affiancamento al ginecologo, non al posto suo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Il ginecologo dice che è tutto a posto.',
+              name: 'Il ginecologo dice che è tutto a posto: perché venire da voi?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Ottimo: esclude le cause organiche. Resta la parte meccanica del bacino, che la visita ginecologica non valuta.',
+                text: 'Ottimo: esclude le cause organiche. Resta la parte meccanica del bacino, che la visita ginecologica non valuta. Lì lavoriamo noi, in parallelo al percorso medico.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi imbarazza la zona.',
+              name: 'Mi imbarazza la zona: come lavorate?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Si lavora dall’esterno, con abbigliamento comodo, spiegando tutto prima: niente avviene senza il tuo consenso.',
+                text: 'Si lavora dall’esterno, con abbigliamento comodo, spiegando ogni passaggio. Niente avviene senza il tuo consenso: ti fermi quando vuoi.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Prendo già qualcosa nei giorni peggiori.',
+              name: 'Prendo già qualcosa nei giorni peggiori: ha senso venire?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'E ha senso, secondo le indicazioni del medico. Noi lavoriamo perché quei giorni pesino meno in partenza.',
+                text: 'Sì, se il dolore resta invalidante. Gli antidolorifici, secondo le indicazioni del medico, gestiscono il sintomo. Noi lavoriamo sulla resistenza del bacino, perché quei giorni pesino meno in partenza — senza sostituire la terapia.',
               },
             },
             {
@@ -688,7 +687,7 @@ function CicloDoloroso() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Dolore improvviso e violentissimo al basso ventre, diverso dal solito: pronto soccorso. Febbre con perdite maleodoranti: subito il medico. Test di gravidanza positivo con dolore forte: urgenza medica. Sanguinamenti abbondanti fuori dal ciclo che si ripetono: prima il ginecologo. Dolore che peggiora ciclo dopo ciclo, anno dopo anno: serve un inquadramento ginecologico approfondito.',
+                text: 'In presenza di dolore improvviso e violentissimo al basso ventre diverso dal solito, febbre con perdite maleodoranti, test di gravidanza positivo con dolore forte, sanguinamenti abbondanti fuori dal ciclo che si ripetono, oppure dolore che peggiora ciclo dopo ciclo, la priorità è la valutazione medica o ginecologica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -929,9 +928,9 @@ function CicloDoloroso() {
             transition={{ duration: 0.6, delay: 0.06 }}
             className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-black leading-[1.02] tracking-[-0.03em] mb-6 sm:mb-8"
           >
-            Hai un ciclo che ti
+            Hai un ciclo doloroso e
             <br className="hidden sm:block" />{' '}
-            cancella due giorni al mese?
+            ti dicono che è normale?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -951,8 +950,8 @@ function CicloDoloroso() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">bacino</strong>,{' '}
             <strong className="font-bold text-cream">diaframma</strong> e{' '}
-            <strong className="font-bold text-cream">zona lombare</strong> — oltre a borsa calda
-            e pastiglia — perché due cicli uguali possono viverli in modo opposto.
+            <strong className="font-bold text-cream">zona lombare</strong> per ridurre l’impatto
+            del ciclo doloroso su giorni, energia e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1131,9 +1130,9 @@ function CicloDoloroso() {
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Ignorarlo non lo fa sparire: lo normalizza. E più lo normalizzi, più ti toglie{' '}
-              <strong className="font-bold text-cream">lavoro</strong>,{' '}
-              <strong className="font-bold text-cream">calendario</strong> e{' '}
-              <strong className="font-bold text-cream">serenità</strong> nei giorni del flusso.
+              <strong className="font-bold text-cream">giornate</strong>,{' '}
+              <strong className="font-bold text-cream">energia</strong> e{' '}
+              <strong className="font-bold text-cream">serenità</strong> quando arriva il flusso.
             </p>
           </motion.div>
 
@@ -1255,11 +1254,11 @@ function CicloDoloroso() {
               <span className="text-green"> e stare comunque male</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              <strong className="font-bold text-cream">I farmaci contano</strong>.{' '}
-              <strong className="font-bold text-cream">Il ginecologo conta</strong>. Ma non sono
-              l’unico livello: se il{' '}
+              <strong className="font-bold text-cream">Farmaci</strong> e{' '}
+              <strong className="font-bold text-cream">ginecologo</strong> restano punti
+              importanti. Ma se il{' '}
               <strong className="font-bold text-cream">bacino è rigido</strong>, le contrazioni
-              trovano resistenza e fanno più male.
+              trovano un muro: lo stesso ciclo fa più male.
             </p>
           </motion.div>
 
@@ -1366,7 +1365,7 @@ function CicloDoloroso() {
               </div>
               </div>
               <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
-                L’utero si contrae. Il bacino decide quanto male fa.
+                Il ciclo è fisiologico. Il bacino rigido può renderlo invalidante.
               </figcaption>
             </motion.figure>
 
@@ -1381,10 +1380,10 @@ function CicloDoloroso() {
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
                 L’<strong className="text-cream font-semibold">utero</strong> è un muscolo che
-                vive dentro il bacino, ancorato da legamenti a ossa e tessuti intorno. Durante il
-                ciclo si contrae: è normale. Ma se il{' '}
-                <strong className="text-cream font-semibold">bacino</strong> è rigido e i tessuti
-                scorrono male, quelle contrazioni trovano resistenza e fanno più male.
+                vive nel bacino, ancorato a ossa e tessuti intorno. Durante il ciclo si contrae:
+                è fisiologico. Ma se il{' '}
+                <strong className="text-cream font-semibold">bacino</strong> è rigido, quelle
+                contrazioni trovano resistenza: più dolore, più giorni persi.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1417,8 +1416,8 @@ function CicloDoloroso() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    Due donne con lo stesso ciclo possono viverlo in modo opposto.
-                    <span className="text-green"> La differenza spesso è nel bacino che lo ospita.</span>
+                    Non sempre serve solo accettare che “è normale”.
+                    <span className="text-green"> A volte serve lavorare su bacino, diaframma e zona lombare.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1443,8 +1442,8 @@ function CicloDoloroso() {
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> del ciclo su pancia,
-              schiena e giorni della tua vita, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> del dolore su giorni,
+              energia e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
