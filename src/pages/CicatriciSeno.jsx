@@ -87,16 +87,15 @@ function useVideoCicatriciSenoVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Sciogliere il petto che <strong className="font-bold">tira</strong> e la cicatrice che{' '}
-    <strong className="font-bold">non scorre</strong>
+    Smetti di sentirti dire che <strong className="font-bold">l’hai voluto tu</strong>
   </>,
   <>
-    Riaprire le <strong className="font-bold">spalle</strong> chiuse e riprenderti il{' '}
-    <strong className="font-bold">respiro</strong> che si ferma a metà
+    Riduci la <strong className="font-bold">tensione</strong> del petto e la cicatrice che non{' '}
+    <strong className="font-bold">scorre</strong>
   </>,
   <>
-    Parlarne senza sentirti dire “
-    <strong className="font-bold">l’hai voluto tu</strong>”: qui non c’è giudizio
+    Torna a <strong className="font-bold">respirare</strong> a fondo, con le{' '}
+    <strong className="font-bold">spalle</strong> più aperte
   </>,
 ]
 
@@ -171,8 +170,8 @@ const MECHANISM_STEPS = [
   },
   {
     k: '03',
-    t: 'Estetica e funzionamento sono due cose',
-    b: 'Il risultato estetico può essere perfetto — e il funzionamento no. Il tempo assesta, ma non scolla.',
+    t: 'Si lavora sullo scorrimento',
+    b: 'Il risultato estetico può essere perfetto. Sul tessuto che tira — e non scorre — spesso nessuno ha ancora lavorato.',
   },
 ]
 
@@ -223,46 +222,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Sciogliamo il petto che <strong className="font-bold">tira</strong> e la cicatrice che non
-    scorre, nel rispetto della protesi
+    Sciogliamo la <strong className="font-bold">tensione</strong> del petto e la cicatrice che
+    non scorre
   </>,
   <>
-    Riapriamo le <strong className="font-bold">spalle</strong> e colleghiamo la schiena tra le
-    scapole al davanti
+    Torni a <strong className="font-bold">respirare</strong> a fondo, con le{' '}
+    <strong className="font-bold">spalle</strong> più aperte
   </>,
   <>
-    Riprendiamo <strong className="font-bold">respiro</strong>, braccio e zona addormentata
+    Torni a muoverti con più <strong className="font-bold">scioltezza</strong> di braccio e
+    torace
   </>,
   <>
-    Ti diamo un <strong className="font-bold">programma a casa</strong> di automassaggio e
-    movimento, con i tempi giusti del tessuto
+    Non sostituiamo il chirurgo: lavoriamo su ciò che l’
+    <strong className="font-bold">estetica</strong> non risolve da sola
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sull’intervento e fissiamo il professionista più adatto al tuo quadro.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'L’intervento, i tempi, cosa tira e cosa si è limitato: è il punto di partenza di tutto il percorso.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Trattamento manuale delle cicatrici',
-    body: 'Tecniche dolci per ridare scorrimento ai piani, nel rispetto della protesi — e lavoro su torace e costole.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo cicatrici, scorrimento dei piani, torace, spalle e dinamica corporea per individuare fattori che alimentano la tensione.',
   },
   {
-    title: 'Scioglimento di spalle, braccio e respiro',
-    body: 'Restituiamo i movimenti che si sono limitati. Un torace che scorre è un respiro che torna a scendere.',
+    title: 'Trattamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Programma di automassaggio e movimento',
-    body: 'Per consolidare a casa, con i tempi giusti del tessuto.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su automassaggio, respiro e movimento, da integrare con il percorso medico.',
   },
 ]
 
@@ -271,13 +271,13 @@ const FAQ_ITEMS = [
     id: 'chirurgo-perfetto',
     question: (
       <>
-        Il chirurgo dice che è tutto <strong>perfetto</strong>.
+        Il chirurgo dice che è tutto <strong>perfetto</strong>: perché venire da voi?
       </>
     ),
     answer: (
       <>
-        E sull’estetica ha ragione. Lo scorrimento dei tessuti è un’altra cosa: si valuta con le
-        mani ed è il nostro campo.
+        Sull’estetica ha ragione. Lo scorrimento dei tessuti è un’altra cosa: si valuta con le
+        mani ed è il nostro campo. Lavoriamo in affiancamento al chirurgo, non al posto suo.
       </>
     ),
   },
@@ -285,13 +285,14 @@ const FAQ_ITEMS = [
     id: 'paura-protesi',
     question: (
       <>
-        Ho paura per la <strong>protesi</strong>.
+        Ho paura per la <strong>protesi</strong>: è sicuro?
       </>
     ),
     answer: (
       <>
         Si lavora con tecniche dolci, nel rispetto dei tessuti e della protesi, e nei tempi giusti
-        dopo l’intervento: il tuo chirurgo può restare nel giro.
+        dopo l’intervento. Il tuo chirurgo può restare nel giro: non sostituiamo il percorso
+        chirurgico, lo affianchiamo.
       </>
     ),
   },
@@ -299,13 +300,14 @@ const FAQ_ITEMS = [
     id: 'lho-voluto-io',
     question: (
       <>
-        L’ho voluto io: mi sembra di non poterne parlare.
+        L’ho voluto io: posso ancora <strong>parlarne</strong>?
       </>
     ),
     answer: (
       <>
-        Qui non c’è nessun giudizio da superare: c’è un torace che deve tornare a muoversi bene.
-        Punto.
+        Sì. Qui non c’è nessun giudizio da superare: c’è un torace che deve tornare a muoversi
+        bene. Aver scelto l’intervento non toglie il diritto di chiedere aiuto se qualcosa tira
+        ancora.
       </>
     ),
   },
@@ -313,13 +315,14 @@ const FAQ_ITEMS = [
     id: 'imbarazzo',
     question: (
       <>
-        Mi imbarazza la zona.
+        Mi imbarazza la <strong>zona</strong>: come lavorate?
       </>
     ),
     answer: (
       <>
-        Comprensibile: si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a
-        ogni passo. Ti fermi quando vuoi.
+        Comprensibile. Si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a
+        ogni passo. Ti fermi quando vuoi: comanda il tuo comfort, non un protocollo uguale per
+        tutte.
       </>
     ),
   },
@@ -332,11 +335,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Rossore, calore, secrezione o febbre nella zona: subito il chirurgo o il medico. Cambio
-        improvviso di forma, volume o consistenza del seno: valutazione chirurgica. Gonfiore
-        comparso a distanza di tempo da un solo lato: sempre da far valutare al medico, senza
-        aspettare. Nodulo nuovo al seno o sotto l’ascella: prima il medico. Dolore forte e
-        improvviso al petto con affanno: prima si esclude il resto, anche in pronto soccorso. Noi
+        In presenza di rossore, calore, secrezione o febbre nella zona, cambio improvviso di
+        forma, volume o consistenza del seno, gonfiore comparso a distanza di tempo da un solo
+        lato, nodulo nuovo al seno o sotto l’ascella, oppure dolore forte e improvviso al petto
+        con affanno, la priorità è la valutazione chirurgica o medica tempestiva. Noi
         interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
@@ -651,34 +653,34 @@ function CicatriciSeno() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Il chirurgo dice che è tutto perfetto.',
+              name: 'Il chirurgo dice che è tutto perfetto: perché venire da voi?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'E sull’estetica ha ragione. Lo scorrimento dei tessuti è un’altra cosa: si valuta con le mani ed è il nostro campo.',
+                text: 'Sull’estetica ha ragione. Lo scorrimento dei tessuti è un’altra cosa: si valuta con le mani ed è il nostro campo. Lavoriamo in affiancamento al chirurgo, non al posto suo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Ho paura per la protesi.',
+              name: 'Ho paura per la protesi: è sicuro?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Si lavora con tecniche dolci, nel rispetto dei tessuti e della protesi, e nei tempi giusti dopo l’intervento: il tuo chirurgo può restare nel giro.',
+                text: 'Si lavora con tecniche dolci, nel rispetto dei tessuti e della protesi, e nei tempi giusti dopo l’intervento. Il tuo chirurgo può restare nel giro: non sostituiamo il percorso chirurgico, lo affianchiamo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'L’ho voluto io: mi sembra di non poterne parlare.',
+              name: 'L’ho voluto io: posso ancora parlarne?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Qui non c’è nessun giudizio da superare: c’è un torace che deve tornare a muoversi bene. Punto.',
+                text: 'Sì. Qui non c’è nessun giudizio da superare: c’è un torace che deve tornare a muoversi bene. Aver scelto l’intervento non toglie il diritto di chiedere aiuto se qualcosa tira ancora.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi imbarazza la zona.',
+              name: 'Mi imbarazza la zona: come lavorate?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Comprensibile: si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a ogni passo. Ti fermi quando vuoi.',
+                text: 'Comprensibile. Si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a ogni passo. Ti fermi quando vuoi: comanda il tuo comfort, non un protocollo uguale per tutte.',
               },
             },
             {
@@ -686,7 +688,7 @@ function CicatriciSeno() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Rossore, calore, secrezione o febbre nella zona: subito il chirurgo o il medico. Cambio improvviso di forma, volume o consistenza del seno: valutazione chirurgica. Gonfiore comparso a distanza di tempo da un solo lato: sempre da far valutare al medico. Nodulo nuovo al seno o sotto l’ascella: prima il medico. Dolore forte e improvviso al petto con affanno: prima si esclude il resto, anche in pronto soccorso.',
+                text: 'In presenza di rossore, calore, secrezione o febbre nella zona, cambio improvviso di forma, volume o consistenza del seno, gonfiore comparso a distanza di tempo da un solo lato, nodulo nuovo al seno o sotto l’ascella, oppure dolore forte e improvviso al petto con affanno, la priorità è la valutazione chirurgica o medica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -929,7 +931,7 @@ function CicatriciSeno() {
           >
             Hai rifatto il seno e
             <br className="hidden sm:block" />{' '}
-            il petto tira ancora?
+            ti dicono che il tirare è normale?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -949,8 +951,8 @@ function CicatriciSeno() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">cicatrici</strong>,{' '}
             <strong className="font-bold text-cream">torace</strong> e{' '}
-            <strong className="font-bold text-cream">spalle</strong> — nel rispetto della
-            protesi — perché il risultato estetico può essere perfetto e il funzionamento no.
+            <strong className="font-bold text-cream">spalle</strong> per ridurre l’impatto della
+            tensione su respiro, movimento e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1255,9 +1257,9 @@ function CicatriciSeno() {
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               <strong className="font-bold text-cream">Il chirurgo conta</strong>.{' '}
               <strong className="font-bold text-cream">Le creme contano</strong>. Ma non sono
-              l’unico livello: i{' '}
-              <strong className="font-bold text-cream">piani che restano aderenti</strong> possono
-              continuare a tirare anche quando l’estetica è perfetta.
+              l’unico livello del problema: i{' '}
+              <strong className="font-bold text-cream">piani aderenti</strong> possono continuare
+              a tirare anche quando l’estetica è già perfetta.
             </p>
           </motion.div>
 
@@ -1351,7 +1353,7 @@ function CicatriciSeno() {
               </div>
               </div>
               <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
-                Il tempo assesta. Non scolla i piani del torace.
+                L’estetica può essere perfetta. I piani possono restare aderenti.
               </figcaption>
             </motion.figure>
 
@@ -1367,10 +1369,9 @@ function CicatriciSeno() {
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
                 Ogni intervento lascia cicatrici anche dove non le vedi: sotto la pelle, intorno
                 alla <strong className="text-cream font-semibold">protesi</strong>, nei piani che
-                devono scorrere. Quando restano incollati, il{' '}
-                <strong className="text-cream font-semibold">torace</strong> si irrigidisce, il
-                braccio trova un limite, il respiro non scende più fino in fondo, le spalle si
-                chiudono.
+                devono scorrere. Quando restano aderenti, il{' '}
+                <strong className="text-cream font-semibold">torace</strong> si chiude: braccio
+                limitato, respiro a metà, spalle in avanti.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1403,8 +1404,8 @@ function CicatriciSeno() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    Il risultato estetico può essere perfetto.
-                    <span className="text-green"> Sullo scorrimento dei tessuti si lavora con le mani.</span>
+                    Non sempre basta “dare tempo”.
+                    <span className="text-green"> A volte serve lavorare sullo scorrimento dei tessuti.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1429,8 +1430,8 @@ function CicatriciSeno() {
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> della cicatrice su
-              torace, spalle e respiro, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> della tensione su respiro,
+              movimento e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
@@ -1654,9 +1655,9 @@ function CicatriciSeno() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
             Se queste storie ti somigliano, il prossimo passo può restituirti più{' '}
-            <strong className="font-bold text-cream">apertura</strong>, meno{' '}
-            <strong className="font-bold text-cream">tiraggio</strong> e un torace che torna a
-            muoversi. Inizia con un consulto telefonico o la prima visita.
+            <strong className="font-bold text-cream">scioltezza</strong>, più{' '}
+            <strong className="font-bold text-cream">respiro</strong> e meno tensione al petto.
+            Inizia con un consulto telefonico o la prima visita.
           </p>
           <div className="flex justify-center">
             <CtaPair />
