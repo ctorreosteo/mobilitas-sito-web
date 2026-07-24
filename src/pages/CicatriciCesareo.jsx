@@ -87,16 +87,15 @@ function useVideoCicatriciCesareoVsl() {
 
 const HERO_BENEFITS = [
   <>
-    Sciogliere la cicatrice che <strong className="font-bold">non scorre</strong> e togliere
-    quel <strong className="font-bold">tiraggio</strong> interno
+    Smetti di sentirti dire che col <strong className="font-bold">tempo</strong> passa
   </>,
   <>
-    Riprenderti la zona <strong className="font-bold">addormentata</strong> e riattivare gli{' '}
-    <strong className="font-bold">addominali bassi</strong>
+    Riduci il <strong className="font-bold">tiraggio</strong> e la cicatrice che non{' '}
+    <strong className="font-bold">scorre</strong>
   </>,
   <>
-    Collegare finalmente <strong className="font-bold">schiena</strong>, postura e parto — non
-    è “solo estetica”
+    Torna a <strong className="font-bold">sentire</strong> la pancia, con meno{' '}
+    <strong className="font-bold">compensi</strong> sulla schiena
   </>,
 ]
 
@@ -167,12 +166,12 @@ const MECHANISM_STEPS = [
   {
     k: '02',
     t: 'Il tessuto non scorre più',
-    b: 'Quando gli strati restano incollati, ogni movimento trova quel punto che tira.',
+    b: 'Quando gli strati restano incollati, ogni movimento trova quel punto che tira: pancia, schiena e postura si riorganizzano.',
   },
   {
     k: '03',
-    t: 'Il corpo si organizza intorno',
-    b: 'La schiena compensa, la postura cambia, la pancia sopra la cicatrice smette di rispondere.',
+    t: 'Si lavora sullo scorrimento',
+    b: 'Il tempo chiude la ferita. Sugli strati che restano aderenti — e sul tiraggio che resta — spesso nessuno ha ancora lavorato.',
   },
 ]
 
@@ -223,47 +222,47 @@ const BENEFITS = [
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    Lavoriamo sulla cicatrice che <strong className="font-bold">non scorre</strong> e sui
-    tessuti che si sono organizzati intorno
+    Sciogliamo la cicatrice che non <strong className="font-bold">scorre</strong> e il{' '}
+    <strong className="font-bold">tiraggio</strong> interno
   </>,
   <>
-    Riprendiamo la zona <strong className="font-bold">addormentata</strong> e gli addominali
-    bassi che non si accendono
+    Torni a <strong className="font-bold">sentire</strong> la pancia e a riattivare gli
+    addominali bassi
   </>,
   <>
-    Colleghiamo <strong className="font-bold">schiena, bacino e postura</strong> a quello che
-    è cambiato dal parto
+    Torni a muoverti con più <strong className="font-bold">scioltezza</strong>, con meno
+    compensi su schiena e postura
   </>,
   <>
-    Ti insegniamo un <strong className="font-bold">automassaggio a casa</strong> con direzioni
-    e piani giusti
+    Non sostituiamo il percorso ostetrico: lavoriamo su ciò che il{' '}
+    <strong className="font-bold">tempo</strong> da solo non scioglie
   </>,
 ]
 
 const VISIT_STEPS = [
   {
     title: 'Primo contatto con la segreteria',
-    body: 'Raccogliamo le informazioni principali sulla cicatrice e fissiamo il professionista più adatto al tuo quadro.',
+    body: 'Raccogliamo le informazioni principali e fissiamo il professionista più adatto al tuo quadro.',
   },
   {
     title: 'Accettazione in studio',
     body: 'Compili la modulistica e impostiamo la visita in modo ordinato e trasparente.',
   },
   {
-    title: 'Colloquio e valutazione iniziale',
-    body: 'Com’è la cicatrice, cosa tira, cosa è cambiato dal parto: è il punto di partenza di tutto il percorso.',
+    title: 'Anamnesi approfondita',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
   },
   {
-    title: 'Trattamento manuale della cicatrice',
-    body: 'Tecniche dolci per ridare scorrimento tra gli strati — e lavoro sui tessuti intorno: pancia, fianchi, pube.',
+    title: 'Valutazione obiettiva e posturale',
+    body: 'Analizziamo cicatrice, scorrimento degli strati, pancia, schiena e dinamica corporea per individuare fattori che alimentano il tiraggio.',
   },
   {
-    title: 'Riattivazione e lavoro sui compensi',
-    body: 'Riattiviamo la pancia profonda che ha smesso di rispondere e lavoriamo su bacino, schiena e postura.',
+    title: 'Trattamento specifico',
+    body: 'Se indicato, iniziamo tecniche manuali personalizzate sulla tua situazione clinica.',
   },
   {
-    title: 'Programma di automassaggio a casa',
-    body: 'Ti insegniamo direzioni e modi giusti, per continuare tra le sedute.',
+    title: 'Indicazioni pratiche personalizzate',
+    body: 'Ti diamo strategie concrete su automassaggio, movimento e posture, da integrare con il percorso medico.',
   },
 ]
 
@@ -272,13 +271,14 @@ const FAQ_ITEMS = [
     id: 'anni-dopo',
     question: (
       <>
-        Sono passati anni: ormai è così.
+        Sono passati <strong>anni</strong>: ormai è così?
       </>
     ),
     answer: (
       <>
-        Il tempo chiude la ferita, non scolla gli strati: su una cicatrice si può lavorare anche
-        a distanza di anni. La valutazione dice quanto margine c’è.
+        No, non necessariamente. Il tempo chiude la ferita, non scolla gli strati: su una
+        cicatrice si può lavorare anche a distanza di anni. La valutazione dice quanto margine
+        c’è, senza promesse facili.
       </>
     ),
   },
@@ -286,13 +286,14 @@ const FAQ_ITEMS = [
     id: 'imbarazzo',
     question: (
       <>
-        Mi imbarazza farla toccare.
+        Mi imbarazza farla <strong>toccare</strong>: come lavorate?
       </>
     ),
     answer: (
       <>
-        Comprensibile: si lavora con delicatezza, spiegando tutto prima, e ti fermi quando vuoi.
-        Nulla senza il tuo consenso.
+        Comprensibile. Si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a
+        ogni passo. Ti fermi quando vuoi: comanda il tuo comfort, non un protocollo uguale per
+        tutte.
       </>
     ),
   },
@@ -306,7 +307,8 @@ const FAQ_ITEMS = [
     answer: (
       <>
         Un punto che tira davanti fa compensare dietro: è meccanica semplice. Ed è il
-        collegamento che nessuno ha controllato.
+        collegamento che spesso nessuno ha controllato. Lavoriamo su cicatrice e compensi insieme,
+        in affiancamento al percorso medico se già in corso.
       </>
     ),
   },
@@ -314,13 +316,14 @@ const FAQ_ITEMS = [
     id: 'automassaggio',
     question: (
       <>
-        La massaggio già da sola.
+        La massaggio già da sola: ha senso venire?
       </>
     ),
     answer: (
       <>
-        Ottima intuizione: con le direzioni e i piani giusti diventa efficace. Ti insegniamo
-        come, così il lavoro continua a casa.
+        Sì, se il tiraggio resta. L’automassaggio è un’ottima intuizione: con le direzioni e i
+        piani giusti diventa davvero efficace. Ti insegniamo come, così il lavoro continua a casa
+        tra le sedute.
       </>
     ),
   },
@@ -333,12 +336,12 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Rossore, calore, secrezione o febbre nella zona della cicatrice: subito il medico.
-        Dolore acuto e improvviso alla pancia: prima il medico. Massa dura che cresce nella
-        zona, o dolore che si accende ogni ciclo sulla cicatrice: valutazione medica. Perdite
-        di sangue anomale e persistenti: prima il ginecologo. Gravidanza in corso con dolore
-        forte sulla cicatrice: subito il ginecologo. Noi interveniamo solo quando il quadro è
-        appropriato a un supporto osteopatico.
+        In presenza di rossore, calore, secrezione o febbre nella zona della cicatrice, dolore
+        acuto e improvviso alla pancia, massa dura che cresce nella zona, dolore che si accende
+        ogni ciclo sulla cicatrice, perdite di sangue anomale e persistenti, oppure gravidanza in
+        corso con dolore forte sulla cicatrice, la priorità è la valutazione medica o
+        ginecologica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un
+        supporto osteopatico.
       </>
     ),
   },
@@ -652,18 +655,18 @@ function CicatriciCesareo() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Sono passati anni: ormai è così.',
+              name: 'Sono passati anni: ormai è così?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Il tempo chiude la ferita, non scolla gli strati: su una cicatrice si può lavorare anche a distanza di anni. La valutazione dice quanto margine c’è.',
+                text: 'No, non necessariamente. Il tempo chiude la ferita, non scolla gli strati: su una cicatrice si può lavorare anche a distanza di anni. La valutazione dice quanto margine c’è, senza promesse facili.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi imbarazza farla toccare.',
+              name: 'Mi imbarazza farla toccare: come lavorate?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Comprensibile: si lavora con delicatezza, spiegando tutto prima, e ti fermi quando vuoi. Nulla senza il tuo consenso.',
+                text: 'Comprensibile. Si lavora con delicatezza, spiegando ogni passaggio, con il tuo consenso a ogni passo. Ti fermi quando vuoi: comanda il tuo comfort, non un protocollo uguale per tutte.',
               },
             },
             {
@@ -671,15 +674,15 @@ function CicatriciCesareo() {
               name: 'Che c’entra la cicatrice col mio mal di schiena?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Un punto che tira davanti fa compensare dietro: è meccanica semplice. Ed è il collegamento che nessuno ha controllato.',
+                text: 'Un punto che tira davanti fa compensare dietro: è meccanica semplice. Ed è il collegamento che spesso nessuno ha controllato. Lavoriamo su cicatrice e compensi insieme, in affiancamento al percorso medico se già in corso.',
               },
             },
             {
               '@type': 'Question',
-              name: 'La massaggio già da sola.',
+              name: 'La massaggio già da sola: ha senso venire?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Ottima intuizione: con le direzioni e i piani giusti diventa efficace. Ti insegniamo come, così il lavoro continua a casa.',
+                text: 'Sì, se il tiraggio resta. L’automassaggio è un’ottima intuizione: con le direzioni e i piani giusti diventa davvero efficace. Ti insegniamo come, così il lavoro continua a casa tra le sedute.',
               },
             },
             {
@@ -687,7 +690,7 @@ function CicatriciCesareo() {
               name: 'Quando è necessario prima un controllo medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Rossore, calore, secrezione o febbre nella zona della cicatrice: subito il medico. Dolore acuto e improvviso alla pancia: prima il medico. Massa dura che cresce nella zona, o dolore che si accende ogni ciclo sulla cicatrice: valutazione medica. Perdite di sangue anomale e persistenti: prima il ginecologo. Gravidanza in corso con dolore forte sulla cicatrice: subito il ginecologo.',
+                text: 'In presenza di rossore, calore, secrezione o febbre nella zona della cicatrice, dolore acuto e improvviso alla pancia, massa dura che cresce nella zona, dolore che si accende ogni ciclo sulla cicatrice, perdite di sangue anomale e persistenti, oppure gravidanza in corso con dolore forte sulla cicatrice, la priorità è la valutazione medica o ginecologica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -928,9 +931,9 @@ function CicatriciCesareo() {
             transition={{ duration: 0.6, delay: 0.06 }}
             className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-black leading-[1.02] tracking-[-0.03em] mb-6 sm:mb-8"
           >
-            Hai una cicatrice da cesareo
+            Hai una cicatrice da cesareo e
             <br className="hidden sm:block" />{' '}
-            che tira ancora?
+            ti dicono che col tempo passa?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -947,11 +950,11 @@ function CicatriciCesareo() {
             transition={{ duration: 0.5, delay: 0.14 }}
             className="text-cream/60 text-lg sm:text-lg leading-relaxed max-w-lg sm:mx-auto mb-10 sm:mb-12 font-medium"
           >
-            Interveniamo in modo specifico sulla{' '}
-            <strong className="font-bold text-cream">cicatrice</strong>, sulle{' '}
-            <strong className="font-bold text-cream">aderenze</strong> e sui{' '}
-            <strong className="font-bold text-cream">compensi</strong> di pancia, schiena e
-            postura — perché il tempo chiude la ferita, ma non scolla gli strati.
+            Interveniamo in modo specifico su{' '}
+            <strong className="font-bold text-cream">cicatrice</strong>,{' '}
+            <strong className="font-bold text-cream">aderenze</strong> e{' '}
+            <strong className="font-bold text-cream">postura</strong> per ridurre l’impatto del
+            tiraggio su pancia, schiena e vita quotidiana.
           </motion.p>
 
           {showHeroMedia && (
@@ -1254,11 +1257,11 @@ function CicatriciCesareo() {
               <span className="text-green"> e stare comunque male</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              <strong className="font-bold text-cream">Le creme contano</strong>.{' '}
-              <strong className="font-bold text-cream">Il controllo dei quaranta giorni
-              conta</strong>. Ma non sono l’unico livello: gli{' '}
-              <strong className="font-bold text-cream">strati che restano incollati</strong> possono
-              continuare a tirare anche anni dopo.
+              <strong className="font-bold text-cream">Creme</strong> e{' '}
+              <strong className="font-bold text-cream">controllo dei quaranta giorni</strong>{' '}
+              restano punti importanti. Ma se gli{' '}
+              <strong className="font-bold text-cream">strati restano aderenti</strong>, il
+              tiraggio può continuare anche anni dopo.
             </p>
           </motion.div>
 
@@ -1352,7 +1355,7 @@ function CicatriciCesareo() {
               </div>
               </div>
               <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
-                Il tempo chiude la ferita. Non scolla gli strati.
+                Il tempo chiude la ferita. Gli strati possono restare aderenti.
               </figcaption>
             </motion.figure>
 
@@ -1368,10 +1371,9 @@ function CicatriciCesareo() {
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
                 Una cicatrice guarisce incollando gli strati tra loro:{' '}
                 <strong className="text-cream font-semibold">pelle</strong>, tessuto sotto,{' '}
-                <strong className="text-cream font-semibold">muscolo</strong>. È il suo lavoro. Il
-                problema nasce quando gli strati restano incollati anche tra loro: il tessuto non
-                scorre più, e ogni movimento trova quel punto che tira. Il corpo, per non sentirlo,
-                si organizza intorno.
+                <strong className="text-cream font-semibold">muscolo</strong>. Quando restano
+                aderenti, il tessuto non scorre più: ogni movimento trova quel punto che tira,
+                la pancia sopra smette di rispondere, la schiena compensa.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1404,8 +1406,8 @@ function CicatriciCesareo() {
                     aria-hidden
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
-                    Il tempo chiude la ferita, ma non scolla gli strati.
-                    <span className="text-green"> Quello si fa con le mani, gradualmente.</span>
+                    Non sempre basta “dare tempo”.
+                    <span className="text-green"> A volte serve lavorare sullo scorrimento degli strati.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1430,8 +1432,8 @@ function CicatriciCesareo() {
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> della cicatrice su
-              scorrimento, pancia e postura, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> del tiraggio su pancia,
+              schiena e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
