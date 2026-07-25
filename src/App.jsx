@@ -47,6 +47,7 @@ import Emicrania from './pages/landing-pages/Emicrania'
 import MalDiSchiena from './pages/landing-pages/MalDiSchiena'
 import Gravidanza from './pages/landing-pages/Gravidanza'
 import ThankYou from './pages/landing-pages/ThankYou'
+import ThankYouRichiesta from './pages/landing-pages/ThankYouRichiesta'
 import ThankYouCervicalgia from './pages/landing-pages/ThankYouCervicalgia'
 import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
@@ -131,6 +132,7 @@ function App() {
         <Route path="/mal-di-schiena" element={<MalDiSchiena />} />
         <Route path="/gravidanza" element={<Gravidanza />} />
         <Route path="/conferma" element={<ThankYou />} />
+        <Route path="/conferma-richiesta" element={<ThankYouRichiesta />} />
         <Route path="/lm-gpadel-infortuni" element={<LmGPadelInfortuni />} />
         <Route path="/lm-gpadel-infortuni-grazie" element={<GpadelInfortuniThankYou />} />
         <Route path="/lm-gpadel-sconto39-generico" element={<LmGpadelSconto39 />} />

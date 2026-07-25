@@ -150,7 +150,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       prefissoCellulare,
       cellulare,
       statusRichiesta: 'LEAD',
-      fonteString: 'GOOGLE_ADS',
+      fonteString: pageContext === 'bruxismo' ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
@@ -174,7 +174,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       setIsSubmitted(false)
       setError(null)
       onClose()
-      navigate(pageContext === 'cervicalgia' ? '/cervicalgia/conferma' : '/conferma')
+      navigate(pageContext === 'cervicalgia' ? '/cervicalgia/conferma' : '/conferma-richiesta')
     } catch (err) {
       console.error('API richieste:', err)
       setError(err.message || 'Si è verificato un errore. Riprova più tardi.')
