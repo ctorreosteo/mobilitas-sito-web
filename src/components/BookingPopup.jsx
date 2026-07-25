@@ -137,12 +137,23 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       reflusso: 'Reflusso',
       vertigini: 'Vertigini',
       bruxismo: 'Bruxismo',
-      'cicatrici-cesareo': 'CicatriciCesareo',
-      'cicatrici-seno': 'CicatriciSeno',
-      'ciclo-doloroso': 'CicloDoloroso',
+      'cicatrici-cesareo': 'Cicatrici cesareo',
+      'cicatrici-seno': 'Cicatrici seno',
+      'ciclo-doloroso': 'Ciclo doloroso',
       fibromialgia: 'Fibromialgia',
       menopausa: 'Menopausa',
     }
+
+    const socialAdsContexts = new Set([
+      'bruxismo',
+      'menopausa',
+      'ciclo-doloroso',
+      'cicatrici-cesareo',
+      'cicatrici-seno',
+      'fibromialgia',
+      'reflusso',
+      'vertigini',
+    ])
 
     const body = {
       nome: cleanName(formData.nome),
@@ -150,7 +161,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       prefissoCellulare,
       cellulare,
       statusRichiesta: 'LEAD',
-      fonteString: pageContext === 'bruxismo' ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
+      fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
