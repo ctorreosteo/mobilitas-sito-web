@@ -158,6 +158,17 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'maldischiena',
     ])
 
+    const campagnaContexts = new Set([
+      'menopausa',
+      'ciclo-doloroso',
+      'cicatrici-cesareo',
+      'cicatrici-seno',
+      'fibromialgia',
+      'reflusso',
+      'vertigini',
+      'maldischiena',
+    ])
+
     const body = {
       nome: cleanName(formData.nome),
       cognome: cleanName(formData.cognome),
@@ -167,6 +178,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
+      ...(campagnaContexts.has(pageContext) && { campagna: '120239301462800644' }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
 
