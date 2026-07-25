@@ -56,7 +56,8 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'cicatrici-seno' ||
   pageContext === 'ciclo-doloroso' ||
   pageContext === 'fibromialgia' ||
-  pageContext === 'menopausa'
+  pageContext === 'menopausa' ||
+  pageContext === 'maldischiena'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -142,6 +143,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'ciclo-doloroso': 'Ciclo doloroso',
       fibromialgia: 'Fibromialgia',
       menopausa: 'Menopausa',
+      maldischiena: 'Mal di schiena',
     }
 
     const socialAdsContexts = new Set([
@@ -153,6 +155,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'fibromialgia',
       'reflusso',
       'vertigini',
+      'maldischiena',
     ])
 
     const body = {
