@@ -244,7 +244,7 @@ const VISIT_STEPS = [
   },
   {
     title: 'Anamnesi approfondita',
-    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorita e obiettivi realistici.',
+    body: 'Ricostruiamo sintomi, trigger, esami effettuati e terapie in corso, per definire priorità e obiettivi realistici.',
   },
   {
     title: 'Valutazione obiettiva e posturale',
