@@ -1275,7 +1275,8 @@ function Vertigini() {
                 aria-hidden
               />
               <div className="relative p-[1px] rounded-[1.75rem] sm:rounded-[2rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.45)_0%,rgba(244,244,244,0.12)_40%,rgba(114,250,147,0.08)_75%,rgba(0,37,82,0.35)_100%)] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(114,250,147,0.08)]">
-              <div className="relative aspect-square rounded-[calc(1.75rem-1px)] sm:rounded-[calc(2rem-1px)] border border-cream/[0.06] bg-blue-dark/60 backdrop-blur-md overflow-hidden">
+              <div className="overflow-hidden rounded-[calc(1.75rem-1px)] sm:rounded-[calc(2rem-1px)] border border-cream/[0.06] bg-blue-dark/60 backdrop-blur-md">
+              <div className="relative aspect-square">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(114,250,147,0.16),transparent_62%)]" />
 
                 <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
@@ -1353,10 +1354,11 @@ function Vertigini() {
                   Equilibrio
                 </span>
               </div>
-              </div>
-              <figcaption className="mt-5 text-center text-cream/55 text-sm leading-relaxed px-2">
+              <figcaption className="px-4 py-3.5 sm:px-5 sm:py-4 text-center text-cream/55 text-sm leading-snug text-balance border-t border-cream/10">
                 In equilibrio, orecchie, occhi e collo devono parlarsi tra loro.
               </figcaption>
+              </div>
+              </div>
             </motion.figure>
 
             {/* — Narrazione + catena causale — */}
