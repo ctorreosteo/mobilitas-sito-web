@@ -58,7 +58,9 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'fibromialgia' ||
   pageContext === 'menopausa' ||
   pageContext === 'maldischiena' ||
-  pageContext === 'stitichezza'
+  pageContext === 'stitichezza' ||
+  pageContext === 'tunnel-carpale' ||
+  pageContext === 'emicrania'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -146,6 +148,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       menopausa: 'Menopausa',
       maldischiena: 'Mal di schiena',
       stitichezza: 'Stitichezza',
+      'tunnel-carpale': 'Tunnel carpale',
+      emicrania: 'Emicrania',
     }
 
     const socialAdsContexts = new Set([
@@ -159,6 +163,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'vertigini',
       'maldischiena',
       'stitichezza',
+      'tunnel-carpale',
+      'emicrania',
     ])
 
     const campagnaContexts = new Set([

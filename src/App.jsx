@@ -43,7 +43,7 @@ import Allianz from './pages/sito-web/partnership/Allianz'
 
 // Landing pages
 import FirstWalk from './pages/landing-pages/FirstWalk'
-import Emicrania from './pages/landing-pages/Emicrania'
+import Emicrania from './pages/Emicrania'
 import MalDiSchienaLanding from './pages/landing-pages/MalDiSchiena'
 import MalDiSchiena from './pages/MalDiSchiena'
 import Gravidanza from './pages/landing-pages/Gravidanza'
@@ -65,6 +65,7 @@ import CicloDoloroso from './pages/CicloDoloroso'
 import Fibromialgia from './pages/Fibromialgia'
 import Menopausa from './pages/Menopausa'
 import Stitichezza from './pages/Stitichezza'
+import TunnelCarpale from './pages/TunnelCarpale'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -112,6 +113,7 @@ function App() {
         <Route path="/menopausa" element={<Layout hideWhatsApp><Menopausa /></Layout>} />
         <Route path="/maldischiena" element={<Layout hideWhatsApp><MalDiSchiena /></Layout>} />
         <Route path="/stitichezza" element={<Layout hideWhatsApp><Stitichezza /></Layout>} />
+        <Route path="/tunnel-carpale" element={<Layout hideWhatsApp><TunnelCarpale /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
@@ -132,7 +134,7 @@ function App() {
         
         {/* Landing pages without main layout */}
         <Route path="/first-walk" element={<FirstWalk />} />
-        <Route path="/emicrania" element={<Emicrania />} />
+        <Route path="/emicrania" element={<Layout hideWhatsApp><Emicrania /></Layout>} />
         <Route path="/mal-di-schiena" element={<MalDiSchienaLanding />} />
         <Route path="/gravidanza" element={<Gravidanza />} />
         <Route path="/conferma" element={<ThankYou />} />
