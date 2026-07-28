@@ -20,14 +20,6 @@ import {
   Check,
   Plus,
   ExternalLink,
-  CalendarX,
-  Eye,
-  MessageCircle,
-  Pill,
-  Users,
-  Briefcase,
-  Calendar,
-  Search,
 } from 'lucide-react'
 import { RECENSIONI_IMAGES } from '../data/recensioni'
 import BookingPopup from '../components/BookingPopup'
@@ -163,59 +155,6 @@ const PAIN_POINTS = [
   },
 ]
 
-const EMOTIONAL_PAIN_POINTS = [
-  {
-    icon: CalendarX,
-    title: 'I giorni che cancelli dal calendario',
-    body: 'Non è un mal di testa: è una giornata che sparisce. Buio, silenzio, e aspettare. Fai il conto di quanti giorni all’anno perdi così e ti viene da piangere.',
-  },
-  {
-    icon: Eye,
-    title: 'L’aura che ti annuncia la condanna',
-    body: 'Vedi quelle luci, quelle righe. E in quel momento sai che hai un’ora di tempo, e che poi la giornata è finita. Non c’è niente da fare, puoi solo prepararti.',
-  },
-  {
-    icon: Sun,
-    title: 'Il vomito e il buio',
-    body: 'Non è solo dolore: è la nausea, è il non poter tenere gli occhi aperti, è il rumore di una porta che ti sembra un’esplosione. Sei a terra, letteralmente.',
-  },
-  {
-    icon: MessageCircle,
-    title: '“Ma dai, è solo mal di testa”',
-    body: 'La frase che ti fa più male di tutte. Chi non l’ha avuta pensa che basti una pastiglia. E tu non hai nemmeno la forza di spiegare.',
-  },
-  {
-    icon: Pill,
-    title: 'Le pastiglie sempre più forti',
-    body: 'Hai iniziato con un antidolorifico banale. Adesso servono i farmaci specifici, e a volte non bastano nemmeno quelli. E ti chiedi dove finirà.',
-  },
-  {
-    icon: Users,
-    title: 'La colpa con i tuoi figli',
-    body: 'Sei chiuso in camera al buio mentre loro giocano di là. Ti chiamano e non puoi rispondere. E ti senti un genitore che non c’è.',
-  },
-  {
-    icon: Briefcase,
-    title: 'Il lavoro che rischi',
-    body: 'I giorni persi si accumulano. Le riunioni saltate, le scadenze mancate. Nessuno te lo dice apertamente, ma tu lo senti.',
-  },
-  {
-    icon: Calendar,
-    title: 'Non puoi programmare niente',
-    body: 'Un viaggio, una cena, un evento importante. Non puoi mai dire sì con certezza, perché non sai come starai. La tua vita la decide lei.',
-  },
-  {
-    icon: Search,
-    title: 'Il pellegrinaggio senza risposte',
-    body: 'Neurologo, TAC, risonanza, diari alimentari. Tutto normale. Ti hanno dato un nome, una profilassi, e nient’altro.',
-  },
-  {
-    icon: PersonStanding,
-    title: 'Nessuno ti ha mai guardato il collo',
-    body: 'Hai fatto tutti gli esami del cervello. Ma nessuno ti ha mai chiesto come tieni le spalle, se digrigni i denti, com’è la tua cervicale.',
-  },
-]
-
 const MECHANISM_STEPS = [
   {
     k: '01',
@@ -236,8 +175,8 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/bruxismo/bruxismo1.JPG',
-    imageClassName: 'object-[58%_55%]',
+    image: '/fibromialgia/fibromialgia3.JPG',
+    imageClassName: 'object-left',
     alt: 'Trattamento osteopatico su collo e mandibola per l’emicrania',
     title: 'Antidolorifici comuni',
     body: 'Spesso insufficienti sull’emicrania vera, e con l’uso frequente possono peggiorare la situazione.',
@@ -247,7 +186,7 @@ const BENEFITS = [
     imageClassName: 'object-[52%_58%]',
     alt: 'Valutazione osteopatica in affiancamento alla terapia neurologica',
     title: 'Farmaci specifici prescritti dallo specialista',
-    body: 'Triptani, FANS ad alto dosaggio e antiemetici agiscono sull’attacco quando è già partito: non riducono il motivo per cui parte.',
+    body: 'Sumatriptan, rizatriptan, zolmitriptan e almotriptan agiscono sull’attacco quando è già partito. FANS ad alto dosaggio e antiemetici completano il quadro — ma non riducono il motivo per cui parte.',
   },
   {
     image: '/bruxismo/bruxismo3.JPG',
@@ -257,11 +196,11 @@ const BENEFITS = [
     body: 'L’unica strategia che ti resta durante l’attacco. Non è una cura: è resistere.',
   },
   {
-    image: '/bruxismo/bruxismo4.JPG',
-    imageClassName: 'object-[45%_52%]',
+    image: '/fibromialgia/fibromialgia4.2.JPG',
+    imageClassName: 'object-[38%_55%]',
     alt: 'Percorso osteopatico integrato con visita neurologica',
     title: 'Visita neurologica, TAC e risonanza',
-    body: 'Fondamentali per escludere cause serie. Risonanza, TAC e angio-risonanza restano riferimenti medici: quando sono normali, ti resta un nome e nessuna spiegazione.',
+    body: 'Risonanza, TAC, angio-risonanza e visita oculistica restano riferimenti medici fondamentali. Quando sono normali, ti resta un nome e nessuna spiegazione.',
   },
   {
     image: '/bruxismo/bruxismo5.JPG',
@@ -271,7 +210,7 @@ const BENEFITS = [
     body: 'Può individuare qualche scatenante, ma raramente basta e spesso restringe la vita senza risolvere.',
   },
   {
-    image: '/bruxismo/bruxismo6.JPG',
+    image: '/vertigini/vertigini3.JPG',
     imageClassName: 'object-[50%_55%]',
     alt: 'Trattamento osteopatico in affiancamento alla profilassi medica',
     title: 'Terapie di profilassi',
@@ -328,13 +267,15 @@ const FAQ_ITEMS = [
     id: 'neurologo',
     question: (
       <>
-        Il <strong>neurologo</strong> mi segue già.
+        Il <strong>neurologo</strong> mi segue già: ha senso venire da voi?
       </>
     ),
     answer: (
       <>
-        Perfetto, e continua con lui: noi lavoriamo su collo, mandibola e tensioni, la parte che la
-        terapia non tocca. Le due cose si sommano.
+        Perfetto, e continua con lui: l’emicrania resta una condizione neurologica e il neurologo è
+        il riferimento clinico. Noi non sostituiamo esami o terapia: lavoriamo in{' '}
+        <em>affiancamento</em> su collo, mandibola e tensioni — la parte che spesso non entra nel
+        piano medico. Le due cose si sommano.
       </>
     ),
   },
@@ -347,8 +288,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Il terreno è neurologico; i fattori che accendono l’attacco spesso sono fisici. È su quelli
-        che lavoriamo.
+        Il terreno è neurologico, ed è giusto che ci pensi lo specialista. Ma i fattori che accendono
+        l’attacco — collo rigido, mandibola serrata, respiro corto — sono spesso fisici. Su quella
+        «legna sul fuoco» si lavora con le mani, in parallelo al percorso neurologico, non al posto
+        suo.
       </>
     ),
   },
@@ -356,13 +299,14 @@ const FAQ_ITEMS = [
     id: 'tutto',
     question: (
       <>
-        Ho già provato di <strong>tutto</strong>.
+        Ho già provato <strong>farmaci</strong>, diari e integratori: cosa può cambiare?
       </>
     ),
     answer: (
       <>
-        Farmaci, diari, integratori: quasi tutto guarda dentro la testa. Collo e mandibola quasi mai.
-        È il pezzo che spesso manca.
+        Farmaci, diari alimentari, integratori, profilassi: quasi tutto guarda dentro la testa o negli
+        scatenanti esterni. Collo e mandibola quasi mai. Se quella catena non è stata valutata, è il
+        pezzo che spesso manca — ed è su quello che lavoriamo noi.
       </>
     ),
   },
@@ -370,13 +314,15 @@ const FAQ_ITEMS = [
     id: 'promessa',
     question: (
       <>
-        Mi promettete che gli <strong>attacchi</strong> spariscono?
+        Mi promettete che gli <strong>attacchi</strong> spariscono del tutto?
       </>
     ),
     answer: (
       <>
-        No. L’obiettivo onesto è lavorare sui fattori fisici per ridurre il peso complessivo:
-        quanto, si vede solo provando.
+        No, e diffidiamo di chi lo fa. L’obiettivo onesto è lavorare sui fattori fisici per alzare
+        la soglia oltre la quale l’attacco parte: meno frequenza, meno intensità, meno giorni persi.
+        Quanto si può migliorare nel tuo caso si capisce solo valutandoti — nessuna promessa facile,
+        solo chiarezza.
       </>
     ),
   },
@@ -384,7 +330,7 @@ const FAQ_ITEMS = [
     id: 'red-flags',
     question: (
       <>
-        Quando è necessario prima un controllo medico?
+        Quando è necessario prima un controllo medico urgente?
       </>
     ),
     answer: (
@@ -413,12 +359,10 @@ function Emicrania() {
   const [showBooking, setShowBooking] = useState(false)
   const [bookingCtaType, setBookingCtaType] = useState('primaVisita')
   const [painIndex, setPainIndex] = useState(0)
-  const [emotionalIndex, setEmotionalIndex] = useState(0)
   const [recensioniIndex, setRecensioniIndex] = useState(0)
   const [openFaqIndex, setOpenFaqIndex] = useState(null)
   const [heroVideoCover, setHeroVideoCover] = useState(true)
   const painRef = useRef(null)
-  const emotionalPainRef = useRef(null)
   const recensioniRef = useRef(null)
   const showHeroMedia = heroVideoLoading || Boolean(heroVideo)
   const heroVideoSrc = heroVideo
@@ -707,10 +651,10 @@ function Emicrania() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Il neurologo mi segue già.',
+              name: 'Il neurologo mi segue già: ha senso venire da voi?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Perfetto, e continua con lui: noi lavoriamo su collo, mandibola e tensioni, la parte che la terapia non tocca. Le due cose si sommano.',
+                text: 'Perfetto, e continua con lui: l\'emicrania resta una condizione neurologica e il neurologo è il riferimento clinico. Noi non sostituiamo esami o terapia: lavoriamo in affiancamento su collo, mandibola e tensioni — la parte che spesso non entra nel piano medico. Le due cose si sommano.',
               },
             },
             {
@@ -718,31 +662,31 @@ function Emicrania() {
               name: "L'emicrania è neurologica: cosa c'entrano le mani?",
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Il terreno è neurologico; i fattori che accendono l\'attacco spesso sono fisici. È su quelli che lavoriamo.',
+                text: 'Il terreno è neurologico, ed è giusto che ci pensi lo specialista. Ma i fattori che accendono l\'attacco — collo rigido, mandibola serrata, respiro corto — sono spesso fisici. Su quella «legna sul fuoco» si lavora con le mani, in parallelo al percorso neurologico, non al posto suo.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Ho già provato di tutto.',
+              name: 'Ho già provato farmaci, diari e integratori: cosa può cambiare?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Farmaci, diari, integratori: quasi tutto guarda dentro la testa. Collo e mandibola quasi mai. È il pezzo che spesso manca.',
+                text: 'Farmaci, diari alimentari, integratori, profilassi: quasi tutto guarda dentro la testa o negli scatenanti esterni. Collo e mandibola quasi mai. Se quella catena non è stata valutata, è il pezzo che spesso manca — ed è su quello che lavoriamo noi.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Mi promettete che gli attacchi spariscono?',
+              name: 'Mi promettete che gli attacchi spariscono del tutto?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'No. L\'obiettivo onesto è lavorare sui fattori fisici per ridurre il peso complessivo: quanto, si vede solo provando.',
+                text: 'No, e diffidiamo di chi lo fa. L\'obiettivo onesto è lavorare sui fattori fisici per alzare la soglia oltre la quale l\'attacco parte: meno frequenza, meno intensità, meno giorni persi. Quanto si può migliorare nel tuo caso si capisce solo valutandoti — nessuna promessa facile, solo chiarezza.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Quando è necessario prima un controllo medico?',
+              name: 'Quando è necessario prima un controllo medico urgente?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'In presenza di mal di testa improvviso e violentissimo mai provato prima, aura che dura più di un\'ora, emicrania che cambia carattere o frequenza, prima emicrania dopo i 50 anni, o mal di testa con febbre alta e collo rigido, la priorità è la valutazione medica tempestiva.',
+                text: 'In presenza di mal di testa improvviso e violentissimo mai provato prima (pronto soccorso subito), aura che dura più di un\'ora o disturbi di vista, parola o forza che non passano, emicrania che cambia completamente carattere o frequenza, prima emicrania comparsa dopo i 50 anni, oppure mal di testa con febbre alta e collo rigido, la priorità è la valutazione medica tempestiva. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
               },
             },
           ],
@@ -772,17 +716,6 @@ function Emicrania() {
     const onScroll = () => {
       const i = Math.round(el.scrollLeft / (PAIN_W + GAP))
       setPainIndex(Math.min(Math.max(0, i), PAIN_POINTS.length - 1))
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    return () => el.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    const el = emotionalPainRef.current
-    if (!el) return
-    const onScroll = () => {
-      const i = Math.round(el.scrollLeft / (PAIN_W + GAP))
-      setEmotionalIndex(Math.min(Math.max(0, i), EMOTIONAL_PAIN_POINTS.length - 1))
     }
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => el.removeEventListener('scroll', onScroll)
@@ -996,7 +929,7 @@ function Emicrania() {
           >
             Soffri di emicrania e
             <br className="hidden sm:block" />{' '}
-            ogni attacco ti cancella la giornata?
+            ti dicono che è solo mal di testa?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
@@ -1289,113 +1222,6 @@ function Emicrania() {
 
       <SectionDivider overlap />
 
-      {/* ——— PESO QUOTIDIANO ——— */}
-      <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <img
-            src="/cervicalgia/cerv12.JPG"
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-[0.24] scale-105"
-          />
-          <div className="absolute inset-0 bg-blue-dark/82" />
-          <div className="absolute inset-0 bg-[linear-gradient(165deg,rgba(0,21,48,0.88)_0%,rgba(0,37,82,0.72)_40%,rgba(0,58,110,0.65)_70%,rgba(0,26,61,0.88)_100%)]" />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5 }}
-          className="relative z-10 mb-8 lg:mb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-            Quello che vivi davvero
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-2xl mb-4 sm:mb-5">
-            Non è “solo mal di testa”.
-            <br />
-            <span className="text-green">È tutto il resto che nessuno vede.</span>
-          </h2>
-        </motion.div>
-
-        <div className="relative z-10">
-          <div
-            ref={emotionalPainRef}
-            className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory gap-4 pb-3 px-4 sm:px-6 lg:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}
-          >
-            {EMOTIONAL_PAIN_POINTS.map((pain, i) => {
-              const Icon = pain.icon
-              return (
-                <motion.article
-                  key={pain.title}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.45, delay: i * 0.05 }}
-                  whileHover={{ y: -4 }}
-                  className="flex-shrink-0 w-[280px] sm:w-[300px] snap-center"
-                >
-                  <div className="group relative h-full overflow-hidden rounded-2xl border border-[#c47a7a]/35 bg-[#c47a7a]/28 backdrop-blur-md p-5 sm:p-6 shadow-[0_12px_40px_-20px_rgba(196,122,122,0.35)] hover:bg-[#c47a7a]/38 hover:border-[#c47a7a]/50 transition-all duration-500">
-                    <div className="relative">
-                      <div className="mb-4 grid place-items-center w-11 h-11 rounded-xl bg-[#c47a7a]/25 border border-[#c47a7a]/40 text-[#e8b4b4]">
-                        <Icon className="w-5 h-5" strokeWidth={1.75} />
-                      </div>
-                      <h3 className="text-cream font-bold text-base sm:text-lg leading-snug mb-2.5 mt-0">
-                        {pain.title}
-                      </h3>
-                      <p className="text-cream/60 text-sm leading-relaxed">{pain.body}</p>
-                    </div>
-                  </div>
-                </motion.article>
-              )
-            })}
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mt-6 px-4">
-            <button
-              type="button"
-              onClick={() => scrollTo(emotionalPainRef, Math.max(0, emotionalIndex - 1), PAIN_W)}
-              className="grid place-items-center w-10 h-10 rounded-full border border-[#c47a7a]/40 bg-[#c47a7a]/20 text-[#e8b4b4] hover:bg-[#c47a7a]/30 transition-colors"
-              aria-label="Precedente"
-            >
-              <ChevronLeft className="w-5 h-5" strokeWidth={2} />
-            </button>
-            <div className="flex justify-center gap-1.5">
-              {EMOTIONAL_PAIN_POINTS.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => scrollTo(emotionalPainRef, i, PAIN_W)}
-                  className={`rounded-full transition-all duration-300 ${
-                    i === emotionalIndex
-                      ? 'bg-[#c47a7a]/90 w-5 h-1.5'
-                      : 'bg-[#c47a7a]/35 w-1.5 h-1.5 hover:bg-[#c47a7a]/55'
-                  }`}
-                  aria-label={`Emotional ${i + 1}`}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() =>
-                scrollTo(
-                  emotionalPainRef,
-                  Math.min(EMOTIONAL_PAIN_POINTS.length - 1, emotionalIndex + 1),
-                  PAIN_W
-                )
-              }
-              className="grid place-items-center w-10 h-10 rounded-full border border-[#c47a7a]/40 bg-[#c47a7a]/20 text-[#e8b4b4] hover:bg-[#c47a7a]/30 transition-colors"
-              aria-label="Successivo"
-            >
-              <ChevronRight className="w-5 h-5" strokeWidth={2} />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider overlap />
-
       {/* ——— MECCANISMO + BENEFICI ——— */}
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
@@ -1427,8 +1253,8 @@ function Emicrania() {
               <span className="text-green"> e stare comunque male</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
-              <strong className="font-bold text-cream">I farmaci contano</strong>.{' '}
-              <strong className="font-bold text-cream">Gli esami contano</strong>. Ma non sono
+              <strong className="font-bold text-cream">Il neurologo conta</strong>.{' '}
+              <strong className="font-bold text-cream">I farmaci contano</strong>. Ma non sono
               l’unico livello del problema:{' '}
               <strong className="font-bold text-cream">collo, mandibola e tensioni</strong> possono
               mantenere attivi gli attacchi anche quando la testa è già stata guardata.
@@ -1513,9 +1339,9 @@ function Emicrania() {
                     />
                   </motion.g>
 
-                  <circle cx="200" cy="72" r="12" fill="#002552" stroke="#72fa93" strokeWidth="2" />
                   <circle cx="95" cy="155" r="12" fill="#002552" stroke="#72fa93" strokeWidth="2" />
                   <circle cx="305" cy="155" r="12" fill="#002552" stroke="#72fa93" strokeWidth="2" />
+                  <circle cx="200" cy="305" r="12" fill="#002552" stroke="#72fa93" strokeWidth="2" />
 
                   <circle cx="200" cy="200" r="42" fill="url(#emicrania-core)" />
                   <motion.circle
@@ -1527,25 +1353,24 @@ function Emicrania() {
                   />
                 </svg>
 
-                <span className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
-                  Cervello
-                </span>
-                <span className="absolute top-[38%] left-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                <span className="absolute top-8 left-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
                   Collo
                 </span>
-                <span className="absolute top-[38%] right-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                <span className="absolute top-8 right-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
-                  Collo
+                  Nuca
                 </span>
-                <span className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
+                <span className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
                   <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_rgba(114,250,147,0.7)]" />
                   Mandibola
                 </span>
+                <span className="absolute top-[48%] left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/50">
+                  Pressione
+                </span>
               </div>
               <figcaption className="px-4 py-3.5 sm:px-5 sm:py-4 text-center text-cream/55 text-sm leading-snug text-balance border-t border-cream/10">
-                Il terreno è neurologico. La legna sul fuoco spesso è fisica.
+                Il neurologo guarda il cervello. Collo e mandibola restano fuori.
               </figcaption>
               </div>
               </div>
@@ -1562,11 +1387,11 @@ function Emicrania() {
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <p className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7">
                 L’emicrania è un cervello più sensibile del normale agli stimoli: questo è il
-                terreno, e non si cancella. Ma gli attacchi partono più facilmente quando il sistema è
-                già sotto pressione:{' '}
-                <strong className="text-cream font-semibold">collo rigido</strong>,{' '}
-                <strong className="text-cream font-semibold">mandibola serrata</strong>, sonno rotto,
-                respiro corto. Sono la legna sul fuoco.
+                terreno, e non si cancella. Ma gli attacchi partono più facilmente quando{' '}
+                <strong className="text-cream font-semibold">collo</strong>,{' '}
+                <strong className="text-cream font-semibold">mandibola</strong> e respiro sono già
+                sotto pressione: è qui che un lavoro manuale mirato può affiancare il percorso
+                neurologico.
               </p>
 
               <ol className="relative space-y-3 mb-6 lg:mb-7 list-none m-0 p-0">
@@ -1591,27 +1416,6 @@ function Emicrania() {
                   </li>
                 ))}
               </ol>
-
-              <div className="grid sm:grid-cols-2 gap-4 mb-6 lg:mb-7">
-                <div className="rounded-xl border border-cream/10 bg-cream/[0.03] px-4 py-3.5">
-                  <p className="text-cream font-bold text-sm mb-2">Farmaci che conosci</p>
-                  <ul className="text-cream/55 text-sm leading-relaxed space-y-1.5 m-0 pl-4">
-                    <li>Triptani (sumatriptan, rizatriptan, zolmitriptan, almotriptan) sull’attacco</li>
-                    <li>FANS ad alto dosaggio (naprossene, ketoprofene, indometacina)</li>
-                    <li>Antiemetici (metoclopramide, domperidone) per nausea e assorbimento</li>
-                    <li>Profilassi (propranololo, topiramato, amitriptilina, flunarizina)</li>
-                  </ul>
-                </div>
-                <div className="rounded-xl border border-cream/10 bg-cream/[0.03] px-4 py-3.5">
-                  <p className="text-cream font-bold text-sm mb-2">Esami che hai già fatto</p>
-                  <ul className="text-cream/55 text-sm leading-relaxed space-y-1.5 m-0 pl-4">
-                    <li>Risonanza magnetica encefalo per escludere cause secondarie</li>
-                    <li>TAC encefalo in urgenza o quando la RM non è disponibile</li>
-                    <li>Angio-risonanza in casi selezionati</li>
-                    <li>Visita oculistica quando c’è aura</li>
-                  </ul>
-                </div>
-              </div>
 
               <div className="p-[1px] rounded-2xl bg-[linear-gradient(135deg,rgba(114,250,147,0.55)_0%,rgba(114,250,147,0.12)_100%)]">
                 <blockquote className="relative overflow-hidden rounded-[calc(1rem-1px)] bg-green/[0.08] px-5 py-4 sm:px-6 sm:py-5">
@@ -1642,12 +1446,12 @@ function Emicrania() {
           >
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-cream mb-4">
               Ecco perché è fondamentale intervenire
-              <span className="text-green"> su collo, mandibola e tensioni.</span>
+              <span className="text-green"> sulla componente meccanica.</span>
             </h3>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-xl">
               Nessuna promessa assoluta, ma un obiettivo chiaro: ridurre l’
-              <strong className="font-bold text-cream">impatto</strong> dell’emicrania sulla tua
-              vita quotidiana, con un percorso serio e misurabile.
+              <strong className="font-bold text-cream">impatto</strong> dell’emicrania su attacchi,
+              giornate e sulla vita quotidiana, con un percorso serio e misurabile.
             </p>
           </motion.div>
 
