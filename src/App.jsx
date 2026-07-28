@@ -64,6 +64,7 @@ import CicatriciSeno from './pages/CicatriciSeno'
 import CicloDoloroso from './pages/CicloDoloroso'
 import Fibromialgia from './pages/Fibromialgia'
 import Menopausa from './pages/Menopausa'
+import Stitichezza from './pages/Stitichezza'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -110,6 +111,7 @@ function App() {
         <Route path="/fibromialgia" element={<Layout hideWhatsApp><Fibromialgia /></Layout>} />
         <Route path="/menopausa" element={<Layout hideWhatsApp><Menopausa /></Layout>} />
         <Route path="/maldischiena" element={<Layout hideWhatsApp><MalDiSchiena /></Layout>} />
+        <Route path="/stitichezza" element={<Layout hideWhatsApp><Stitichezza /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
