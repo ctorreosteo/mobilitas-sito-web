@@ -59,6 +59,7 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'menopausa' ||
   pageContext === 'maldischiena' ||
   pageContext === 'stitichezza' ||
+  pageContext === 'gonfiore-addominale' ||
   pageContext === 'tunnel-carpale' ||
   pageContext === 'emicrania'
 
@@ -148,6 +149,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       menopausa: 'Menopausa',
       maldischiena: 'Mal di schiena',
       stitichezza: 'Stitichezza',
+      'gonfiore-addominale': 'Gonfiore addominale',
       'tunnel-carpale': 'Tunnel carpale',
       emicrania: 'Emicrania',
     }
@@ -163,6 +165,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'vertigini',
       'maldischiena',
       'stitichezza',
+      'gonfiore-addominale',
       'tunnel-carpale',
       'emicrania',
     ])
