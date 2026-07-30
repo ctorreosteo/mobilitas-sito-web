@@ -178,43 +178,43 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/maldischiena/maldischiena1.JPG',
-    imageClassName: 'object-[58%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.04.JPG',
+    imageClassName: 'object-[52%_48%]',
     alt: 'Trattamento osteopatico su collo e braccio per il tunnel carpale',
     title: 'Tutore notturno',
     body: 'Aiuta davvero i sintomi della notte, ma nessuno ti ha spiegato perché il problema è nato.',
   },
   {
-    image: '/maldischiena/maldischiena2.JPG',
-    imageClassName: 'object-[52%_58%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.08.JPG',
+    imageClassName: 'object-[42%_40%]',
     alt: 'Valutazione osteopatica del percorso del nervo mediano',
     title: 'Antinfiammatori e FANS',
     body: 'Riducono il fastidio, senza modificare ciò che comprime o irrita il nervo. Ibuprofene, ketoprofene e naprossene sono molto usati, con efficacia limitata perché il problema è compressivo.',
   },
   {
-    image: '/maldischiena/maldischiena3.JPG',
-    imageClassName: 'object-[42%_52%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.03.png',
+    imageClassName: 'object-[58%_42%]',
     alt: 'Lavoro osteopatico su collo e spalla in affiancamento agli esami',
     title: 'Elettromiografia',
     body: 'Esame fondamentale per capire quanto il nervo è sofferente e guidare la scelta chirurgica. Non dice dove il problema sia iniziato.',
   },
   {
-    image: '/maldischiena/maldischiena4.JPG',
-    imageClassName: 'object-[45%_52%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.05.JPG',
+    imageClassName: 'object-[38%_50%]',
     alt: 'Trattamento manuale su avambraccio e polso',
     title: 'Riposo dal gesto ripetuto',
     body: 'Il problema è che quel gesto è il tuo lavoro: mouse, tastiera, forbici, volante — non puoi smettere.',
   },
   {
-    image: '/maldischiena/maldischiena5.JPG',
-    imageClassName: 'object-[48%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.01.png',
+    imageClassName: 'object-[62%_38%]',
     alt: 'Percorso osteopatico integrato per tunnel carpale',
     title: 'Infiltrazione di cortisone e integratori',
     body: 'Sollievo reale ma temporaneo, con indicazioni precise. Vitamine del gruppo B e acido alfa-lipoico sono molto prescritti, con benefici modesti.',
   },
   {
-    image: '/maldischiena/maldischiena6.JPG',
-    imageClassName: 'object-[50%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.06.JPG',
+    imageClassName: 'object-[55%_45%]',
     alt: 'Approccio osteopatico in affiancamento al percorso medico',
     title: 'Intervento chirurgico',
     body: 'Efficace su indicazione precisa, e proposto spesso molto presto: ecografia, radiografia e risonanza restano riferimenti medici — prima vale la pena escludere il resto della catena.',
@@ -401,7 +401,7 @@ function TunnelCarpale() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/tunnel-carpale`
-    const ogImage = `${origin}/maldischiena/maldischiena1.JPG`
+    const ogImage = `${origin}/epicondilite-tunnel/epicondilite-tunnel.04.JPG`
 
     const title =
       'Osteopata Tunnel Carpale Torino | Nervo Mediano, Collo e Mano | Mobilitas'
@@ -899,7 +899,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv11.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.08.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.28] scale-105"
           />
@@ -1101,7 +1101,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv15.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.04.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-[0.26] scale-105"
           />
@@ -1226,7 +1226,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv10.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.01.png"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_45%] opacity-[0.24] scale-105"
           />
@@ -1519,7 +1519,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv9.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.06.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-[0.22] scale-105"
           />
@@ -1679,7 +1679,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv14.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.03.png"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-[0.22] scale-105"
           />
@@ -1927,7 +1927,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv16.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.07.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-[0.28] scale-105"
           />
@@ -2037,7 +2037,7 @@ function TunnelCarpale() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv13.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.05.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-[0.28] scale-105"
           />

@@ -176,43 +176,43 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/maldischiena/maldischiena1.JPG',
-    imageClassName: 'object-[58%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.02.png',
+    imageClassName: 'object-[45%_50%]',
     alt: 'Valutazione osteopatica di spalla e gomito per l’epicondilite',
     title: 'Riposo',
     body: 'Un mese fermo e dopo tre giorni identico: la prova che il problema non era il quanto usi il braccio, ma il come.',
   },
   {
-    image: '/maldischiena/maldischiena2.JPG',
-    imageClassName: 'object-[52%_58%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.03.png',
+    imageClassName: 'object-[55%_45%]',
     alt: 'Approccio osteopatico in affiancamento agli antinfiammatori per l’epicondilite',
     title: 'Antinfiammatori e FANS',
     body: 'Abbassano il dolore, senza toccare il sovraccarico. FANS orali (ibuprofene, ketoprofene, diclofenac) e topici (gel, cerotti) sono il primo tentativo nella quasi totalità dei casi.',
   },
   {
-    image: '/maldischiena/maldischiena3.JPG',
-    imageClassName: 'object-[42%_52%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.08.JPG',
+    imageClassName: 'object-[42%_40%]',
     alt: 'Lavoro osteopatico oltre fascia e tutore per l’epicondilite',
     title: 'Fascia epicondiloidea o tutore',
     body: 'Sollievo finché lo porti, da capo appena lo togli. Ghiaccio e cerotti medicati gestiscono il fastidio, non la causa.',
   },
   {
-    image: '/maldischiena/maldischiena4.JPG',
-    imageClassName: 'object-[45%_52%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.01.png',
+    imageClassName: 'object-[58%_40%]',
     alt: 'Trattamento osteopatico su avambraccio e catena del braccio',
     title: 'Fisioterapia ed esercizi eccentrici',
     body: 'Tra gli approcci più solidi, ma centrati sul gomito: spalla, collo e postura restano spesso fuori. Onde d’urto e tecarterapia possono stimolare il tessuto, però lavorano dove il conto arriva, non dove nasce.',
   },
   {
-    image: '/maldischiena/maldischiena5.JPG',
-    imageClassName: 'object-[48%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.04.JPG',
+    imageClassName: 'object-[52%_48%]',
     alt: 'Percorso osteopatico oltre le infiltrazioni per l’epicondilite',
     title: 'Infiltrazione di cortisone',
     body: 'Sollievo reale per qualche settimana, e poi il ritorno al punto di partenza. Non ripetibile. PRP e terapie rigenerative mirano al tessuto, senza modificare il gesto che lo sovraccarica.',
   },
   {
-    image: '/maldischiena/maldischiena6.JPG',
-    imageClassName: 'object-[50%_55%]',
+    image: '/epicondilite-tunnel/epicondilite-tunnel.06.JPG',
+    imageClassName: 'object-[48%_42%]',
     alt: 'Approccio osteopatico in affiancamento a ecografia e percorso medico',
     title: 'Ecografia e valutazione chirurgica',
     body: 'L’ecografia mostra lo stato del tendine, non il motivo per cui ci è arrivato. Radiografia, risonanza ed elettromiografia restano riferimenti medici; la chirurgia è ultima opzione, dopo mesi di percorso conservativo.',
@@ -417,7 +417,7 @@ function Epicondilite() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/epicondilite`
-    const ogImage = `${origin}/maldischiena/maldischiena1.JPG`
+    const ogImage = `${origin}/epicondilite-tunnel/epicondilite-tunnel.06.JPG`
 
     const title =
       'Osteopata Epicondilite Torino | Gomito, Spalla e Catena del Braccio | Mobilitas'
@@ -923,7 +923,7 @@ function Epicondilite() {
       <section className="relative z-[2] pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv11.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.02.png"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.28] scale-105"
           />
@@ -1125,7 +1125,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv15.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.01.png"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-[0.26] scale-105"
           />
@@ -1250,7 +1250,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv10.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.07.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_45%] opacity-[0.24] scale-105"
           />
@@ -1613,7 +1613,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv9.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.08.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-[0.22] scale-105"
           />
@@ -1773,7 +1773,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv14.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.05.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-[0.22] scale-105"
           />
@@ -2021,7 +2021,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv16.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.03.png"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-[0.28] scale-105"
           />
@@ -2131,7 +2131,7 @@ function Epicondilite() {
       <section className="relative z-[2] py-16 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <img
-            src="/cervicalgia/cerv13.JPG"
+            src="/epicondilite-tunnel/epicondilite-tunnel.06.JPG"
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-[0.28] scale-105"
           />
