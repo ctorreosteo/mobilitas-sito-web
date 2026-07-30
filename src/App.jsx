@@ -67,6 +67,7 @@ import Menopausa from './pages/Menopausa'
 import Stitichezza from './pages/Stitichezza'
 import TunnelCarpale from './pages/TunnelCarpale'
 import GonfioreAddominale from './pages/GonfioreAddominale'
+import Epicondilite from './pages/Epicondilite'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -116,6 +117,7 @@ function App() {
         <Route path="/stitichezza" element={<Layout hideWhatsApp><Stitichezza /></Layout>} />
         <Route path="/gonfiore-addominale" element={<Layout hideWhatsApp><GonfioreAddominale /></Layout>} />
         <Route path="/tunnel-carpale" element={<Layout hideWhatsApp><TunnelCarpale /></Layout>} />
+        <Route path="/epicondilite" element={<Layout hideWhatsApp><Epicondilite /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />

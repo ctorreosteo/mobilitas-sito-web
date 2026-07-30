@@ -61,6 +61,7 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'stitichezza' ||
   pageContext === 'gonfiore-addominale' ||
   pageContext === 'tunnel-carpale' ||
+  pageContext === 'epicondilite' ||
   pageContext === 'emicrania'
 
 const isVisitaContext = (packageType, pageContext) =>
@@ -151,6 +152,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       stitichezza: 'Stitichezza',
       'gonfiore-addominale': 'Gonfiore addominale',
       'tunnel-carpale': 'Tunnel carpale',
+      epicondilite: 'Epicondilite',
       emicrania: 'Emicrania',
     }
 
@@ -167,6 +169,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'stitichezza',
       'gonfiore-addominale',
       'tunnel-carpale',
+      'epicondilite',
       'emicrania',
     ])
 
