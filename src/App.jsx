@@ -69,6 +69,7 @@ import TunnelCarpale from './pages/TunnelCarpale'
 import GonfioreAddominale from './pages/GonfioreAddominale'
 import Epicondilite from './pages/Epicondilite'
 import ColonIrritabile from './pages/ColonIrritabile'
+import Sciatalgia from './pages/Sciatalgia'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -120,6 +121,7 @@ function App() {
         <Route path="/tunnel-carpale" element={<Layout hideWhatsApp><TunnelCarpale /></Layout>} />
         <Route path="/epicondilite" element={<Layout hideWhatsApp><Epicondilite /></Layout>} />
         <Route path="/colon-irritabile" element={<Layout hideWhatsApp><ColonIrritabile /></Layout>} />
+        <Route path="/sciatalgia" element={<Layout hideWhatsApp><Sciatalgia /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />

@@ -63,7 +63,8 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'tunnel-carpale' ||
   pageContext === 'epicondilite' ||
   pageContext === 'colon-irritabile' ||
-  pageContext === 'emicrania'
+  pageContext === 'emicrania' ||
+  pageContext === 'sciatalgia'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -156,6 +157,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       epicondilite: 'Epicondilite',
       'colon-irritabile': 'Colon irritabile',
       emicrania: 'Emicrania',
+      sciatalgia: 'Sciatalgia',
     }
 
     const socialAdsContexts = new Set([
@@ -174,6 +176,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'epicondilite',
       'colon-irritabile',
       'emicrania',
+      'sciatalgia',
     ])
 
     const campagnaContexts = new Set([
@@ -185,6 +188,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'reflusso',
       'vertigini',
       'maldischiena',
+      'sciatalgia',
     ])
 
     const body = {
