@@ -739,7 +739,12 @@ function Bruxismo() {
       })
 
       const maxScroll = Math.max(0, el.scrollWidth - el.clientWidth)
+      const nearStart = el.scrollLeft <= 48
       const nearEnd = maxScroll > 0 && el.scrollLeft >= maxScroll - 48
+      if (nearStart) {
+        setRecensioniIndex(0)
+        return
+      }
       setRecensioniIndex(nearEnd ? children.length - 1 : best)
     }
 
