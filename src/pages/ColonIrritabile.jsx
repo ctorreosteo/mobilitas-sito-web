@@ -263,17 +263,18 @@ const VISIT_STEPS = [
 
 const FAQ_ITEMS = [
   {
-    id: 'mani-intestino',
+    id: 'cosa-valutate',
     question: (
       <>
-        Cosa c’entrano le <strong>mani</strong> con il mio intestino?
+        Su cosa lavorate di <strong>concreto</strong>, se gli esami sono a posto?
       </>
     ),
     answer: (
       <>
-        L’intestino risponde a spazio, movimento e calma del sistema nervoso: tre cose su cui le
-        mani lavorano da fuori. Noi valutiamo diaframma, addome, bacino e dialogo testa-pancia — in{' '}
-        <em>affiancamento</em> al medico, non al posto degli esami che hai già fatto.
+        Sugli aspetti che la colonscopia non mostra: diaframma, mobilità addominale, bacino e
+        dialogo testa-pancia. Sono pezzi meccanici e nervosi che possono mantenere urgenza e
+        gonfiore anche quando la struttura dell’intestino è sana — in <em>affiancamento</em> al
+        medico, non al posto degli esami che hai già fatto.
       </>
     ),
   },
@@ -680,10 +681,10 @@ function ColonIrritabile() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: "Cosa c'entrano le mani con il mio intestino?",
+              name: 'Su cosa lavorate di concreto, se gli esami sono a posto?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: "L'intestino risponde a spazio, movimento e calma del sistema nervoso: tre cose su cui le mani lavorano da fuori. L'osteopatia lavora in affiancamento al medico su diaframma, addome, bacino e dialogo testa-pancia.",
+                text: "Sugli aspetti che la colonscopia non mostra: diaframma, mobilità addominale, bacino e dialogo testa-pancia. L'osteopatia lavora in affiancamento al medico su pezzi meccanici e nervosi che possono mantenere i sintomi anche quando la struttura dell'intestino è sana.",
               },
             },
             {
@@ -994,8 +995,8 @@ function ColonIrritabile() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">diaframma</strong>,{' '}
             <strong className="font-bold text-cream">addome</strong> e{' '}
-            <strong className="font-bold text-cream">sistema neurovegetativo</strong> per ridurre
-            l’impatto del colon irritabile su urgenza, pasti e vita sociale.
+            <strong className="font-bold text-cream">sistema neurovegetativo</strong> per
+            alleggerire quanto il colon irritabile pesa su urgenza, pasti e vita sociale.
           </motion.p>
 
           {showHeroMedia && (
