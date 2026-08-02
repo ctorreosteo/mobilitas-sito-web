@@ -973,8 +973,8 @@ function Epicondilite() {
             Interveniamo in modo specifico su{' '}
             <strong className="font-bold text-cream">spalla</strong>,{' '}
             <strong className="font-bold text-cream">collo</strong> e{' '}
-            <strong className="font-bold text-cream">gesto quotidiano</strong> per ridurre l’impatto
-            dell’epicondilite su lavoro, presa e vita di tutti i giorni.
+            <strong className="font-bold text-cream">gesto quotidiano</strong> per alleggerire
+            quanto l’epicondilite pesa su lavoro, presa e vita di tutti i giorni.
           </motion.p>
 
           {showHeroMedia && (
