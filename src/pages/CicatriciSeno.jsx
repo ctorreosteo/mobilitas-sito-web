@@ -1335,7 +1335,7 @@ function CicatriciSeno() {
                   />
                 </svg>
 
-                <span className="absolute top-7 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                <span className="absolute top-[calc(30.5%-2.5rem)] left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
                   Spalle
                 </span>
@@ -1347,7 +1347,7 @@ function CicatriciSeno() {
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
                   Respiro
                 </span>
-                <span className="absolute bottom-7 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
+                <span className="absolute top-[calc(69.5%+1.5rem)] left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
                   <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_rgba(114,250,147,0.7)]" />
                   Cicatrice
                 </span>
