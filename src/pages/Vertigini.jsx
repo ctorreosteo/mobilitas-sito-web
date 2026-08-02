@@ -1337,16 +1337,16 @@ function Vertigini() {
                   />
                 </svg>
 
-                {/* etichette */}
+                {/* etichette — stessa distanza dai nodi del triangolo */}
                 <span className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
                   <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_rgba(114,250,147,0.7)]" />
                   Occhi
                 </span>
-                <span className="absolute bottom-6 left-5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                <span className="absolute top-[calc(72%+2.5rem)] left-[22%] -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
                   Collo
                 </span>
-                <span className="absolute bottom-6 right-5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
+                <span className="absolute top-[calc(72%+2.5rem)] left-[78%] -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
                   Orecchie
                 </span>
