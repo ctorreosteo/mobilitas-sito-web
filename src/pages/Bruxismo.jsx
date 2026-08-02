@@ -926,7 +926,7 @@ function Bruxismo() {
           >
             Soffri di bruxismo e
             <br className="hidden sm:block" />{' '}
-            ti svegli già stanco?
+            ti svegli con la mandibola bloccata?
             <br />
             <span className="relative inline-block text-green">
               <motion.span
