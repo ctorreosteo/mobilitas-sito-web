@@ -1280,83 +1280,152 @@ function TunnelCarpale() {
               />
               <div className="relative p-[1px] rounded-[1.75rem] sm:rounded-[2rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.45)_0%,rgba(244,244,244,0.12)_40%,rgba(114,250,147,0.08)_75%,rgba(0,37,82,0.35)_100%)] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.65),0_0_0_1px_rgba(114,250,147,0.08)]">
               <div className="overflow-hidden rounded-[calc(1.75rem-1px)] sm:rounded-[calc(2rem-1px)] border border-cream/[0.06] bg-blue-dark/60 backdrop-blur-md">
-              <div className="relative aspect-square">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(114,250,147,0.16),transparent_62%)]" />
+              <div className="relative aspect-square min-h-[280px] sm:min-h-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_48%,rgba(114,250,147,0.18),transparent_68%)]" />
 
-                <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
+                <svg
+                  viewBox="0 0 400 400"
+                  className="absolute inset-0 w-full h-full"
+                  preserveAspectRatio="xMidYMid meet"
+                  aria-hidden
+                >
                   <defs>
-                    <linearGradient id="tunnel-carpale-nerve" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#72fa93" stopOpacity="0.2" />
+                    <linearGradient id="tunnel-carpale-nerve" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0.35" />
+                      <stop offset="55%" stopColor="#72fa93" stopOpacity="0.95" />
+                      <stop offset="100%" stopColor="#72fa93" stopOpacity="0.45" />
                     </linearGradient>
                     <radialGradient id="tunnel-carpale-core" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0.85" />
+                      <stop offset="0%" stopColor="#72fa93" stopOpacity="0.9" />
                       <stop offset="100%" stopColor="#72fa93" stopOpacity="0" />
                     </radialGradient>
+                    <filter id="tunnel-carpale-glow" x="-40%" y="-40%" width="180%" height="180%">
+                      <feGaussianBlur stdDeviation="4" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
                   </defs>
 
                   <motion.circle
-                    cx="200" cy="200" r="152"
-                    fill="none" stroke="#F4F4F4" strokeOpacity="0.09"
-                    strokeWidth="1" strokeDasharray="2 11"
+                    cx="220"
+                    cy="200"
+                    r="168"
+                    fill="none"
+                    stroke="#F4F4F4"
+                    strokeOpacity="0.09"
+                    strokeWidth="1"
+                    strokeDasharray="2 11"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                    style={{ transformOrigin: '200px 200px', transformBox: 'view-box' }}
+                    style={{ transformOrigin: '220px 200px', transformBox: 'view-box' }}
                   />
 
                   {/* percorso nervo: collo → spalla → avambraccio → tunnel */}
                   <path
-                    d="M200 36 L200 110 L248 168 L268 238 L290 318"
+                    d="M 176 52
+                       L 176 128
+                       C 176 168, 200 196, 236 228
+                       C 258 252, 278 284, 300 318"
                     fill="none"
                     stroke="url(#tunnel-carpale-nerve)"
-                    strokeWidth="14"
+                    strokeWidth="18"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeOpacity="0.22"
+                    strokeOpacity="0.2"
                   />
                   <path
-                    d="M200 36 L200 110 L248 168 L268 238 L290 318"
+                    d="M 176 52
+                       L 176 128
+                       C 176 168, 200 196, 236 228
+                       C 258 252, 278 284, 300 318"
                     fill="none"
                     stroke="#72fa93"
-                    strokeWidth="2"
+                    strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeOpacity="0.85"
+                    strokeOpacity="0.9"
                   />
 
-                  {/* nodi lungo il percorso */}
-                  <circle cx="200" cy="36" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
-                  <circle cx="200" cy="110" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
-                  <circle cx="248" cy="168" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
-                  <circle cx="268" cy="238" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
+                  {/* guide etichette → nodi */}
+                  <path
+                    d="M 108 52 H 167 M 108 128 H 167 M 108 228 H 225 M 108 318 H 291"
+                    fill="none"
+                    stroke="#F4F4F4"
+                    strokeOpacity="0.14"
+                    strokeWidth="1"
+                    strokeDasharray="3 5"
+                  />
 
-                  {/* tunnel carpale */}
+                  {/* nodi intermedi */}
+                  <circle cx="176" cy="52" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
+                  <circle cx="176" cy="128" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
+                  <circle cx="236" cy="228" r="10" fill="#002552" stroke="#72fa93" strokeWidth="2" />
+
+                  {/* tunnel: punto di compressione */}
                   <motion.g
-                    animate={{ scale: [1, 1.06, 1] }}
+                    animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{ transformOrigin: '290px 318px', transformBox: 'view-box' }}
+                    style={{ transformOrigin: '300px 318px', transformBox: 'view-box' }}
                   >
-                    <circle cx="290" cy="318" r="34" fill="url(#tunnel-carpale-core)" />
-                    <circle cx="290" cy="318" r="22" fill="none" stroke="#72fa93" strokeWidth="2.5" strokeOpacity="0.9" />
+                    <circle cx="300" cy="318" r="42" fill="url(#tunnel-carpale-core)" filter="url(#tunnel-carpale-glow)" />
+                    <circle cx="300" cy="318" r="26" fill="none" stroke="#72fa93" strokeWidth="2.5" strokeOpacity="0.95" />
+                    <circle cx="300" cy="318" r="11" fill="#002552" stroke="#72fa93" strokeWidth="2.5" />
                   </motion.g>
-                </svg>
 
-                <span className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
-                  Collo
-                </span>
-                <span className="absolute top-[26%] right-8 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
-                  Spalla
-                </span>
-                <span className="absolute top-[56%] right-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cream/60" />
-                  Avambraccio
-                </span>
-                <span className="absolute bottom-8 right-10 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-green">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_rgba(114,250,147,0.7)]" />
-                  Tunnel
-                </span>
+                  {/* etichette allineate ai nodi */}
+                  <g fontFamily="Montserrat, system-ui, sans-serif" fontWeight="700">
+                    <g>
+                      <circle cx="32" cy="52" r="3.5" fill="rgba(244,244,244,0.55)" />
+                      <text
+                        x="44"
+                        y="56"
+                        fill="rgba(244,244,244,0.72)"
+                        fontSize="11"
+                        letterSpacing="2.4"
+                      >
+                        COLLO
+                      </text>
+                    </g>
+                    <g>
+                      <circle cx="32" cy="128" r="3.5" fill="rgba(244,244,244,0.55)" />
+                      <text
+                        x="44"
+                        y="132"
+                        fill="rgba(244,244,244,0.72)"
+                        fontSize="11"
+                        letterSpacing="2.4"
+                      >
+                        SPALLA
+                      </text>
+                    </g>
+                    <g>
+                      <circle cx="32" cy="228" r="3.5" fill="rgba(244,244,244,0.55)" />
+                      <text
+                        x="44"
+                        y="232"
+                        fill="rgba(244,244,244,0.72)"
+                        fontSize="10"
+                        letterSpacing="1.6"
+                      >
+                        AVAMBRACCIO
+                      </text>
+                    </g>
+                    <g>
+                      <circle cx="32" cy="318" r="4" fill="#72fa93" />
+                      <text
+                        x="44"
+                        y="322"
+                        fill="#72fa93"
+                        fontSize="11"
+                        letterSpacing="2.4"
+                      >
+                        TUNNEL
+                      </text>
+                    </g>
+                  </g>
+                </svg>
               </div>
               <figcaption className="px-4 py-3.5 sm:px-5 sm:py-4 text-center text-cream/55 text-sm leading-snug text-balance border-t border-cream/10">
                 Il nervo che formicola nella mano parte dal collo: il tunnel è solo l’ultima porta.
