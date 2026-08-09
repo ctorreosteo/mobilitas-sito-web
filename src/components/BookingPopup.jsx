@@ -179,18 +179,6 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'sciatalgia',
     ])
 
-    const campagnaContexts = new Set([
-      'menopausa',
-      'ciclo-doloroso',
-      'cicatrici-cesareo',
-      'cicatrici-seno',
-      'fibromialgia',
-      'reflusso',
-      'vertigini',
-      'maldischiena',
-      'sciatalgia',
-    ])
-
     const body = {
       nome: cleanName(formData.nome),
       cognome: cleanName(formData.cognome),
@@ -199,8 +187,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       statusRichiesta: 'LEAD',
       fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
+      campagna: '120239301462800644',
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
-      ...(campagnaContexts.has(pageContext) && { campagna: '120239301462800644' }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
 
