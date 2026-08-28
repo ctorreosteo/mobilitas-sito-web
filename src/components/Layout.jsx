@@ -3,9 +3,9 @@ import Header from './Header'
 import Footer from './Footer'
 import WhatsAppButtonSito from './WhatsAppButtonSito'
 
-const Layout = ({ children, hideWhatsApp = false }) => {
+const Layout = ({ children, hideWhatsApp = false, overflowClip = false }) => {
   return (
-    <div className="min-h-screen bg-cream w-full max-w-full overflow-x-hidden">
+    <div className={`min-h-screen bg-cream w-full max-w-full ${overflowClip ? 'overflow-x-clip' : 'overflow-x-hidden'}`}>
       {/* Header */}
       <Header />
 

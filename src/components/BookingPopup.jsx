@@ -64,7 +64,9 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'epicondilite' ||
   pageContext === 'colon-irritabile' ||
   pageContext === 'emicrania' ||
-  pageContext === 'sciatalgia'
+  pageContext === 'sciatalgia' ||
+  pageContext === 'offerta-postura-uomo' ||
+  pageContext === 'offerta-postura-donna'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -76,13 +78,30 @@ function getPopupCopy(packageType, pageContext, ctaType) {
   const isPrimaVisita = isLanding && (ctaType === 'primaVisita' || !ctaType)
   const isVisita = isVisitaContext(packageType, pageContext) && !isConsulto
 
+  const isOffertaPostura =
+    pageContext === 'offerta-postura-uomo' || pageContext === 'offerta-postura-donna'
+
   if (isConsulto) {
     return {
-      title: 'Richiedi consulto telefonico gratuito',
-      subtitle: 'Consulenza gratuita',
-      subtext: 'La nostra segreteria ti chiamerà per un breve colloquio gratuito e darti tutte le informazioni.',
-      cta: 'Richiedi consulto gratuito',
-      pacchettoLabel: 'Consulto gratuito',
+      title: isOffertaPostura
+        ? 'Chiamaci se hai dubbi o vuoi saperne di più'
+        : 'Richiedi consulto telefonico gratuito',
+      subtitle: isOffertaPostura ? 'Parla con la segreteria' : 'Consulenza gratuita',
+      subtext: isOffertaPostura
+        ? 'Nessun impegno: ti richiamiamo per rispondere alle domande sul Percorso Posturale e sull’offerta.'
+        : 'La nostra segreteria ti chiamerà per un breve colloquio gratuito e darti tutte le informazioni.',
+      cta: isOffertaPostura ? 'Richiedi una chiamata' : 'Richiedi consulto gratuito',
+      pacchettoLabel: isOffertaPostura ? 'Info Percorso Posturale' : 'Consulto gratuito',
+    }
+  }
+
+  if (isPrimaVisita && isOffertaPostura) {
+    return {
+      title: 'Blocca il tuo posto a 500€',
+      subtitle: 'Percorso Posturale — Black Friday',
+      subtext: 'La segreteria ti chiamerà per confermare il posto e darti tutte le informazioni sul percorso.',
+      cta: 'Blocca il tuo posto a 500€',
+      pacchettoLabel: 'Percorso Posturale 500€',
     }
   }
 
@@ -137,8 +156,14 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     const orarioText = selectedOption ? selectedOption.text : formData.orarioChiamata
 
     const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
+    const isOffertaPostura =
+      pageContext === 'offerta-postura-uomo' || pageContext === 'offerta-postura-donna'
     const leadMagnetString =
-      isLandingVisita(pageContext) && ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
+      isLandingVisita(pageContext) && ctaType === 'consulto'
+        ? 'CT_GRATUITA'
+        : isOffertaPostura
+          ? 'OFFERTA_POSTURA_500'
+          : 'COUPON49'
 
     const tagByContext = {
       cervicalgia: 'Cervicalgia',
@@ -158,6 +183,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'colon-irritabile': 'Colon irritabile',
       emicrania: 'Emicrania',
       sciatalgia: 'Sciatalgia',
+      'offerta-postura-uomo': 'Percorso posturale uomo',
+      'offerta-postura-donna': 'Percorso posturale donna',
     }
 
     const socialAdsContexts = new Set([
@@ -177,6 +204,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       'colon-irritabile',
       'emicrania',
       'sciatalgia',
+      'offerta-postura-uomo',
+      'offerta-postura-donna',
     ])
 
     const body = {
