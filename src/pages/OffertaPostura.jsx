@@ -689,50 +689,62 @@ function SplitLine({ text, delay = 0, className = '' }) {
 function HeroSpine({ className = '' }) {
   const reduceMotion = useReducedMotion()
   const drawn = { pathLength: 1, opacity: 1 }
+
   return (
-    <svg
-      viewBox="0 0 200 340"
-      className={className}
-      fill="none"
-      aria-hidden
-    >
+    <svg viewBox="0 0 200 360" className={className} fill="none" aria-hidden>
       <motion.circle
         cx="118"
         cy="42"
-        r="20"
+        r="21"
         stroke="currentColor"
-        strokeWidth="1.35"
+        strokeWidth="1.4"
         initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.35 }}
+        animate={{ pathLength: 1, opacity: 0.38 }}
         transition={{ duration: 1.2, delay: 0.15, ease: HERO_EASE }}
       />
       <motion.path
-        d="M118 62c-10 18-28 36-36 62-8 26-6 54 8 82 10 22 16 48 18 78"
+        d="M118 63 C108 88 86 118 78 152 C70 186 78 222 96 258 C108 282 114 308 116 338"
         stroke="currentColor"
-        strokeWidth="1.35"
+        strokeWidth="1.4"
         strokeLinecap="round"
         initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.28 }}
-        transition={{ duration: 1.6, delay: 0.35, ease: HERO_EASE }}
+        animate={{ pathLength: 1, opacity: 0.3 }}
+        transition={{ duration: 1.7, delay: 0.28, ease: HERO_EASE }}
       />
+      {[92, 128, 168, 214, 258].map((y, i) => (
+        <motion.line
+          key={`g-${y}`}
+          x1={108 - i * 4}
+          x2={128 - i * 3}
+          y1={y}
+          y2={y + 4}
+          stroke="currentColor"
+          strokeWidth="1.15"
+          strokeLinecap="round"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 0.22 }}
+          transition={{ duration: 0.4, delay: 0.55 + i * 0.08 }}
+        />
+      ))}
+
       <motion.circle
         cx="100"
         cy="40"
-        r="20"
+        r="21"
         stroke="#72fa93"
-        strokeWidth="1.7"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.9 }}
-        transition={{ duration: 1.25, delay: 0.85, ease: HERO_EASE }}
-      />
-      <motion.path
-        d="M100 60c0 28-2 64-2 100s2 72 2 108"
-        stroke="#72fa93"
-        strokeWidth="1.7"
-        strokeLinecap="round"
+        strokeWidth="1.75"
         initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 0.95 }}
-        transition={{ duration: 1.7, delay: 1.05, ease: HERO_EASE }}
+        transition={{ duration: 1.2, delay: 0.75, ease: HERO_EASE }}
+      />
+      <motion.path
+        d="M100 61 C100 96 98 138 100 180 C102 222 100 268 100 338"
+        stroke="#72fa93"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1.75, delay: 0.9, ease: HERO_EASE }}
       />
       <motion.path
         d="M78 92h44"
@@ -740,9 +752,21 @@ function HeroSpine({ className = '' }) {
         strokeWidth="1.4"
         strokeLinecap="round"
         initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.7 }}
-        transition={{ duration: 0.7, delay: 1.45, ease: HERO_EASE }}
+        animate={{ pathLength: 1, opacity: 0.8 }}
+        transition={{ duration: 0.7, delay: 1.35, ease: HERO_EASE }}
       />
+      {[78, 108, 140, 174, 210, 248, 286].map((y, i) => (
+        <motion.path
+          key={`v-${y}`}
+          d={`M${88 - (i % 3)} ${y} h${24 + (i > 3 ? 4 : 0)}`}
+          stroke="#72fa93"
+          strokeWidth="1.35"
+          strokeLinecap="round"
+          initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 0.75 }}
+          transition={{ duration: 0.45, delay: 1.15 + i * 0.07, ease: HERO_EASE }}
+        />
+      ))}
     </svg>
   )
 }
@@ -1292,7 +1316,7 @@ function OffertaPostura({ variant = 'uomo' }) {
       >
         <LiquidField variant="light" />
         <div className="offerta-hero-grain" aria-hidden />
-        <HeroSpine className="pointer-events-none absolute left-1/2 top-6 z-[1] h-[340px] w-[200px] -translate-x-1/2 text-blue-dark opacity-[0.22] sm:top-2 sm:h-[420px] sm:w-[240px]" />
+        <HeroSpine className="pointer-events-none absolute left-1/2 top-6 z-[1] h-[340px] w-[200px] -translate-x-1/2 text-blue-dark opacity-[0.22] sm:top-2 sm:h-[440px] sm:w-[240px]" />
 
         <motion.div className="relative z-10" style={{ y: heroTextY }}>
           <motion.div
