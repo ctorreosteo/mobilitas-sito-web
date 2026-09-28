@@ -43,6 +43,22 @@ function readMetaAdId(params, key) {
   return /^\d+$/.test(id) ? id : null
 }
 
+const metaAdLandingContexts = new Set([
+  'emicrania',
+  'stitichezza',
+  'tunnel-carpale',
+  'cicatrici-seno',
+  'vertigini',
+  'menopausa',
+  'ciclo-doloroso',
+  'cicatrici-cesareo',
+  'bruxismo',
+  'epicondilite',
+  'colon-irritabile',
+  'maldischiena',
+  'reflusso',
+])
+
 function metaAdIdsFromUrl() {
   const params = new URLSearchParams(window.location.search)
   const metaAdCampaignId = readMetaAdId(params, 'campaign_id')
@@ -237,7 +253,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
       campagna: '120239301462800644',
-      ...(pageContext === 'emicrania' ? metaAdIdsFromUrl() : {}),
+      ...(metaAdLandingContexts.has(pageContext) ? metaAdIdsFromUrl() : {}),
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
