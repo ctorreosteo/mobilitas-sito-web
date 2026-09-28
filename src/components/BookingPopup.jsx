@@ -35,6 +35,26 @@ function parseCellulare(raw) {
   return { prefissoCellulare: '+39', cellulare: digits }
 }
 
+/** ID Meta numerico dalla query string. Toglie le graffe {{id}} se presenti. */
+function readMetaAdId(params, key) {
+  const raw = params.get(key)?.trim()
+  if (!raw) return null
+  const id = raw.replace(/^\{\{/, '').replace(/\}\}$/, '').trim()
+  return /^\d+$/.test(id) ? id : null
+}
+
+function metaAdIdsFromUrl() {
+  const params = new URLSearchParams(window.location.search)
+  const metaAdCampaignId = readMetaAdId(params, 'campaign_id')
+  const metaAdsetCampaignId = readMetaAdId(params, 'adset_id')
+  const metaAdId = readMetaAdId(params, 'ad_id')
+  return {
+    ...(metaAdCampaignId && { metaAdCampaignId }),
+    ...(metaAdsetCampaignId && { metaAdsetCampaignId }),
+    ...(metaAdId && { metaAdId }),
+  }
+}
+
 const formatCurrentDate = () => {
   const now = new Date()
   const day = String(now.getDate()).padStart(2, '0')
@@ -217,6 +237,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
       campagna: '120239301462800644',
+      ...(pageContext === 'emicrania' ? metaAdIdsFromUrl() : {}),
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
