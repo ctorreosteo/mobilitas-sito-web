@@ -12,18 +12,17 @@ In **locale**: copia `.env.example` in `.env` e compila i valori.
 
 L'API richieste (popup prenotazione/consulto) è pubblica e non richiede credenziali.
 
-## Deploy manuale
+## Deploy
 
-Il comando compila il progetto e pubblica `dist/` su Firebase Hosting nel
-progetto `mobilitas-sito-web`:
+Dalla cartella principale del progetto esegui:
 
 ```bash
-npm run deploy
+./deploy.sh
 ```
 
-Lo script usa il login di Firebase CLI. Per un deploy senza login interattivo,
-salva invece la chiave del service account in
-`.secrets/firebase-deploy.json`; la cartella è esclusa da Git.
+Lo script compila il sito e lo pubblica automaticamente su Firebase Hosting
+nel progetto `mobilitas-sito-web`. Non è richiesto alcun login: la chiave locale
+si trova in `.secrets/firebase-deploy.json` e la cartella è esclusa da Git.
 
 ---
 
