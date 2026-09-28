@@ -200,6 +200,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
         : isOffertaPostura
           ? 'OFFERTA_POSTURA_500'
           : 'COUPON49'
+    const isPainLanding = isLandingVisita(pageContext) && !isOffertaPostura
+    const leadMagnetRequested = ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
 
     const tagByContext = {
       cervicalgia: 'Cervicalgia',
@@ -252,6 +254,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       statusRichiesta: 'LEAD',
       fonteString: socialAdsContexts.has(pageContext) ? 'SOCIAL_ADS' : 'GOOGLE_ADS',
       leadMagnetString,
+      ...(isPainLanding && { leadMagnetRequested }),
       campagna: '120239301462800644',
       ...(metaAdLandingContexts.has(pageContext) ? metaAdIdsFromUrl() : {}),
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
