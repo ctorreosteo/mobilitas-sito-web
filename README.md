@@ -14,6 +14,20 @@ L'API richieste (popup prenotazione/consulto) è pubblica e non richiede credenz
 
 ## Deploy
 
+### Installazione Firebase CLI
+
+L'installazione è necessaria solo la prima volta e richiede Node.js e npm:
+
+```bash
+npm install -g firebase-tools
+firebase --version
+```
+
+Non è necessario eseguire `firebase login`, perché lo script usa il service
+account locale.
+
+### Pubblicazione
+
 Dalla cartella principale del progetto esegui:
 
 ```bash
