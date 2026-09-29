@@ -2,6 +2,28 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
 
+const API_BASE = import.meta.env.VITE_API_BASE
+  || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
+
+const cleanName = (name) =>
+  name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(' ')
+
+const parseCellulare = (raw) => {
+  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
+  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
+  if (s.startsWith('+')) {
+    const match = s.match(/^(\+\d{1,4})(\d+)$/)
+    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
+    const digits = s.replace(/\D/g, '')
+    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
+    const num = digits.slice(2).replace(/^0+/, '') || digits
+    return { prefissoCellulare: pref, cellulare: num }
+  }
+  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
+}
+
 export default function GpadelInfortuniPopup({ isOpen, onClose }) {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
@@ -68,57 +90,40 @@ export default function GpadelInfortuniPopup({ isOpen, onClose }) {
     }
     
     setIsSubmitting(true)
-    
-    // Skip Zapier webhook in development/local to save resources
-    if (import.meta.env.DEV) {
-      console.log('Development mode: skipping Zapier webhook call')
-      setIsSubmitting(false)
-      navigate('/lm-gpadel-infortuni-grazie')
-      return
+
+    const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
+    const body = {
+      nome: cleanName(formData.nome),
+      cognome: cleanName(formData.cognome),
+      email: formData.email.trim(),
+      prefissoCellulare,
+      cellulare,
+      statusRichiesta: 'LEAD',
+      fonteString: 'GPADEL',
+      leadMagnetString: 'GPADEL_39',
+      leadMagnetRequestedString: 'GPADEL_39',
+      tag: 'PADEL',
+      note: 'Pagina: lm-gpadel-infortuni. Guida Infortuni Padel gratuita.'
     }
-    
-    // Send data to Zapier webhook
+
     try {
-      // Format date and time as requested: dd/mm/yyyy and hh:mm
-      const now = new Date()
-      const day = String(now.getDate()).padStart(2, '0')
-      const month = String(now.getMonth() + 1).padStart(2, '0')
-      const year = now.getFullYear()
-      const hours = String(now.getHours()).padStart(2, '0')
-      const minutes = String(now.getMinutes()).padStart(2, '0')
-      
-      const webhookData = {
-        nome: formData.nome,
-        cognome: formData.cognome,
-        telefono: formData.cellulare,
-        email: formData.email,
-        data: `${day}/${month}/${year}`,
-        ora: `${hours}:${minutes}`,
-        offerta: 'Guida Infortuni Padel - GRATIS',
-        pagina: 'GPADEL Infortuni Landing',
-        privacy_accettata: formData.privacy
-      }
-      
-      // Send data to Zapier webhook
-      const response = await fetch('https://hooks.zapier.com/hooks/catch/19401274/ui06lc2/', {
+      const response = await fetch(`${API_BASE}/api/richieste`, {
         method: 'POST',
-        body: JSON.stringify(webhookData)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+
+      const json = await response.json()
+      if (!response.ok || !json.success) {
+        throw new Error(json.error || json.message || `Errore ${response.status}`)
       }
-      
-      const result = await response.json()
-      console.log('Zapier webhook response:', result)
-      
-      // Redirect to thank you page after success
+
       setIsSubmitting(false)
+      onClose()
       navigate('/lm-gpadel-infortuni-grazie')
-      
     } catch (error) {
-      console.error('Error sending data to Zapier:', error)
-      setFormErrors({ submit: 'Si è verificato un errore durante l\'invio. Riprova più tardi.' })
+      console.error('API richieste:', error)
+      setFormErrors({ submit: error.message || 'Si è verificato un errore durante l\'invio. Riprova più tardi.' })
       setIsSubmitting(false)
     }
   }

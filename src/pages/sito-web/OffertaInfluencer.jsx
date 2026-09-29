@@ -1,6 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+const API_BASE = import.meta.env.VITE_API_BASE
+  || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
+
+const cleanName = (name) =>
+  name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(' ')
+
+const parseCellulare = (raw) => {
+  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
+  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
+  if (s.startsWith('+')) {
+    const match = s.match(/^(\+\d{1,4})(\d+)$/)
+    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
+    const digits = s.replace(/\D/g, '')
+    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
+    const num = digits.slice(2).replace(/^0+/, '') || digits
+    return { prefissoCellulare: pref, cellulare: num }
+  }
+  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
+}
+
 const OffertaInfluencer = () => {
   const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
@@ -17,6 +39,8 @@ const OffertaInfluencer = () => {
     privacy: false
   })
   const [formErrors, setFormErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -143,57 +167,42 @@ const OffertaInfluencer = () => {
       setFormErrors(errors)
       return
     }
-    
-    console.log('Redirecting to confirmation page...') // Debug log
-    
-    // Send data to Zapier webhook
-    try {
-      // Format date and time as requested: dd/mm/yyyy and hh:mm
-      const now = new Date()
-      const day = String(now.getDate()).padStart(2, '0')
-      const month = String(now.getMonth() + 1).padStart(2, '0')
-      const year = now.getFullYear()
-      const hours = String(now.getHours()).padStart(2, '0')
-      const minutes = String(now.getMinutes()).padStart(2, '0')
-      
-      const webhookData = {
-        nome: formData.nome,
-        cognome: formData.cognome,
-        telefono: formData.cellulare,
-        email: formData.email,
-        codice_sconto: formData.codiceSconto,
-        data: `${day}/${month}/${year}`,
-        ora: `${hours}:${minutes}`,
-        offerta: 'Offerta Influencer',
-        pagina: 'Offerta Influencer',
-        privacy_accettata: formData.privacy
-      }
-      
-      // Send data to Zapier webhook for influencer offer
-      const response = await fetch('https://hooks.zapier.com/hooks/catch/19401274/ukg0yvh/', {
-        method: 'POST',
-        body: JSON.stringify(webhookData)
-      })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const result = await response.json()
-      console.log('Zapier webhook response:', result)
-      console.log('Data sent to Zapier successfully')
-    } catch (error) {
-      console.error('Error sending data to Zapier:', error)
-      // Don't block the user flow if webhook fails
+
+    setIsSubmitting(true)
+    setSubmitError('')
+
+    const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
+    const codiceSconto = formData.codiceSconto.trim()
+    const body = {
+      nome: cleanName(formData.nome),
+      cognome: cleanName(formData.cognome),
+      email: formData.email.trim(),
+      prefissoCellulare,
+      cellulare,
+      statusRichiesta: 'LEAD',
+      fonteString: 'INFLUENCER_MARKETING',
+      leadMagnetString: 'COUPON45',
+      leadMagnetRequestedString: 'COUPON45',
+      note: `codice sconto inserito: ${codiceSconto}`
     }
-    
-    // Redirect to confirmation page
+
     try {
+      const response = await fetch(`${API_BASE}/api/richieste`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+
+      const json = await response.json()
+      if (!response.ok || !json.success) {
+        throw new Error(json.error || json.message || `Errore ${response.status}`)
+      }
+
       navigate('/offerta-influencer-conferma')
     } catch (error) {
-      console.error('Navigation error:', error)
-      // Fallback to window.location
-      window.location.href = '/offerta-influencer-conferma'
+      console.error('API richieste:', error)
+      setSubmitError(error.message || 'Si è verificato un errore durante l\'invio. Riprova.')
+      setIsSubmitting(false)
     }
   }
 
@@ -407,12 +416,15 @@ const OffertaInfluencer = () => {
                 {formErrors.privacy && <p className="text-red-500 text-xs mt-1">{formErrors.privacy}</p>}
               </div>
               
+              {submitError && <p className="text-red-500 text-sm">{submitError}</p>}
+
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-600 transition-all font-montserrat"
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-600 transition-all font-montserrat disabled:opacity-60"
                 >
-                  Prenota con sconto
+                  {isSubmitting ? 'Invio in corso...' : 'Prenota con sconto'}
                 </button>
               </div>
             </form>

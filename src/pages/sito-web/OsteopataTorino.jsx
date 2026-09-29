@@ -336,6 +336,7 @@ const OsteopataTorino = () => {
       fonteString: 'GOOGLE_ADS',
       leadMagnetString: 'COUPON49',
       leadMagnetRequestedString: 'COUPON49',
+      campagna: 'Google | Osteopata Torino',
       tag: 'Osteopata Torino',
       note: 'Pagina: Osteopata Torino. Offerta: trattamento da 90€ a 49€.'
     }
