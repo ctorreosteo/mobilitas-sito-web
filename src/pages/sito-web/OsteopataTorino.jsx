@@ -4,6 +4,28 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import Header from '../../components/Header'
 import { RECENSIONI_IMAGES } from '../../data/recensioni'
 
+const API_BASE = import.meta.env.VITE_API_BASE
+  || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
+
+const cleanName = (name) =>
+  name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(' ')
+
+const parseCellulare = (raw) => {
+  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
+  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
+  if (s.startsWith('+')) {
+    const match = s.match(/^(\+\d{1,4})(\d+)$/)
+    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
+    const digits = s.replace(/\D/g, '')
+    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
+    const num = digits.slice(2).replace(/^0+/, '') || digits
+    return { prefissoCellulare: pref, cellulare: num }
+  }
+  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
+}
+
 const OsteopataTorino = () => {
   const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
@@ -19,6 +41,8 @@ const OsteopataTorino = () => {
     privacy: false
   })
   const [formErrors, setFormErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const carouselRef = useRef(null)
   const bodyAreasCarouselRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -298,55 +322,41 @@ const OsteopataTorino = () => {
       return
     }
     
-    console.log('Redirecting to confirmation page...') // Debug log
-    
-    // Send data to Zapier webhook
-    try {
-      // Format date and time as requested: dd/mm/yyyy and hh:mm
-      const now = new Date()
-      const day = String(now.getDate()).padStart(2, '0')
-      const month = String(now.getMonth() + 1).padStart(2, '0')
-      const year = now.getFullYear()
-      const hours = String(now.getHours()).padStart(2, '0')
-      const minutes = String(now.getMinutes()).padStart(2, '0')
-      
-      const webhookData = {
-        nome: formData.nome,
-        cognome: formData.cognome,
-        telefono: formData.cellulare,
-        email: formData.email,
-        data: `${day}/${month}/${year}`,
-        ora: `${hours}:${minutes}`,
-        offerta: 'Trattamento osteopatico da 90€ a 49€',
-        pagina: 'Osteopata Torino',
-        privacy_accettata: formData.privacy
-      }
-      
-      // Send data to Zapier webhook (same approach as gravidanza landing)
-      const response = await fetch('https://hooks.zapier.com/hooks/catch/19401274/urmpgqj/', {
-        method: 'POST',
-        body: JSON.stringify(webhookData)
-      })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const result = await response.json()
-      console.log('Zapier webhook response:', result)
-      console.log('Data sent to Zapier successfully')
-    } catch (error) {
-      console.error('Error sending data to Zapier:', error)
-      // Don't block the user flow if webhook fails
+    setIsSubmitting(true)
+    setSubmitError('')
+
+    const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
+    const body = {
+      nome: cleanName(formData.nome),
+      cognome: cleanName(formData.cognome),
+      email: formData.email.trim(),
+      prefissoCellulare,
+      cellulare,
+      statusRichiesta: 'LEAD',
+      fonteString: 'GOOGLE_ADS',
+      leadMagnetString: 'COUPON49',
+      leadMagnetRequestedString: 'COUPON49',
+      tag: 'Osteopata Torino',
+      note: 'Pagina: Osteopata Torino. Offerta: trattamento da 90€ a 49€.'
     }
-    
-    // Redirect to confirmation page
+
     try {
+      const response = await fetch(`${API_BASE}/api/richieste`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+
+      const json = await response.json()
+      if (!response.ok || !json.success) {
+        throw new Error(json.error || json.message || `Errore ${response.status}`)
+      }
+
       navigate('/osteopata-torino-conferma')
     } catch (error) {
-      console.error('Navigation error:', error)
-      // Fallback to window.location
-      window.location.href = '/osteopata-torino-conferma'
+      console.error('API richieste:', error)
+      setSubmitError(error.message || 'Si è verificato un errore durante l\'invio. Riprova.')
+      setIsSubmitting(false)
     }
   }
 
@@ -583,12 +593,17 @@ const OsteopataTorino = () => {
                 {formErrors.privacy && <p className="text-red-500 text-xs mt-1">{formErrors.privacy}</p>}
               </div>
               
+              {submitError && (
+                <p className="text-red-600 text-sm font-medium">{submitError}</p>
+              )}
+
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="button-shake w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-lg hover:from-blue-700 hover:to-green-600 transition-all font-montserrat text-lg"
+                  disabled={isSubmitting}
+                  className="button-shake w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-lg hover:from-blue-700 hover:to-green-600 transition-all font-montserrat text-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Prenota con sconto
+                  {isSubmitting ? 'Invio in corso...' : 'Prenota con sconto'}
                 </button>
               </div>
             </form>
