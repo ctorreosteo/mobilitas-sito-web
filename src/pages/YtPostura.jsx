@@ -156,58 +156,70 @@ const MECHANISM_STEPS = [
 
 const BENEFITS = [
   {
-    image: '/maldischiena/maldischiena1.JPG',
-    imageClassName: 'object-center',
-    alt: 'Visita in studio a Torino',
-    title: 'Stare dritto senza sforzarti',
-    body: 'Quando quella zona torna a muoversi, stare dritto smette di essere una fatica. Non devi tenerti su con la volontà. Il corpo ci arriva da solo, e ci resta più a lungo.',
+    icon: Camera,
+    image: '/cervicalgia/cerv11.JPG',
+    imageClassName: 'object-[center_28%]',
+    alt: 'Lavoro su collo e spalle in studio',
+    eyebrow: 'La foto di lato',
+    title: 'In foto torni a sembrare te',
+    body: 'Testa sopra le spalle, petto più aperto. Quell’aria stanca che vedi di lato si attenua. Molte volte non sono gli anni. È la posizione in cui stai tutto il giorno, anche quando non ci pensi.',
   },
   {
+    icon: Clock,
     image: '/maldischiena/maldischiena2.JPG',
     imageClassName: 'object-center',
     alt: 'Trattamento osteopatico sulla schiena',
-    title: 'Quel bruciore della sera si calma',
-    body: 'Se la schiena ricomincia a sostenersi da sola, i muscoli in mezzo alla schiena non devono più stare tesi tutto il giorno. E quel fastidio che conoscevi a memoria inizia a presentarsi meno spesso.',
+    eyebrow: 'Il bruciore della sera',
+    title: 'Quel punto può mollare',
+    body: 'Il bruciore in mezzo alla schiena è il muscolo che ti regge fino a sera. Se la schiena ricomincia a sostenersi da sola, quel muscolo non deve più stare teso tutto il giorno. Il fastidio che conoscevi a memoria si fa vedere meno spesso.',
   },
   {
-    image: '/maldischiena/maldischiena3.JPG',
+    icon: Repeat,
+    image: '/maldischiena/maldischiena1.JPG',
     imageClassName: 'object-center',
-    alt: 'Lavoro manuale su schiena e bacino',
-    title: 'Finalmente capisci che cosa hai',
-    body: 'C’è una curva dell’osso, che non si cambia, e una che si muove ancora. C’è la scoliosi vera, e c’è il corpo che si è solo inclinato. C’è la gamba davvero più corta, e c’è il bacino girato. Sapere quale dei due sei cambia il lavoro che ha senso fare.',
+    alt: 'Visita posturale in studio a Torino',
+    eyebrow: 'Ti tiri su, e ricadi',
+    title: 'Stai dritto senza tenerti su',
+    body: 'Oggi ci resti un minuto, poi il corpo ricade. Quando schiena e costole si riaprono, stare dritto ha un appoggio. Non lo tieni con la volontà. Ci arrivi, e ci resti più a lungo.',
   },
   {
-    image: '/cervicalgia/cerv11.JPG',
-    imageClassName: 'object-[center_40%]',
-    alt: 'Lavoro su collo e spalle',
-    title: 'In foto torni a sembrare te',
-    body: 'Con la testa sopra le spalle e il petto più aperto, quell’aria stanca che vedi di lato si attenua. Molte volte non sono gli anni. È la posizione.',
-  },
-  {
-    image: '/maldischiena/maldischiena4.JPG',
-    imageClassName: 'object-center',
-    alt: 'Trattamento osteopatico sulla schiena',
-    title: 'La palestra, finalmente, resta',
-    body: 'Fare muscolo serve, e non devi smettere. Però su una schiena che si apre e su un bacino dritto, quello che alleni resta. Su una zona bloccata, lo perdi appena smetti.',
-  },
-  {
+    icon: Archive,
     image: '/maldischiena/maldischiena6.JPG',
     imageClassName: 'object-center',
     alt: 'Seduta in studio per la postura',
-    title: 'Guardiamo tutto il corpo, non solo il dolore',
-    body: 'Collo, costole, bacino, anche e piedi. Non ci fermiamo al punto che ti ha fatto arrivare fin qui, perché molte volte quello è solo il posto dove il dolore è arrivato per ultimo.',
+    eyebrow: 'Correttore, cuscino, sedia',
+    title: 'Li togli, e non ricadi',
+    body: 'Finché li usi, un po’ ti tengono. Appena li togli, torni come prima. Se la schiena si riapre e il bacino torna dritto, il lavoro lo fa il corpo. Il pezzo esterno smette di essere l’unico modo per stare su.',
+  },
+  {
+    icon: ScanSearch,
+    image: '/maldischiena/maldischiena3.JPG',
+    imageClassName: 'object-center',
+    alt: 'Valutazione di schiena e bacino',
+    eyebrow: 'La parola sul referto',
+    title: 'Sai se è osso o posizione',
+    body: 'Curva dell’osso o corpo inclinato. Scoliosi vera o schiena messa storta. Gamba corta o bacino girato. Si lavora solo sulla seconda. Alla prima visita te lo diciamo, con i tuoi esami in mano.',
+  },
+  {
+    icon: Dumbbell,
+    image: '/maldischiena/maldischiena4.JPG',
+    imageClassName: 'object-center',
+    alt: 'Trattamento osteopatico sulla schiena',
+    eyebrow: 'Ti alleni, e torni uguale',
+    title: 'In palestra, il lavoro resta',
+    body: 'Palestra, nuoto, ginnastica: continua. Diventare più forte serve. Su una schiena che si apre e su un bacino dritto, quello che alleni resta. Su una zona ferma, lo perdi appena smetti.',
   },
 ]
 
 const AFTER_IMAGES_BENEFITS = [
   <>
-    <strong className="font-bold">Prima visita</strong>: ti diciamo cosa si muove ancora e cosa no
+    <strong className="font-bold">Prima visita</strong>: ti diciamo cosa si muove ancora, e cosa è osso
   </>,
   <>
-    <strong className="font-bold">3 sedute</strong>: sul punto da cui parte tutto il resto
+    <strong className="font-bold">3 sedute</strong>: solo su quella parte, non su un programma uguale per tutti
   </>,
   <>
-    <strong className="font-bold">App</strong>: un piano semplice, così non torni come prima
+    <strong className="font-bold">App</strong>: pochi esercizi, così a casa non torni dov’eri
   </>,
   <>
     <strong className="font-bold">299€</strong> invece di 600€. Oggi non paghi niente
@@ -1489,7 +1501,7 @@ function YtPostura() {
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
                     Chi ti promette di raddrizzarti prima di averti visto, ti sta prendendo in giro.
-                    <span className="text-green"> Noi ti diciamo subito cosa si muove ancora. E cosa no.</span>
+                    <span className="text-green"> Noi ti diciamo subito dove intervenire per risolvere il problema. E dove non serve.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1498,7 +1510,7 @@ function YtPostura() {
           </div>
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-10">
           <div className="h-px w-full bg-gradient-to-r from-transparent via-cream/15 to-transparent mb-12 lg:mb-16" aria-hidden />
 
           <motion.div
@@ -1508,80 +1520,99 @@ function YtPostura() {
             transition={{ duration: 0.5 }}
             className="max-w-3xl mb-10 lg:mb-14"
           >
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-cream mb-4">
-              Cosa puoi riavere, se si lavora
-              <span className="text-green"> sulla parte che si muove ancora.</span>
-            </h3>
+            <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
+              Cosa può tornare
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-3xl mb-4 sm:mb-5">
+              Non devi più tenerti su.
+              <br />
+              <span className="text-green">Il corpo ci resta da solo.</span>
+            </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Non è la stessa cosa per tutti, e non deve esserlo. Alla prima visita capiamo da dove
-              parte il tuo. Nelle 3 sedute lavoriamo lì. Poi, con l’app, ti diamo un piano semplice
-              da fare a casa, così nelle ore in cui non sei in studio il corpo non torna dov’era.
+              Sono le risposte alle storie di sopra. Non arrivano tutte, e non arrivano il giorno in
+              cui lasci il numero. Se una parte è diventata osso, resta: te lo diciamo alla prima
+              visita. Se schiena, costole, bacino o piedi si muovono ancora, il lavoro è lì. E queste
+              cose possono tornare, strada facendo.
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {BENEFITS.map((item, i) => (
-              <motion.article
-                key={item.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                className="group"
-              >
-                <div className="relative p-[1px] rounded-[1.25rem] sm:rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.14)_0%,rgba(244,244,244,0.04)_45%,rgba(114,250,147,0.18)_100%)] shadow-[0_16px_48px_-28px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:shadow-[0_24px_56px_-24px_rgba(114,250,147,0.22)] group-hover:bg-[linear-gradient(145deg,rgba(114,250,147,0.35)_0%,rgba(244,244,244,0.08)_50%,rgba(114,250,147,0.22)_100%)]">
-                  <div className="overflow-hidden rounded-[calc(1.25rem-1px)] sm:rounded-[calc(1.35rem-1px)] bg-blue-dark/80 backdrop-blur-md">
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img
-                        src={item.image}
-                        alt={item.alt}
-                        loading="lazy"
-                        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05] ${item.imageClassName || 'object-center'}`}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-blue-dark/80 via-blue-dark/10 to-blue-dark/20 pointer-events-none" />
-                      <div className="absolute inset-0 bg-gradient-to-br from-green/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
-                      <span className="absolute top-3 left-3 grid place-items-center min-w-[2.35rem] h-9 px-2.5 rounded-full border border-cream/20 bg-blue-dark text-xs font-black tabular-nums text-green shadow-[0_0_18px_rgba(114,250,147,0.15)]">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                    </div>
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-5">
+            {BENEFITS.map((item, i) => {
+              const Icon = item.icon
+              return (
+                <motion.article
+                  key={item.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: (i % 2) * 0.08 }}
+                  whileHover={{ y: -4 }}
+                  className="group h-full"
+                >
+                  <div className="relative h-full p-[1px] rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.16)_0%,rgba(244,244,244,0.05)_42%,rgba(114,250,147,0.22)_100%)] shadow-[0_16px_48px_-28px_rgba(0,0,0,0.6)] transition-all duration-500 group-hover:shadow-[0_24px_56px_-24px_rgba(114,250,147,0.22)] group-hover:bg-[linear-gradient(145deg,rgba(114,250,147,0.45)_0%,rgba(244,244,244,0.08)_48%,rgba(114,250,147,0.28)_100%)]">
+                    <div className="flex h-full flex-col sm:flex-row overflow-hidden rounded-[calc(1.35rem-1px)] bg-blue-dark/80 backdrop-blur-md">
+                      <div className="relative h-44 sm:h-auto sm:w-[38%] sm:self-stretch shrink-0 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.alt}
+                          loading="lazy"
+                          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] ${item.imageClassName || 'object-center'}`}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-blue-dark/70 via-blue-dark/10 to-blue-dark/15 sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-blue-dark/25 pointer-events-none" />
+                        <span className="absolute top-3 left-3 grid place-items-center min-w-[2.35rem] h-9 px-2.5 rounded-full border border-cream/20 bg-blue-dark text-xs font-black tabular-nums text-green shadow-[0_0_18px_rgba(114,250,147,0.15)]">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                      </div>
 
-                    <div className="px-4 py-4 sm:px-5 sm:py-6 border-t border-cream/10">
-                      <h4 className="text-cream font-bold text-base sm:text-[1.05rem] leading-snug mb-2.5 transition-colors duration-300 group-hover:text-green">
-                        {item.title}
-                      </h4>
-                      <p className="text-cream/55 text-sm sm:text-[15px] leading-relaxed">{item.body}</p>
+                      <div className="flex min-w-0 flex-1 flex-col justify-center px-4 py-4 sm:px-5 sm:py-5">
+                        <div className="mb-3 flex items-center gap-2.5">
+                          <span className="grid place-items-center w-8 h-8 rounded-lg border border-green/30 bg-green/10 text-green shrink-0">
+                            <Icon className="w-4 h-4" strokeWidth={1.75} />
+                          </span>
+                          <p className="m-0 text-[11px] font-bold uppercase tracking-[0.16em] text-cream/45 leading-none">
+                            {item.eyebrow}
+                          </p>
+                        </div>
+                        <h3 className="text-cream font-black text-xl sm:text-[1.35rem] leading-snug tracking-tight mb-2 mt-0 transition-colors duration-300 group-hover:text-green">
+                          {item.title}
+                        </h3>
+                        <p className="text-cream/55 text-sm sm:text-[15px] leading-relaxed m-0">{item.body}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+                </motion.article>
+              )
+            })}
           </div>
 
-          <motion.ul
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45 }}
-            className="w-full max-w-xl min-w-0 mt-10 lg:mt-14 space-y-2.5 sm:space-y-3.5 text-left"
+            className="mt-8 lg:mt-10 p-[1px] rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.45)_0%,rgba(244,244,244,0.08)_45%,rgba(114,250,147,0.18)_100%)]"
           >
-            {AFTER_IMAGES_BENEFITS.map((benefit, i) => (
-              <motion.li
-                key={i}
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="flex items-center gap-3 min-w-0"
-              >
-                <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
-                  <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
-                </span>
-                <span className="min-w-0 flex-1 text-cream/85 text-base sm:text-base leading-snug font-medium break-words">
-                  {benefit}
-                </span>
-              </motion.li>
-            ))}
-          </motion.ul>
+            <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/75 backdrop-blur-md px-5 py-5 sm:px-7 sm:py-7">
+              <p className="text-cream font-black text-lg sm:text-xl leading-snug mb-1 mt-0">
+                Se alla visita ha senso, il percorso è questo.
+              </p>
+              <p className="text-cream/50 text-sm sm:text-[15px] leading-relaxed mb-5 sm:mb-6">
+                Oggi non paghi. Il prezzo te lo confermiamo quando ti richiamiamo.
+              </p>
+              <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3 m-0 p-0 list-none">
+                {AFTER_IMAGES_BENEFITS.map((benefit, i) => (
+                  <li key={i} className="flex items-start gap-3 min-w-0">
+                    <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 mt-0.5 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
+                      <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
+                    </span>
+                    <span className="min-w-0 flex-1 text-cream/85 text-[15px] sm:text-base leading-snug font-medium">
+                      {benefit}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
         </div>
 
         <div className="relative z-10 flex justify-center mt-12 px-4">
