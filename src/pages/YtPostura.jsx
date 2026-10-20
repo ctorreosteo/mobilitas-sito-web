@@ -226,30 +226,46 @@ const AFTER_IMAGES_BENEFITS = [
   </>,
 ]
 
-const VISIT_STEPS = [
+const ENTRY_DOORS = [
   {
-    title: 'Scegli come entrare',
-    body: 'Il bottone verde ti tiene il posto in lista. L’altro è una telefonata gratis, se hai ancora un dubbio. Lasci nome e numero, e oggi non paghi.',
+    id: 'lista',
+    kicker: 'Tiene il posto',
+    title: 'Mettiti in lista',
+    lead: 'Per chi si è già riconosciuto. Il percorso sta per partire, e il posto del mese va a chi lascia nome e numero prima.',
+    points: [
+      'Oggi non paghi. Lasci nome e numero, e basta.',
+      'Ti richiamiamo noi e ti confermiamo 299€ invece di 600€.',
+      'Se il mese è pieno, il posto è di chi è arrivato prima di te.',
+    ],
   },
   {
-    title: 'Ti guardiamo in piedi',
-    body: 'Ci dici dove fa male e cosa hai già provato. Poi guardiamo quanta parte si muove ancora, per capire se è una posizione o una curva da lasciare stare.',
+    id: 'consulto',
+    kicker: 'Se ti resta un dubbio',
+    title: 'Fatti dire se è il tuo caso',
+    lead: 'Una telefonata gratis. Non per convincerti: per dirti se la tua situazione si può risolvere con questo percorso.',
+    points: [
+      'Ti richiamiamo noi. Non è una visita e non è un video.',
+      'Se non ha senso farlo così, te lo diciamo. Non ti vendiamo niente.',
+      'Se invece sì, da quella telefonata entri in lista.',
+    ],
+  },
+]
+
+const AFTER_ENTRY = [
+  {
+    k: '01',
+    t: 'Lasci nome e numero',
+    b: 'Dalla lista o dalla telefonata. In tutti e due i casi oggi non parte nessun pagamento.',
   },
   {
-    title: 'Non ci fermiamo al dolore',
-    body: 'Guardiamo collo, petto, bacino, anche e piedi. Il punto che fa male lo lasciamo per ultimo, perché prima vogliamo capire chi lo fa lavorare così.',
+    k: '02',
+    t: 'Ti richiamiamo noi',
+    b: 'Sede, prezzo, e se questo mese c’è ancora posto. Non resti ad aspettare una mail.',
   },
   {
-    title: 'Tre sedute, sul tuo caso',
-    body: 'L’osteopata lavora sulla parte che si muove ancora. Se una parte è diventata osso, non te la promettiamo: con le mani non si cambia.',
-  },
-  {
-    title: 'Un piano semplice, sull’app',
-    body: 'Dopo, ti diamo pochi esercizi scelti per te. L’app non sostituisce le sedute. Serve perché, fuori dallo studio, il corpo non torni dov’era.',
-  },
-  {
-    title: 'Quando sei a casa, da solo',
-    body: 'Il piano segue la tua giornata vera. Non ti chiediamo di lasciare telefono o scrivania. Ti chiediamo un corpo che riesca a reggerli.',
+    k: '03',
+    t: 'In studio, prima la verità',
+    b: 'Ti guardiamo in piedi. Se è osso, te lo diciamo. Se si muove, partono le 3 sedute e l’app.',
   },
 ]
 
@@ -1804,228 +1820,149 @@ function YtPostura() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
-            className="mb-14 lg:mb-20 text-left lg:text-center"
+            className="mb-10 lg:mb-14 text-left"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
               Come si entra
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Prima scegli il bottone.
-              <span className="text-green"> Poi il percorso è uno solo.</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-3xl mb-4 sm:mb-5">
+              Due modi per entrare.
+              <br />
+              <span className="text-green">Uno solo ti tiene il posto.</span>
             </h2>
-            <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl lg:mx-auto">
-              Il verde è per chi ha già deciso e vuole il posto. L’altro è per chi ha ancora un
-              dubbio e preferisce sentirci prima. Oggi nessuno dei due ti chiede dei soldi. Cambia
-              solo quanto sei già sicuro.
+            <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
+              Il verde è la lista. Ogni mese i posti sono pochi, e li prende chi lascia nome e
+              numero prima. L’altro è una telefonata gratis: serve se ti resta un dubbio, e ti
+              diciamo noi se questo percorso ha senso. Oggi non paghi, né di qua né di là.
             </p>
           </motion.div>
 
-          {/* Desktop: serpentine map */}
-          <div className="hidden lg:block relative mx-auto max-w-4xl h-[72rem]">
-            <svg
-              className="pointer-events-none absolute inset-0 w-full h-full"
-              viewBox="0 0 800 768"
-              fill="none"
-              aria-hidden
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient id="visitWave" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#72fa93" stopOpacity="0.12" />
-                  <stop offset="15%" stopColor="#72fa93" stopOpacity="0.9" />
-                  <stop offset="50%" stopColor="#a8ffbf" stopOpacity="1" />
-                  <stop offset="85%" stopColor="#72fa93" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#72fa93" stopOpacity="0.12" />
-                </linearGradient>
-                <filter id="visitGlow" x="-50%" y="-8%" width="200%" height="116%">
-                  <feGaussianBlur stdDeviation="5" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {/* soft under-glow */}
-              <path
-                d="M260 48
-                   C 260 95, 540 115, 540 160
-                   C 540 205, 260 225, 260 272
-                   C 260 319, 540 339, 540 384
-                   C 540 429, 260 449, 260 496
-                   C 260 543, 540 563, 540 608
-                   C 540 653, 260 673, 260 720"
-                stroke="#72fa93"
-                strokeWidth="12"
-                strokeOpacity="0.14"
-                strokeLinecap="round"
-                filter="url(#visitGlow)"
-              />
-              <path
-                d="M260 48
-                   C 260 95, 540 115, 540 160
-                   C 540 205, 260 225, 260 272
-                   C 260 319, 540 339, 540 384
-                   C 540 429, 260 449, 260 496
-                   C 260 543, 540 563, 540 608
-                   C 540 653, 260 673, 260 720"
-                stroke="url(#visitWave)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-              <path
-                d="M260 48
-                   C 260 95, 540 115, 540 160
-                   C 540 205, 260 225, 260 272
-                   C 260 319, 540 339, 540 384
-                   C 540 429, 260 449, 260 496
-                   C 260 543, 540 563, 540 608
-                   C 540 653, 260 673, 260 720"
-                stroke="#72fa93"
-                strokeWidth="1.25"
-                strokeOpacity="0.4"
-                strokeLinecap="round"
-                strokeDasharray="1.5 11"
-              />
-            </svg>
-
-            {/* Nodes locked to wave peaks */}
-            {[
-              { x: '32.5%', y: '6.25%' },
-              { x: '67.5%', y: '20.8%' },
-              { x: '32.5%', y: '35.4%' },
-              { x: '67.5%', y: '50%' },
-              { x: '32.5%', y: '64.6%' },
-              { x: '67.5%', y: '79.2%' },
-            ].map((pos, i) => (
-              <span
-                key={`node-${i}`}
-                className="absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center"
-                style={{ left: pos.x, top: pos.y }}
-                aria-hidden
-              >
-                <span className="absolute w-11 h-11 rounded-full bg-green/20 blur-md" />
-                <span className="relative w-3.5 h-3.5 rounded-full bg-blue-dark shadow-[0_0_16px_rgba(0,37,82,0.55)] ring-[7px] ring-green" />
-              </span>
-            ))}
-
-            <ol className="relative h-full list-none m-0 p-0">
-              {VISIT_STEPS.map((step, i) => {
-                const isLeft = i % 2 === 0
-                const tops = ['1%', '15.5%', '30%', '44.5%', '59%', '73.5%']
-                return (
-                  <motion.li
-                    key={step.title}
-                    initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.5, delay: i * 0.07 }}
-                    className="absolute w-[30%]"
-                    style={{
-                      top: tops[i],
-                      left: isLeft ? '0%' : 'auto',
-                      right: isLeft ? 'auto' : '0%',
-                      textAlign: isLeft ? 'right' : 'left',
-                    }}
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-5 items-stretch">
+            {ENTRY_DOORS.map((door, i) => {
+              const isList = door.id === 'lista'
+              return (
+                <motion.article
+                  key={door.id}
+                  initial={{ opacity: 0, y: 22 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                  className="h-full"
+                >
+                  <div
+                    className={`relative flex h-full flex-col p-[1px] rounded-[1.35rem] ${
+                      isList
+                        ? 'bg-[linear-gradient(160deg,rgba(114,250,147,0.85)_0%,rgba(114,250,147,0.18)_42%,rgba(244,244,244,0.12)_100%)] shadow-[0_24px_60px_-28px_rgba(114,250,147,0.45)]'
+                        : 'bg-[linear-gradient(160deg,rgba(244,244,244,0.22)_0%,rgba(244,244,244,0.06)_50%,rgba(244,244,244,0.14)_100%)]'
+                    }`}
                   >
-                    <span className="inline-flex items-center rounded-full bg-green px-3 py-1 text-blue-dark text-[11px] font-black uppercase tracking-[0.18em] shadow-[0_0_18px_rgba(114,250,147,0.28)] mb-1.5">
-                      Step {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className="text-cream text-[1.35rem] xl:text-2xl font-black leading-[1.2] mb-2.5 tracking-tight">
-                      {step.title}
-                    </h3>
-                    <p className="text-cream/55 text-[15px] leading-relaxed">
-                      {step.body}
-                    </p>
-                  </motion.li>
-                )
-              })}
-            </ol>
+                    <div className="flex h-full flex-col rounded-[calc(1.35rem-1px)] bg-blue-dark/80 backdrop-blur-md px-5 py-5 sm:px-7 sm:py-7">
+                      <div className="mb-5 flex items-start justify-between gap-4">
+                        <span
+                          className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] ${
+                            isList
+                              ? 'bg-green text-blue-dark shadow-[0_0_18px_rgba(114,250,147,0.35)]'
+                              : 'border border-cream/25 text-cream/75'
+                          }`}
+                        >
+                          {door.kicker}
+                        </span>
+                        {isList ? (
+                          <p className="m-0 flex items-baseline gap-2 leading-none">
+                            <span className="text-cream/35 font-bold text-lg line-through">600€</span>
+                            <span className="text-green font-black text-4xl tracking-tight">299€</span>
+                          </p>
+                        ) : (
+                          <p className="m-0 text-cream/70 text-sm font-bold uppercase tracking-[0.14em]">
+                            Gratis
+                          </p>
+                        )}
+                      </div>
+
+                      <h3 className="text-cream font-black text-2xl sm:text-[1.75rem] leading-tight tracking-tight mb-3 mt-0">
+                        {door.title}
+                      </h3>
+                      <p className="text-cream/70 text-[15px] sm:text-base leading-relaxed mb-5">
+                        {door.lead}
+                      </p>
+
+                      <ul className="space-y-3 mb-6 m-0 p-0 list-none">
+                        {door.points.map((point) => (
+                          <li key={point} className="flex items-start gap-3">
+                            <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 mt-0.5 shadow-[0_0_16px_rgba(114,250,147,0.25)]">
+                              <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
+                            </span>
+                            <span className="text-cream/85 text-[15px] sm:text-base leading-snug font-medium">
+                              {point}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        type="button"
+                        onClick={isList ? openPrimaVisita : openConsulto}
+                        className={`mt-auto inline-flex w-full items-center justify-between gap-3 rounded-full pl-6 pr-1.5 min-h-[58px] font-black uppercase tracking-tight transition-all duration-300 hover:-translate-y-0.5 ${
+                          isList
+                            ? 'text-blue-dark bg-[linear-gradient(90deg,#3dd968_0%,#72fa93_45%,#a8ffbf_100%)] hover:brightness-110 hover:shadow-[0_14px_34px_-12px_rgba(114,250,147,0.55)]'
+                            : 'text-blue-dark border-2 border-cream bg-cream hover:bg-white hover:shadow-[0_14px_34px_-12px_rgba(244,244,244,0.35)]'
+                        }`}
+                      >
+                        <span className="inline-flex items-center gap-2.5 min-w-0">
+                          {isList ? (
+                            <CalendarCheck className="w-5 h-5 shrink-0" strokeWidth={2.5} />
+                          ) : (
+                            <Phone className="w-5 h-5 shrink-0" strokeWidth={2.5} />
+                          )}
+                          <span>{isList ? 'Mettiti in lista' : 'Consulenza gratis'}</span>
+                        </span>
+                        <span
+                          className={`grid place-items-center w-11 h-11 rounded-full shrink-0 ${
+                            isList ? 'bg-blue-dark text-green' : 'bg-blue-dark text-cream'
+                          }`}
+                        >
+                          <ArrowRight className="w-5 h-5" strokeWidth={2.25} />
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </motion.article>
+              )
+            })}
           </div>
 
-          {/* Mobile / tablet: vertical wavy route */}
-          <div className="lg:hidden relative">
-            <svg
-              className="pointer-events-none absolute left-0 top-2 bottom-2 w-16 sm:w-20 h-[calc(100%-1rem)]"
-              viewBox="0 0 80 900"
-              fill="none"
-              aria-hidden
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient id="visitWaveMobile" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#72fa93" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#72fa93" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#72fa93" stopOpacity="0.2" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M40 10
-                   C 62 70, 18 130, 40 190
-                   C 62 250, 18 310, 40 370
-                   C 62 430, 18 490, 40 550
-                   C 62 610, 18 670, 40 730
-                   C 62 790, 18 850, 40 890"
-                stroke="#72fa93"
-                strokeWidth="8"
-                strokeOpacity="0.12"
-                strokeLinecap="round"
-              />
-              <path
-                d="M40 10
-                   C 62 70, 18 130, 40 190
-                   C 62 250, 18 310, 40 370
-                   C 62 430, 18 490, 40 550
-                   C 62 610, 18 670, 40 730
-                   C 62 790, 18 850, 40 890"
-                stroke="url(#visitWaveMobile)"
-                strokeWidth="2.25"
-                strokeLinecap="round"
-              />
-              <path
-                d="M40 10
-                   C 62 70, 18 130, 40 190
-                   C 62 250, 18 310, 40 370
-                   C 62 430, 18 490, 40 550
-                   C 62 610, 18 670, 40 730
-                   C 62 790, 18 850, 40 890"
-                stroke="#72fa93"
-                strokeWidth="1"
-                strokeOpacity="0.35"
-                strokeDasharray="2 10"
-                strokeLinecap="round"
-              />
-            </svg>
-
-            <ol className="relative space-y-10 sm:space-y-12 pl-16 sm:pl-20 list-none m-0">
-              {VISIT_STEPS.map((step, i) => (
+          <div className="mt-10 lg:mt-14">
+            <p className="text-cream font-black text-xl sm:text-2xl leading-snug mb-5 mt-0">
+              Appena lasci il numero, succede questo.
+            </p>
+            <ol className="grid md:grid-cols-3 gap-4 m-0 p-0 list-none">
+              {AFTER_ENTRY.map((step, i) => (
                 <motion.li
-                  key={step.title}
+                  key={step.k}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  className="relative"
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className="rounded-2xl border border-cream/10 bg-blue-dark/70 backdrop-blur-md px-5 py-5"
                 >
-                  <span className="absolute -left-[3.15rem] sm:-left-[3.85rem] top-2 z-10 grid place-items-center">
-                    <span className="absolute w-9 h-9 rounded-full bg-green/25 blur-md" />
-                    <span className="relative w-3 h-3 rounded-full bg-blue-dark shadow-[0_0_14px_rgba(0,37,82,0.5)] ring-[5px] ring-green" />
+                  <span className="inline-flex items-center rounded-full bg-green px-3 py-1 text-blue-dark text-[11px] font-black uppercase tracking-[0.16em] mb-3">
+                    {step.k}
                   </span>
-
-                  <span className="inline-flex items-center rounded-full bg-green px-3 py-1 text-blue-dark text-[11px] font-black uppercase tracking-[0.18em] shadow-[0_0_18px_rgba(114,250,147,0.28)] mb-1">
-                    Step {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="text-cream text-xl sm:text-2xl font-black leading-tight mb-2 tracking-tight">
-                    {step.title}
+                  <h3 className="text-cream font-black text-lg sm:text-xl leading-snug tracking-tight mb-2 mt-0">
+                    {step.t}
                   </h3>
-                  <p className="text-cream/55 text-sm sm:text-[15px] leading-relaxed w-full text-left">
-                    {step.body}
-                  </p>
+                  <p className="text-cream/55 text-sm sm:text-[15px] leading-relaxed m-0">{step.b}</p>
                 </motion.li>
               ))}
             </ol>
           </div>
 
-          <div className="mt-14 sm:mt-16 flex justify-center">
+          <p className="text-cream/75 text-base sm:text-lg leading-relaxed max-w-2xl mt-8 sm:mt-10 mb-8">
+            Se ti sei riconosciuto, il passo è uno: lasci nome e numero. Il posto di questo mese lo
+            prende chi entra prima.
+          </p>
+
+          <div className="flex justify-center">
             <CtaPair />
           </div>
         </div>
