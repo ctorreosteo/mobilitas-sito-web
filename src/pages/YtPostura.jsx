@@ -83,13 +83,16 @@ function useVideoYtPosturaVsl() {
 
 const HERO_BENEFITS = [
   <>
-    <strong className="font-bold">Visita posturale specifica</strong>
+    <strong className="font-bold">Visita posturale</strong>: guardiamo tutto il corpo, non il punto
+    che brucia. Fissiamo l’obiettivo. Il tuo.
   </>,
   <>
-    <strong className="font-bold">3 trattamenti osteopatici mirati</strong>, per la postura che vuoi
+    <strong className="font-bold">3 sedute osteopatiche</strong>: solo per quell’obiettivo. Alla
+    fine, la postura che vuoi. Il problema per cui sei arrivato, risolto.
   </>,
   <>
-    <strong className="font-bold">App</strong>: un supporto ogni giorno, così non torni indietro
+    <strong className="font-bold">App su misura</strong>: i corsi scelti dai professionisti sul tuo
+    caso. Per tenere l’obiettivo. Tutto nel telefono.
   </>,
 ]
 
@@ -102,32 +105,32 @@ const PAIN_POINTS = [
   {
     icon: Camera,
     title: 'In foto sembri più stanco di come ti senti',
-    body: 'Ti vedi di lato, in una vetrina o in una foto, e non ti piaci. La schiena è chiusa, la testa sta davanti alle spalle, e sembri più vecchio di come ti senti dentro. Non è la luce della foto. È la posizione in cui stai tutto il giorno, anche quando non ci pensi.',
+    body: 'Ti vedi di lato, in una vetrina o in una foto, e non ti riconosci. Schiena chiusa, testa davanti alle spalle. Sembri più vecchio di come ti senti. Non è la luce. È come stai tutto il giorno, anche quando non ci pensi.',
   },
   {
     icon: Clock,
     title: 'La sera brucia sempre nello stesso punto',
-    body: 'Verso sera, in mezzo alla schiena, senti quel bruciore che ormai conosci. Quei muscoli non sono il problema: stanno tenendo su una schiena che non si apre più. Il massaggio ti fa stare bene. Poi passano due o tre giorni, e sei da capo.',
+    body: 'Verso sera, in mezzo alla schiena, torna quel bruciore. Quei muscoli non sono il problema: tengono su una schiena che non si apre più. Il massaggio ti fa stare bene due giorni. Poi sei da capo.',
   },
   {
     icon: Repeat,
     title: 'Ti raddrizzi, e non resta',
-    body: 'Apri le spalle e tiri indietro la testa. Per un minuto funziona. Appena torni al telefono o al lavoro, il corpo ricade. Per lui quella è la posizione più comoda, perché è quella che ha imparato. Voler stare dritto non basta, se una parte della schiena non si muove più.',
+    body: 'Apri le spalle, tiri indietro la testa. Un minuto, e ricadi. Per il corpo quella è la posizione comoda: è quella che ha imparato. Voler stare dritto non basta, se una parte della schiena non si muove più.',
   },
   {
     icon: Archive,
     title: 'Hai già comprato un sacco di cose',
-    body: 'Il correttore, il cuscino nuovo, la sedia, il plantare. Finché li usi, un po’ ti tengono. Appena li togli, torni come prima. Non è che hai sbagliato a provarci. Hai sistemato il pezzo di sopra, mentre il motivo stava più sotto.',
+    body: 'Correttore, cuscino, sedia, plantare. Finché li tieni addosso, ti reggono loro. Li togli, e torni come prima. Non hai sbagliato a provarci. Hai sistemato il pezzo di sopra. Il motivo stava sotto.',
   },
   {
     icon: ScanSearch,
     title: 'Ti hanno detto una parola, e poi basta',
-    body: 'Sul foglio degli esami c’è scritto che il collo è diventato dritto, oppure «scoliosi», oppure qualcuno ti ha detto che hai una gamba più corta. E lì si sono fermati. Quasi nessuno ti ha spiegato se è l’osso, che non si cambia, oppure il corpo che si è messo storto per stare in equilibrio. Sono due cose diverse, e cambia tutto.',
+    body: 'Sul referto c’è «collo dritto», oppure «scoliosi», oppure «hai una gamba più corta». E lì si sono fermati. Quasi nessuno ti ha detto se è l’osso, che non si cambia, o il corpo che si è messo storto per stare in equilibrio. Sono due cose diverse. Cambia tutto.',
   },
   {
     icon: Dumbbell,
     title: 'Ti alleni, ma torni sempre uguale',
-    body: 'Fai palestra, ginnastica, nuoto o addominali. Diventi più forte, e questo va bene. Però se sotto c’è una zona che non si muove, l’esercizio le gira intorno. Alleni il corpo così com’è. Non gli insegni a stare in un altro modo.',
+    body: 'Palestra, ginnastica, nuoto, addominali. Diventi più forte, e va bene. Ma se sotto c’è una zona ferma, l’esercizio le gira intorno. Alleni il corpo così com’è. Non gli insegni a stare in un altro modo.',
   },
 ]
 
@@ -135,12 +138,12 @@ const MECHANISM_STEPS = [
   {
     k: '01',
     t: 'Prima cambia la postura. Poi arriva il dolore',
-    b: 'Prima del dolore, il petto non si apre, la testa non sta sopra le spalle e il bacino non è dritto. Quello che senti arriva dopo.',
+    b: 'Prima del dolore, il petto non si apre, la testa non sta sopra le spalle, il bacino non è dritto. Quello che senti arriva dopo.',
   },
   {
     k: '02',
     t: 'Fa male in un punto. Il motivo è un altro',
-    b: 'Il bruciore in mezzo alla schiena è il muscolo che ti regge tutto il giorno. Il collo duro sorregge una schiena chiusa. Se fa male sempre dallo stesso lato, carichi sempre da lì.',
+    b: 'Il bruciore in mezzo alla schiena è il muscolo che ti regge tutto il giorno. Il collo duro sorregge una schiena chiusa. Se fa male sempre dallo stesso lato, è da lì che carichi.',
   },
   {
     k: '03',
@@ -149,7 +152,7 @@ const MECHANISM_STEPS = [
   },
   {
     k: '04',
-    t: 'L’osso resta così. Quello che si muove, se aspetti, si blocca',
+    t: 'L’osso resta. Quello che si muove, se aspetti, si blocca',
     b: 'Se la curva è diventata osso, resta. Te lo diciamo subito. Schiena, costole, bacino, anche e piedi, quasi sempre, si muovono ancora. Si lavora lì. Più aspetti, più si irrigidiscono.',
   },
 ]
@@ -162,7 +165,7 @@ const BENEFITS = [
     alt: 'Lavoro su collo e spalle in studio',
     eyebrow: 'La foto di lato',
     title: 'In foto torni a sembrare te',
-    body: 'Testa sopra le spalle, petto più aperto. Quell’aria stanca che vedi di lato si attenua. Molte volte non sono gli anni. È la posizione in cui stai tutto il giorno, anche quando non ci pensi.',
+    body: 'Testa sopra le spalle, petto aperto. Quell’aria stanca di lato si vede meno. Spesso non sono gli anni. È come stai tutto il giorno.',
   },
   {
     icon: Clock,
@@ -170,8 +173,8 @@ const BENEFITS = [
     imageClassName: 'object-center',
     alt: 'Trattamento osteopatico sulla schiena',
     eyebrow: 'Il bruciore della sera',
-    title: 'Quel punto può mollare',
-    body: 'Il bruciore in mezzo alla schiena è il muscolo che ti regge fino a sera. Se la schiena ricomincia a sostenersi da sola, quel muscolo non deve più stare teso tutto il giorno. Il fastidio che conoscevi a memoria si fa vedere meno spesso.',
+    title: 'La sera, quel punto molla',
+    body: 'Quel bruciore è il muscolo che ti regge fino a sera. Se la schiena torna a sostenersi da sola, il muscolo può smettere. Il fastidio che conoscevi a memoria si fa vedere meno.',
   },
   {
     icon: Repeat,
@@ -180,7 +183,7 @@ const BENEFITS = [
     alt: 'Visita posturale in studio a Torino',
     eyebrow: 'Ti tiri su, e ricadi',
     title: 'Stai dritto senza tenerti su',
-    body: 'Oggi ci resti un minuto, poi il corpo ricade. Quando schiena e costole si riaprono, stare dritto ha un appoggio. Non lo tieni con la volontà. Ci arrivi, e ci resti più a lungo.',
+    body: 'Oggi ci resti un minuto, poi ricadi. Quando schiena e costole si riaprono, stare dritto ha un appoggio. Non lo tieni con la volontà. Ci arrivi da solo, e ci resti più a lungo.',
   },
   {
     icon: Archive,
@@ -189,7 +192,7 @@ const BENEFITS = [
     alt: 'Seduta in studio per la postura',
     eyebrow: 'Correttore, cuscino, sedia',
     title: 'Li togli, e non ricadi',
-    body: 'Finché li usi, un po’ ti tengono. Appena li togli, torni come prima. Se la schiena si riapre e il bacino torna dritto, il lavoro lo fa il corpo. Il pezzo esterno smette di essere l’unico modo per stare su.',
+    body: 'Finché li usi, ti tengono loro. Li togli, e torni come prima. Se la schiena si riapre e il bacino torna dritto, ti tiene il corpo. Non un pezzo comprato.',
   },
   {
     icon: ScanSearch,
@@ -197,8 +200,8 @@ const BENEFITS = [
     imageClassName: 'object-center',
     alt: 'Valutazione di schiena e bacino',
     eyebrow: 'La parola sul referto',
-    title: 'Sai se è osso o posizione',
-    body: 'Curva dell’osso o corpo inclinato. Scoliosi vera o schiena messa storta. Gamba corta o bacino girato. Si lavora solo sulla seconda. Alla prima visita te lo diciamo, con i tuoi esami in mano.',
+    title: 'Capisci se è osso o posizione',
+    body: 'Curva dell’osso, o corpo inclinato. Scoliosi vera, o schiena messa storta. Gamba corta, o bacino girato. Si lavora solo sulla seconda di ogni coppia. Alla prima visita te lo diciamo, con i tuoi esami in mano.',
   },
   {
     icon: Dumbbell,
@@ -206,8 +209,8 @@ const BENEFITS = [
     imageClassName: 'object-center',
     alt: 'Trattamento osteopatico sulla schiena',
     eyebrow: 'Ti alleni, e torni uguale',
-    title: 'In palestra, il lavoro resta',
-    body: 'Palestra, nuoto, ginnastica: continua. Diventare più forte serve. Su una schiena che si apre e su un bacino dritto, quello che alleni resta. Su una zona ferma, lo perdi appena smetti.',
+    title: 'Quello che alleni, resta',
+    body: 'Palestra, nuoto, ginnastica: continua. La forza serve. Su una schiena che si apre e su un bacino dritto, quello che alleni resta. Su una zona ferma, lo perdi appena smetti.',
   },
 ]
 
@@ -216,7 +219,7 @@ const AFTER_IMAGES_BENEFITS = [
     <strong className="font-bold">Prima visita</strong>: ti diciamo cosa si muove ancora, e cosa è osso
   </>,
   <>
-    <strong className="font-bold">3 sedute</strong>: solo su quella parte, non su un programma uguale per tutti
+    <strong className="font-bold">3 sedute</strong>: solo su quella parte. Niente programma uguale per tutti
   </>,
   <>
     <strong className="font-bold">App</strong>: pochi esercizi, così a casa non torni dov’eri
@@ -231,21 +234,21 @@ const ENTRY_DOORS = [
     id: 'lista',
     kicker: 'Tiene il posto',
     title: 'Mettiti in lista',
-    lead: 'Per chi si è già riconosciuto. Il percorso sta per partire, e il posto del mese va a chi lascia nome e numero prima.',
+    lead: 'Per chi si è già riconosciuto. Il percorso sta per partire. Il posto del mese va a chi lascia nome e numero prima.',
     points: [
       'Oggi non paghi. Lasci nome e numero, e basta.',
-      'Ti richiamiamo noi e ti confermiamo 299€ invece di 600€.',
-      'Se il mese è pieno, il posto è di chi è arrivato prima di te.',
+      'Ti richiamiamo noi. Ti confermiamo 299€ invece di 600€.',
+      'Se il mese è pieno, il posto è di chi è arrivato prima.',
     ],
   },
   {
     id: 'consulto',
     kicker: 'Se ti resta un dubbio',
     title: 'Fatti dire se è il tuo caso',
-    lead: 'Una telefonata gratis. Non per convincerti: per dirti se la tua situazione si può risolvere con questo percorso.',
+    lead: 'Una telefonata gratis. Non per convincerti. Per dirti se ha senso farlo così, nel tuo caso.',
     points: [
-      'Ti richiamiamo noi. Non è una visita e non è un video.',
-      'Se non ha senso farlo così, te lo diciamo. Non ti vendiamo niente.',
+      'Ti richiamiamo noi. Non è una visita, e non è un video.',
+      'Se non ha senso, te lo diciamo. Non ti vendiamo niente.',
       'Se invece sì, da quella telefonata entri in lista.',
     ],
   },
@@ -255,12 +258,12 @@ const AFTER_ENTRY = [
   {
     k: '01',
     t: 'Lasci nome e numero',
-    b: 'Dalla lista o dalla telefonata. In tutti e due i casi oggi non parte nessun pagamento.',
+    b: 'Lista o telefonata: è lo stesso gesto. Oggi non parte nessun pagamento.',
   },
   {
     k: '02',
     t: 'Ti richiamiamo noi',
-    b: 'Sede, prezzo, e se questo mese c’è ancora posto. Non resti ad aspettare una mail.',
+    b: 'Sede, prezzo, e se questo mese c’è ancora posto. Non aspetti una mail.',
   },
   {
     k: '03',
@@ -279,10 +282,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Se hai già capito che è il tuo caso, premi il verde: ti mette in lista. Il percorso sta per
-        partire, ogni mese i posti sono pochi e li prende chi si iscrive prima. Se invece ti resta
-        un dubbio, premi l’altro: è una telefonata gratis, ti richiamiamo e ti diciamo se ha senso
-        farlo così. In nessuno dei due paghi oggi.
+        Se hai già capito che è il tuo caso, premi il verde: entri in lista. Il percorso sta per
+        partire. Ogni mese i posti sono pochi, e li prende chi si iscrive prima. Se ti resta un
+        dubbio, premi l’altro: è una telefonata gratis. Ti richiamiamo e ti diciamo se ha senso
+        farlo così. In nessuno dei due casi paghi oggi.
       </>
     ),
   },
@@ -295,10 +298,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        No, e non fidarti di chi te lo promette prima ancora di averti visto. Una parte della curva
-        può essere diventata osso, e quella non si cambia con le mani. Si lavora sulla parte che si
-        muove ancora: le ossa della schiena, le costole, il bacino. Quanto migliori si vede strada
-        facendo, non il giorno in cui lasci il numero.
+        No. E non fidarti di chi te lo promette prima di averti visto. Una parte della curva può
+        essere diventata osso: quella non si cambia con le mani. Si lavora su quello che si muove
+        ancora: schiena, costole, bacino. Quanto migliori, lo vedi strada facendo. Non il giorno in
+        cui lasci il numero.
       </>
     ),
   },
@@ -313,11 +316,11 @@ const FAQ_ITEMS = [
       <>
         Sono le due frasi che chiudono il discorso troppo presto. La scoliosi vera è dell’osso: la
         curva resta anche quando ti pieghi in avanti, e si vede sulla lastra. Molte volte, invece,
-        il corpo si è solo inclinato per stare in equilibrio, e quando ti chini la storta si
-        riduce. Di solito parte dal bacino, da un’anca o da come appoggi il piede. Anche «ho una
-        gamba più corta» quasi sempre non è vero: le gambe sono uguali, ed è il bacino che si è
-        girato. La gamba davvero più corta si misura con una lastra, e sono i casi pochi. La visita
-        serve proprio a questo, con i tuoi esami in mano.
+        il corpo si è solo inclinato per stare in equilibrio. Ti chini, e la storta si riduce. Di
+        solito parte dal bacino, da un’anca, o da come appoggi il piede. Anche «ho una gamba più
+        corta», quasi sempre, non è vero: le gambe sono uguali, è il bacino che si è girato. La
+        gamba davvero più corta si misura con una lastra, e sono pochi casi. La visita serve a
+        questo, con i tuoi esami in mano.
       </>
     ),
   },
@@ -330,11 +333,11 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        Continua pure, perché diventare più forte serve, e il sollievo che senti è vero. Il punto è
-        un altro: se una zona è ferma, l’esercizio le gira intorno, e il massaggio scioglie il
-        muscolo che sta facendo il lavoro al posto suo. Non tocca il motivo per cui quel muscolo si
-        affatica. Qui si comincia rimettendo in movimento quella zona. Poi l’app ti aiuta a tenere
-        quello che si è mosso, nei giorni in cui non sei in studio.
+        Continua. Diventare più forte serve, e il sollievo che senti è vero. Il punto è un altro.
+        Se una zona è ferma, l’esercizio le gira intorno. Il massaggio scioglie il muscolo che sta
+        lavorando al posto suo, e non tocca il motivo per cui si affatica. Qui si comincia
+        rimettendo in movimento quella zona. Poi l’app ti aiuta a tenere quello che si è mosso, nei
+        giorni in cui non sei in studio.
       </>
     ),
   },
@@ -347,10 +350,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        È il momento migliore per guardarci, perché c’è ancora più spazio per lavorare. Una schiena
-        che si chiude, una testa che sta avanti o un bacino inclinato, oggi, sono la schiena dura,
-        il fiato corto e il dolore di domani. Non è solo una questione di specchio. È lo stesso
-        problema, visto prima che inizi a farti male.
+        È il momento migliore per venire: c’è ancora spazio per lavorare. Una schiena chiusa, una
+        testa in avanti, un bacino inclinato. Oggi sono lo specchio. Domani sono la schiena dura, il
+        fiato corto, il dolore. Non è solo una questione di foto. È lo stesso problema, visto prima
+        che faccia male.
       </>
     ),
   },
@@ -363,11 +366,10 @@ const FAQ_ITEMS = [
     ),
     answer: (
       <>
-        C’è una prima visita, in cui capiamo il tuo caso. Poi ci sono 3 sedute con l’osteopata,
-        fatte su quello che abbiamo trovato, non su un programma uguale per tutti. E c’è l’app, con
-        un piano semplice da seguire a casa. Il prezzo pieno è 600€, il percorso è 299€. Oggi non
-        paghi: o entri in lista, o chiedi la telefonata. Il prezzo te lo confermiamo quando ti
-        richiamiamo.
+        Una prima visita, per capire il tuo caso. Poi 3 sedute con l’osteopata, su quello che abbiamo
+        trovato: non un programma uguale per tutti. E l’app, con un piano semplice da fare a casa.
+        Il prezzo pieno è 600€. Il percorso è 299€. Oggi non paghi: o entri in lista, o chiedi la
+        telefonata. Il prezzo te lo confermiamo quando ti richiamiamo.
       </>
     ),
   },
@@ -376,10 +378,10 @@ const FAQ_ITEMS = [
     question: <>L’app è un altro video da guardare?</>,
     answer: (
       <>
-        No. Dopo la visita trovi pochi esercizi e delle video lezioni scelte sulla tua situazione,
-        non due movimenti presi a caso da internet. Li fai a casa o in pausa, quando puoi. L’app non
-        sostituisce le 3 sedute. Serve perché, nelle ore in cui nessuno ti mette le mani addosso, il
-        corpo non torni da solo nella posizione di prima.
+        No. Dopo la visita trovi pochi esercizi e delle video lezioni scelte sulla tua situazione.
+        Non due movimenti presi da internet. Li fai a casa, o in pausa, quando puoi. L’app non
+        sostituisce le 3 sedute. Serve nelle ore in cui nessuno ti mette le mani addosso, perché il
+        corpo non torni da solo dov’era.
       </>
     ),
   },
@@ -394,10 +396,10 @@ const FAQ_ITEMS = [
       <>
         Vai prima dal medico se non controlli più la pipì o le feci. Se un braccio o una gamba
         diventa più debole di giorno in giorno. Se il dolore di notte cresce e stai perdendo peso.
-        Se hai la febbre insieme al dolore.         Se in poche settimane un lato del corpo è diventato molto
-        più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi bene, non
-        parli bene o non hai forza. In questi casi, prima il medico. Poi, se serve, si vede il
-        resto.
+        Se hai la febbre insieme al dolore. Se in poche settimane un lato del corpo è diventato
+        molto più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi
+        bene, non parli bene o non hai forza. In questi casi, prima il medico. Poi, se serve, si
+        vede il resto.
       </>
     ),
   },
@@ -494,7 +496,7 @@ function YtPostura() {
     }
 
     const description =
-      'Ti tiri su e dopo un minuto sei di nuovo giù. Non è pigrizia: una parte del corpo non si muove più, e il resto si sposta per tenerla su. Qui ti spieghiamo perché, con parole semplici. Poi scegli: lista d’attesa a 299€ invece di 600€, oppure una telefonata gratis. Oggi non paghi.'
+      'Ti tiri su e dopo un minuto sei di nuovo giù. Non è pigrizia: una parte del corpo non si muove più, e il resto si sposta per tenerla su. Lista d’attesa a 299€ invece di 600€, oppure una telefonata gratis. Oggi non paghi.'
 
     // Standard SEO
     ensureMetaByName('description', description)
@@ -708,34 +710,10 @@ function YtPostura() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'Posso già prenotare?',
+              name: 'Quale dei due bottoni è il mio?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'No. Sta per partire. Col bottone verde ti metti in lista. Non paghi ora. La segreteria ti richiama il prima possibile. Ogni mese prendiamo poche persone. I posti vanno a chi si iscrive prima.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Il video mostra un pezzo. Il percorso guarda tutto?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Sì. Collo, schiena e spalle spesso sono la stessa storia: le ore di ogni giorno. La visita guarda te. Le 3 sedute seguono quella.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Cosa c’è nei 299 euro?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Tre cose. Una prima visita. 3 sedute dall’osteopata. L’app, con un piano preciso fatto per te. Il prezzo pieno è 600 euro. Oggi non paghi: ti metti in lista.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Ho già fatto fisioterapia o posturale.',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Bene. Continua. Se una zona è bloccata, l’esercizio spesso le gira intorno. Noi prima la sblocchiamo. Poi l’app ti aiuta a tenerla quando non sei in studio.',
+                text: 'Se hai già capito che è il tuo caso, premi il verde: entri in lista. Il percorso sta per partire. Ogni mese i posti sono pochi, e li prende chi si iscrive prima. Se ti resta un dubbio, l’altro bottone è una telefonata gratis. Ti richiamiamo e ti diciamo se ha senso farlo così. In nessuno dei due casi paghi oggi.',
               },
             },
             {
@@ -743,15 +721,47 @@ function YtPostura() {
               name: 'Mi raddrizzate?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'No. Non è una soluzione magica. È per chi è stanco di rimandare. Una parte può restare così. Lavoriamo su quello che si muove ancora. Quanto migliori, lo vedi strada facendo.',
+                text: 'No. Una parte della curva può essere diventata osso: quella non si cambia con le mani. Si lavora su quello che si muove ancora: schiena, costole, bacino. Quanto migliori, lo vedi strada facendo. Non il giorno in cui lasci il numero.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Come funziona l’app?',
+              name: 'Nel referto c’è scoliosi, o mi hanno detto che ho una gamba corta.',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Dopo la visita hai un piano preciso: video lezioni e videocorsi fatti per te. Li guardi a casa o in pausa. L’app non sostituisce le 3 sedute. Serve a non restare solo fuori studio.',
+                text: 'La scoliosi vera è dell’osso: la curva resta anche quando ti pieghi in avanti, e si vede sulla lastra. Molte volte il corpo si è solo inclinato per stare in equilibrio. Anche «ho una gamba più corta», quasi sempre, non è vero: le gambe sono uguali, è il bacino che si è girato. La visita serve a dirti quale dei due è il tuo caso.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Faccio già palestra, posturale o fisioterapia.',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Continua. Diventare più forte serve. Se una zona è ferma, l’esercizio le gira intorno. Qui si comincia rimettendo in movimento quella zona. Poi l’app ti aiuta a tenere quello che si è mosso, nei giorni in cui non sei in studio.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Non ho dolore. Mi dà fastidio solo come mi vedo.',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'È il momento migliore per venire: c’è ancora spazio per lavorare. Una schiena chiusa, una testa in avanti, un bacino inclinato. Oggi sono lo specchio. Domani sono la schiena dura, il fiato corto, il dolore.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Cosa c’è nei 299€?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Una prima visita, per capire il tuo caso. Poi 3 sedute con l’osteopata, su quello che abbiamo trovato. E l’app, con un piano semplice da fare a casa. Il prezzo pieno è 600€. Il percorso è 299€. Oggi non paghi. Il prezzo te lo confermiamo quando ti richiamiamo.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'L’app è un altro video da guardare?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'No. Dopo la visita trovi pochi esercizi e delle video lezioni scelte sulla tua situazione. Li fai a casa, o in pausa, quando puoi. L’app non sostituisce le 3 sedute. Serve perché, nelle ore in cui nessuno ti mette le mani addosso, il corpo non torni da solo dov’era.',
               },
             },
             {
@@ -759,7 +769,7 @@ function YtPostura() {
               name: 'Quando devo andare prima dal medico?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Se non controlli pipì o feci. Se un braccio o una gamba perde forza ogni giorno. Se il dolore di notte cresce e perdi peso. Se hai febbre. Se da poche settimane un lato è molto più storto. In quei casi, prima il medico.',
+                text: 'Vai prima dal medico se non controlli più la pipì o le feci. Se un braccio o una gamba diventa più debole di giorno in giorno. Se il dolore di notte cresce e stai perdendo peso. Se hai la febbre insieme al dolore. Se in poche settimane un lato del corpo è diventato molto più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi bene, non parli bene o non hai forza. In questi casi, prima il medico.',
               },
             },
           ],
@@ -905,8 +915,8 @@ function YtPostura() {
         >
           <span className="inline-flex items-center gap-2 sm:gap-2.5 min-w-0">
             <Phone className={`${iconCls} shrink-0`} strokeWidth={2.5} />
-            <span className="sm:hidden">Consulenza gratis</span>
-            <span className="hidden sm:inline whitespace-nowrap">Consulenza gratuita</span>
+            <span className="sm:hidden">Telefonata gratis</span>
+            <span className="hidden sm:inline whitespace-nowrap">Telefonata gratis</span>
           </span>
           <span
             className={`grid place-items-center rounded-full bg-blue-dark text-cream shrink-0 ${arrowCls}`}
@@ -1023,16 +1033,16 @@ function YtPostura() {
             transition={{ duration: 0.5, delay: 0.14 }}
             className="text-cream/60 text-lg sm:text-lg leading-relaxed max-w-2xl sm:mx-auto mb-10 sm:mb-12 font-medium"
           >
-            Lo fai tutti i giorni, anche se non te ne accorgi. Ti tiri su, apri le spalle, sistemi
-            la testa. Per un attimo ci sei. Poi riprendi il telefono, il lavoro o la macchina, e
-            torni storto come prima. Se ti è già successo, non sei pigro e non ti manca la volontà.
+            Lo fai ogni giorno. Ti tiri su, apri le spalle, sistemi la testa. Per un attimo ci sei.
+            Poi riprendi il telefono, il lavoro o la macchina, e torni storto. Non sei pigro. Ti
+            manca il movimento, non la voglia.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.18 }}
-            className="relative w-full max-w-3xl sm:mx-auto mb-6 sm:mb-12"
+            className="relative w-full max-w-3xl sm:mx-auto mb-6 sm:mb-8"
             style={{
               y: heroMediaY,
               rotateX: heroMediaRotateX,
@@ -1120,16 +1130,21 @@ function YtPostura() {
             transition={{ duration: 0.45, delay: 0.24 }}
             className="flex flex-col items-center gap-4 sm:gap-8 w-full min-w-0"
           >
-            <ul className="w-full max-w-xl min-w-0 px-4 sm:px-5 space-y-2.5 sm:space-y-3.5 text-left">
+            <p className="m-0 max-w-xl px-4 text-center text-cream font-black text-xl sm:text-2xl leading-snug tracking-tight">
+              Nel video abbiamo studiato il problema.
+              <br />
+              <span className="text-green">Adesso vediamo come risolverlo.</span>
+            </p>
+            <ul className="w-full max-w-2xl min-w-0 px-4 sm:px-5 space-y-3 sm:space-y-4 text-left">
               {HERO_BENEFITS.map((benefit, i) => (
                 <motion.li
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.28 + i * 0.08 }}
-                  className="flex items-center gap-3 min-w-0"
+                  className="flex items-start gap-3 min-w-0"
                 >
-                  <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
+                  <span className="grid place-items-center w-6 h-6 rounded-full bg-green shrink-0 mt-0.5 shadow-[0_0_20px_rgba(114,250,147,0.25)]">
                     <Check className="w-3.5 h-3.5 text-blue-dark" strokeWidth={3} />
                   </span>
                   <span className="min-w-0 flex-1 text-cream/85 text-base sm:text-base leading-snug font-medium break-words">
@@ -1168,20 +1183,19 @@ function YtPostura() {
                   <span>Via Lamarmora 35, Torino (Crocetta)</span>
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-2 max-w-md text-center">
-                <p className="m-0 text-cream/80 text-[15px] sm:text-base leading-snug">
-                  Il bottone verde ti mette in lista, e oggi non paghi. Il percorso sta per partire:
-                  ogni mese i posti sono pochi, e li prende chi arriva prima.
-                </p>
-                <p className="m-0 text-cream/80 text-[15px] sm:text-base leading-snug">
-                  La consulenza è una telefonata gratis. Serve a capire se la tua situazione si può
-                  risolvere con questo percorso. Lasci nome e numero, ti richiamiamo noi.
-                </p>
-              </div>
             </div>
 
-            <div className="flex justify-center w-full mt-2 sm:mt-0">
+            <div className="flex flex-col items-center gap-3 sm:gap-4 w-full mt-2 sm:mt-0">
               <CtaPair size="lg" />
+              <div className="flex flex-col items-center gap-2 max-w-2xl px-4 text-center">
+                <p className="m-0 text-cream/80 text-[15px] sm:text-base leading-snug">
+                  Il verde ti mette in lista: nome e numero, e il posto è tuo. Oggi non paghi.
+                </p>
+                <p className="m-0 text-cream/80 text-[15px] sm:text-base leading-snug">
+                  L’altro è una consulenza gratis. Parli con i responsabili dello studio: ti dicono
+                  se il percorso fa per te, e se la tua situazione si può risolvere qui.
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -1215,15 +1229,13 @@ function YtPostura() {
               Ti ci ritrovi?
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-3xl mb-4 sm:mb-5">
-              Ti fa male il collo, la schiena o la pancia.
-              <br />
-              <span className="text-green">La causa è quasi sempre un’altra.</span>
+              Ecco perché rimani storto.
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Il dolore lo senti in un punto solo, e pensi che il problema sia quello. Quasi sempre
-              è un’altra parte del corpo, che non si muove più come dovrebbe. Il punto che fa male
-              ne paga solo le conseguenze. Leggi le storie qui sotto. Se una è la tua, continua: ti
-              spieghiamo perché succede.
+              Quando ti fa male un punto, la cosa naturale è curare solo quello. Quasi sempre,
+              però, il problema non è lì: c’è un’altra parte del corpo che è ferma e non si muove
+              più, e il punto che senti si stanca perché deve lavorare anche per quella. Se una di
+              queste storie è la tua, continua.
             </p>
           </motion.div>
 
@@ -1338,16 +1350,16 @@ function YtPostura() {
             className="max-w-3xl mb-12 lg:mb-16"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-green/40 bg-green px-5 py-2.5 sm:py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.22em] shadow-[0_0_24px_rgba(114,250,147,0.25)] mb-4 sm:mb-5">
-              Detto semplice
+              In parole povere
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4 sm:mb-5">
-              Inizialmente ti fa male un punto.
-              <span className="text-green"> Ma il resto del corpo compensa.</span>
+              Fa male in un punto.
+              <br />
+              <span className="text-green">Il resto del corpo compensa.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Se continui a curare solo il punto che brucia, stai meglio per un po’ e poi torna. Il
-              massaggio, la pastiglia e il correttore calmano il fastidio. Non tolgono il motivo per
-              cui quel fastidio si forma di nuovo, ogni giorno.
+              Se curi solo il punto che brucia, stai meglio un po’ e poi torna. Massaggio, pastiglia,
+              correttore: calmano il fastidio. Non tolgono il motivo per cui, ogni giorno, si riforma.
             </p>
           </motion.div>
 
@@ -1456,7 +1468,7 @@ function YtPostura() {
                 ))}
               </div>
               <figcaption className="px-4 py-3.5 sm:px-5 sm:py-4 text-center text-cream/55 text-sm leading-snug text-balance border-t border-cream/10">
-                Fa male su. Il motivo, molte volte, sta sotto.
+                Fa male sopra. Il motivo sta sotto.
               </figcaption>
               </div>
               </div>
@@ -1473,16 +1485,16 @@ function YtPostura() {
               <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/70 backdrop-blur-md px-5 py-5 sm:px-6 sm:py-6">
               <div className="text-cream/75 text-[15px] sm:text-lg leading-relaxed mb-6 lg:mb-7 space-y-4">
                 <p>
-                  La testa sta dritta solo se la schiena sotto è aperta. Se resti curvo per ore,
-                  il petto si chiude e le spalle cadono in avanti. Allora anche la testa va
-                  avanti, e il collo si irrigidisce per tenerla su.
+                  La testa sta dritta solo se la schiena sotto è aperta. Se resti curvo per ore, il
+                  petto si chiude e le spalle cadono in avanti. La testa le segue. Il collo si
+                  irrigidisce per tenerla su.
                 </p>
                 <p>
-                  Più in basso succede la stessa cosa. Se il bacino è inclinato in avanti, la
-                  pancia sporge anche se non è grassa. Se un fianco è più alto, quasi mai è una
-                  gamba corta: è il bacino che si è girato. Se il ginocchio cade verso l’interno,
-                  a spostarlo sono l’anca e il piede. E se ti sei messo storto per un dolore, puoi
-                  restare così anche quando il dolore è passato.
+                  Più in basso è la stessa storia. Bacino inclinato in avanti: la pancia sporge, anche
+                  se non è grassa. Un fianco più alto: quasi mai è una gamba corta. È il bacino
+                  che si è girato. Il ginocchio che cade in dentro lo spostano l’anca e il piede. E
+                  se ti sei messo storto per un dolore, puoi restare così anche quando il dolore è
+                  passato.
                 </p>
               </div>
 
@@ -1517,7 +1529,7 @@ function YtPostura() {
                   />
                   <p className="text-cream/90 font-medium text-[15px] sm:text-lg leading-relaxed pl-2">
                     Chi ti promette di raddrizzarti prima di averti visto, ti sta prendendo in giro.
-                    <span className="text-green"> Noi ti diciamo subito dove intervenire per risolvere il problema. E dove non serve.</span>
+                    <span className="text-green"> Noi ti diciamo dove si può intervenire. E dove non serve.</span>
                   </p>
                 </blockquote>
               </div>
@@ -1542,13 +1554,13 @@ function YtPostura() {
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight max-w-3xl mb-4 sm:mb-5">
               Non devi più tenerti su.
               <br />
-              <span className="text-green">Il corpo ci resta da solo.</span>
+              <span className="text-green">Resta dritto da solo.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Sono le risposte alle storie di sopra. Non arrivano tutte, e non arrivano il giorno in
-              cui lasci il numero. Se una parte è diventata osso, resta: te lo diciamo alla prima
-              visita. Se schiena, costole, bacino o piedi si muovono ancora, il lavoro è lì. E queste
-              cose possono tornare, strada facendo.
+              Non è uguale per tutti, e non deve esserlo. Se una parte è diventata osso, resta: te lo
+              diciamo alla prima visita. Se schiena, costole, bacino o piedi si muovono ancora, il
+              lavoro è lì. Queste cose possono tornare. Non il giorno in cui lasci il numero. Strada
+              facendo.
             </p>
           </motion.div>
 
@@ -1610,7 +1622,7 @@ function YtPostura() {
           >
             <div className="rounded-[calc(1.35rem-1px)] bg-blue-dark/75 backdrop-blur-md px-5 py-5 sm:px-7 sm:py-7">
               <p className="text-cream font-black text-lg sm:text-xl leading-snug mb-1 mt-0">
-                Se alla visita ha senso, il percorso è questo.
+                Se la visita dice sì, il percorso è questo.
               </p>
               <p className="text-cream/50 text-sm sm:text-[15px] leading-relaxed mb-5 sm:mb-6">
                 Oggi non paghi. Il prezzo te lo confermiamo quando ti richiamiamo.
@@ -1669,10 +1681,9 @@ function YtPostura() {
               <span className="text-green">hanno già smesso di provare a caso.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Siamo lo studio di osteopatia più recensito d’Italia. Leggile con calma, sono storie
-              di gente che era già passata dal massaggio, dalla palestra e dalle pastiglie. Poi,
-              se ti sei riconosciuto, non restare a metà pagina: più sotto scegli uno dei due
-              bottoni.
+              Siamo lo studio di osteopatia più recensito d’Italia. Non sono storie di chi ha provato
+              una cosa sola. Sono di gente già passata dal massaggio, dalla palestra e dalle
+              pastiglie.
             </p>
           </motion.div>
         </div>
@@ -1787,10 +1798,8 @@ function YtPostura() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
           <p className="text-cream/70 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
-            Se hai capito che è il tuo caso e vuoi il posto, entra in lista con il bottone verde.
-            Se invece vuoi che qualcuno ti dica se ha senso per te, prima di decidere, chiedi la
-            telefonata gratis. In tutti e due i casi fai la stessa cosa: lasci nome e numero. Oggi
-            non paghi niente.
+            Se è il tuo caso, entra in lista. Se ti resta un dubbio, chiedi la telefonata. In tutti e
+            due i casi lasci nome e numero. Oggi non paghi.
           </p>
           <div className="flex justify-center">
             <CtaPair />
@@ -1831,9 +1840,9 @@ function YtPostura() {
               <span className="text-green">Uno solo ti tiene il posto.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Il verde è la lista. Ogni mese i posti sono pochi, e li prende chi lascia nome e
-              numero prima. L’altro è una telefonata gratis: serve se ti resta un dubbio, e ti
-              diciamo noi se questo percorso ha senso. Oggi non paghi, né di qua né di là.
+              Il verde è la lista. Ogni mese i posti sono pochi: li prende chi lascia nome e numero
+              prima. L’altro è una telefonata gratis, se ti resta un dubbio. Ti diciamo noi se questo
+              percorso ha senso. Oggi non paghi, né con la lista né con la telefonata.
             </p>
           </motion.div>
 
@@ -1914,7 +1923,7 @@ function YtPostura() {
                           ) : (
                             <Phone className="w-5 h-5 shrink-0" strokeWidth={2.5} />
                           )}
-                          <span>{isList ? 'Mettiti in lista' : 'Consulenza gratis'}</span>
+                          <span>{isList ? 'Mettiti in lista' : 'Telefonata gratis'}</span>
                         </span>
                         <span
                           className={`grid place-items-center w-11 h-11 rounded-full shrink-0 ${
@@ -1958,7 +1967,7 @@ function YtPostura() {
           </div>
 
           <p className="text-cream/75 text-base sm:text-lg leading-relaxed max-w-2xl mt-8 sm:mt-10 mb-8">
-            Se ti sei riconosciuto, il passo è uno: lasci nome e numero. Il posto di questo mese lo
+            Se ti sei riconosciuto, il passo è uno. Lasci nome e numero. Il posto di questo mese lo
             prende chi entra prima.
           </p>
 
@@ -2000,9 +2009,8 @@ function YtPostura() {
               <span className="text-green"> Torino</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              San Donato e Crocetta. Quando ti richiamiamo, scegli tu la sede che ti viene più
-              comoda. Ci arrivi in metro, in bus o in macchina, e il posto in lista non dipende da
-              quale delle due ti è più vicina.
+              San Donato e Crocetta. Quando ti richiamiamo, scegli la sede che ti viene meglio. Metro,
+              bus o macchina: il posto in lista non dipende da quale delle due ti è più vicina.
             </p>
           </motion.div>
 
@@ -2053,7 +2061,7 @@ function YtPostura() {
           </div>
 
           <p className="text-cream/65 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto text-center my-10 sm:my-12">
-              In metro. San Donato: Bernini o Principi d’Acaja. Crocetta: fermata Crocetta.
+              In metro. San Donato: Bernini o Principi d’Acaja. Crocetta: la fermata Crocetta.
           </p>
 
           <div className="p-[1px] rounded-[1.35rem] bg-[linear-gradient(145deg,rgba(244,244,244,0.16)_0%,rgba(244,244,244,0.05)_50%,rgba(114,250,147,0.14)_100%)]">
@@ -2066,7 +2074,7 @@ function YtPostura() {
                   Parcheggio vicino a entrambe le sedi
                 </p>
                 <p className="text-cream/55 text-xs sm:text-sm mt-0.5">
-                  Parcheggi nelle vicinanze e strisce blu
+                  Strisce blu e parcheggi intorno
                 </p>
               </div>
             </div>
@@ -2106,12 +2114,13 @@ function YtPostura() {
               Prima di scegliere
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Le domande che ti frenano,
-              <span className="text-green"> dette una per una.</span>
+              Le domande che ti fermano.
+              <br />
+              <span className="text-green">Con una risposta secca.</span>
             </h2>
             <p className="text-cream/60 text-base sm:text-lg leading-relaxed max-w-2xl">
-              Aprine una. Se dopo averle lette ti resta un dubbio, è proprio per quello che c’è la
-              telefonata. Se invece ti sono chiare, il bottone verde è il passo giusto.
+              Aprine una. Se dopo ti resta un dubbio, è per questo che c’è la telefonata. Se ti sono
+              chiare, il verde è il passo giusto.
             </p>
           </motion.div>
 
@@ -2207,9 +2216,8 @@ function YtPostura() {
             transition={{ duration: 0.45 }}
             className="mt-10 sm:mt-12 text-cream/65 text-base sm:text-lg leading-relaxed text-left max-w-2xl"
           >
-            Se hai un dubbio, chiedi la telefonata. Se hai già deciso, mettiti in lista. Ti
-            richiamiamo il prima possibile. Oggi non parte nessun pagamento, e i posti di questo
-            mese li prende chi entra prima.
+            Un dubbio: chiedi la telefonata. Hai già deciso: mettiti in lista. Ti richiamiamo il prima
+            possibile. Oggi non paghi. I posti di questo mese li prende chi entra prima.
           </motion.p>
 
           <div className="mt-8 sm:mt-10 flex justify-center">
