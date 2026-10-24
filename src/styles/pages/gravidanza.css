@@ -594,3 +594,5 @@
 @media (max-width: 479px) {
   .mx-grav-btn { padding: 0 18px; font-size: 0.9rem; letter-spacing: 0.01em; gap: 10px; }
 }
+
+.mx-page.mx-grav strong, .mx-page.mx-grav b { color: inherit; }

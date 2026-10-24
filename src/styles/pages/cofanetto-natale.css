@@ -741,3 +741,17 @@
   .mx-xmas-foot { padding-bottom: 60px; }
   .mx-xmas-foot__grid { grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
 }
+
+/* Titolo che va a capo senza allargare la griglia */
+.mx-xmas-hero__grid { grid-template-columns: minmax(0, 1fr); }
+.mx-xmas-hero__title .mx-mask { white-space: normal; text-wrap: balance; }
+
+@layer base {
+  .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(2.2rem, 10.4vw, 4.6rem) !important; line-height: 0.98; }
+  @media (min-width: 1024px) {
+    .mx-xmas-hero__grid { grid-template-columns: 1.05fr 0.95fr; }
+    .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(2.6rem, 4.6vw, 4.8rem) !important; }
+  }
+}
+
+.mx-xmas-pain b, .mx-xmas-faq b, .mx-xmas-tag b { color: inherit; }
