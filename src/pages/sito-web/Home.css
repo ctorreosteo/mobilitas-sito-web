@@ -2000,7 +2000,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
   .mx-collage__b { width: 66%; height: 46%; }
   .mx-collage__label { left: 0; bottom: 6%; font-size: 0.78rem; padding: 12px 18px; }
 
-  .mx-touch { padding: 64px 0 56px; }
+  .mx-touch { padding: 64px 0 120px; }
   .mx-touch__copy { min-height: 196px; }
   .mx-touch__spine { transform: scale(0.6); margin: -92px 0; }
   .mx-touch__action { min-height: 150px; }

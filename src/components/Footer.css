@@ -289,7 +289,7 @@
 
 @media (max-width: 1023px) {
   /* Spazio per il bottone WhatsApp flottante */
-  .mx-footer__bottom { padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+  .mx-footer__bottom { padding-bottom: calc(124px + env(safe-area-inset-bottom)); }
 }
 
 .mx-footer__bottom-row {

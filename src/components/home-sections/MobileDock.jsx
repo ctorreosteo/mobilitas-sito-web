@@ -5,24 +5,15 @@ import { Vertebra } from './SpineProgress'
 import { EASE, MSG_CONSULTO, MSG_VISITA, SPINE_COUNT, openWhatsApp, useReadingProgress } from './homeMotion'
 
 // Barra fissa in basso su mobile: le due azioni sempre sotto il pollice,
-// e la colonna che si riallinea mentre leggi. Compare dopo l'hero e si fa da parte
-// sulla sezione "tieni premuto" e su quella finale, che hanno già le loro CTA.
-const overlapsViewport = (el) => {
-  if (!el) return false
-  const r = el.getBoundingClientRect()
-  return r.top < window.innerHeight * 0.8 && r.bottom > window.innerHeight * 0.2
-}
-
+// e la colonna che si riallinea mentre leggi. Entra al primo scroll verso il basso
+// e da lì resta sempre visibile.
 const MobileDock = () => {
   const progress = useReadingProgress()
   const { scrollY } = useScroll()
-  const [visible, setVisible] = useState(false)
+  const [shown, setShown] = useState(false)
 
   useMotionValueEvent(scrollY, 'change', (y) => {
-    const final = document.getElementById('mx-final')
-    const finalReached = final && final.getBoundingClientRect().top < window.innerHeight * 0.8
-    const onTouchSection = overlapsViewport(document.getElementById('mx-touch'))
-    setVisible(y > window.innerHeight * 0.9 && !finalReached && !onTouchSection)
+    if (!shown && y > scrollY.getPrevious() && y > 10) setShown(true)
   })
 
   return (
@@ -30,9 +21,10 @@ const MobileDock = () => {
       className="mx-dock"
       aria-label="Prenota"
       initial={false}
-      animate={{ y: visible ? 0 : 140, opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.5, ease: EASE }}
-      style={{ pointerEvents: visible ? 'auto' : 'none' }}
+      animate={{ y: shown ? 0 : 140, opacity: shown ? 1 : 0 }}
+      transition={{ duration: 0.6, ease: EASE }}
+      style={{ pointerEvents: shown ? 'auto' : 'none' }}
+      aria-hidden={!shown || undefined}
     >
       <div className="mx-dock__spine" aria-hidden="true">
         {Array.from({ length: SPINE_COUNT }, (_, i) => (
