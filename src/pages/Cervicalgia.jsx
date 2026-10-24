@@ -37,6 +37,8 @@ import {
 import { RECENSIONI_IMAGES } from '../data/recensioni'
 import BookingPopup from '../components/BookingPopup'
 import WhatsAppButton from '../components/WhatsAppButton'
+import { RECENSIONI_TOTALI } from '../data/studi'
+import GoogleReviewsLinks from '../components/GoogleReviewsLinks'
 
 // Allineamento default di tutti i testi della pagina
 const PAGE_TEXT_ALIGN = 'text-left'
@@ -609,9 +611,10 @@ function Cervicalgia() {
                 </div>
                 <div className={`${PAGE_TEXT_ALIGN} mt-2 flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2`}>
                   <p className="text-cream/60 text-sm">
-                    Scorri per vedere alcune delle 700+ recensioni ufficiali
+                    Scorri per vedere alcune delle oltre {RECENSIONI_TOTALI} recensioni ufficiali
                   </p>
                 </div>
+                <GoogleReviewsLinks className="mt-6" />
               </div>
             </motion.div>
 

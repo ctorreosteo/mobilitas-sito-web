@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { CheckCircle, Calendar } from 'lucide-react'
 import { useState } from 'react'
 import BookingPopup from './BookingPopup'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../GoogleReviewsLinks'
 
 export default function OfferSection() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -184,8 +186,9 @@ export default function OfferSection() {
               margin: 0,
               lineHeight: '1.4'
             }}>
-              Il nostro Studio Mobilitas ha 390+ recensioni Google con storie meravigliose sui nostri trattamenti
+              Il nostro Studio Mobilitas ha oltre {RECENSIONI_TOTALI} recensioni Google con storie meravigliose sui nostri trattamenti
             </p>
+            <GoogleReviewsLinks align="center" variant="light" className="mt-3" />
           </motion.div>
 
           {/* Treatment Title */}

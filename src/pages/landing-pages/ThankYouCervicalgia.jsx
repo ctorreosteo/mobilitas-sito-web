@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle, Phone, Mail, Star } from 'lucide-react'
 import { RECENSIONI_IMAGES } from '../../data/recensioni'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../../components/GoogleReviewsLinks'
 
 const CARD_WIDTH = 320
 const GAP = 16
@@ -239,8 +241,9 @@ export default function ThankYouCervicalgia() {
                 ))}
               </div>
               <p className="text-cream/60 text-sm text-center mt-2">
-                Scorri per vedere alcune delle 700+ recensioni ufficiali
+                Scorri per vedere alcune delle oltre {RECENSIONI_TOTALI} recensioni ufficiali
               </p>
+              <GoogleReviewsLinks align="center" className="mt-6" />
             </div>
           </motion.section>
         </div>

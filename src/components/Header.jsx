@@ -35,11 +35,14 @@ const Header = ({ topOffset = 0 }) => {
       const delta = y - lastY.current
       lastY.current = y
       setScrolled(y > 12)
+      // In cima e su desktop l'header è sempre visibile (anche dopo un salto, es. cambio pagina)
+      if (y < 240 || window.matchMedia('(min-width: 1024px)').matches) {
+        setHidden(false)
+        return
+      }
       // Salti grandi = scroll programmatico (es. ripristino alla chiusura del menu): non nascondere
       if (Math.abs(delta) > 400) return
-      // Su desktop l'header resta sempre visibile; si nasconde scendendo solo su schermi stretti
-      if (y < 240 || window.matchMedia('(min-width: 1024px)').matches) setHidden(false)
-      else if (delta > 6) setHidden(true)
+      if (delta > 6) setHidden(true)
       else if (delta < -6) setHidden(false)
     }
     onScroll()

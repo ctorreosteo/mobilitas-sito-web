@@ -1,7 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Star, ExternalLink, ArrowRight } from 'lucide-react'
+import { Star, ArrowRight } from 'lucide-react'
 import { RECENSIONI_IMAGES } from '../../data/recensioni'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../GoogleReviewsLinks'
 import { Counter, Kicker, MaskLines, Photo, Reveal } from './HomeKit'
 import { EASE, useParallax } from './homeMotion'
 
@@ -92,7 +94,7 @@ const TestimonialsSection = () => {
                 ))}
               </span>
               <span className="mx-body mx-small" style={{ display: 'block', marginTop: 8 }}>
-                su Google · oltre 600 storie vere
+                su Google · oltre {RECENSIONI_TOTALI} storie vere
               </span>
             </span>
           </Reveal>
@@ -111,17 +113,10 @@ const TestimonialsSection = () => {
       </div>
 
       <div className="mx-wrap">
-        <div style={{ marginTop: 40, textAlign: 'center' }}>
-          <a
-            className="mx-link"
-            href="https://www.google.com/search?q=mobilitas+recensioni"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Leggi le recensioni su Google
-            <ExternalLink size={16} />
-          </a>
-        </div>
+        <Reveal className="mx-reviews__cta">
+          <p className="mx-body">Leggi tutte le recensioni dei nostri due studi su Google</p>
+          <GoogleReviewsLinks align="center" />
+        </Reveal>
 
         <div style={{ marginTop: 'clamp(110px, 14vw, 200px)' }}>
           <Kicker>Il teatro della trasformazione</Kicker>
@@ -176,7 +171,7 @@ const TestimonialsSection = () => {
                         <Star key={s} size={16} />
                       ))}
                     </span>
-                    <strong>5.0/5</strong> · <span className="mx-accent">oltre 600 persone</span> hanno raccontato come la loro vita sia cambiata con il nostro aiuto
+                    <strong>5.0/5</strong> · <span className="mx-accent">oltre {RECENSIONI_TOTALI} persone</span> hanno raccontato come la loro vita sia cambiata con il nostro aiuto
                   </p>
                 )}
               </Reveal>

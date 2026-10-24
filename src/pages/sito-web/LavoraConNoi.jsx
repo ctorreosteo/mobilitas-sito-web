@@ -1,368 +1,560 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
+  Coins,
+  MapPin,
+  Rocket,
+  Zap,
+} from 'lucide-react'
+import PageShell from '../../components/site/PageShell'
+import FinalCta from '../../components/site/FinalCta'
+import { Kicker, MaskLines, Reveal, ScrollWords, Snap } from '../../components/home-sections/HomeKit'
+import { EASE, trackSpotlight, useParallax } from '../../components/home-sections/homeMotion'
+import '../../styles/pages/lavora-con-noi.css'
 
-const LavoraConNoi = () => {
-  const jobRoles = [
-    {
-      id: 'osteopata_tirocinante',
-      title: 'Osteopata Tirocinante',
-      type: 'Tirocinio',
-      location: 'In presenza',
-      image: '/lavori/osteo_tirocinante.png',
-      status: 'open'
-    },
-    {
-      id: 'osteopata_junior',
-      title: 'Osteopata Junior',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/osteo_junior.png',
-      status: 'open'
-    },
-    {
-      id: 'osteopata_senior',
-      title: 'Osteopata Senior',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/osteo_senior.png',
-      status: 'closed'
-    },
-    {
-      id: 'osteopata_leader',
-      title: 'Osteopata Team Leader o Manager',
-      type: 'Assunzione',
-      location: 'In presenza',
-      image: '/lavori/osteo_leader.png',
-      status: 'closed'
-    },
-    {
-      id: 'nutrizionista',
-      title: 'Nutrizionista',
-      type: 'Assunzione',
-      location: 'In presenza',
-      image: '/lavori/nutrizionista.png',
-      status: 'open'
-    },
-    {
-      id: 'segretaria',
-      title: 'Segretaria Generale',
-      type: 'Assunzione',
-      location: 'In presenza',
-      image: '/lavori/segretaria.png',
-      status: 'closed'
-    },
-    {
-      id: 'commerciale',
-      title: 'Commerciale',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/commerciale.png',
-      status: 'closed'
-    },
-    {
-      id: 'pilates',
-      title: 'Istruttore Pilates',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/pilates.png',
-      status: 'closed'
-    },
-    {
-      id: 'personal-trainer',
-      title: 'Personal Trainer',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/pt.png',
-      status: 'closed'
-    },
-    {
-      id: 'video-maker',
-      title: 'Video Maker',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/video_maker.jpg',
-      status: 'closed'
-    },
-    {
-      id: 'social-media-manager',
-      title: 'Social Media Manager',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/smm.png',
-      status: 'closed'
-    },
-    {
-      id: 'marketer-full-stack',
-      title: 'Marketer Full Stack',
-      type: 'Partita iva',
-      location: 'In presenza',
-      image: '/lavori/marketer.png',
-      status: 'closed'
+const jobRoles = [
+  {
+    id: 'osteopata_tirocinante',
+    title: 'Osteopata Tirocinante',
+    type: 'Tirocinio',
+    location: 'In presenza',
+    image: '/lavori/osteo_tirocinante.png',
+    status: 'open'
+  },
+  {
+    id: 'osteopata_junior',
+    title: 'Osteopata Junior',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/osteo_junior.png',
+    status: 'open'
+  },
+  {
+    id: 'osteopata_senior',
+    title: 'Osteopata Senior',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/osteo_senior.png',
+    status: 'closed'
+  },
+  {
+    id: 'osteopata_leader',
+    title: 'Osteopata Team Leader o Manager',
+    type: 'Assunzione',
+    location: 'In presenza',
+    image: '/lavori/osteo_leader.png',
+    status: 'closed'
+  },
+  {
+    id: 'nutrizionista',
+    title: 'Nutrizionista',
+    type: 'Assunzione',
+    location: 'In presenza',
+    image: '/lavori/nutrizionista.png',
+    status: 'open'
+  },
+  {
+    id: 'segretaria',
+    title: 'Segretaria Generale',
+    type: 'Assunzione',
+    location: 'In presenza',
+    image: '/lavori/segretaria.png',
+    status: 'closed'
+  },
+  {
+    id: 'commerciale',
+    title: 'Commerciale',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/commerciale.png',
+    status: 'closed'
+  },
+  {
+    id: 'pilates',
+    title: 'Istruttore Pilates',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/pilates.png',
+    status: 'closed'
+  },
+  {
+    id: 'personal-trainer',
+    title: 'Personal Trainer',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/pt.png',
+    status: 'closed'
+  },
+  {
+    id: 'video-maker',
+    title: 'Video Maker',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/video_maker.jpg',
+    status: 'closed'
+  },
+  {
+    id: 'social-media-manager',
+    title: 'Social Media Manager',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/smm.png',
+    status: 'closed'
+  },
+  {
+    id: 'marketer-full-stack',
+    title: 'Marketer Full Stack',
+    type: 'Partita iva',
+    location: 'In presenza',
+    image: '/lavori/marketer.png',
+    status: 'closed'
+  }
+]
+
+const culture = [
+  {
+    title: 'Team giovane e collaborativo',
+    description:
+      "Clima meraviglioso, atmosfera familiare e supporto reciproco reale. La collaborazione e l'innovazione sono al centro di tutto.",
+  },
+  {
+    title: 'Leadership positiva',
+    description:
+      'Niente terrorismo psicologico. Leadership basata su fiducia, rispetto e crescita personale. Solo obiettivi chiari e feedback costruttivi.',
+  },
+  {
+    title: 'Crescita accelerata',
+    description:
+      'Azienda in forte espansione con opportunità di fare esperienza significativa velocemente. La crescita è tangibile e meritata.',
+  },
+]
+
+const investments = [
+  {
+    icon: Coins,
+    title: 'Stipendi e compensi sopra la media',
+    description: 'Compensi competitivi che riconoscono il valore del tuo lavoro quotidiano.',
+  },
+  {
+    icon: Rocket,
+    title: 'Possibilità di crescita professionale e carriera rapida',
+    description:
+      'Opportunità concrete di sviluppo professionale attraverso il continuo apprendimento e miglioramente di Soft Skills e Hard Skills. E, in aggiunta, spazio di avanzamento di carriera attraverso un sistema meritocratico reale.',
+  },
+  {
+    icon: Building2,
+    title: 'Possibilità di assumere ruoli gestionali e direzionali velocemente con meritocrazia',
+    description:
+      'Sistema meritocratico che premia competenza e risultati, permettendo di raggiungere posizioni di leadership in tempi rapidi.',
+  },
+  {
+    icon: Zap,
+    title:
+      'Possibilità di entrare in società e/o sviluppare progetti imprenditoriali insieme con know-how, risorse umane e capitali alle spalle',
+    description:
+      'Opportunità concrete di entrare in società e/o sviluppare progetti imprenditoriali insieme con accesso a competenze, risorse umane qualificate e capitali per realizzare le idee insieme.',
+  },
+]
+
+const FILTERS = [
+  { id: 'all', label: 'Tutte' },
+  { id: 'open', label: 'Aperte' },
+  { id: 'closed', label: 'Chiuse' },
+]
+
+// /lavori/osteo_junior.png -> /lavori/web/osteo_junior-700.jpg (+ 1200)
+const webImage = (src, size = 700) => {
+  const name = src.replace(/^\/lavori\//, '').replace(/\.\w+$/, '')
+  return `/lavori/web/${name}-${size}.jpg`
+}
+
+const scrollToBoard = () => {
+  document.getElementById('posizioni')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+// Testo "a palette" stile tabellone partenze: le lettere girano e poi si fermano.
+// Il testo vero resta per gli screen reader; la parte animata è aria-hidden.
+const Flap = ({ text, play, delay = 0, tiles = false, className = '' }) => {
+  const [shown, setShown] = useState(text)
+  const [settled, setSettled] = useState(false)
+
+  useEffect(() => {
+    if (!play) return undefined
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      setSettled(true)
+      return undefined
     }
-  ]
+    let frame = 0
+    let timer
+    const total = 14 + text.length
+    const start = setTimeout(() => {
+      timer = setInterval(() => {
+        frame += 1
+        setShown(
+          text
+            .split('')
+            .map((ch, i) => {
+              if (ch === ' ' || frame > 6 + i * 0.6) return ch
+              return GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
+            })
+            .join('')
+        )
+        if (frame >= total) {
+          clearInterval(timer)
+          setShown(text)
+          setSettled(true)
+        }
+      }, 45)
+    }, delay * 1000)
+    return () => {
+      clearTimeout(start)
+      clearInterval(timer)
+    }
+  }, [play, text, delay])
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Why Work With Us Section */}
-      <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 pt-20 pb-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-20">
-            <h1 className="text-5xl md:text-7xl font-bold text-blue-dark font-montserrat mb-6">
-              Perché lavorare in
-              <span className="text-sky-600 block mt-3">Mobilitas</span>
-            </h1>
-            <div className="w-24 h-1 bg-sky-600 mx-auto rounded-full"></div>
-          </div>
+    <span className={`mx-flap ${tiles ? 'mx-flap--tiles' : ''} ${settled ? 'is-settled' : ''} ${className}`}>
+      <span className="mx-jobs-sr">{text}</span>
+      <span aria-hidden="true">
+        {tiles
+          ? shown.split('').map((ch, i) => (
+              <span key={i} className="mx-flap__tile">
+                {ch}
+              </span>
+            ))
+          : shown}
+      </span>
+    </span>
+  )
+}
 
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-            {/* Left Column - Text */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-blue-dark font-montserrat leading-tight">
-                  Un'alternativa perfetta al mondo del lavoro tossico
-                </h2>
-                <p className="text-lg text-gray-600 font-montserrat leading-relaxed">
-                  In un mercato sempre più competitivo e spesso caratterizzato da ambienti tossici, 
-                  <span className="text-sky-600 font-semibold"> Mobilitas rappresenta un'alternativa reale </span> 
-                  a tutto quello che non funziona nelle aziende tradizionali.
-                </p>
-              </div>
+const StatusFlap = ({ status, play, delay }) => (
+  <span className={`mx-jobs-status ${status === 'open' ? 'is-open' : 'is-closed'}`}>
+    <span className="mx-jobs-status__pre">Posizione</span>
+    <Flap tiles text={status === 'open' ? 'Aperta' : 'Chiusa'} play={play} delay={delay} />
+  </span>
+)
 
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-2">
-                      Team giovane e collaborativo
-                    </h3>
-                    <p className="text-gray-600 font-montserrat leading-relaxed">
-                      Clima meraviglioso, atmosfera familiare e supporto reciproco reale. 
-                      La collaborazione e l'innovazione sono al centro di tutto.
-                    </p>
-                  </div>
-                </div>
+// Titolo che si accende parola per parola mentre scorri
+const LightWord = ({ progress, range, children }) => {
+  const opacity = useTransform(progress, range, [0.16, 1])
+  return <motion.span style={{ opacity }}>{children} </motion.span>
+}
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-2">
-                      Leadership positiva
-                    </h3>
-                    <p className="text-gray-600 font-montserrat leading-relaxed">
-                      Niente terrorismo psicologico. Leadership basata su fiducia, rispetto 
-                      e crescita personale. Solo obiettivi chiari e feedback costruttivi.
-                    </p>
-                  </div>
-                </div>
+const LightTitle = ({ text }) => {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.9', 'start 0.45'] })
+  const words = text.split(' ')
+  return (
+    <h3 ref={ref} className="mx-h mx-jobs-creed__title">
+      {words.map((w, i) => (
+        <LightWord key={i} progress={scrollYProgress} range={[i / words.length, Math.min(1, (i + 1.5) / words.length)]}>
+          {w}
+        </LightWord>
+      ))}
+    </h3>
+  )
+}
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg className="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-2">
-                      Crescita accelerata
-                    </h3>
-                    <p className="text-gray-600 font-montserrat leading-relaxed">
-                      Azienda in forte espansione con opportunità di fare esperienza 
-                      significativa velocemente. La crescita è tangibile e meritata.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+const BoardRow = ({ job, index }) => {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
+  const open = job.status === 'open'
+  return (
+    <motion.li
+      ref={ref}
+      layout
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className={`mx-jobs-row ${open ? 'is-open' : ''}`}
+    >
+      <Link to={`/lavora-con-noi/${job.id}`} className="mx-jobs-row__link">
+        <span className="mx-jobs-row__thumb">
+          <img src={webImage(job.image)} alt={job.title} loading="lazy" decoding="async" />
+        </span>
+        <span className="mx-jobs-row__role">
+          <h3 className="mx-h mx-jobs-row__title">
+            <Flap text={job.title} play={inView} delay={0.05 * (index % 6)} />
+          </h3>
+          <span className="mx-jobs-row__meta">
+            <span className="mx-jobs-chip">{job.type}</span>
+            <span className="mx-jobs-row__loc">
+              <MapPin size={14} aria-hidden="true" />
+              {job.location}
+            </span>
+          </span>
+        </span>
+        <span className="mx-jobs-row__type">{job.type}</span>
+        <span className="mx-jobs-row__place">{job.location}</span>
+        <StatusFlap status={job.status} play={inView} delay={0.15 + 0.05 * (index % 6)} />
+        <span className="mx-jobs-row__go">
+          <span>Candidati</span>
+          <span className="mx-jobs-row__arrow" aria-hidden="true">
+            <ArrowRight size={18} strokeWidth={2.6} />
+          </span>
+        </span>
+      </Link>
+    </motion.li>
+  )
+}
 
-            {/* Right Column - Visual Element */}
-            <div className="relative">
-              <div className="bg-gradient-to-br from-sky-50 to-sky-100 border border-sky-200 rounded-3xl p-8 h-full shadow-lg">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                    <svg className="w-16 h-16 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-4">
-                    Il futuro del lavoro
-                  </h3>
-                  <p className="text-gray-600 font-montserrat leading-relaxed">
-                    Unisciti a un team che crede nel talento, nella crescita e nell'innovazione. 
-                    La tua carriera merita un ambiente dove il successo è condiviso.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+const LavoraConNoi = () => {
+  const [bandRef, bandY] = useParallax(8)
+  const [filter, setFilter] = useState('all')
+  const [heroPlay, setHeroPlay] = useState(false)
 
-          {/* Investment Section */}
-          <div className="bg-gradient-to-r from-sky-50 via-sky-100 to-sky-50 border border-sky-200 rounded-3xl p-12 shadow-lg">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-blue-dark font-montserrat mb-6">
-                Il tuo successo è il nostro investimento
-              </h2>
-              <div className="w-20 h-1 bg-sky-600 mx-auto rounded-full"></div>
-            </div>
+  const openJobs = jobRoles.filter((j) => j.status === 'open')
+  const closedJobs = jobRoles.filter((j) => j.status !== 'open')
+  // Sul tabellone le posizioni aperte vengono prima
+  const boardJobs = filter === 'open' ? openJobs : filter === 'closed' ? closedJobs : [...openJobs, ...closedJobs]
+  const counts = { all: jobRoles.length, open: openJobs.length, closed: closedJobs.length }
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Left Column */}
-              <div className="space-y-8">
-                <div>
-                  <div className="w-20 h-20 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-4 text-left">
-                    Stipendi e compensi sopra la media
-                  </h3>
-                  <p className="text-gray-600 font-montserrat leading-relaxed text-left">
-                    Compensi competitivi che riconoscono il valore del tuo lavoro quotidiano.
-                  </p>
-                </div>
+  useEffect(() => {
+    const t = setTimeout(() => setHeroPlay(true), 700)
+    return () => clearTimeout(t)
+  }, [])
 
-                <div>
-                  <div className="w-20 h-20 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-4 text-left">
-                    Possibilità di crescita professionale e carriera rapida
-                  </h3>
-                  <p className="text-gray-600 font-montserrat leading-relaxed text-left">
-                    Opportunità concrete di sviluppo professionale attraverso il continuo apprendimento e miglioramente di Soft Skills e Hard Skills. E, in aggiunta, spazio di avanzamento di carriera 
-                    attraverso un sistema meritocratico reale.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column */}
-              <div className="space-y-8">
-                <div>
-                  <div className="w-20 h-20 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-4 text-left">
-                    Possibilità di assumere ruoli gestionali e direzionali velocemente con meritocrazia
-                  </h3>
-                  <p className="text-gray-600 font-montserrat leading-relaxed text-left">
-                    Sistema meritocratico che premia competenza e risultati, permettendo 
-                    di raggiungere posizioni di leadership in tempi rapidi.
-                  </p>
-                </div>
-
-                <div>
-                  <div className="w-20 h-20 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-4 text-left">
-                    Possibilità di entrare in società e/o sviluppare progetti imprenditoriali insieme con know-how, risorse umane e capitali alle spalle
-                  </h3>
-                  <p className="text-gray-600 font-montserrat leading-relaxed text-left">
-                    Opportunità concrete di entrare in società e/o sviluppare progetti imprenditoriali insieme con accesso 
-                    a competenze, risorse umane qualificate e capitali per realizzare le idee insieme.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Closing Statement */}
-          <div className="text-center mt-16">
-            <p className="text-2xl md:text-3xl font-bold text-blue-dark font-montserrat leading-relaxed max-w-4xl mx-auto">
-              La tua carriera merita un ambiente dove il successo è condiviso, 
-              dove la crescita è reale e dove il futuro si costruisce insieme.
-            </p>
-          </div>
+  return (
+    <PageShell className="mx-jobs">
+      {/* Hero: titolo enorme + mini tabellone delle posizioni aperte */}
+      <section className="mx-jobs-hero">
+        <div className="mx-aurora" aria-hidden="true">
+          <span />
+          <span />
+          <span />
         </div>
-      </div>
+        <div className="mx-hero__grid-lines" aria-hidden="true" />
 
-      {/* Header Section */}
-      <div className="bg-white pt-16 pb-8 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-blue-dark font-montserrat mb-4">
-              Figure professionali e Posizioni aperte
+        <div className="mx-wrap mx-jobs-hero__layout">
+          <div className="mx-jobs-hero__copy">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}>
+              <Kicker>Lavora con noi</Kicker>
+            </motion.div>
+            <h1 className="mx-h mx-jobs-hero__title">
+              <MaskLines
+                immediate
+                delay={0.2}
+                lines={[{ text: 'Perché' }, { text: 'lavorare in' }, { text: 'Mobilitas', className: 'mx-gradient' }]}
+              />
             </h1>
+            <motion.p
+              className="mx-lead mx-jobs-hero__lead"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.55 }}
+            >
+              In un mercato sempre più competitivo e spesso caratterizzato da ambienti tossici,{' '}
+              <strong className="mx-accent">Mobilitas rappresenta un'alternativa reale</strong> a tutto quello che non
+              funziona nelle aziende tradizionali.
+            </motion.p>
           </div>
+
+          <motion.div
+            className="mx-jobs-mini"
+            initial={{ opacity: 0, y: 40, rotate: -2 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.45 }}
+          >
+            <div className="mx-jobs-mini__head">
+              <span className="mx-jobs-live" aria-hidden="true" />
+              <span>Posizioni aperte</span>
+              <span className="mx-jobs-mini__count">
+                <Flap tiles text={String(openJobs.length).padStart(2, '0')} play={heroPlay} />
+              </span>
+            </div>
+            <ul className="mx-jobs-mini__list">
+              {openJobs.map((job, i) => (
+                <li key={job.id}>
+                  <Link to={`/lavora-con-noi/${job.id}`} className="mx-jobs-mini__row">
+                    <span className="mx-jobs-mini__n">0{i + 1}</span>
+                    <span className="mx-jobs-mini__role">
+                      <Flap text={job.title} play={heroPlay} delay={0.2 + i * 0.25} />
+                      <small>
+                        {job.type} · {job.location}
+                      </small>
+                    </span>
+                    <ArrowUpRight size={20} aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <button type="button" className="mx-jobs-mini__all" onClick={scrollToBoard}>
+              Tutte le {jobRoles.length} figure professionali
+              <ArrowDown size={16} strokeWidth={2.6} aria-hidden="true" />
+            </button>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Job Roles Grid */}
-      <div className="bg-gray-50 pb-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {jobRoles.map((job, index) => (
-              <div
-                key={job.id}
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 transition-shadow duration-200"
-              >
-                {/* Image */}
-                <div className="h-48 bg-gray-100 overflow-hidden">
-                  <img 
-                    src={job.image} 
-                    alt={job.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-blue-dark font-montserrat mt-0">
-                      {job.title}
-                    </h3>
-                    <span className="text-sm text-gray-600 font-montserrat bg-sky-100 px-2 py-1 rounded whitespace-nowrap text-right">
-                      {job.type}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm text-gray-600 font-montserrat">
-                      {job.location}
-                    </span>
-                    <Link
-                      to={`/lavora-con-noi/${job.id}`}
-                      className="text-sm font-medium text-sky-600 hover:text-sky-700 font-montserrat no-underline"
-                    >
-                      Candidati →
-                    </Link>
-                  </div>
+      {/* Manifesto della cultura */}
+      <section className="mx-section mx-section--deep">
+        <div className="mx-wrap">
+          <Kicker n="01">La nostra cultura</Kicker>
+          <h2 className="mx-h mx-h--md mx-jobs-creed__intro">
+            <MaskLines lines={[{ text: "Un'alternativa perfetta" }, { text: 'al mondo del lavoro tossico', className: 'mx-accent' }]} />
+          </h2>
 
-                  {/* Status Indicator */}
-                  <div className="border-t border-gray-100 pt-3 pb-0">
-                    <div className="flex items-center justify-start">
-                      <span className={`text-sm font-medium font-montserrat px-3 py-1 rounded-full ${
-                        job.status === 'open' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {job.status === 'open' ? 'Posizione Aperta' : 'Posizione Chiusa'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <ol className="mx-jobs-creed">
+            {culture.map((c, i) => (
+              <li key={c.title} className="mx-jobs-creed__item">
+                <span className="mx-jobs-creed__n" aria-hidden="true">0{i + 1}</span>
+                <LightTitle text={c.title} />
+                <Reveal className="mx-jobs-creed__text" y={24}>
+                  <p className="mx-body">{c.description}</p>
+                </Reveal>
+              </li>
             ))}
+          </ol>
+
+          <div className="mx-jobs-band">
+            <Reveal className="mx-jobs-band__media">
+              <div ref={bandRef} style={{ height: '100%' }}>
+                <motion.div style={{ y: bandY, height: '100%' }}>
+                  <img
+                    className="mx-parallax-img"
+                    src="/home/web/home5-1600.jpg"
+                    srcSet="/home/web/home5-900.jpg 900w, /home/web/home5-1600.jpg 1600w"
+                    sizes="(min-width: 1280px) 820px, 100vw"
+                    alt="Un trattamento nello Studio Mobilitas"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </motion.div>
+              </div>
+            </Reveal>
+            <Reveal className="mx-jobs-band__card" delay={0.15}>
+              <span className="mx-jobs-band__icon">
+                <Zap size={26} />
+              </span>
+              <h3 className="mx-h mx-h--md">Il futuro del lavoro</h3>
+              <p className="mx-body">
+                Unisciti a un team che crede nel talento, nella crescita e nell'innovazione. La tua carriera merita un
+                ambiente dove il successo è condiviso.
+              </p>
+            </Reveal>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* Investimento */}
+      <section className="mx-section mx-section--glow">
+        <div className="mx-wrap">
+          <Kicker n="02">Cosa ti offriamo</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines
+              lines={[{ text: 'Il tuo successo' }, { text: 'è il nostro' }, { text: 'investimento.', className: 'mx-gradient' }]}
+            />
+          </h2>
+
+          <Snap className="mx-jobs-invest">
+            {investments.map((item, i) => {
+              const Icon = item.icon
+              return (
+                <Reveal key={item.title} delay={(i % 2) * 0.08} className="mx-jobs-invest__item" onMouseMove={trackSpotlight}>
+                  <div className="mx-jobs-invest__top">
+                    <span className="mx-jobs-invest__n" aria-hidden="true">0{i + 1}</span>
+                    <span className="mx-card__icon">
+                      <Icon size={24} />
+                    </span>
+                  </div>
+                  <h3 className="mx-h mx-h--sm">{item.title}</h3>
+                  <p className="mx-body">{item.description}</p>
+                </Reveal>
+              )
+            })}
+          </Snap>
+
+          <ScrollWords
+            className="mx-manifesto mx-jobs-manifesto"
+            parts={[
+              'La tua carriera merita un ambiente dove',
+              { text: 'il successo è condiviso,', accent: true },
+              'dove la crescita è reale e dove',
+              { text: 'il futuro si costruisce insieme.', accent: true },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Tabellone delle posizioni */}
+      <section className="mx-section mx-section--deep mx-jobs-boardsec" id="posizioni">
+        <div className="mx-wrap">
+          <Kicker n="03">Il tabellone</Kicker>
+          <div className="mx-jobs-boardhead">
+            <h2 className="mx-h mx-h--lg">
+              <MaskLines lines={[{ text: 'Figure professionali' }, { text: 'e Posizioni aperte', className: 'mx-outline' }]} />
+            </h2>
+            <div className="mx-jobs-filter" role="group" aria-label="Filtra le posizioni">
+              {FILTERS.map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  aria-pressed={filter === f.id}
+                  className={filter === f.id ? 'is-active' : ''}
+                  onClick={() => setFilter(f.id)}
+                >
+                  {f.label}
+                  <span>{counts[f.id]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mx-jobs-board">
+            <div className="mx-jobs-board__cols" aria-hidden="true">
+              <span />
+              <span>Ruolo</span>
+              <span>Contratto</span>
+              <span>Sede</span>
+              <span>Stato</span>
+              <span />
+            </div>
+            <ul className="mx-jobs-board__list">
+              {boardJobs.map((job, i) => (
+                <BoardRow key={job.id} job={job} index={i} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <FinalCta
+        kicker="Il futuro del lavoro"
+        titleLines={[{ text: 'Il futuro si' }, { text: 'costruisce' }, { text: 'insieme.', className: 'mx-gradient' }]}
+        text="Unisciti a un team che crede nel talento, nella crescita e nell'innovazione."
+      >
+        <div className="mx-ctas">
+          <button type="button" className="mx-btn mx-btn--primary" onClick={scrollToBoard}>
+            <span>
+              <small>{openJobs.length} posizioni aperte</small>
+              Scopri le posizioni
+            </span>
+            <span className="mx-btn__icon">
+              <ArrowDown size={20} strokeWidth={2.4} />
+            </span>
+          </button>
+          <Link to="/influencer" className="mx-btn mx-btn--ghost">
+            <span>
+              <small>Influencer?</small>
+              Collabora con noi
+            </span>
+            <span className="mx-btn__icon">
+              <ArrowUpRight size={20} strokeWidth={2.4} />
+            </span>
+          </Link>
+        </div>
+      </FinalCta>
+    </PageShell>
   )
 }
 

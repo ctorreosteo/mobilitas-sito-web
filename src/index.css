@@ -27,12 +27,14 @@
   
   #root {
     overflow-x: hidden;
+    overflow-x: clip; /* non crea un contenitore di scroll: position: sticky continua a funzionare */
     width: 100%;
     max-width: 100vw;
   }
   
   html, body {
     overflow-x: hidden;
+    overflow-x: clip; /* non crea un contenitore di scroll: position: sticky continua a funzionare */
     width: 100%;
     max-width: 100vw;
   }
@@ -61,12 +63,14 @@
   @media (max-width: 768px) {
     body {
       overflow-x: hidden !important;
+      overflow-x: clip !important;
       width: 100vw !important;
       max-width: 100vw !important;
     }
     
     #root {
       overflow-x: hidden !important;
+      overflow-x: clip !important;
       width: 100vw !important;
       max-width: 100vw !important;
     }

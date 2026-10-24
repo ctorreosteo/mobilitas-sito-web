@@ -1,11 +1,12 @@
 /*
- * Home — "La pagina che ti riallinea"
- * Tutto è sotto .mx-home. Le regole che devono battere gli !important
+ * Linguaggio visivo Mobilitas: home ("La pagina che ti riallinea") e pagine interne.
+ * Tutto è sotto .mx-home (home) o .mx-page (pagine interne, vedi components/site/PageShell).
+ * Le regole che devono battere gli !important
  * mobile di index.css (h1..h4 a 1.5rem ecc.) stanno in @layer base,
  * con specificità più alta.
  */
 
-.mx-home {
+:is(.mx-home, .mx-page) {
   --ink: #000f2b;
   --navy: #002552;
   --navy-2: #00346f;
@@ -25,7 +26,7 @@
 }
 
 /* Grana pellicola su tutta la pagina */
-.mx-home::after {
+:is(.mx-home, .mx-page)::after {
   content: '';
   position: fixed;
   inset: 0;
@@ -36,7 +37,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.mx-home ::selection {
+:is(.mx-home, .mx-page) ::selection {
   background: var(--green);
   color: var(--navy);
 }
@@ -58,6 +59,7 @@
   position: relative;
   padding: clamp(80px, 10vw, 140px) 0;
   overflow: hidden;
+  overflow: clip; /* come hidden, ma lascia funzionare position: sticky all'interno */
 }
 
 .mx-section--deep { background: var(--ink); }
@@ -76,11 +78,11 @@
 /* ---------- Tipografia ---------- */
 
 @layer base {
-  .mx-home h1.mx-h,
-  .mx-home h2.mx-h,
-  .mx-home h3.mx-h,
-  .mx-home h4.mx-h,
-  .mx-home p.mx-h {
+  :is(.mx-home, .mx-page) h1.mx-h,
+  :is(.mx-home, .mx-page) h2.mx-h,
+  :is(.mx-home, .mx-page) h3.mx-h,
+  :is(.mx-home, .mx-page) h4.mx-h,
+  :is(.mx-home, .mx-page) p.mx-h {
     margin: 0;
     font-family: var(--font-primary) !important;
     font-weight: 900;
@@ -89,13 +91,13 @@
     color: var(--cream);
   }
 
-  .mx-home .mx-h.mx-h--hero { font-size: clamp(3.5rem, 8.2vw, 8rem) !important; }
-  .mx-home .mx-h.mx-h--xl { font-size: clamp(2.6rem, 8.4vw, 7.4rem) !important; }
-  .mx-home .mx-h.mx-h--lg { font-size: clamp(2.2rem, 5.6vw, 4.9rem) !important; line-height: 0.98; }
-  .mx-home .mx-h.mx-h--md { font-size: clamp(1.45rem, 2.6vw, 2.2rem) !important; letter-spacing: -0.03em; line-height: 1.12; }
-  .mx-home .mx-h.mx-h--sm { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !important; letter-spacing: -0.02em; line-height: 1.22; font-weight: 800; }
+  :is(.mx-home, .mx-page) .mx-h.mx-h--hero { font-size: clamp(3.5rem, 8.2vw, 8rem) !important; }
+  :is(.mx-home, .mx-page) .mx-h.mx-h--xl { font-size: clamp(2.6rem, 8.4vw, 7.4rem) !important; }
+  :is(.mx-home, .mx-page) .mx-h.mx-h--lg { font-size: clamp(2.2rem, 5.6vw, 4.9rem) !important; line-height: 0.98; }
+  :is(.mx-home, .mx-page) .mx-h.mx-h--md { font-size: clamp(1.45rem, 2.6vw, 2.2rem) !important; letter-spacing: -0.03em; line-height: 1.12; }
+  :is(.mx-home, .mx-page) .mx-h.mx-h--sm { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !important; letter-spacing: -0.02em; line-height: 1.22; font-weight: 800; }
 
-  .mx-home .mx-lead {
+  :is(.mx-home, .mx-page) .mx-lead {
     font-size: clamp(1.1rem, 1.7vw, 1.45rem) !important;
     line-height: 1.55;
     color: var(--muted);
@@ -103,21 +105,21 @@
     margin: 0;
   }
 
-  .mx-home .mx-body {
+  :is(.mx-home, .mx-page) .mx-body {
     font-size: clamp(1rem, 1.15vw, 1.1rem) !important;
     line-height: 1.7;
     color: var(--muted);
     margin: 0;
   }
 
-  .mx-home .mx-small {
+  :is(.mx-home, .mx-page) .mx-small {
     font-size: 0.8rem !important;
     line-height: 1.5;
   }
 }
 
-.mx-home strong,
-.mx-home b { color: var(--cream); font-weight: 700; }
+:is(.mx-home, .mx-page) strong,
+:is(.mx-home, .mx-page) b { color: var(--cream); font-weight: 700; }
 
 .mx-accent { color: var(--green); }
 
@@ -1532,16 +1534,16 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 /* ---------- Riduzione movimento ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .mx-home *,
-  .mx-home *::before,
-  .mx-home *::after {
+  :is(.mx-home, .mx-page) *,
+  :is(.mx-home, .mx-page) *::before,
+  :is(.mx-home, .mx-page) *::after {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
 }
 
 /* Immagini con parallasse: 120% del contenitore, centrate */
-.mx-home .mx-parallax-img {
+:is(.mx-home, .mx-page) .mx-parallax-img {
   position: relative;
   top: -10%;
   display: block;
@@ -1580,7 +1582,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 }
 
 .mx-touch__copy { max-width: 680px; min-height: 230px; }
-.mx-home .mx-touch__text { margin-top: 18px; }
+:is(.mx-home, .mx-page) .mx-touch__text { margin-top: 18px; }
 
 .mx-touch__stage {
   position: relative;
@@ -1793,7 +1795,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 
 /* Caroselli a scorrimento */
 @media (max-width: 899px) {
-  .mx-home .mx-snap {
+  :is(.mx-home, .mx-page) .mx-snap {
     display: flex;
     gap: 12px;
     margin-left: -24px;
@@ -1808,9 +1810,9 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
     list-style: none;
   }
 
-  .mx-home .mx-snap::-webkit-scrollbar { display: none; }
+  :is(.mx-home, .mx-page) .mx-snap::-webkit-scrollbar { display: none; }
 
-  .mx-home .mx-snap > * {
+  :is(.mx-home, .mx-page) .mx-snap > * {
     flex: 0 0 84%;
     min-width: 0;
     scroll-snap-align: start;
@@ -1836,7 +1838,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 
   .mx-benefits { margin-top: 56px; border-top: 0; }
 
-  .mx-home .mx-snap > .mx-benefit {
+  :is(.mx-home, .mx-page) .mx-snap > .mx-benefit {
     padding: 26px 24px 28px;
     border: 1px solid var(--line);
     border-radius: 24px;
@@ -1845,7 +1847,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 
   .mx-problems { margin-top: 56px; border-top: 0; }
 
-  .mx-home .mx-snap > .mx-problem {
+  :is(.mx-home, .mx-page) .mx-snap > .mx-problem {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -1962,7 +1964,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
 /* Telefono */
 @media (max-width: 767px) {
   /* Prestazioni: niente grana in blend, aurore ferme, niente luce-cursore */
-  .mx-home::after { display: none; }
+  :is(.mx-home, .mx-page)::after { display: none; }
   .mx-aurora { filter: blur(44px); }
   .mx-aurora span { animation: none; }
   .mx-hero__spot { display: none; }
@@ -1973,7 +1975,7 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
   .mx-hero { padding-top: 44px; }
   .mx-kicker { margin-bottom: 20px; font-size: 0.7rem; letter-spacing: 0.16em; }
   .mx-hero__pre { margin-bottom: 14px; font-size: 0.76rem; letter-spacing: 0.18em; }
-  .mx-home .mx-hero__sub { margin-top: 24px !important; }
+  :is(.mx-home, .mx-page) .mx-hero__sub { margin-top: 24px !important; }
   .mx-hero .mx-ctas { margin-top: 28px; }
   .mx-trust { margin-top: 22px; gap: 10px 18px; font-size: 0.8rem; }
   .mx-scrollhint { display: none; }
@@ -2007,4 +2009,53 @@ a.mx-ribbon__item:hover { text-decoration: underline; text-decoration-thickness:
   .mx-touch__done .mx-btn { width: 100%; }
 
   .mx-final { padding: 96px 0 80px; }
+}
+
+/* ======================================================================
+   Pagine interne (components/site)
+   ====================================================================== */
+
+.mx-page { overflow-x: clip; }
+
+.mx-phero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(64px, 9vw, 120px) 0 clamp(72px, 9vw, 120px);
+  background: radial-gradient(120% 80% at 50% 0%, var(--navy-2) 0%, var(--navy) 45%, var(--ink) 100%);
+}
+
+.mx-phero__layout {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .mx-phero.has-media .mx-phero__layout { grid-template-columns: 1.3fr 0.7fr; gap: 56px; }
+}
+
+.mx-phero__copy { max-width: 900px; }
+:is(.mx-home, .mx-page) .mx-phero__lead { max-width: 640px; margin-top: 32px; }
+.mx-phero__extra { margin-top: 36px; }
+.mx-phero__extra .mx-ctas { margin-top: 0; }
+
+.mx-phero__media { width: min(100%, 420px); }
+
+@media (max-width: 1023px) {
+  .mx-phero__media { width: min(84%, 380px); }
+}
+
+@media (max-width: 767px) {
+  .mx-phero { padding: 44px 0 64px; }
+}
+
+.mx-page .mx-final { padding-bottom: clamp(90px, 12vw, 160px); }
+
+/* Bottoni recensioni Google sotto il nastro delle recensioni */
+.mx-reviews__cta {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin-top: 44px;
+  text-align: center;
 }

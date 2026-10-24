@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import Header from '../../components/Header'
 import { RECENSIONI_IMAGES } from '../../data/recensioni'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../../components/GoogleReviewsLinks'
 
 const API_BASE = import.meta.env.VITE_API_BASE
   || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
@@ -802,7 +804,7 @@ const OsteopataTorino = () => {
                 </span>
               </h3>
               <p className="text-blue-dark/70 text-base md:text-lg mt-3 font-medium">
-              ⭐ Oltre 600 persone hanno raccontato pubblicamente le loro storie meravigliose ⭐
+              ⭐ Oltre {RECENSIONI_TOTALI} persone hanno raccontato pubblicamente le loro storie meravigliose ⭐
               </p>
             </div>
             
@@ -831,6 +833,7 @@ const OsteopataTorino = () => {
                   <ChevronRight className="w-4 h-4 animate-pulse" />
                 </div>
               </div>
+              <GoogleReviewsLinks align="center" variant="light" className="mt-8" />
             </div>
           </div>
         </div>

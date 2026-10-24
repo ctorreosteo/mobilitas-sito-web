@@ -10,7 +10,7 @@ import TouchSpineSection from '../../components/home-sections/TouchSpineSection'
 import SpineProgress from '../../components/home-sections/SpineProgress'
 import MobileDock from '../../components/home-sections/MobileDock'
 import WhatsAppButtonSito from '../../components/WhatsAppButtonSito'
-import './Home.css'
+import '../../styles/mx.css'
 
 const Home = () => {
   // SEO metadata for Home page

@@ -112,8 +112,8 @@ function App() {
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
-        <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="uomo" /></Layout>} />
-        <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="donna" /></Layout>} />
+        <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp><OffertaPostura variant="uomo" /></Layout>} />
+        <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp><OffertaPostura variant="donna" /></Layout>} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />

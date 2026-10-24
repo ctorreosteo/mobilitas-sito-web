@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import { CheckCircle, ShoppingCart } from 'lucide-react'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../GoogleReviewsLinks'
 
 export default function OfferSection() {
   const handlePurchaseClick = () => {
@@ -185,8 +187,9 @@ export default function OfferSection() {
               margin: 0,
               lineHeight: '1.4'
             }}>
-              Abbiamo 378 recensioni Google di persone che raccontano storie meravigliose sui nostri trattamenti
+              Abbiamo oltre {RECENSIONI_TOTALI} recensioni Google di persone che raccontano storie meravigliose sui nostri trattamenti
             </p>
+            <GoogleReviewsLinks align="center" variant="light" className="mt-3" />
           </motion.div>
 
           {/* Treatment Title */}

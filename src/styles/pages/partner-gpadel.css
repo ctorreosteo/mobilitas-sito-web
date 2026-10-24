@@ -1,0 +1,481 @@
+/* GPADEL: il campo. Linee del campo, traiettoria della pallina, tabellone. */
+
+/* ---------- Hero ---------- */
+.mx-gp-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 8vw, 110px) 0 clamp(72px, 9vw, 120px);
+  background:
+    radial-gradient(70% 60% at 80% 10%, rgba(56, 189, 248, 0.22), transparent 70%),
+    radial-gradient(120% 80% at 50% 0%, var(--navy-2) 0%, var(--navy) 45%, var(--ink) 100%);
+}
+
+.mx-gp-hero__court {
+  position: absolute;
+  left: 30%;
+  top: 50%;
+  width: min(1100px, 120vw);
+  transform: translateY(-50%) rotate(-14deg) skewX(-8deg);
+  pointer-events: none;
+  opacity: 0.55;
+  mask-image: radial-gradient(70% 80% at 50% 50%, black 40%, transparent 90%);
+  -webkit-mask-image: radial-gradient(70% 80% at 50% 50%, black 40%, transparent 90%);
+}
+
+/* Superficie del campo appena accennata */
+.mx-gp-hero__court::before {
+  content: '';
+  position: absolute;
+  inset: 1%;
+  background: linear-gradient(120deg, rgba(56, 189, 248, 0.08), rgba(114, 250, 147, 0.06));
+}
+
+.mx-gp-court {
+  display: block;
+  width: 100%;
+  height: auto;
+  stroke: rgba(114, 250, 147, 0.55);
+}
+
+.mx-gp-court path { vector-effect: non-scaling-stroke; stroke-width: 2px; }
+.mx-gp-hero__court .mx-gp-court { filter: drop-shadow(0 0 8px rgba(114, 250, 147, 0.35)); }
+
+.mx-gp-hero__ball {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.mx-gp-traj {
+  fill: none;
+  stroke: rgba(114, 250, 147, 0.4);
+  stroke-width: 2;
+  stroke-dasharray: 2 12;
+  stroke-linecap: round;
+}
+
+.mx-gp-ballshape circle {
+  fill: var(--green);
+  filter: drop-shadow(0 0 14px rgba(114, 250, 147, 0.8));
+}
+
+.mx-gp-ballshape path {
+  fill: none;
+  stroke: rgba(0, 37, 82, 0.55);
+  stroke-width: 2;
+}
+
+.mx-gp-hero__layout {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .mx-gp-hero__layout { grid-template-columns: 1.3fr 0.7fr; gap: 56px; }
+}
+
+.mx-gp-hero__copy { max-width: 820px; }
+
+.mx-gp-hero__title { --mx-fit: 6; --mx-k: 0.74; --mx-max: 11.5rem; }
+
+:is(.mx-home, .mx-page) .mx-gp-hero__pre {
+  font-size: clamp(1.6rem, 3.4vw, 3rem);
+  letter-spacing: -0.035em;
+  padding-bottom: 0.12em;
+}
+
+:is(.mx-home, .mx-page) .mx-gp-hero__lead { max-width: 600px; margin-top: 28px; }
+.mx-gp-hero__ctas { margin-top: 36px; }
+
+/* Foto come parete in vetro con rete */
+.mx-gp-glass {
+  position: relative;
+  width: min(84%, 420px);
+  margin: 0 auto;
+}
+
+.mx-gp-glass__frame {
+  position: relative;
+  aspect-ratio: 4 / 5.2;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 60px 120px -40px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(244, 244, 244, 0.2);
+}
+
+.mx-gp-glass__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+.mx-gp-glass__frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.14), transparent 35%),
+    linear-gradient(to top, rgba(0, 15, 43, 0.7), transparent 40%);
+}
+
+/* Rete metallica nella parte alta, come nei campi */
+.mx-gp-glass__mesh {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 22%;
+  z-index: 1;
+  background-image:
+    linear-gradient(45deg, rgba(244, 244, 244, 0.22) 1px, transparent 1px),
+    linear-gradient(-45deg, rgba(244, 244, 244, 0.22) 1px, transparent 1px);
+  background-size: 14px 14px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* Segnapunti sotto la foto */
+.mx-gp-score {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: -26px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 16px;
+  background: #00091c;
+  border: 1px solid rgba(114, 250, 147, 0.35);
+  box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.8), 0 0 40px rgba(114, 250, 147, 0.15);
+  white-space: nowrap;
+}
+
+.mx-gp-score__team {
+  padding: 10px 14px;
+  border-radius: 11px;
+  background: rgba(244, 244, 244, 0.06);
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.mx-gp-score__x {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--navy);
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+
+/* ---------- Rally: tre colpi ---------- */
+.mx-gp-rally {
+  position: relative;
+  margin-top: clamp(56px, 7vw, 96px);
+}
+
+.mx-gp-rally__arc { display: none; }
+
+@media (min-width: 900px) {
+  .mx-gp-rally { padding-top: 70px; }
+
+  .mx-gp-rally__arc {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 90px;
+    overflow: visible;
+  }
+
+  .mx-gp-rally__arc path {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 2px;
+    stroke-dasharray: 2 10;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.7;
+  }
+
+  .mx-gp-rally__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Punto di rimbalzo sopra ogni card */
+.mx-gp-shot { overflow: visible; }
+
+.mx-gp-shot::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 30px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 6px rgba(114, 250, 147, 0.18), 0 0 24px rgba(114, 250, 147, 0.6);
+}
+
+@media (max-width: 899px) {
+  .mx-gp-shot::after { display: none; }
+}
+
+/* ---------- Partnership strategica ---------- */
+.mx-gp-feature {
+  display: grid;
+  gap: 36px;
+  margin-top: clamp(72px, 9vw, 130px);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .mx-gp-feature { grid-template-columns: 0.8fr 1.2fr; gap: 72px; }
+}
+
+.mx-gp-feature__photo { aspect-ratio: 4 / 5; border-radius: 32px; }
+.mx-gp-feature__photo img { object-position: 50% 40%; }
+
+@media (max-width: 899px) {
+  .mx-gp-feature__photo { aspect-ratio: 4 / 4.2; }
+}
+
+.mx-gp-feature__copy h3.mx-h { margin-bottom: 28px; }
+
+/* ---------- Chi è ---------- */
+.mx-gp-about__court {
+  position: absolute;
+  top: 60px;
+  right: -12%;
+  width: min(900px, 120vw);
+  height: auto;
+  opacity: 0.35;
+  transform: rotate(-8deg);
+  stroke: rgba(56, 189, 248, 0.5);
+  pointer-events: none;
+}
+
+.mx-gp-about__court path { vector-effect: non-scaling-stroke; stroke-width: 1px; }
+
+.mx-gp-about__cards {
+  display: grid;
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+@media (min-width: 900px) {
+  .mx-gp-about__cards { grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+
+.mx-gp-services {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(64px, 8vw, 110px);
+}
+
+.mx-gp-services__title,
+.mx-gp-strengths__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mx-gp-services__title svg,
+.mx-gp-strengths__title svg { color: var(--green); flex-shrink: 0; }
+
+.mx-gp-ribbon {
+  display: flex;
+  margin-top: 22px;
+  padding: 20px 0;
+  overflow: hidden;
+  background: var(--green);
+  color: var(--navy);
+  transform: rotate(-1.5deg);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.mx-gp-ribbon .mx-marquee { margin: 0; padding: 0; list-style: none; }
+.mx-gp-ribbon:hover .mx-marquee { animation-play-state: paused; }
+
+.mx-gp-strengths__title { margin-top: clamp(64px, 8vw, 110px) !important; }
+
+.mx-gp-strengths {
+  display: grid;
+  gap: 14px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .mx-gp-strengths { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+}
+
+/* Ogni punto come un rettangolo di campo */
+.mx-gp-strength {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 22px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(114, 250, 147, 0.12) calc(50% - 0.5px), rgba(114, 250, 147, 0.12) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    rgba(244, 244, 244, 0.03);
+  overflow: hidden;
+}
+
+.mx-gp-strength__n {
+  grid-row: span 2;
+  font-weight: 900;
+  font-size: clamp(3.4rem, 5vw, 4.6rem);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: var(--green);
+  text-shadow: 0 0 30px rgba(114, 250, 147, 0.4);
+}
+
+.mx-gp-strength__name {
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+
+/* ---------- Tabellone dei benefici ---------- */
+.mx-gp-board {
+  position: relative;
+  margin-top: clamp(56px, 7vw, 96px);
+  border-radius: 32px;
+  background: #00091c;
+  border: 1px solid rgba(244, 244, 244, 0.14);
+  box-shadow: 0 60px 120px -50px rgba(0, 0, 0, 0.9), inset 0 0 0 6px rgba(244, 244, 244, 0.025);
+  overflow: hidden;
+}
+
+.mx-gp-board__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px clamp(20px, 3vw, 36px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.03);
+}
+
+.mx-gp-board__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.mx-gp-board__live i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 12px var(--green);
+  animation: mx-breathe 1.6s ease-in-out infinite;
+}
+
+.mx-gp-board__sets { display: flex; gap: 6px; }
+
+.mx-gp-board__sets b {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(114, 250, 147, 0.12);
+  color: var(--green);
+  font-weight: 900;
+  font-size: 0.85rem;
+}
+
+.mx-gp-board__rows { margin: 0; padding: 0; list-style: none; }
+
+.mx-gp-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  row-gap: 12px;
+  align-items: center;
+  padding: 26px clamp(20px, 3vw, 36px);
+  border-top: 1px solid var(--line);
+  transition: background 0.5s var(--ease);
+}
+
+.mx-gp-row:first-child { border-top: 0; }
+.mx-gp-row:hover { background: rgba(114, 250, 147, 0.05); }
+
+/* Cifre da tabellone: matrice di punti verdi */
+.mx-gp-row__n {
+  display: grid;
+  place-items: center;
+  min-width: 74px;
+  height: 64px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle, rgba(114, 250, 147, 0.08) 1px, transparent 1.5px) 0 0 / 6px 6px,
+    #000611;
+  border: 1px solid rgba(114, 250, 147, 0.2);
+  font-weight: 900;
+  font-size: 2.1rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--green);
+  text-shadow: 0 0 12px rgba(114, 250, 147, 0.75);
+}
+
+.mx-gp-row__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mx-gp-row__title svg { color: var(--green); flex-shrink: 0; }
+
+.mx-gp-row__text { grid-column: 1 / -1; }
+
+@media (min-width: 900px) {
+  .mx-gp-row {
+    grid-template-columns: 110px 0.8fr 1.2fr;
+    column-gap: 40px;
+    padding: 36px 40px;
+  }
+
+  .mx-gp-row__n { min-width: 96px; height: 80px; font-size: 2.8rem; }
+  .mx-gp-row__text { grid-column: auto; }
+}
+
+@media (max-width: 767px) {
+  .mx-gp-hero { padding: 40px 0 88px; }
+  .mx-gp-hero__court { left: -20%; top: 62%; width: 170vw; }
+  .mx-gp-glass { width: 82%; }
+  .mx-gp-score__team { padding: 9px 11px; font-size: 0.74rem; }
+  .mx-gp-board__sets { display: none; }
+  .mx-gp-row__n { min-width: 62px; height: 54px; font-size: 1.7rem; }
+  .mx-gp-strength { padding: 20px; }
+}

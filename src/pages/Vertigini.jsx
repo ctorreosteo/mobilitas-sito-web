@@ -22,6 +22,8 @@ import {
   Monitor,
 } from 'lucide-react'
 import { RECENSIONI_IMAGES } from '../data/recensioni'
+import { RECENSIONI_TOTALI, STUDI } from '../data/studi'
+import GoogleReviewsLinks from '../components/GoogleReviewsLinks'
 import BookingPopup from '../components/BookingPopup'
 import SectionDivider from '../components/SectionDivider'
 
@@ -101,9 +103,7 @@ const HERO_BENEFITS = [
 ]
 
 const RECENSIONI_PREVIEW = RECENSIONI_IMAGES.slice(0, 18)
-const RECENSIONI_TOTAL = 850
-const GOOGLE_RECENSIONI_URL =
-  'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z/data=!4m8!3m7!1s0xfe2e29f381fdc93:0x97eee174cab07ada!8m2!3d45.0802312!4d7.6577188!9m1!1b1!16s%2Fg%2F11kqfhtyvd?entry=ttu'
+const RECENSIONI_TOTAL = RECENSIONI_TOTALI
 
 const PAIN_POINTS = [
   {
@@ -379,8 +379,6 @@ function Vertigini() {
   const RECENSIONI_W = 280
   const GAP = 16
   const RECENSIONI_SLIDES = RECENSIONI_PREVIEW.length + 1 // + card “tutte le recensioni”
-  // Ultima foto del preview oppure card Google: su mobile lo snap spesso si ferma una slide prima
-  const showGoogleRecensioniCta = recensioniIndex >= RECENSIONI_PREVIEW.length - 2
 
   useEffect(() => {
     if (!heroVideo) return
@@ -1543,7 +1541,7 @@ function Vertigini() {
               Recensioni
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-tight mb-4">
-              Oltre 850 recensioni tra i nostri due studi.
+              Oltre {RECENSIONI_TOTAL} recensioni tra i nostri due studi.
               <br />
               <span className="text-green">Recensioni reali.</span>
             </h2>
@@ -1575,23 +1573,25 @@ function Vertigini() {
             </div>
           ))}
           <div className="flex-shrink-0 w-[260px] sm:w-[300px] snap-center self-stretch">
-            <a
-              href={GOOGLE_RECENSIONI_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <div
               className="flex h-full min-h-full flex-col items-center justify-center gap-2.5 rounded-2xl border border-green/35 bg-green/[0.12] px-5 py-5 text-center shadow-[0_18px_40px_-18px_rgba(114,250,147,0.35)] transition-all duration-300 hover:bg-green/20 hover:-translate-y-0.5"
             >
-              <span className="grid place-items-center w-10 h-10 rounded-full bg-green text-blue-dark shadow-[0_0_18px_rgba(114,250,147,0.4)]">
-                <ExternalLink className="w-4 h-4" strokeWidth={2.25} />
-              </span>
               <p className="text-cream font-black text-base leading-snug">
-                Leggi tutte le {RECENSIONI_TOTAL} recensioni
+                Leggi le oltre {RECENSIONI_TOTAL} recensioni dei nostri due studi
               </p>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-green px-4 py-2 text-blue-dark text-[11px] font-black uppercase tracking-[0.14em]">
-                Apri Google Maps
-                <ExternalLink className="w-3 h-3" strokeWidth={2.25} />
-              </span>
-            </a>
+              {STUDI.map((studio) => (
+                <a
+                  key={studio.id}
+                  href={studio.recensioniUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-green px-4 py-2 text-blue-dark text-[11px] font-black uppercase tracking-[0.14em] hover:brightness-110 transition-all duration-300"
+                >
+                  {studio.nome}
+                  <ExternalLink className="w-3 h-3" strokeWidth={2.25} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1628,15 +1628,14 @@ function Vertigini() {
             </div>
 
             {recensioniIndex >= RECENSIONI_SLIDES - 1 ? (
-              <a
-                href={GOOGLE_RECENSIONI_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => scrollRecensioniTo(0)}
                 className="group grid place-items-center w-12 h-12 rounded-full bg-green text-blue-dark shadow-[0_10px_28px_-10px_rgba(114,250,147,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_14px_34px_-10px_rgba(114,250,147,0.65)]"
-                aria-label="Leggi tutte le recensioni su Google Maps"
+                aria-label="Torna alla prima recensione"
               >
-                <ExternalLink className="w-5 h-5" strokeWidth={2.25} />
-              </a>
+                <RotateCcw className="w-5 h-5" strokeWidth={2.25} />
+              </button>
             ) : (
               <button
                 type="button"
@@ -1649,17 +1648,7 @@ function Vertigini() {
             )}
           </div>
 
-          {showGoogleRecensioniCta && (
-            <a
-              href={GOOGLE_RECENSIONI_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-green px-6 py-3 text-blue-dark text-xs sm:text-sm font-black uppercase tracking-[0.16em] shadow-[0_10px_28px_-10px_rgba(114,250,147,0.55)] hover:brightness-110 transition-all duration-300"
-            >
-              Leggi tutte su Google Maps
-              <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.25} />
-            </a>
-          )}
+          <GoogleReviewsLinks align="center" />
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 text-left sm:text-center">
