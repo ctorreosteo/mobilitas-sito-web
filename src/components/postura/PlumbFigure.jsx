@@ -155,7 +155,7 @@ const PlumbFigure = ({ progress, className = '' }) => {
       ))}
 
       {/* Spalla */}
-      <motion.circle r="9" style={{ cx: shoulderX, cy: shoulderY }} className="mx-post-fig__joint" />
+      <motion.circle r="9" cx={shoulderX} cy={shoulderY} className="mx-post-fig__joint" />
 
       {/* Collo e testa */}
       <motion.path d={neck} className="mx-post-fig__neck" />
