@@ -3,6 +3,7 @@ import { Check, ShoppingCart, ArrowUpRight } from 'lucide-react'
 import { RECENSIONI_TOTALI } from '../../data/studi'
 import GoogleReviewsLinks from '../GoogleReviewsLinks'
 import { EASE } from '../home-sections/homeMotion'
+import { MaskLines } from '../home-sections/HomeKit'
 
 export default function OfferSection() {
   const handlePurchaseClick = () => {
@@ -39,19 +40,14 @@ export default function OfferSection() {
       <div className="mx-wrap mx-mds-offer__grid">
         <div className="mx-mds-offer__head">
           <h2 className="mx-h mx-mds-offer__title">
-            {['LA NOSTRA', 'OFFERTA', `DI ${currentMonth.toUpperCase()}`, 'PER TE'].map((line, i) => (
-              <span key={i} className="mx-mask">
-                <motion.span
-                  className={i === 1 ? 'mx-accent' : i === 2 ? 'mx-outline' : undefined}
-                  initial={{ y: '110%' }}
-                  whileInView={{ y: '0%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, ease: EASE, delay: i * 0.08 }}
-                >
-                  {line}
-                </motion.span>
-              </span>
-            ))}
+            <MaskLines
+              lines={[
+                { text: 'LA NOSTRA' },
+                { text: 'OFFERTA', className: 'mx-accent' },
+                { text: `DI ${currentMonth.toUpperCase()}`, className: 'mx-outline' },
+                { text: 'PER TE' },
+              ]}
+            />
           </h2>
         </div>
 

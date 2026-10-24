@@ -2,7 +2,8 @@ import { Kicker, Reveal, Snap } from '../home-sections/HomeKit'
 import { trackSpotlight } from '../home-sections/homeMotion'
 import ClImg from './ClImg'
 import Emblem from './Emblem'
-import { BookCtas, CheckList, Title, pad2 } from './kit'
+import { BookCtas, CheckList, Title } from './kit'
+import { pad2 } from './ctaContext'
 
 // 01 — I sintomi: carosello su telefono, griglia su desktop
 export const PainSection = ({ page }) => {

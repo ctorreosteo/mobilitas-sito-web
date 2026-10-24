@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
+import Dialog, { DialogHeader } from './ui/Dialog'
 
 // Utility functions for data cleaning
 const cleanName = (name) => {
@@ -189,26 +189,29 @@ function getPopupCopy(packageType, pageContext, ctaType) {
   }
 }
 
+// Fasce orarie: il testo dell'etichetta finisce nelle note della richiesta ("Orario richiesta: …")
+const ORARI = [
+  { value: 'mattina', label: 'Mattina (9:00 – 12:00)' },
+  { value: 'pausa-pranzo', label: 'Pausa pranzo (13:00 – 14:00)' },
+  { value: 'pomeriggio', label: 'Pomeriggio (14:00 – 18:00)' },
+  { value: 'sera', label: 'Sera (18:00 – 20:00)' },
+  { value: 'qualsiasi', label: 'Qualsiasi orario' },
+]
+
+const EMPTY_FORM = { nome: '', cognome: '', cellulare: '', orarioChiamata: '' }
+
 export default function BookingPopup({ isOpen, onClose, packageType, pageContext, ctaType }) {
   const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    nome: '',
-    cognome: '',
-    cellulare: '',
-    orarioChiamata: ''
-  })
+  const uid = useId()
+  const [formData, setFormData] = useState(EMPTY_FORM)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState(null)
 
   const copy = getPopupCopy(packageType, pageContext, ctaType)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async (e) => {
@@ -216,9 +219,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     setIsSubmitting(true)
     setError(null)
 
-    const orarioSelect = document.getElementById('orarioChiamata')
-    const selectedOption = orarioSelect?.options[orarioSelect.selectedIndex]
-    const orarioText = selectedOption ? selectedOption.text : formData.orarioChiamata
+    const orarioText = ORARI.find((o) => o.value === formData.orarioChiamata)?.label || formData.orarioChiamata
 
     const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
     const isOffertaPostura =
@@ -312,8 +313,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       }
 
       setIsSubmitting(false)
-      setFormData({ nome: '', cognome: '', cellulare: '', orarioChiamata: '' })
-      setIsSubmitted(false)
+      setFormData(EMPTY_FORM)
       setError(null)
       onClose()
       navigate(pageContext === 'cervicalgia' ? '/cervicalgia/conferma' : '/conferma-richiesta')
@@ -326,198 +326,105 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setIsSubmitted(false)
       setError(null)
-      setFormData({ nome: '', cognome: '', cellulare: '', orarioChiamata: '' })
+      setFormData(EMPTY_FORM)
       onClose()
     }
   }
 
+  const canSubmit =
+    !isSubmitting &&
+    formData.nome.trim() &&
+    formData.cognome.trim() &&
+    formData.cellulare.trim() &&
+    formData.orarioChiamata
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 font-montserrat"
-          onClick={handleClose}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 30 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="bg-blue-dark border border-green rounded-2xl shadow-2xl w-full max-w-[92vw] sm:max-w-[400px] max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header - compatto su mobile */}
-            <div className="relative bg-blue-dark p-3 pb-2 sm:p-5 sm:pb-4 border-b border-green/20">
+    <Dialog isOpen={isOpen} onClose={handleClose} closeDisabled={isSubmitting} title={copy.title}>
+      <DialogHeader title={copy.title} subtitle={copy.subtitle} text={copy.subtext} />
+
+      <form className="mx-dlg-form" onSubmit={handleSubmit}>
+        <div className="mx-dlg-row mx-dlg-row--2">
+          <div className="mx-dlg-field">
+            <label className="mx-dlg-label" htmlFor={`${uid}-nome`}>Nome *</label>
+            <input
+              className="mx-dlg-input"
+              type="text"
+              id={`${uid}-nome`}
+              name="nome"
+              value={formData.nome}
+              onChange={handleInputChange}
+              required
+              autoComplete="given-name"
+              placeholder="Mario"
+            />
+          </div>
+          <div className="mx-dlg-field">
+            <label className="mx-dlg-label" htmlFor={`${uid}-cognome`}>Cognome *</label>
+            <input
+              className="mx-dlg-input"
+              type="text"
+              id={`${uid}-cognome`}
+              name="cognome"
+              value={formData.cognome}
+              onChange={handleInputChange}
+              required
+              autoComplete="family-name"
+              placeholder="Rossi"
+            />
+          </div>
+        </div>
+
+        <div className="mx-dlg-field">
+          <label className="mx-dlg-label" htmlFor={`${uid}-cellulare`}>Cellulare *</label>
+          <input
+            className="mx-dlg-input"
+            type="tel"
+            inputMode="tel"
+            id={`${uid}-cellulare`}
+            name="cellulare"
+            value={formData.cellulare}
+            onChange={handleInputChange}
+            required
+            autoComplete="tel"
+            placeholder="+39 333 123 4567"
+          />
+        </div>
+
+        <div className="mx-dlg-field">
+          <span className="mx-dlg-label" id={`${uid}-orario`}>Orario *</span>
+          <div className="mx-dlg-chips" role="radiogroup" aria-labelledby={`${uid}-orario`}>
+            {ORARI.map((o) => (
               <button
-                onClick={handleClose}
-                disabled={isSubmitting}
-                className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-colors duration-200 disabled:opacity-50 bg-black/30 border-2 border-green text-cream hover:bg-green/20"
+                key={o.value}
+                type="button"
+                role="radio"
+                aria-checked={formData.orarioChiamata === o.value}
+                className="mx-dlg-chip"
+                onClick={() => setFormData((prev) => ({ ...prev, orarioChiamata: o.value }))}
               >
-                <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                {o.label}
               </button>
+            ))}
+          </div>
+        </div>
 
-              <div className="text-center pr-7 sm:pr-8">
-                <h2 className="text-lg sm:text-xl font-black text-green mb-0.5 sm:mb-1 leading-tight">
-                  {copy.title}
-                </h2>
-                <p className="text-sm sm:text-sm font-bold text-cream/90 mb-0.5 sm:mb-1">
-                  {copy.subtitle}
-                </p>
-                <p className="text-xs sm:text-xs text-cream/80 font-medium italic leading-snug">
-                  {copy.subtext}
-                </p>
-              </div>
-            </div>
+        {error && <p className="mx-dlg-error" role="alert">{error}</p>}
 
-            {/* Content - form compatto su mobile */}
-            <div className="p-3 sm:p-8">
-              {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
-                  <div className="space-y-1 sm:space-y-1.5">
-                    <label htmlFor="nome" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
-                      Nome *
-                    </label>
-                    <input
-                      type="text"
-                      id="nome"
-                      name="nome"
-                      value={formData.nome}
-                      onChange={handleInputChange}
-                      required
-                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
-                      placeholder="Mario"
-                    />
-                  </div>
-
-                  <div className="space-y-1 sm:space-y-1.5">
-                    <label htmlFor="cognome" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
-                      Cognome *
-                    </label>
-                    <input
-                      type="text"
-                      id="cognome"
-                      name="cognome"
-                      value={formData.cognome}
-                      onChange={handleInputChange}
-                      required
-                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
-                      placeholder="Rossi"
-                    />
-                  </div>
-
-                  <div className="space-y-1 sm:space-y-1.5">
-                    <label htmlFor="cellulare" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
-                      Cellulare *
-                    </label>
-                    <input
-                      type="tel"
-                      id="cellulare"
-                      name="cellulare"
-                      value={formData.cellulare}
-                      onChange={handleInputChange}
-                      required
-                      className="input-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] placeholder-cream/30 transition-all duration-300"
-                      placeholder="+39 333 123 4567"
-                    />
-                  </div>
-
-                  <div className="space-y-1 sm:space-y-1.5">
-                    <label htmlFor="orarioChiamata" className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-green/90">
-                      Orario *
-                    </label>
-                    <select
-                      id="orarioChiamata"
-                      name="orarioChiamata"
-                      value={formData.orarioChiamata}
-                      onChange={handleInputChange}
-                      required
-                      className="input-premium select-premium input-compact w-full px-3 py-2.5 sm:px-4 sm:py-3.5 rounded-lg sm:rounded-xl text-cream font-medium text-sm sm:text-[15px] transition-all duration-300 appearance-none cursor-pointer [&>option]:bg-[#001a3d] [&>option]:text-cream"
-                    >
-                      <option value="">Seleziona fascia oraria</option>
-                      <option value="mattina">Mattina (9:00 – 12:00)</option>
-                      <option value="pausa-pranzo">Pausa pranzo (13:00 – 14:00)</option>
-                      <option value="pomeriggio">Pomeriggio (14:00 – 18:00)</option>
-                      <option value="sera">Sera (18:00 – 20:00)</option>
-                      <option value="qualsiasi">Qualsiasi orario</option>
-                    </select>
-                  </div>
-
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-400/30 bg-red-500/10"
-                    >
-                      <p className="text-red-200/90 text-xs sm:text-sm font-medium">{error}</p>
-                    </motion.div>
-                  )}
-
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting || !formData.nome.trim() || !formData.cognome.trim() || !formData.cellulare.trim() || !formData.orarioChiamata}
-                    className="cta-popup-brand w-full text-blue-dark py-3 px-4 sm:py-4 sm:px-6 rounded-xl sm:rounded-2xl text-sm sm:text-base tracking-wide shadow-[0_4px_20px_rgba(114,250,147,0.25)] hover:shadow-[0_6px_28px_rgba(114,250,147,0.35)] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
-                    whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                    whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-5 h-5 border-2 border-blue-dark border-t-transparent rounded-full animate-spin" />
-                        <span>Invio in corso...</span>
-                      </div>
-                    ) : (
-                      copy.cta
-                    )}
-                  </motion.button>
-                </form>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-4 sm:py-8"
-                >
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-green flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: "spring", damping: 15 }}
-                      className="text-blue-dark text-xl sm:text-2xl font-bold"
-                    >
-                      ✓
-                    </motion.div>
-                  </div>
-
-                  <h3 className="text-lg sm:text-2xl font-black text-cream mb-2 sm:mb-4">
-                    Prenotazione confermata!
-                  </h3>
-
-                  <p className="text-cream/80 text-sm sm:text-base mb-4 sm:mb-6">
-                    Grazie <strong className="text-green">{formData.nome}</strong>! Ti contatteremo al numero <strong className="text-green">{formData.cellulare}</strong> entro 24 ore.
-                    {formData.orarioChiamata && (
-                      <span className="block mt-1 sm:mt-2">
-                        Ti chiameremo preferibilmente <strong className="text-green">{formData.orarioChiamata}</strong>.
-                      </span>
-                    )}
-                  </p>
-
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    className="text-xs sm:text-sm text-cream/50"
-                  >
-                    Questo popup si chiuderà automaticamente...
-                  </motion.div>
-                </motion.div>
-              )}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        <button type="submit" className="mx-dlg-submit" disabled={!canSubmit}>
+          {isSubmitting ? (
+            <>
+              <span className="mx-dlg-spinner" aria-hidden="true" />
+              Invio in corso...
+            </>
+          ) : (
+            <>
+              {copy.cta}
+              <ArrowRight size={20} strokeWidth={2.6} />
+            </>
+          )}
+        </button>
+      </form>
+    </Dialog>
   )
 }

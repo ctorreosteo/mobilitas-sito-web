@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useId, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { X } from 'lucide-react'
-import '../styles/pages/gpadel-lm.css'
+import { Download } from 'lucide-react'
+import Dialog, { DialogHeader } from './ui/Dialog'
 
 const API_BASE = import.meta.env.VITE_API_BASE
   || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
@@ -29,6 +27,7 @@ const parseCellulare = (raw) => {
 
 export default function GpadelInfortuniPopup({ isOpen, onClose }) {
   const navigate = useNavigate()
+  const uid = useId()
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
@@ -131,171 +130,82 @@ export default function GpadelInfortuniPopup({ isOpen, onClose }) {
     }
   }
 
-  // Esc per chiudere e pagina ferma sotto il pannello
-  useEffect(() => {
-    if (!isOpen) return
-    const onKey = (e) => {
-      if (e.key === 'Escape' && !isSubmitting) onClose()
-    }
-    const prev = document.documentElement.style.overflow
-    document.documentElement.style.overflow = 'hidden'
-    window.addEventListener('keydown', onKey)
-    return () => {
-      document.documentElement.style.overflow = prev
-      window.removeEventListener('keydown', onKey)
-    }
-  }, [isOpen, isSubmitting, onClose])
+  const field = (name, label, props) => (
+    <div className="mx-dlg-field">
+      <label className="mx-dlg-label" htmlFor={`${uid}-${name}`}>{label}</label>
+      <input
+        className="mx-dlg-input"
+        id={`${uid}-${name}`}
+        name={name}
+        value={formData[name]}
+        onChange={handleInputChange}
+        required
+        disabled={isSubmitting}
+        aria-invalid={Boolean(formErrors[name])}
+        aria-describedby={formErrors[name] ? `${uid}-${name}-err` : undefined}
+        {...props}
+      />
+      {formErrors[name] && (
+        <p className="mx-dlg-fielderr" id={`${uid}-${name}-err`}>{formErrors[name]}</p>
+      )}
+    </div>
+  )
 
-  if (!isOpen) return null
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose} closeDisabled={isSubmitting} title="Compila il form">
+      <DialogHeader
+        kicker="Guida gratuita"
+        title="Compila il form"
+        text="Dopo che avrai compilato il form, la nostra segreteria farà un controllo manuale che si tratti di una richiesta vera e ti inverà la guida gratuita. Compila subito il form! 👇🏼"
+      />
 
-  const fieldClass = (name) => `mx-gpl-field ${formErrors[name] ? 'is-error' : ''}`
-
-  return createPortal(
-    <div
-      className="mx-gpl-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="mx-gpl-modal-title"
-      onClick={(e) => {
-        if (e.target === e.currentTarget && !isSubmitting) {
-          onClose()
-        }
-      }}
-    >
-      <motion.div
-        className="mx-gpl-sheet"
-        initial={{ y: 60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Close Button */}
-        <button
-          type="button"
-          aria-label="Chiudi"
-          onClick={() => {
-            if (!isSubmitting) {
-              onClose()
-            }
-          }}
-          disabled={isSubmitting}
-          className="mx-gpl-sheet__close"
-        >
-          <X size={20} />
-        </button>
-
-        <div className="mx-gpl-sheet__head">
-          <span className="mx-gpl-sheet__thumb" aria-hidden="true">
-            <img src="/landing-pages/web/lm-gpadel-copertina-480.jpg" alt="" width="1414" height="2000" />
-          </span>
-          <div>
-            <h3 id="mx-gpl-modal-title" className="mx-h mx-gpl-sheet__title">Compila il form</h3>
-          </div>
+      <form className="mx-dlg-form" onSubmit={handleFormSubmit} noValidate>
+        <div className="mx-dlg-row mx-dlg-row--2">
+          {field('nome', 'Nome *', { type: 'text', placeholder: 'Nome *', autoComplete: 'given-name' })}
+          {field('cognome', 'Cognome *', { type: 'text', placeholder: 'Cognome *', autoComplete: 'family-name' })}
         </div>
-        <p className="mx-gpl-sheet__intro">
-          Dopo che avrai compilato il form, la nostra segreteria farà un controllo manuale che si tratti di una richiesta vera e ti inverà la guida gratuita. 
-          Compila subito il form! 👇🏼
-        </p>
+        {field('cellulare', 'Cellulare *', { type: 'tel', inputMode: 'tel', placeholder: 'Cellulare *', autoComplete: 'tel' })}
+        {field('email', 'Email *', { type: 'email', inputMode: 'email', placeholder: 'Email *', autoComplete: 'email' })}
 
-        <form onSubmit={handleFormSubmit} className="mx-gpl-form">
-          <div className="mx-gpl-form__row">
-            <div className={fieldClass('nome')}>
-              <input
-                type="text"
-                name="nome"
-                placeholder="Nome *"
-                aria-label="Nome"
-                autoComplete="given-name"
-                value={formData.nome}
-                onChange={handleInputChange}
-                required
-                minLength={2}
-                disabled={isSubmitting}
-              />
-              {formErrors.nome && <p className="mx-gpl-field__err">{formErrors.nome}</p>}
-            </div>
-            <div className={fieldClass('cognome')}>
-              <input
-                type="text"
-                name="cognome"
-                placeholder="Cognome *"
-                aria-label="Cognome"
-                autoComplete="family-name"
-                value={formData.cognome}
-                onChange={handleInputChange}
-                required
-                minLength={2}
-                disabled={isSubmitting}
-              />
-              {formErrors.cognome && <p className="mx-gpl-field__err">{formErrors.cognome}</p>}
-            </div>
-          </div>
-
-          <div className={fieldClass('cellulare')}>
+        <div>
+          <label className="mx-dlg-check" htmlFor={`${uid}-privacy`}>
             <input
-              type="tel"
-              name="cellulare"
-              placeholder="Cellulare *"
-              aria-label="Cellulare"
-              autoComplete="tel"
-              value={formData.cellulare}
-              onChange={handleInputChange}
-              required
-              minLength={10}
-              pattern="[0-9+\s\-\(\)]+"
-              disabled={isSubmitting}
-            />
-            {formErrors.cellulare && <p className="mx-gpl-field__err">{formErrors.cellulare}</p>}
-          </div>
-
-          <div className={fieldClass('email')}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email *"
-              aria-label="Email"
-              autoComplete="email"
-              value={formData.email}
+              type="checkbox"
+              name="privacy"
+              id={`${uid}-privacy`}
+              checked={formData.privacy}
               onChange={handleInputChange}
               required
               disabled={isSubmitting}
+              aria-invalid={Boolean(formErrors.privacy)}
             />
-            {formErrors.email && <p className="mx-gpl-field__err">{formErrors.email}</p>}
-          </div>
+            <span>
+              Accetto la{' '}
+              <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer">
+                privacy policy
+              </a>{' '}
+              e autorizzo il trattamento dei miei dati personali
+            </span>
+          </label>
+          {formErrors.privacy && <p className="mx-dlg-fielderr">{formErrors.privacy}</p>}
+        </div>
 
-          <div>
-            <div className="mx-gpl-consent">
-              <input
-                type="checkbox"
-                name="privacy"
-                id="privacy"
-                checked={formData.privacy}
-                onChange={handleInputChange}
-                required
-                disabled={isSubmitting}
-              />
-              <label htmlFor="privacy">
-                Accetto la <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer">privacy policy</a> e autorizzo il trattamento dei miei dati personali
-              </label>
-            </div>
-            {formErrors.privacy && <p className="mx-gpl-field__err">{formErrors.privacy}</p>}
-          </div>
+        {formErrors.submit && <p className="mx-dlg-error" role="alert">{formErrors.submit}</p>}
 
-          {formErrors.submit && (
-            <div className="mx-gpl-form__fail">
-              <p>{formErrors.submit}</p>
-            </div>
+        <button type="submit" className="mx-dlg-submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <span className="mx-dlg-spinner" aria-hidden="true" />
+              Invio in corso...
+            </>
+          ) : (
+            <>
+              Scarica la guida gratis
+              <Download size={20} strokeWidth={2.6} />
+            </>
           )}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="mx-gpl-submit"
-          >
-            {isSubmitting ? 'Invio in corso...' : 'Scarica la guida gratis'}
-          </button>
-        </form>
-      </motion.div>
-    </div>,
-    document.body
+        </button>
+      </form>
+    </Dialog>
   )
 }

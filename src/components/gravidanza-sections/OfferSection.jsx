@@ -1,27 +1,68 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, Calendar } from 'lucide-react'
+import { CheckCircle, Calendar, Baby } from 'lucide-react'
 import { useState } from 'react'
 import BookingPopup from './BookingPopup'
 import { RECENSIONI_TOTALI } from '../../data/studi'
 import GoogleReviewsLinks from '../GoogleReviewsLinks'
+import { EASE } from '../home-sections/homeMotion'
+import { MaskLines } from '../home-sections/HomeKit'
+
+// Le stesse fasce del campo "Settimana di gravidanza" del modulo di prenotazione
+const WEEK_OPTIONS = [
+  { value: '1-4', label: '1-4 settimane' },
+  { value: '5-8', label: '5-8 settimane' },
+  { value: '9-12', label: '9-12 settimane' },
+  { value: '13-16', label: '13-16 settimane' },
+  { value: '17-20', label: '17-20 settimane' },
+  { value: '21-24', label: '21-24 settimane' },
+  { value: '25-28', label: '25-28 settimane' },
+  { value: '29-32', label: '29-32 settimane' },
+  { value: '33-36', label: '33-36 settimane' },
+  { value: '37-40', label: '37-40 settimane' },
+]
+
+// Anello delle 40 settimane: dieci archi, si riempie fino alla fascia scelta.
+function WeekRing({ index }) {
+  const R = 74
+  const C = 2 * Math.PI * R
+  const seg = C / 10
+  const gap = 6
+  return (
+    <svg className="mx-grav-ring__svg" viewBox="0 0 180 180" aria-hidden="true">
+      <defs>
+        <linearGradient id="mx-grav-ring-g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#72fa93" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(-90 90 90)">
+        {WEEK_OPTIONS.map((w, i) => (
+          <circle
+            key={w.value}
+            cx="90"
+            cy="90"
+            r={R}
+            fill="none"
+            strokeWidth="12"
+            strokeLinecap="round"
+            stroke={i <= index ? 'url(#mx-grav-ring-g)' : 'rgba(0, 37, 82, 0.09)'}
+            strokeDasharray={`${seg - gap} ${C - seg + gap}`}
+            strokeDashoffset={-i * seg}
+            style={{ transition: `stroke 0.4s ${i * 0.04}s` }}
+          />
+        ))}
+      </g>
+    </svg>
+  )
+}
 
 export default function OfferSection() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [week, setWeek] = useState('')
 
   const handleBookingClick = () => {
     setIsPopupOpen(true)
   };
-
-  // Calcola i posti rimasti basandosi sui giorni del mese
-  const calculateRemainingSpots = () => {
-    const today = new Date();
-    const dayOfMonth = today.getDate();
-    const totalSpots = 40; // Meno posti per gravidanza
-    const remainingSpots = Math.max(1, totalSpots - (dayOfMonth)); // Minimo 1 posto
-    return remainingSpots;
-  };
-
-  const remainingSpots = calculateRemainingSpots();
 
   // Ottieni il nome del mese corrente
   const getCurrentMonthName = () => {
@@ -34,303 +75,126 @@ export default function OfferSection() {
   };
 
   const currentMonth = getCurrentMonthName();
+  const weekIndex = WEEK_OPTIONS.findIndex((w) => w.value === week)
 
   return (
-    <section id="offer-section" style={{
-      background: 'linear-gradient(135deg, #0a1a3a 0%, #002552 25%, #1a3a5c 50%, #002552 75%, #0a1a3a 100%)',
-      padding: '60px 16px',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Background Effects */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'radial-gradient(circle at 20% 80%, rgba(255, 104, 105, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 104, 105, 0.1) 0%, transparent 50%)',
-        pointerEvents: 'none'
-      }} />
-      
-      {/* Content */}
-      <div style={{maxWidth: '1200px', margin: '0 auto', textAlign: 'center', padding: '0 8px', position: 'relative', zIndex: 1}}>
-        
-        {/* Offer Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-8 sm:mb-12"
-        >
-          <h2 style={{
-            fontSize: 'clamp(28px, 5vw, 42px)',
-            fontWeight: '900',
-            lineHeight: '1.1',
-            marginBottom: '12px',
-            textShadow: '0 4px 20px rgba(0,0,0,0.3)'
-          }}>
-            <motion.div 
-              style={{color: '#F4F4F4', display: 'block'}}
-              animate={{ textShadow: ['0 4px 20px rgba(0,0,0,0.3)', '0 4px 20px rgba(255, 104, 105, 0.3)', '0 4px 20px rgba(0,0,0,0.3)'] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              LA NOSTRA OFFERTA
-            </motion.div>
-            <motion.div 
-              style={{color: '#FF6869', display: 'block'}}
-              animate={{ 
-                textShadow: [
-                  '0 4px 20px rgba(255, 104, 105, 0.3)',
-                  '0 4px 30px rgba(255, 104, 105, 0.6)',
-                  '0 4px 20px rgba(255, 104, 105, 0.3)'
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              DI {currentMonth.toUpperCase()} PER TE
-            </motion.div>
-          </h2>
-        </motion.div>
+    <section id="offer-section" className="mx-grav-sec mx-grav-offer">
+      <div className="mx-grav-offer__bg" aria-hidden="true" />
+      <div className="mx-wrap">
+        <h2 className="mx-h mx-grav-offer__title">
+          <MaskLines
+            lines={[
+              { text: 'LA NOSTRA OFFERTA' },
+              { text: `DI ${currentMonth.toUpperCase()} PER TE`, className: 'mx-grav-soft' },
+            ]}
+          />
+        </h2>
 
-        {/* Offer Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="p-4 sm:p-10 rounded-2xl sm:rounded-3xl max-w-2xl sm:max-w-3xl mx-auto mb-6 sm:mb-10"
-          style={{
-            boxShadow: '0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1)',
-            border: '2px solid rgba(255, 104, 105, 0.4)',
-            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-            color: '#002552',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
-          {/* Card Glow Effect */}
-          <div style={{
-            position: 'absolute',
-            top: '-2px',
-            left: '-2px',
-            right: '-2px',
-            bottom: '-2px',
-            background: 'linear-gradient(45deg, #FF6869, #FF8A95, #FF6869)',
-            borderRadius: '24px',
-            zIndex: -1,
-            opacity: 0.3,
-            filter: 'blur(8px)'
-          }} />
-          
-          {/* Urgency Banner - Inside white box */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '8px 16px',
-              borderRadius: '25px',
-              fontSize: '12px',
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              letterSpacing: '0.8px',
-              boxShadow: '0 3px 12px rgba(255, 104, 105, 0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
-              border: '1px solid rgba(255, 104, 105, 0.8)',
-              background: 'linear-gradient(135deg, rgba(255, 104, 105, 0.8) 0%, rgba(255, 104, 105, 0.9) 100%)',
-              color: '#002552',
-              margin: '0 auto 8px auto',
-              width: 'auto',
-              maxWidth: '400px',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
+        <div className="mx-grav-offer__grid">
+          <motion.article
+            className="mx-grav-card"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ duration: 1.1, ease: EASE }}
           >
-            <motion.div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: '-100%',
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)'
-              }}
-              animate={{ left: ['100%', '-100%'] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            />
-            <span style={{ position: 'relative', zIndex: 1 }}>
-              ⚠️ Ultimi posti rimasti
-            </span>
-          </motion.div>
+            <span className="mx-grav-card__chip">⚠️ Ultimi posti rimasti</span>
 
-          {/* Reviews Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            style={{
-              backgroundColor: 'rgba(255, 104, 105, 0.1)',
-              border: '2px solid rgba(255, 104, 105, 0.3)',
-              borderRadius: '12px',
-              padding: '16px 20px',
-              marginBottom: '12px',
-              textAlign: 'center'
-            }}
-          >
-            <p style={{
-              fontSize: '16px',
-              fontWeight: '700',
-              color: '#002552',
-              margin: 0,
-              lineHeight: '1.4'
-            }}>
-              Il nostro Studio Mobilitas ha oltre {RECENSIONI_TOTALI} recensioni Google con storie meravigliose sui nostri trattamenti
-            </p>
-            <GoogleReviewsLinks align="center" variant="light" className="mt-3" />
-          </motion.div>
+            <h3 className="mx-h mx-grav-card__name">Trattamento Osteopatico per la Gravidanza</h3>
 
-          {/* Treatment Title */}
-          <h3 style={{
-            fontSize: '24px',
-            fontWeight: '700',
-            marginBottom: '16px',
-            color: '#002552'
-          }}>
-            Trattamento Osteopatico per la Gravidanza
-          </h3>
+            <div className="mx-grav-price">
+              <s>€90</s>
+              <b>€69</b>
+            </div>
 
-          {/* Price */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '20px',
-            marginBottom: '16px'
-          }}>
-            <span style={{
-              fontSize: '28px',
-              fontWeight: 'bold',
-              textDecoration: 'line-through',
-              color: 'rgba(0, 37, 82, 0.6)'
-            }}>
-              €90
-            </span>
-            <span style={{
-              fontSize: '48px',
-              fontWeight: '900',
-              color: '#FF6869'
-            }}>
-              €69
-            </span>
-          </div>
-
-          {/* Treatment Description */}
-          <div style={{marginBottom: '20px'}}>
-            <p className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 text-left" style={{color: '#002552'}}>
-              Il trattamento di un'ora è composto da:
-            </p>
-            
-            <div style={{textAlign: 'left'}}>
+            <p className="mx-grav-card__intro">Il trattamento di un'ora è composto da:</p>
+            <ul className="mx-grav-card__list">
               {[
                 "Anamnesi generale approfondita per la gravidanza",
                 "Trattamento Osteopatico specializzato per la gravidanza",
                 "Consigli per il benessere di mamma e bambino"
-              ].map((item, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                  className="flex items-center mb-2 sm:mb-3"
+              ].map((item) => (
+                <li key={item}>
+                  <CheckCircle size={18} strokeWidth={2.4} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mx-grav-reviews">
+              <p>
+                Il nostro Studio Mobilitas ha oltre {RECENSIONI_TOTALI} recensioni Google con storie meravigliose sui nostri trattamenti
+              </p>
+              <GoogleReviewsLinks align="center" variant="light" />
+            </div>
+          </motion.article>
+
+          <motion.div
+            className="mx-grav-ring"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}
+          >
+            <p className="mx-grav-ring__label" id="mx-grav-week-label">Settimana di gravidanza</p>
+
+            <div className="mx-grav-ring__stage">
+              <WeekRing index={weekIndex} />
+              <div className="mx-grav-ring__core">
+                <motion.span
+                  key={week || 'none'}
+                  className="mx-grav-ring__baby"
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 16 }}
                 >
-                  <CheckCircle 
-                    className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0"
-                    style={{color: '#FF6869'}} 
-                  />
-                  <span className="text-sm sm:text-base font-medium" style={{color: '#002552'}}>
-                    {item}
-                  </span>
-                </motion.div>
+                  <Baby size={30} strokeWidth={2} />
+                </motion.span>
+                <b>{weekIndex >= 0 ? WEEK_OPTIONS[weekIndex].label : '1–40'}</b>
+              </div>
+            </div>
+
+            <div className="mx-grav-weeks" role="radiogroup" aria-labelledby="mx-grav-week-label">
+              {WEEK_OPTIONS.map((w) => (
+                <button
+                  key={w.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={week === w.value}
+                  className={week === w.value ? 'is-on' : ''}
+                  onClick={() => setWeek(week === w.value ? '' : w.value)}
+                >
+                  {w.value}
+                </button>
               ))}
             </div>
-          </div>
 
-          {/* CTA Button */}
-          <motion.button 
-            onClick={handleBookingClick}
-            className="px-5 sm:px-9 py-2.5 sm:py-4 text-sm sm:text-lg font-bold rounded-full mx-auto mb-3 sm:mb-5 flex items-center justify-center gap-2 sm:gap-3"
-            style={{
-              backgroundColor: '#002552',
-              color: '#FF6869',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 12px 35px rgba(0, 37, 82, 0.4), inset 0 1px 0 rgba(255, 104, 105, 0.2)',
-              transition: 'all 0.3s ease',
-              fontFamily: 'Montserrat, sans-serif',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#001a3a';
-              e.target.style.boxShadow = '0 18px 45px rgba(0, 37, 82, 0.6), inset 0 1px 0 rgba(255, 104, 105, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = '#002552';
-              e.target.style.boxShadow = '0 12px 35px rgba(0, 37, 82, 0.4), inset 0 1px 0 rgba(255, 104, 105, 0.2)';
-            }}
-          >
-            <Calendar className="w-4 h-4 sm:w-6 sm:h-6" />
-            PRENOTA ORA CON SCONTO
-          </motion.button>
+            <motion.button
+              type="button"
+              onClick={handleBookingClick}
+              className="mx-grav-btn mx-grav-btn--full"
+              whileTap={{ scale: 0.97 }}
+            >
+              <Calendar size={20} strokeWidth={2.4} />
+              <span>PRENOTA ORA CON SCONTO</span>
+            </motion.button>
 
-          {/* Disclaimer Text */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="text-xs sm:text-sm font-bold italic text-center mx-auto leading-tight max-w-sm sm:max-w-lg"
-            style={{
-              color: '#FF6869'
-            }}
-          >
-            Dopo che compili il form, la nostra segretaria ti chiamerà per confermare l'appuntamento. Siamo aperti anche il sabato! 🤱
-          </motion.p>
-        </motion.div>
+            <p className="mx-grav-ring__note">
+              Dopo che compili il form, la nostra segretaria ti chiamerà per confermare l'appuntamento. Siamo aperti anche il sabato! 🤱
+            </p>
+          </motion.div>
+        </div>
 
-        {/* Urgency Message */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          style={{
-            backgroundColor: 'rgba(255, 104, 105, 0.2)',
-            border: '2px solid rgba(255, 104, 105, 0.4)',
-            borderRadius: '16px',
-            padding: '20px',
-            maxWidth: '500px',
-            margin: '0 auto'
-          }}
-        >
-          <p style={{
-            color: '#F4F4F4',
-            fontSize: '16px',
-            fontWeight: '600',
-            margin: 0,
-            textAlign: 'center'
-          }}>
-            ⚡ Offerta limitata SOLO per QUESTO MESE - Fino ad esaurimento posti
-          </p>
-        </motion.div>
+        <div className="mx-grav-limit">
+          <p>⚡ Offerta limitata SOLO per QUESTO MESE - Fino ad esaurimento posti</p>
+        </div>
       </div>
 
       {/* Booking Popup */}
-      <BookingPopup 
-        isOpen={isPopupOpen} 
-        onClose={() => setIsPopupOpen(false)} 
+      <BookingPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        initialWeek={week}
       />
     </section>
   )

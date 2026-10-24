@@ -55,8 +55,6 @@ const WEB = {
   '/vertigini/vertigini6.JPG': 'vertigini-vertigini6',
 }
 
-export const webSrc = (src, w = 1600) => (WEB[src] ? `/condition-landing/web/${WEB[src]}-${w}.jpg` : src)
-
 // eager: immagini above the fold (niente lazy-load, priorità alta)
 const ClImg = ({ src, alt = '', sizes = '100vw', eager = false, ...rest }) => {
   const key = WEB[src]

@@ -5,9 +5,9 @@ import GoogleReviewsLinks from '../GoogleReviewsLinks'
 import { RECENSIONI_IMAGES } from '../../data/recensioni'
 import { RECENSIONI_TOTALI, STUDI } from '../../data/studi'
 import ClImg from './ClImg'
-import { CtaContext } from './ctaContext'
 import { MAPS } from './defaults'
-import { BookCtas, CheckList, Title, pad2 } from './kit'
+import { BookCtas, CheckList, Title } from './kit'
+import { CtaContext, pad2 } from './ctaContext'
 
 const RECENSIONI_PREVIEW = RECENSIONI_IMAGES.slice(0, 18)
 const RECENSIONI_SLIDES = RECENSIONI_PREVIEW.length + 1 // + card “tutte le recensioni”

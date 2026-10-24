@@ -22,7 +22,7 @@
     display: flex;
     align-items: center;
     min-height: min(100svh, 980px);
-    padding: calc(80px + 56px) 0 80px;
+    padding: calc(80px + 40px) 0 64px;
   }
 }
 
@@ -78,6 +78,7 @@
 @media (min-width: 1024px) {
   .mx-g39-hero__grid { max-width: 1280px; }
   .mx-g39-hero__grid > * { max-width: 600px; }
+  .mx-g39-hero__grid > .mx-g39-hero__head { max-width: 780px; }
 }
 
 .mx-g39-badge {
@@ -114,7 +115,7 @@
 @layer base {
   :is(.mx-home, .mx-page) .mx-h.mx-g39-title {
     margin-top: 16px;
-    font-size: clamp(2.2rem, 9.4vw, 5rem) !important;
+    font-size: clamp(2.2rem, 9.4vw, 4.1rem) !important;
     line-height: 0.98;
   }
 
@@ -169,7 +170,7 @@
 }
 
 @media (min-width: 1024px) {
-  .mx-g39-ticket__main { padding: 30px 30px 30px 32px; }
+  .mx-g39-ticket__main { padding: 24px 28px 24px 30px; }
 }
 
 .mx-g39-ticket__list {
@@ -191,7 +192,7 @@
 }
 
 @media (min-width: 1024px) {
-  .mx-g39-ticket__list { gap: 12px; margin-top: 22px; }
+  .mx-g39-ticket__list { gap: 10px; margin-top: 16px; }
   .mx-g39-ticket__list li { font-size: 1.02rem; gap: 12px; }
 }
 

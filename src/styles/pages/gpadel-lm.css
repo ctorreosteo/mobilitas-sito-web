@@ -1,5 +1,5 @@
 /*
- * GPADEL lead magnet (/lm-gpadel-infortuni), relativo popup e thank-you.
+ * GPADEL lead magnet (/lm-gpadel-infortuni) e thank-you.
  * Concetto: il campo da padel di notte visto da fondo campo (vetri, luci, linee in prospettiva),
  * la guida come libro 3D appoggiato sul campo, il prezzo come tabellone segnapunti.
  * Prefisso: .mx-gpl-
@@ -107,7 +107,7 @@
   }
 }
 
-.mx-gpl-hero__head { grid-area: head; }
+.mx-gpl-hero__head { grid-area: head; position: relative; z-index: 1; }
 
 .mx-gpl-badge {
   display: inline-flex;
@@ -156,6 +156,8 @@
 
   :is(.mx-home, .mx-page) .mx-gpl-hero__lead {
     grid-area: lead;
+    position: relative;
+    z-index: 1;
     max-width: 620px;
     font-size: clamp(1rem, 1.35vw, 1.2rem) !important;
   }
@@ -212,10 +214,18 @@
   width: 180vw;
   transform: translateX(-50%);
   pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+}
+
+@media (max-width: 1023px) {
+  .mx-gpl-court { bottom: -10%; }
 }
 
 @media (min-width: 1024px) {
-  .mx-gpl-court { width: 1180px; top: -6%; bottom: -30%; }
+  .mx-gpl-court { width: 820px; top: -8%; bottom: -14%; }
+  .mx-gpl-court__floor { transform: perspective(900px) rotateX(55deg); }
 }
 
 .mx-gpl-court__glass {
@@ -773,227 +783,6 @@
   font-size: 0.78rem;
   letter-spacing: 0.04em;
 }
-
-/* ---------------- Popup (in portale, fuori da .mx-page) ---------------- */
-
-.mx-gpl-modal {
-  --ink: #000f2b;
-  --navy: #002552;
-  --sky: #38bdf8;
-  --green: #72fa93;
-  --cream: #f4f4f4;
-  --red: #ff6869;
-  --line: rgba(244, 244, 244, 0.12);
-  --muted: rgba(244, 244, 244, 0.7);
-
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: rgba(0, 8, 26, 0.74);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  font-family: var(--font-primary);
-  color: var(--cream);
-}
-
-@media (min-width: 640px) {
-  .mx-gpl-modal { align-items: center; padding: 24px; }
-}
-
-.mx-gpl-sheet {
-  position: relative;
-  width: 100%;
-  max-width: 460px;
-  max-height: 92vh;
-  max-height: 92dvh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 30px 22px calc(24px + env(safe-area-inset-bottom));
-  border-radius: 30px 30px 0 0;
-  background:
-    radial-gradient(80% 50% at 100% 0%, rgba(56, 189, 248, 0.2), transparent 70%),
-    linear-gradient(170deg, #003069, #001634 60%);
-  border: 1px solid rgba(244, 244, 244, 0.14);
-  border-bottom: 0;
-  box-shadow: 0 -30px 80px rgba(0, 0, 0, 0.5);
-}
-
-.mx-gpl-sheet::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  width: 44px;
-  height: 4px;
-  margin-left: -22px;
-  border-radius: 4px;
-  background: rgba(244, 244, 244, 0.25);
-}
-
-@media (min-width: 640px) {
-  .mx-gpl-sheet { padding: 36px 32px 32px; border-radius: 30px; border-bottom: 1px solid rgba(244, 244, 244, 0.14); }
-  .mx-gpl-sheet::before { display: none; }
-}
-
-.mx-gpl-sheet__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(244, 244, 244, 0.1);
-  color: var(--cream);
-  cursor: pointer;
-}
-
-.mx-gpl-sheet__close:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.mx-gpl-sheet__head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-right: 44px;
-}
-
-.mx-gpl-sheet__thumb {
-  flex-shrink: 0;
-  width: 50px;
-  aspect-ratio: 1414 / 2000;
-  border-radius: 3px;
-  overflow: hidden;
-  transform: rotate(-7deg);
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(244, 244, 244, 0.2);
-}
-
-.mx-gpl-sheet__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-@layer base {
-  .mx-gpl-modal h3.mx-gpl-sheet__title {
-    margin: 0;
-    font-family: var(--font-primary) !important;
-    font-size: 1.75rem !important;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.035em;
-    color: var(--cream);
-  }
-}
-
-.mx-gpl-sheet__intro {
-  margin: 16px 0 20px;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--muted);
-}
-
-.mx-gpl-form { display: grid; gap: 12px; }
-
-.mx-gpl-form__row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.mx-gpl-field input {
-  width: 100%;
-  height: 54px;
-  padding: 0 16px;
-  border-radius: 15px;
-  border: 1px solid rgba(244, 244, 244, 0.2);
-  background: rgba(244, 244, 244, 0.06);
-  color: var(--cream);
-  font-family: var(--font-primary);
-  font-size: 16px;
-  font-weight: 600;
-  outline: none;
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-}
-
-.mx-gpl-field input::placeholder { color: rgba(244, 244, 244, 0.5); font-weight: 500; }
-
-.mx-gpl-field input:focus {
-  border-color: var(--green);
-  background: rgba(244, 244, 244, 0.09);
-  box-shadow: 0 0 0 3px rgba(114, 250, 147, 0.2);
-}
-
-.mx-gpl-field input:-webkit-autofill {
-  -webkit-text-fill-color: var(--cream);
-  -webkit-box-shadow: 0 0 0 40px #0a2a5a inset;
-  caret-color: var(--cream);
-}
-
-.mx-gpl-field input:disabled { opacity: 0.5; cursor: not-allowed; }
-.mx-gpl-field.is-error input { border-color: var(--red); }
-
-.mx-gpl-field__err,
-.mx-gpl-form .mx-gpl-field__err {
-  margin: 6px 2px 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #ffb1b1;
-}
-
-.mx-gpl-consent {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 4px 2px;
-}
-
-.mx-gpl-consent input {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  accent-color: var(--green);
-}
-
-.mx-gpl-consent label {
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.mx-gpl-consent a { color: var(--cream); text-decoration: underline; text-underline-offset: 2px; }
-
-.mx-gpl-form__fail {
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(255, 104, 105, 0.12);
-  border: 1px solid rgba(255, 104, 105, 0.35);
-}
-
-.mx-gpl-form__fail p { margin: 0; font-size: 0.85rem; color: #ffd0d0; }
-
-.mx-gpl-submit {
-  margin-top: 8px;
-  width: 100%;
-  min-height: 60px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--green);
-  color: var(--navy);
-  font-family: var(--font-primary);
-  font-weight: 900;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 18px 40px -16px rgba(114, 250, 147, 0.8);
-  transition: transform 0.2s, filter 0.2s;
-}
-
-.mx-gpl-submit:hover { filter: brightness(1.06); }
-.mx-gpl-submit:active { transform: scale(0.98); }
-.mx-gpl-submit:disabled { opacity: 0.55; cursor: not-allowed; }
 
 /* ---------------- Thank-you (/lm-gpadel-infortuni-grazie) ---------------- */
 

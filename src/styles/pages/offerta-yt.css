@@ -3,7 +3,7 @@
 
 @layer base {
   :is(.mx-home, .mx-page) .mx-oyt-hero__title {
-    font-size: clamp(2.35rem, 9.6vw, 5.2rem) !important;
+    font-size: clamp(2.35rem, 9.6vw, 4.3rem) !important;
     line-height: 0.95 !important;
     letter-spacing: -0.05em;
   }
@@ -64,6 +64,7 @@
   grid-template-areas: "copy" "player" "offer" "more";
 }
 
+.mx-oyt-hero__grid > * { min-width: 0; }
 .mx-oyt-hero__copy { grid-area: copy; }
 .mx-oyt-player { grid-area: player; }
 .mx-oyt-hero__offer { grid-area: offer; }
@@ -74,7 +75,7 @@
 @media (min-width: 1024px) {
   .mx-oyt-hero { padding-top: 56px; }
   .mx-oyt-hero__grid {
-    grid-template-columns: 1fr 1.05fr;
+    grid-template-columns: 0.9fr 1.1fr;
     grid-template-areas: "copy player" "offer player" "more more";
     column-gap: 64px;
     row-gap: 28px;
@@ -100,7 +101,7 @@
   aspect-ratio: 16 / 9;
 }
 
-.mx-oyt-player__screen img:first-child {
+.mx-oyt-player__screen > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -311,7 +312,7 @@
 
 .mx-oyt-track {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 72px 1fr;
   gap: 14px;
   padding: 10px;
   border-radius: 20px;
@@ -324,6 +325,7 @@
 
 @media (min-width: 900px) {
   .mx-oyt-track { grid-template-columns: 150px 1fr; gap: 20px; padding: 14px; border-radius: 24px; }
+  .mx-oyt-track__thumb { aspect-ratio: 16 / 10; }
 }
 
 .mx-oyt-track__thumb {
@@ -331,7 +333,7 @@
   display: grid;
   place-items: center;
   align-self: start;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1;
   border-radius: 14px;
   background:
     radial-gradient(80% 80% at 30% 20%, rgba(114, 250, 147, 0.35), transparent 70%),
@@ -363,9 +365,7 @@
 }
 
 .mx-oyt-track__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 0;
+  display: block;
   font-size: 0.82rem;
   font-weight: 500;
   line-height: 1.45;

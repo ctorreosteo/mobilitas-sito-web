@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Dialog, { DialogHeader } from '../../components/ui/Dialog'
 import {
   Globe,
   Linkedin,
@@ -96,27 +97,11 @@ const itemVariants = {
   },
 }
 
-const menuVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: -10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.2, ease: 'easeOut' },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.8,
-    y: -10,
-    transition: { duration: 0.15, ease: 'easeIn' },
-  },
-}
-
-const ShareMenu = ({ isOpen, onClose, url, title, position, onCopyConfirm }) => {
+const ShareMenu = ({ isOpen, onClose, url, title, onCopyConfirm }) => {
   const shareOptions = [
     {
       name: 'Copia Link',
-      icon: <Copy className="w-4 h-4" />,
+      icon: <Copy size={20} />,
       action: () => {
         navigator.clipboard.writeText(url)
         onCopyConfirm()
@@ -125,7 +110,7 @@ const ShareMenu = ({ isOpen, onClose, url, title, position, onCopyConfirm }) => 
     },
     {
       name: 'Condividi',
-      icon: <Share2 className="w-4 h-4" />,
+      icon: <Share2 size={20} />,
       action: () => {
         if (navigator.share) {
           navigator
@@ -145,32 +130,17 @@ const ShareMenu = ({ isOpen, onClose, url, title, position, onCopyConfirm }) => 
   ]
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div className="fixed inset-0 z-40" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
-          <motion.div
-            className="links-share-menu fixed z-50 min-w-[200px] rounded-lg py-2"
-            style={{ left: position.x, top: position.y }}
-            variants={menuVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            {shareOptions.map((option) => (
-              <button
-                key={option.name}
-                className="links-share-menu-item flex w-full items-center space-x-3 px-4 py-3 text-left transition-colors duration-200"
-                onClick={option.action}
-              >
-                <div className="links-share-menu-icon">{option.icon}</div>
-                <span className="text-sm font-medium">{option.name}</span>
-              </button>
-            ))}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+    <Dialog isOpen={isOpen} onClose={onClose} title={`Condividi: ${title}`}>
+      <DialogHeader kicker="Condividi" title={title} />
+      <div className="mx-dlg-actions">
+        {shareOptions.map((option) => (
+          <button key={option.name} type="button" className="mx-dlg-action" onClick={option.action}>
+            <span className="mx-dlg-action__icon">{option.icon}</span>
+            {option.name}
+          </button>
+        ))}
+      </div>
+    </Dialog>
   )
 }
 
@@ -179,7 +149,6 @@ function Links() {
     isOpen: false,
     url: '',
     title: '',
-    position: { x: 0, y: 0 },
   })
   const [showCopyToast, setShowCopyToast] = useState(false)
 
@@ -189,16 +158,7 @@ function Links() {
 
   const handleShareClick = (event, url, title) => {
     event.stopPropagation()
-    const menuWidth = 200
-    const menuHeight = 120
-    let x = event.clientX - menuWidth / 2
-    let y = event.clientY + 10
-
-    if (x < 10) x = 10
-    if (x + menuWidth > window.innerWidth - 10) x = window.innerWidth - menuWidth - 10
-    if (y + menuHeight > window.innerHeight - 10) y = event.clientY - menuHeight - 10
-
-    setShareMenu({ isOpen: true, url, title, position: { x, y } })
+    setShareMenu({ isOpen: true, url, title })
   }
 
   const closeShareMenu = () => setShareMenu((prev) => ({ ...prev, isOpen: false }))
@@ -305,7 +265,7 @@ function Links() {
             </div>
           </motion.div>
 
-          <ShareMenu isOpen={shareMenu.isOpen} onClose={closeShareMenu} url={shareMenu.url} title={shareMenu.title} position={shareMenu.position} onCopyConfirm={showCopyConfirmation} />
+          <ShareMenu isOpen={shareMenu.isOpen} onClose={closeShareMenu} url={shareMenu.url} title={shareMenu.title} onCopyConfirm={showCopyConfirmation} />
 
           <AnimatePresence>
             {showCopyToast && (

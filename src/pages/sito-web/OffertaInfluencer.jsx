@@ -433,7 +433,7 @@ const OffertaInfluencer = () => {
         isSubmitting={isSubmitting}
         submitError={submitError}
         extraField={
-          <div className="mx-lsh__field">
+          <div className="mx-dlg-field">
             <input
               type="text"
               name="codiceSconto"
@@ -441,7 +441,7 @@ const OffertaInfluencer = () => {
               value={formData.codiceSconto}
               onChange={handleInputChange}
               autoComplete="off"
-              className={`mx-lsh__input ${formErrors.codiceSconto ? 'is-error' : ''}`}
+              className={`mx-dlg-input ${formErrors.codiceSconto ? 'is-error' : ''}`}
             />
             {formErrors.codiceSconto && <p className="mx-lsh__err">{formErrors.codiceSconto}</p>}
             <p className="mx-lsh__hint">Il codice sconto ti permette di ottenere il 50% di sconto (45€ invece di 90€)</p>

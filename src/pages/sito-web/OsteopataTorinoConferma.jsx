@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Phone, Download, Info, Clock3, CalendarDays, BadgePercent } from 'lucide-react'
+import PageShell from '../../components/site/PageShell'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
+import { MaskLines } from '../../components/home-sections/HomeKit'
+import { EASE } from '../../components/home-sections/homeMotion'
+import '../../styles/pages/osteopata-torino-conferma.css'
+
+// Conferma della landing Google (e di /offerta-yt): la spunta si disegna, poi i prossimi passi
+// in ordine — la chiamata della segreteria (il telefono "squilla") e la scorciatoia WhatsApp.
 
 const OsteopataTorinoConferma = () => {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
-
   // Google Ads conversion tracking
   useEffect(() => {
     // Track conversion when user reaches confirmation page
@@ -81,130 +85,154 @@ const OsteopataTorinoConferma = () => {
     window.open(whatsappUrl, '_blank')
   }
 
+  // Salva il numero della segreteria in rubrica (vCard)
+  const handleSaveNumber = () => {
+    const phoneNumber = '393518198457'
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Mobilitas Segreteria\nTEL:${phoneNumber}\nEND:VCARD`
+    const blob = new Blob([vcard], { type: 'text/vcard' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'mobilitas-segreteria.vcf'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const offerMonth = new Date().toLocaleDateString('it-IT', { month: 'long' })
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-blue-dark font-montserrat overflow-hidden">
-      {/* CONFIRMATION SECTION */}
-      <section className="relative pt-20 pb-20 flex items-center justify-center overflow-hidden min-h-screen">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 via-transparent to-green-500/5"></div>
-          
-          {/* Animated geometric shapes */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-full blur-lg animate-pulse delay-1000"></div>
-          <div className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-br from-blue-300/15 to-green-400/15 rounded-full blur-2xl animate-pulse delay-2000"></div>
-          
-          {/* Floating particles */}
-          <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 right-1/4 w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce delay-500"></div>
-          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-blue-600 rounded-full animate-bounce delay-1000"></div>
+    <PageShell className="mx-otc">
+      <section className="mx-otc-hero">
+        <div className="mx-aurora" aria-hidden="true">
+          <span />
+          <span />
+          <span />
         </div>
 
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center">
-          {/* Success Icon */}
-          <div className={`mb-8 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-2xl">
-              <span className="text-white text-4xl">✓</span>
-            </div>
+        <div className="mx-wrap mx-otc__wrap">
+          {/* Spunta che si disegna, con un piccolo scoppio di luce */}
+          <div className="mx-otc-check" aria-hidden="true">
+            {Array.from({ length: 12 }, (_, i) => (
+              <motion.i
+                key={i}
+                className="mx-otc-check__ray"
+                style={{ rotate: `${i * 30}deg` }}
+                initial={{ scaleY: 0, opacity: 0 }}
+                animate={{ scaleY: [0, 1, 0], opacity: [0, 1, 0] }}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.75 }}
+              />
+            ))}
+            <svg viewBox="0 0 120 120">
+              <motion.circle
+                cx="60"
+                cy="60"
+                r="54"
+                fill="none"
+                stroke="#72fa93"
+                strokeWidth="5"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+              />
+              <motion.circle
+                cx="60"
+                cy="60"
+                r="46"
+                fill="#72fa93"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.55 }}
+                style={{ transformOrigin: '60px 60px' }}
+              />
+              <motion.path
+                d="M38 62 L 53 77 L 83 45"
+                fill="none"
+                stroke="#002552"
+                strokeWidth="9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.8 }}
+              />
+            </svg>
           </div>
 
-          {/* Main Message */}
-          <div className={`mb-8 transition-all duration-1500 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <h1 className="text-4xl md:text-6xl font-black text-blue-dark mb-6 leading-tight">
-              Richiesta effettuata
-              <span className="block bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent mt-2">
-                correttamente!
+          <h1 className="mx-h mx-otc__title">
+            <MaskLines immediate delay={0.3} lines={[{ text: 'Richiesta effettuata' }, { text: 'correttamente!', className: 'mx-gradient' }]} />
+          </h1>
+
+          {/* I prossimi passi */}
+          <ol className="mx-otc-steps">
+            <motion.li
+              className="mx-otc-step mx-otc-step--call"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.9 }}
+            >
+              <span className="mx-otc-step__mark mx-otc-ring" aria-hidden="true">
+                <i />
+                <i />
+                <Phone size={22} />
               </span>
-            </h1>
-          </div>
-
-          {/* Confirmation Details */}
-          <div className={`mb-12 transition-all duration-1500 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <div className="bg-white rounded-3xl p-8 shadow-2xl border border-green-100 max-w-3xl mx-auto">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl">📞</span>
-                </div>
-                <h2 className="text-2xl font-bold text-blue-dark mb-4">
-                  Verrai chiamato dalla nostra segreteria
-                </h2>
-                <p className="text-lg text-blue-dark/70 leading-relaxed mb-6">
-                  Ti contatteremo al numero <span className="font-bold text-blue-600">3518198457</span> per prenotare 
+              <div className="mx-otc-step__body">
+                <h2 className="mx-h mx-h--md">Verrai chiamato dalla nostra segreteria</h2>
+                <p className="mx-body">
+                  Ti contatteremo al numero <span className="mx-otc-num">3518198457</span> per prenotare
                   il giorno e l'orario che preferisci.
                 </p>
-                
-                {/* Save Number Button */}
-                <div className="mb-8">
-                  <button 
-                    onClick={() => {
-                      const phoneNumber = '393518198457'
-                      const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Mobilitas Segreteria\nTEL:${phoneNumber}\nEND:VCARD`
-                      const blob = new Blob([vcard], { type: 'text/vcard' })
-                      const url = URL.createObjectURL(blob)
-                      const link = document.createElement('a')
-                      link.href = url
-                      link.download = 'mobilitas-segreteria.vcf'
-                      link.click()
-                      URL.revokeObjectURL(url)
-                    }}
-                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg font-montserrat"
-                  >
-                    <span className="mr-2">📱</span>
-                    Salva il numero
-                  </button>
-                </div>
+                <button type="button" onClick={handleSaveNumber} className="mx-otc-save">
+                  <Download size={18} strokeWidth={2.4} />
+                  Salva il numero
+                </button>
               </div>
+            </motion.li>
 
-              {/* WhatsApp CTA */}
-              <div className="border-t border-gray-200 pt-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-2xl">💬</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-blue-dark mb-4">
-                    Vuoi saltare la lista d'attesa?
-                  </h3>
-                  <p className="text-blue-dark/70 mb-6">
-                    Se vuoi prenotare subito senza aspettare la chiamata, scrivici su WhatsApp!
-                  </p>
-                  
-                  <button 
-                    onClick={handleWhatsAppClick}
-                    className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-lg rounded-2xl shadow-2xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105 font-montserrat"
-                  >
-                    <span className="relative z-10 flex items-center">
-                      <span className="mr-3 text-2xl">💬</span>
-                      <div className="text-left">
-                        <div>Salta la lista d'attesa</div>
-                        <div className="text-sm font-normal opacity-90">Scrivici su WhatsApp</div>
-                      </div>
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </button>
-                </div>
+            <motion.li
+              className="mx-otc-step mx-otc-step--wa"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 1.05 }}
+            >
+              <span className="mx-otc-step__mark mx-otc-step__mark--wa" aria-hidden="true">
+                <WhatsAppIcon size={22} />
+              </span>
+              <div className="mx-otc-step__body">
+                <h3 className="mx-h mx-h--md">Vuoi saltare la lista d'attesa?</h3>
+                <p className="mx-body">
+                  Se vuoi prenotare subito senza aspettare la chiamata, scrivici su WhatsApp!
+                </p>
+                <motion.button type="button" whileTap={{ scale: 0.97 }} onClick={handleWhatsAppClick} className="mx-btn mx-btn--primary mx-otc-wa">
+                  <span>
+                    <span className="mx-otc-wa__main">Salta la lista d'attesa</span>
+                    <small>Scrivici su WhatsApp</small>
+                  </span>
+                  <span className="mx-btn__icon"><WhatsAppIcon size={20} /></span>
+                </motion.button>
               </div>
-            </div>
-          </div>
+            </motion.li>
+          </ol>
 
-          {/* Additional Info */}
-          <div className={`transition-all duration-1500 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-6 border border-blue-100 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm">ℹ️</span>
-                </div>
-                <h4 className="text-lg font-bold text-blue-dark">Informazioni utili</h4>
-              </div>
-              <div className="text-blue-dark/70 text-sm space-y-2">
-                <p>• La nostra segreteria ti chiamerà entro 24 ore</p>
-                <p>• Puoi prenotare per qualsiasi giorno della settimana</p>
-                <p>• L'offerta è valida solo per {new Date().toLocaleDateString('it-IT', { month: 'long' })}</p>
-              </div>
-            </div>
-          </div>
+          <motion.aside
+            className="mx-otc-info"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: EASE, delay: 1.2 }}
+          >
+            <h4 className="mx-otc-info__title">
+              <Info size={18} />
+              Informazioni utili
+            </h4>
+            <ul>
+              <li><Clock3 size={16} />La nostra segreteria ti chiamerà entro 24 ore</li>
+              <li><CalendarDays size={16} />Puoi prenotare per qualsiasi giorno della settimana</li>
+              <li><BadgePercent size={16} />L'offerta è valida solo per {offerMonth}</li>
+            </ul>
+          </motion.aside>
         </div>
       </section>
-    </div>
+    </PageShell>
   )
 }
 

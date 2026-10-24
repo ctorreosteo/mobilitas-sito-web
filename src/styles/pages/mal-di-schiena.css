@@ -862,3 +862,11 @@
 @media (max-width: 767px) {
   .mx-mds .mx-btn--primary { animation: none; }
 }
+
+.mx-mds-offer__title br { display: none; }
+
+@media (min-width: 1024px) {
+  .mx-mds-offer__grid { grid-template-rows: auto 1fr; }
+  .mx-mds-offer__head { align-self: start; position: static; }
+  .mx-mds-urgency { align-self: start; }
+}
