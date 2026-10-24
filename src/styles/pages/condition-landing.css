@@ -16,7 +16,7 @@
   }
 
   :is(.mx-home, .mx-page) .mx-cl-hero__name {
-    font-size: clamp(2.5rem, calc(88vw / (var(--cl-chars) * 0.62)), 4.6rem) !important;
+    font-size: clamp(2.5rem, calc(88vw / (var(--cl-chars) * 0.72)), 4.6rem) !important;
   }
 
   :is(.mx-home, .mx-page) .mx-cl-h2 {
@@ -58,7 +58,7 @@
 @media (min-width: 1024px) {
   @layer base {
     :is(.mx-home, .mx-page) .mx-cl-hero__name {
-      font-size: clamp(3rem, calc(50vw / (var(--cl-chars) * 0.62)), 8.4rem) !important;
+      font-size: clamp(3rem, calc(min(44vw, 590px) / (var(--cl-chars) * 0.72)), 8.4rem) !important;
     }
   }
 }

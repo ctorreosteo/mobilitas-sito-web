@@ -37,7 +37,7 @@ import {
   X,
 } from 'lucide-react'
 import BookingPopup from '../components/BookingPopup'
-import WhatsAppButton from '../components/WhatsAppButton'
+import WhatsAppFab from '../components/whatsapp/WhatsAppFab'
 import PageShell from '../components/site/PageShell'
 import { Kicker, MaskLines, Reveal, Snap } from '../components/home-sections/HomeKit'
 import { EASE, useParallax } from '../components/home-sections/homeMotion'
@@ -865,7 +865,11 @@ function Cervicalgia() {
           ctaType={bookingCtaType}
         />
       </AnimatePresence>
-      <WhatsAppButton />
+      <WhatsAppFab
+        message="Ciao, vorrei avere maggiori informazioni sul trattamento osteopatico per la cervicalgia"
+        bubbleText="Hai qualche dubbio o domanda prima di venire da noi? Scrivici un messaggio e saremo lieti di chiarire tutto quanto!"
+        bubbleId="cervicalgia"
+      />
     </PageShell>
   )
 }

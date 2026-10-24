@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Dialog, { DialogHeader } from './ui/Dialog'
+import { parseCellulare } from '../utils/phone'
 
 // Utility functions for data cleaning
 const cleanName = (name) => {
@@ -10,30 +11,11 @@ const cleanName = (name) => {
   ).join(' ')
 }
 
-const cleanPhone = (phone) => {
-  return phone.trim().replace(/\s+/g, '')
-}
-
 // In dev: '' così le chiamate vanno a /api/... (stesso origin) e il proxy Vite le inoltra a hq.studiomobilitas.it/api/...
 // In prod: base completa (se il backend abilita CORS per il tuo dominio, altrimenti serve proxy lato server)
 // Nota: usiamo VITE_API_BASE per poter cambiare rapidamente endpoint senza toccare il codice.
 const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
-/** Estrae prefisso (es. +39) e numero solo cifre per l'API richieste */
-function parseCellulare(raw) {
-  const s = cleanPhone(raw).replace(/[-.]/g, '')
-  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
-  if (s.startsWith('+')) {
-    const match = s.match(/^(\+\d{1,4})(\d+)$/)
-    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
-    const digits = s.replace(/\D/g, '')
-    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
-    const num = digits.slice(2).replace(/^0+/, '') || digits
-    return { prefissoCellulare: pref, cellulare: num }
-  }
-  const digits = s.replace(/\D/g, '')
-  return { prefissoCellulare: '+39', cellulare: digits }
-}
 
 /** ID Meta numerico dalla query string. Toglie le graffe {{id}} se presenti. */
 function readMetaAdId(params, key) {

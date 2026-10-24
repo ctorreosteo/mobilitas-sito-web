@@ -602,17 +602,16 @@ const OffertaYT = () => {
             exit={{ y: 120, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 28 }}
           >
-            <ChapterBar progress={progress} compact />
-            <div className="mx-oyt-dock__row">
+            <div className="mx-oyt-dock__info">
               <span className="mx-oyt-dock__chapter">
-                <small>{pad(chapter + 1)} / {pad(CHAPTERS.length)}</small>
-                {CHAPTERS[chapter].label}
+                <small>{pad(chapter + 1)} / {pad(CHAPTERS.length)}</small> {CHAPTERS[chapter].label}
               </span>
-              <button type="button" className="mx-oyt-dock__btn" onClick={openForm}>
-                <span>PRENOTA IL TRATTAMENTO</span>
-                <ArrowUpRight size={18} strokeWidth={2.6} />
-              </button>
+              <ChapterBar progress={progress} compact />
             </div>
+            <button type="button" className="mx-oyt-dock__btn" onClick={openForm}>
+              <span>PRENOTA IL TRATTAMENTO</span>
+              <ArrowUpRight size={18} strokeWidth={2.6} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

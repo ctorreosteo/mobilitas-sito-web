@@ -755,3 +755,15 @@
 }
 
 .mx-xmas-pain b, .mx-xmas-faq b, .mx-xmas-tag b { color: inherit; }
+
+/* Spazio per il cofanetto che esce dalla scatola */
+@media (max-width: 1023px) {
+  .mx-xmas-hero__gift { margin-top: 34px; }
+  .mx-xmas-gift { height: 250px; }
+  .mx-xmas-gift__card { width: 150px; height: 190px; margin-left: -75px; }
+}
+
+@media (min-width: 1024px) {
+  .mx-xmas-hero { min-height: 0; padding-bottom: 90px; }
+  .mx-xmas-hero__gift { padding-top: 70px; }
+}

@@ -108,7 +108,7 @@ function App() {
         <Route path="/links" element={<Layout><Links /></Layout>} />
         <Route path="/privacy-policy-applicazione" element={<Layout><PrivacyPolicyApplicazione /></Layout>} />
         <Route path="/supporto-app" element={<Layout><SupportoApp /></Layout>} />
-        <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
+        <Route path="/cervicalgia" element={<Layout hideWhatsApp><Cervicalgia /></Layout>} />
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />

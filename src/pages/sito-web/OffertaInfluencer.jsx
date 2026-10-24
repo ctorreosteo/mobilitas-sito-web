@@ -20,6 +20,7 @@ import {
   Gift,
 } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
+import { parseCellulare } from '../../utils/phone'
 import LeadFormSheet from '../../components/landing/LeadFormSheet'
 import { Kicker, MaskLines, Reveal, Snap } from '../../components/home-sections/HomeKit'
 import { EASE } from '../../components/home-sections/homeMotion'
@@ -37,20 +38,6 @@ const cleanName = (name) =>
   name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
   ).join(' ')
-
-const parseCellulare = (raw) => {
-  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
-  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
-  if (s.startsWith('+')) {
-    const match = s.match(/^(\+\d{1,4})(\d+)$/)
-    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
-    const digits = s.replace(/\D/g, '')
-    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
-    const num = digits.slice(2).replace(/^0+/, '') || digits
-    return { prefissoCellulare: pref, cellulare: num }
-  }
-  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
-}
 
 const bodyAreas = [
   {
@@ -175,22 +162,23 @@ const Coupon = ({ code, onCodeChange, onSubmit }) => {
           Risparmi 45€ (50% di sconto) 🎉
         </p>
 
-        <AnimatePresence>
-          {shown && (
-            <motion.span
-              key="stamp"
-              className="mx-oinf-coupon__stamp"
-              aria-hidden="true"
-              initial={{ scale: 2.4, opacity: 0, rotate: -30 }}
-              animate={{ scale: 1, opacity: 1, rotate: -14 }}
-              exit={{ scale: 0.6, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 380, damping: 18 }}
-            >
-              -50%
-            </motion.span>
-          )}
-        </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {shown && (
+          <motion.span
+            key="stamp"
+            className="mx-oinf-coupon__stamp"
+            aria-hidden="true"
+            initial={{ scale: 2.4, opacity: 0, rotate: -30 }}
+            animate={{ scale: 1, opacity: 1, rotate: -14 }}
+            exit={{ scale: 0.6, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+          >
+            -50%
+          </motion.span>
+        )}
+      </AnimatePresence>
 
       <form
         className="mx-oinf-coupon__stub"

@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Download } from 'lucide-react'
 import Dialog, { DialogHeader } from './ui/Dialog'
+import { parseCellulare } from '../utils/phone'
 
 const API_BASE = import.meta.env.VITE_API_BASE
   || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
@@ -10,20 +11,6 @@ const cleanName = (name) =>
   name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
   ).join(' ')
-
-const parseCellulare = (raw) => {
-  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
-  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
-  if (s.startsWith('+')) {
-    const match = s.match(/^(\+\d{1,4})(\d+)$/)
-    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
-    const digits = s.replace(/\D/g, '')
-    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
-    const num = digits.slice(2).replace(/^0+/, '') || digits
-    return { prefissoCellulare: pref, cellulare: num }
-  }
-  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
-}
 
 export default function GpadelInfortuniPopup({ isOpen, onClose }) {
   const navigate = useNavigate()

@@ -212,8 +212,9 @@
 
 .mx-oinf-coupon__stamp {
   position: absolute;
-  right: 18px;
-  bottom: 18px;
+  z-index: 2;
+  right: 10px;
+  bottom: 92px;
   display: grid;
   place-items: center;
   width: 84px;
@@ -272,7 +273,7 @@
   .mx-oinf-coupon__row s { font-size: 1.7rem; }
   .mx-oinf-coupon .mx-oinf-coupon__row--big b { font-size: 5rem; }
   .mx-oinf-coupon__save { font-size: 1rem; }
-  .mx-oinf-coupon__stamp { width: 112px; height: 112px; font-size: 1.8rem; right: 28px; bottom: 26px; }
+  .mx-oinf-coupon__stamp { width: 112px; height: 112px; font-size: 1.8rem; right: 22px; bottom: 112px; }
   .mx-oinf-coupon__code { font-size: 2rem; line-height: 44px; min-height: 44px; }
   .mx-oinf-coupon__sticker { font-size: 1rem; padding: 10px 18px; right: -14px; top: -20px; }
 }
@@ -556,7 +557,8 @@
     border-right: 2px dashed rgba(0, 37, 82, 0.3);
   }
 
-  .mx-oinf-dock__stub b {
+  .mx-oinf-dock .mx-oinf-dock__stub b {
+    color: var(--navy);
     max-width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;

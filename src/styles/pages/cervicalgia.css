@@ -1061,7 +1061,8 @@
 
 .mx-cerv-ty__seal {
   position: relative;
-  width: min(78vw, 360px);
+  width: min(60vw, 340px);
+  margin-bottom: 26px;
 }
 
 .mx-cerv-ty__seal .mx-cerv-dial { width: 100%; }
@@ -1072,12 +1073,12 @@
   top: 70.6%;
   display: grid;
   place-items: center;
-  width: 30%;
+  width: 27%;
   aspect-ratio: 1;
+  margin: -13.5% 0 0 -13.5%;
   border-radius: 50%;
   background: var(--green);
   color: var(--navy);
-  transform: translate(-50%, -50%);
   box-shadow: 0 0 0 10px rgba(114, 250, 147, 0.14), 0 20px 50px -10px rgba(114, 250, 147, 0.6);
 }
 
@@ -1105,7 +1106,7 @@
   list-style: none;
   width: 100%;
   max-width: 560px;
-  margin: 40px 0 0;
+  margin: 30px 0 0;
   padding: 0;
   text-align: left;
 }
@@ -1115,7 +1116,7 @@
   display: grid;
   grid-template-columns: 52px 1fr;
   gap: 16px;
-  padding-bottom: 26px;
+  padding-bottom: 20px;
 }
 
 .mx-cerv-ty__step::before {

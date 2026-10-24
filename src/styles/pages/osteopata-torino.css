@@ -184,7 +184,7 @@
 
 .mx-ot-timer i { font-style: normal; font-weight: 900; color: var(--green); }
 
-.mx-ot-timer--compact b { min-width: 0; height: auto; padding: 0; background: none; color: var(--navy); font-size: 0.78rem; }
+.mx-ot-timer--compact b { min-width: 0; height: auto; padding: 0; background: none; color: var(--navy); font-size: 0.72rem; }
 .mx-ot-timer--compact i { color: var(--navy); opacity: 0.6; }
 
 /* Foto */
@@ -912,7 +912,7 @@
     gap: 10px;
     width: 100%;
     min-height: 56px;
-    padding: 8px 14px 8px 18px;
+    padding: 8px 8px 8px 16px;
     border: 0;
     border-radius: 999px;
     background: var(--green);
@@ -924,10 +924,11 @@
   }
 
   .mx-ot-dock__txt { display: grid; line-height: 1.1; min-width: 0; }
-  .mx-ot-dock__txt b { font-size: 0.8rem; font-weight: 900; white-space: nowrap; }
+  .mx-ot-dock__txt b { font-size: 0.72rem; font-weight: 900; }
   .mx-ot-dock__txt small { font-size: 0.7rem; font-weight: 800; opacity: 0.75; }
 
   .mx-ot-dock .mx-ot-timer {
+    gap: 1px;
     padding: 6px 8px;
     border-radius: 999px;
     background: rgba(0, 37, 82, 0.12);

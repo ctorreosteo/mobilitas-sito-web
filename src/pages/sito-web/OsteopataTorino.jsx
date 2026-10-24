@@ -23,6 +23,7 @@ import { RECENSIONI_IMAGES } from '../../data/recensioni'
 import { RECENSIONI_TOTALI, STUDI } from '../../data/studi'
 import GoogleReviewsLinks from '../../components/GoogleReviewsLinks'
 import PageShell from '../../components/site/PageShell'
+import { parseCellulare } from '../../utils/phone'
 import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import LeadFormSheet from '../../components/landing/LeadFormSheet'
 import { Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
@@ -41,20 +42,6 @@ const cleanName = (name) =>
   name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
   ).join(' ')
-
-const parseCellulare = (raw) => {
-  const s = raw.trim().replace(/\s+/g, '').replace(/[-.]/g, '')
-  if (!s) return { prefissoCellulare: '+39', cellulare: '' }
-  if (s.startsWith('+')) {
-    const match = s.match(/^(\+\d{1,4})(\d+)$/)
-    if (match) return { prefissoCellulare: match[1], cellulare: match[2] }
-    const digits = s.replace(/\D/g, '')
-    const pref = digits.length >= 2 ? '+' + digits.slice(0, 2) : '+39'
-    const num = digits.slice(2).replace(/^0+/, '') || digits
-    return { prefissoCellulare: pref, cellulare: num }
-  }
-  return { prefissoCellulare: '+39', cellulare: s.replace(/\D/g, '') }
-}
 
 // Testi comuni per i bottoni CTA
 const CTA_TEXTS = {

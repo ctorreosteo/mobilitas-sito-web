@@ -55,7 +55,7 @@ function GiftBox() {
       <motion.span
         className="mx-xmas-gift__card"
         initial={false}
-        animate={open ? { y: '-34%', rotate: -3, scale: 1 } : { y: '42%', rotate: 0, scale: 0.92 }}
+        animate={open ? { y: '-26%', rotate: -3, scale: 1 } : { y: '42%', rotate: 0, scale: 0.92 }}
         transition={{ duration: 1.1, ease: EASE, delay: open ? 0.25 : 0 }}
       >
         <img src="/natale25/web/box1-900.jpg" alt="Cofanetto natalizio Mobilitas" />

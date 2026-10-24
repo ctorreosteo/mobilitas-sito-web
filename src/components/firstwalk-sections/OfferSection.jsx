@@ -1,7 +1,17 @@
 import { motion } from 'framer-motion'
-import { Check, Star, Clock } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import BookingPopup from '../BookingPopup'
+import { Reveal } from '../home-sections/HomeKit'
+import { EASE } from '../home-sections/homeMotion'
+
+const baseFeatures = [
+  "Camminata guidata con osteopati",
+  "Merenda al sacco fornita da noi",
+  "Esercizi di respirazione e stretching",
+  "Accesso al gruppo riservato su WhatsApp",
+  "Foto e riprese dell'evento in omaggio"
+]
 
 export default function OfferSection() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -18,173 +28,124 @@ export default function OfferSection() {
   }
 
   return (
-    <section id="offer-section" className="py-20 bg-blue-dark text-white overflow-x-hidden">
-      <div className="max-w-6xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-black mb-6">
-            Un'offerta <span className="text-green">SPECIALE</span>
+    <section id="offer-section" className="mx-walk-sec mx-walk-offer">
+      <div className="mx-walk-offer__stars" aria-hidden="true" />
+      <div className="mx-wrap">
+        <Reveal className="mx-walk-head mx-walk-head--center">
+          <h2 className="mx-h mx-walk-h2 mx-walk-h2--light">
+            Un'offerta <span className="mx-accent">SPECIALE</span>
             <br />
             riservata solo a chi è già nostro cliente
           </h2>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto">
-            Per questa prima edizione della Mobilitas Walk, abbiamo riservato ai nostri pazienti due pacchetti esclusivi, 
+          <p className="mx-walk-lead mx-walk-lead--light">
+            Per questa prima edizione della Mobilitas Walk, abbiamo riservato ai nostri pazienti due pacchetti esclusivi,
             pensati per farti vivere l'esperienza nel modo che preferisci.
           </p>
-        </motion.div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-5xl mx-auto">
-          {/* Base Package */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20"
+        <div className="mx-walk-passes">
+          {/* Base */}
+          <motion.article
+            className="mx-walk-pass"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ duration: 0.9, ease: EASE }}
           >
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-white mb-2">🎫 PACCHETTO BASE</h3>
-              <div className="text-4xl font-bold mb-2">
-                <span className="text-red-400 line-through text-2xl">20€</span>
+            <div className="mx-walk-pass__top">
+              <h3 className="mx-h mx-walk-pass__name">🎫 PACCHETTO BASE</h3>
+              <div className="mx-walk-pass__price">
+                <s>20€</s>
                 {" "}
-                <span className="text-green">5€</span>
+                <b>5€</b>
               </div>
-              <p className="text-gray-300">La tua prima esperienza Mobilitas Walk</p>
+              <p className="mx-walk-pass__tag">La tua prima esperienza Mobilitas Walk</p>
             </div>
 
-            <div className="space-y-4 mb-8">
-              {[
-                "Camminata guidata con osteopati",
-                "Merenda al sacco fornita da noi",
-                "Esercizi di respirazione e stretching",
-                "Accesso al gruppo riservato su WhatsApp",
-                "Foto e riprese dell'evento in omaggio"
-              ].map((feature, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <Check className="w-5 h-5 text-green" />
-                  <span className="text-white">{feature}</span>
-                </div>
+            <div className="mx-walk-pass__perf" aria-hidden="true" />
+
+            <ul className="mx-walk-pass__list">
+              {baseFeatures.map((feature) => (
+                <li key={feature}><Check size={18} strokeWidth={3} /><span>{feature}</span></li>
               ))}
-            </div>
+            </ul>
 
-            <div className="text-center">
-              <p className="text-gray-400 mb-6">Per chi vuole solo iniziare, senza impegno. Ma con qualità Mobilitas.</p>
-              <motion.button 
-                onClick={() => handlePackageSelection('base')}
-                className="group relative w-full overflow-hidden bg-cream text-primary font-bold py-4 px-8 rounded-2xl shadow-2xl hover:shadow-cream/50 transition-all duration-500 transform hover:scale-105 border-2 border-blue-dark hover:border-blue-dark/80 font-montserrat"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-dark/10 to-azure-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative flex items-center justify-center space-x-3">
-                  <span className="text-lg">🎫</span>
-                  <span className="text-lg">Scegli Pacchetto Base</span>
-                  <motion.div
-                    className="w-5 h-5"
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    →
-                  </motion.div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-              </motion.button>
-            </div>
-          </motion.div>
+            <p className="mx-walk-pass__for">Per chi vuole solo iniziare, senza impegno. Ma con qualità Mobilitas.</p>
+            <motion.button
+              type="button"
+              onClick={() => handlePackageSelection('base')}
+              className="mx-walk-pass__btn"
+              whileTap={{ scale: 0.97 }}
+            >
+              <span>🎫</span>
+              <span>Scegli Pacchetto Base</span>
+              <ArrowRight size={20} strokeWidth={2.4} />
+            </motion.button>
+          </motion.article>
 
-          {/* Premium Package */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 relative transform scale-105"
+          {/* Premium */}
+          <motion.article
+            className="mx-walk-pass mx-walk-pass--premium"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
           >
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-yellow-400 text-primary px-4 py-2 rounded-full text-sm font-bold">
-                Il più scelto
-              </span>
-            </div>
-
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-white mb-2">🌟 PACCHETTO PREMIUM</h3>
-              <div className="text-4xl font-bold mb-2">
-                <span className="text-red-400 line-through text-2xl">140€</span>
+            <span className="mx-walk-pass__badge">Il più scelto</span>
+            <div className="mx-walk-pass__top">
+              <h3 className="mx-h mx-walk-pass__name">🌟 PACCHETTO PREMIUM</h3>
+              <div className="mx-walk-pass__price">
+                <s>140€</s>
                 {" "}
-                <span className="text-green">39€</span>
+                <b>39€</b>
               </div>
-              <p className="text-sky-300 italic">Il pacchetto più scelto dai nostri pazienti!</p>
+              <p className="mx-walk-pass__tag mx-walk-pass__tag--it">Il pacchetto più scelto dai nostri pazienti!</p>
             </div>
 
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center space-x-3">
-                <Check className="w-5 h-5 text-white" />
-                <span className="text-white font-medium">Tutto quello che è incluso nel Pacchetto Base</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Check className="w-5 h-5 text-white" />
-                <span className="text-white font-medium">
+            <div className="mx-walk-pass__perf" aria-hidden="true" />
+
+            <ul className="mx-walk-pass__list">
+              <li><Check size={18} strokeWidth={3} /><span>Tutto quello che è incluso nel Pacchetto Base</span></li>
+              <li>
+                <Check size={18} strokeWidth={3} />
+                <span>
                   1 seduta di pressoterapia in studio a prezzo ridotto (
-                  <span className="text-red-400 line-through">60€</span>
+                  <s>60€</s>
                   {" "}
-                  <span className="text-green-400 font-bold">34€</span>
+                  <b>34€</b>
                   )
                 </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Check className="w-5 h-5 text-white" />
-                <span className="text-white font-medium">
+              </li>
+              <li>
+                <Check size={18} strokeWidth={3} />
+                <span>
                   1 seduta di pressoterapia in omaggio (
-                  <span className="text-red-400 line-through">60€</span>
+                  <s>60€</s>
                   {" "}
-                  <span className="text-green-400 font-bold">0€</span>
+                  <b>0€</b>
                   )
                 </span>
-              </div>
-            </div>
+              </li>
+            </ul>
 
-            <div className="text-center">
-              <p className="text-gray-400 italic text-base mb-2">⚠️ Solo 20 pacchetti disponibili con questo prezzo!</p>
-              <p className="text-gray-300 mb-6">Pensato per chi vuole continuare a sentirsi bene anche dopo la camminata.</p>
-              <motion.button 
-                onClick={() => handlePackageSelection('premium')}
-                className="group relative w-full overflow-hidden bg-gradient-to-r from-green via-green to-azure-dark text-primary font-black py-5 px-8 rounded-2xl shadow-2xl hover:shadow-green/50 transition-all duration-500 transform hover:scale-105 border-4 border-cream hover:border-green/50 font-montserrat"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-cream/20 to-azure-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative flex items-center justify-center space-x-3">
-                  <motion.span 
-                    className="text-2xl"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    ⭐
-                  </motion.span>
-                  <span className="text-xl">Scegli Pacchetto Premium</span>
-                  <motion.div
-                    className="w-6 h-6 text-2xl"
-                    animate={{ x: [0, 8, 0] }}
-                    transition={{ duration: 1.2, repeat: Infinity }}
-                  >
-                    🚀
-                  </motion.div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cream/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cream via-azure-dark to-cream transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-              </motion.button>
-            </div>
-          </motion.div>
+            <p className="mx-walk-pass__warn">⚠️ Solo 20 pacchetti disponibili con questo prezzo!</p>
+            <p className="mx-walk-pass__for">Pensato per chi vuole continuare a sentirsi bene anche dopo la camminata.</p>
+            <motion.button
+              type="button"
+              onClick={() => handlePackageSelection('premium')}
+              className="mx-walk-pass__btn mx-walk-pass__btn--premium"
+              whileTap={{ scale: 0.97 }}
+            >
+              <span>⭐</span>
+              <span>Scegli Pacchetto Premium</span>
+              <ArrowRight size={20} strokeWidth={2.4} />
+            </motion.button>
+          </motion.article>
         </div>
       </div>
 
       {/* Booking Popup */}
-      <BookingPopup 
+      <BookingPopup
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
         packageType={selectedPackage}

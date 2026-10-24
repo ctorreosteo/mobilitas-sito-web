@@ -55,9 +55,9 @@
 
 @layer base {
   :is(.mx-home, .mx-page) h1.mx-404__num {
-    display: flex;
-    justify-content: center;
-    gap: 0.02em;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
     margin: 0;
     font-family: var(--font-primary) !important;
     font-size: clamp(7.5rem, 38vw, 15rem) !important;
@@ -75,6 +75,7 @@
 
 .mx-404__digit {
   display: inline-block;
+  margin: 0 0.01em;
   transform-origin: 50% 60%;
 }
 

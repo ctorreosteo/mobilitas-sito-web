@@ -1,151 +1,79 @@
 import { motion } from 'framer-motion'
 import { Users, Heart, Shield, Zap, Target, HandHeart } from 'lucide-react'
+import { Reveal } from '../home-sections/HomeKit'
+import { EASE } from '../home-sections/homeMotion'
+
+const challenge = [
+  { title: "Stress cronico e ritmi frenetici", subtitle: "La società moderna ci vuole sempre di corsa", icon: Zap },
+  { title: "Sedentarietà forzata", subtitle: "Lavori che ci immobilizzano per ore", icon: Target },
+  { title: "Isolamento e solitudine", subtitle: "Perdiamo il contatto con noi stessi e gli altri", icon: Shield },
+]
+
+const community = [
+  { title: "Persone consapevoli e motivate", subtitle: "Che hanno capito l'importanza del proprio benessere", icon: Users },
+  { title: "Condivisione di esperienze autentiche", subtitle: "Insieme per crescere e divertirci", icon: Heart },
+  { title: "Supporto reciproco e motivazione", subtitle: "Una rete di persone che si sostengono a vicenda", icon: HandHeart },
+]
+
+function Column({ tone, title, sub, items }) {
+  return (
+    <div className={`mx-walk-col mx-walk-col--${tone}`}>
+      <div className="mx-walk-col__head">
+        <h3 className="mx-h mx-walk-col__title">{title}</h3>
+        <p>{sub}</p>
+      </div>
+      <ul>
+        {items.map((item, index) => {
+          const Icon = item.icon
+          return (
+            <motion.li
+              key={item.title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+              transition={{ duration: 0.8, ease: EASE, delay: index * 0.07 }}
+            >
+              <span className="mx-walk-col__ic"><Icon size={20} strokeWidth={2.2} /></span>
+              <div>
+                <h4 className="mx-h mx-walk-col__t">{item.title}</h4>
+                <p>{item.subtitle}</p>
+              </div>
+            </motion.li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 export default function ProblemSection() {
   return (
-    <section className="py-12 md:py-20 bg-cream">
-      <div className="max-w-6xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <h2 className="text-3xl md:text-6xl font-black text-primary mb-6 md:mb-8">
+    <section className="mx-walk-sec mx-walk-problem">
+      <div className="mx-wrap">
+        <Reveal className="mx-walk-head mx-walk-head--center">
+          <h2 className="mx-h mx-walk-h2">
             Unisciti alla community di chi
             <br />
-            <span className="text-primary">si prende cura di sé</span>
+            <span className="mx-walk-mark">si prende cura di sé</span>
           </h2>
-          <p className="text-lg md:text-xl text-primary/80 max-w-4xl mx-auto">
-            In una società che vuole tenerci spenti e senza energie, 
+          <p className="mx-walk-lead">
+            In una società che vuole tenerci spenti e senza energie,
             <strong> noi scegliamo di essere vivi, energici e consapevoli</strong>
           </p>
-        </motion.div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
-          {/* The Challenge */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-6 md:space-y-8"
-          >
-            <div className="text-center mb-6 md:mb-8">
-              <h3 className="text-2xl md:text-3xl font-black text-primary mb-3 md:mb-4">⚡ LA SFIDA</h3>
-              <p className="text-primary/70 text-sm md:text-base">Contro il sistema moderno che ci vuole spenti</p>
-            </div>
-
-            {[
-              {
-                title: "Stress cronico e ritmi frenetici",
-                subtitle: "La società moderna ci vuole sempre di corsa",
-                icon: Zap,
-                color: "orange"
-              },
-              {
-                title: "Sedentarietà forzata",
-                subtitle: "Lavori che ci immobilizzano per ore",
-                icon: Target,
-                color: "orange"
-              },
-              {
-                title: "Isolamento e solitudine",
-                subtitle: "Perdiamo il contatto con noi stessi e gli altri",
-                icon: Shield,
-                color: "orange"
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-orange-50 border-l-4 border-orange-400 p-4 md:p-8 rounded-2xl hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-start">
-                  <div className="w-8 h-8 md:w-12 md:h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-4 h-4 md:w-6 md:h-6 text-orange-600" />
-                  </div>
-                  <div className="ml-3 md:ml-4">
-                    <h4 className="text-base md:text-xl font-bold text-primary mb-1 md:mb-2 mt-0">{item.title}</h4>
-                    <p className="text-primary font-semibold text-sm md:text-lg">{item.subtitle}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Our Community */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div className="text-center mb-6 md:mb-8">
-              <h3 className="text-2xl md:text-3xl font-black text-primary mb-3 md:mb-4">❤️ LA NOSTRA COMMUNITY</h3>
-              <p className="text-primary/70 text-sm md:text-base">Persone che scelgono di prendersi cura di sé</p>
-            </div>
-
-            {[
-              {
-                title: "Persone consapevoli e motivate",
-                subtitle: "Che hanno capito l'importanza del proprio benessere",
-                icon: Users,
-                color: "emerald"
-              },
-              {
-                title: "Condivisione di esperienze autentiche",
-                subtitle: "Insieme per crescere e divertirci",
-                icon: Heart,
-                color: "emerald"
-              },
-              {
-                title: "Supporto reciproco e motivazione",
-                subtitle: "Una rete di persone che si sostengono a vicenda",
-                icon: HandHeart,
-                color: "emerald"
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-emerald-50 border-l-4 border-emerald-400 p-4 md:p-8 rounded-2xl hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-start">
-                  <div className="w-8 h-8 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-4 h-4 md:w-6 md:h-6 text-emerald-600" />
-                  </div>
-                  <div className="ml-3 md:ml-4">
-                    <h4 className="text-base md:text-xl font-bold text-primary mb-1 md:mb-2 mt-0">{item.title}</h4>
-                    <p className="text-primary font-semibold text-sm md:text-lg">{item.subtitle}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+        <div className="mx-walk-vs">
+          <Column tone="warn" title="⚡ LA SFIDA" sub="Contro il sistema moderno che ci vuole spenti" items={challenge} />
+          <span className="mx-walk-vs__arrow" aria-hidden="true" />
+          <Column tone="ok" title="❤️ LA NOSTRA COMMUNITY" sub="Persone che scelgono di prendersi cura di sé" items={community} />
         </div>
 
-        {/* Community Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center bg-blue-dark text-cream p-6 md:p-12 rounded-2xl"
-        >
-          <Users className="w-12 h-12 md:w-16 md:h-16 text-cream mx-auto mb-4 md:mb-6" />
-          <h3 className="text-2xl md:text-4xl font-black mb-4 md:mb-6 text-cream">
+        <Reveal className="mx-walk-statement">
+          <Users size={40} strokeWidth={2} />
+          <h3 className="mx-h mx-walk-statement__t">
             Sei parte di una community che condivide i tuoi valori. Insieme costruiamo il nostro benessere.
           </h3>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   )
