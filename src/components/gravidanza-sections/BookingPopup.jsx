@@ -21,7 +21,8 @@ const formatCurrentTime = () => {
   return `${hours}:${minutes}`
 }
 
-export default function BookingPopup({ isOpen, onClose }) {
+// initialWeek: settimana già scelta nella pagina (es. '21-24'), precompila il campo
+export default function BookingPopup({ isOpen, onClose, initialWeek = '' }) {
   const uid = useId()
   const [formData, setFormData] = useState({
     firstName: '',
@@ -31,6 +32,15 @@ export default function BookingPopup({ isOpen, onClose }) {
     pregnancyWeek: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // All'apertura porta nel form la settimana scelta nella pagina, se il campo è ancora vuoto
+  const [lastOpen, setLastOpen] = useState(false)
+  if (isOpen !== lastOpen) {
+    setLastOpen(isOpen)
+    if (isOpen && initialWeek && !formData.pregnancyWeek) {
+      setFormData((prev) => ({ ...prev, pregnancyWeek: initialWeek }))
+    }
+  }
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(false)
 
