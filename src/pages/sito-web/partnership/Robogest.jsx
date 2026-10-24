@@ -4,7 +4,6 @@ import {
   ArrowDown,
   Bot,
   Lightbulb,
-  MessageCircle,
   PartyPopper,
   Rocket,
   Route,
@@ -16,6 +15,7 @@ import {
   Zap,
   BarChart3,
 } from 'lucide-react'
+import WhatsAppIcon from '../../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../../components/site/PageShell'
 import FinalCta from '../../../components/site/FinalCta'
 import { Counter, Kicker, MaskLines, Reveal, Snap } from '../../../components/home-sections/HomeKit'
@@ -181,7 +181,7 @@ const Robogest = () => (
                 Consulto gratuito
               </span>
               <span className="mx-btn__icon">
-                <MessageCircle size={20} strokeWidth={2.4} />
+                <WhatsAppIcon size={20} strokeWidth={2.4} />
               </span>
             </button>
             <a className="mx-btn mx-btn--ghost" href="#benefici">

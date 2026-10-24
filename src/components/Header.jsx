@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, useScroll, useSpring } from 'framer-motion'
-import { Phone, MessageCircle } from 'lucide-react'
+import { Phone } from 'lucide-react'
+import WhatsAppIcon from './whatsapp/WhatsAppIcon'
 import Sidebar from './Sidebar'
 import './Header.css'
 
@@ -108,7 +109,7 @@ const Header = ({ topOffset = 0 }) => {
               <span>Chiama</span>
             </a>
             <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-header__book">
-              <MessageCircle size={16} strokeWidth={2.4} />
+              <WhatsAppIcon size={16} strokeWidth={2.4} />
               Prenota
             </a>
           </div>

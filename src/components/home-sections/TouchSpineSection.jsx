@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useMotionValue, useMotionValueEvent, useTransform } from 'framer-motion'
-import { MessageCircle, RotateCcw, Fingerprint } from 'lucide-react'
+import { RotateCcw, Fingerprint } from 'lucide-react'
+import WhatsAppIcon from '../whatsapp/WhatsAppIcon'
 import { Vertebra } from './SpineProgress'
 import { Kicker } from './HomeKit'
 import { EASE, MSG_CONSULTO, buzz, openWhatsApp } from './homeMotion'
@@ -133,7 +134,7 @@ const TouchSpineSection = () => {
                   Consulto gratuito
                 </span>
                 <span className="mx-btn__icon">
-                  <MessageCircle size={20} strokeWidth={2.4} />
+                  <WhatsAppIcon size={20} strokeWidth={2.4} />
                 </span>
               </button>
               <button type="button" className="mx-touch__again" onClick={reset}>

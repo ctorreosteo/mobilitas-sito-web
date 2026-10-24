@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import { MessageCircle, Percent } from 'lucide-react'
+import { Percent } from 'lucide-react'
+import WhatsAppIcon from '../whatsapp/WhatsAppIcon'
 import { Vertebra } from './SpineProgress'
 import { EASE, MSG_CONSULTO, MSG_VISITA, SPINE_COUNT, openWhatsApp, useReadingProgress } from './homeMotion'
 
@@ -33,7 +34,7 @@ const MobileDock = () => {
       </div>
       <div className="mx-dock__row">
         <button type="button" className="mx-dock__btn mx-dock__btn--primary" onClick={() => openWhatsApp(MSG_CONSULTO)}>
-          <MessageCircle size={18} strokeWidth={2.4} />
+          <WhatsAppIcon size={18} strokeWidth={2.4} />
           <span className="mx-dock__lbl">
             Consulto
             <small>gratuito</small>

@@ -6,7 +6,6 @@ import {
   Handshake,
   Lightbulb,
   MapPin,
-  MessageCircle,
   Route,
   Sparkles,
   Star,
@@ -14,6 +13,7 @@ import {
   Target,
   Trophy,
 } from 'lucide-react'
+import WhatsAppIcon from '../../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../../components/site/PageShell'
 import FinalCta from '../../../components/site/FinalCta'
 import { Kicker, MaskLines, Reveal, Snap } from '../../../components/home-sections/HomeKit'
@@ -185,7 +185,7 @@ const GPADEL = () => (
                 Consulto gratuito
               </span>
               <span className="mx-btn__icon">
-                <MessageCircle size={20} strokeWidth={2.4} />
+                <WhatsAppIcon size={20} strokeWidth={2.4} />
               </span>
             </button>
             <a className="mx-btn mx-btn--ghost" href="#benefici">

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, ArrowUp, MapPin, Clock, Phone, Mail, MessageCircle, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react'
+import { ArrowUpRight, ArrowUp, MapPin, Clock, Phone, Mail, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react'
+import WhatsAppIcon from './whatsapp/WhatsAppIcon'
 import './Footer.css'
 
 const EASE = [0.16, 1, 0.3, 1]
@@ -121,7 +122,7 @@ export default function Footer() {
             <ul className="mx-footer__links">
               <li>
                 <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle size={16} />
+                  <WhatsAppIcon size={16} />
                   WhatsApp
                 </a>
               </li>

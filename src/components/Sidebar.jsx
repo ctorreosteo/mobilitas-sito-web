@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion'
-import { X, Phone, Mail, MessageCircle, User, ArrowUpRight, Plus, MapPin, Clock } from 'lucide-react'
+import { X, Phone, Mail, User, ArrowUpRight, Plus, MapPin, Clock } from 'lucide-react'
+import WhatsAppIcon from './whatsapp/WhatsAppIcon'
 import { Vertebra } from './home-sections/SpineProgress'
 import './Sidebar.css'
 
@@ -248,7 +249,7 @@ const MenuContent = ({ onClose, anchor }) => {
                   Scrivici su WhatsApp
                 </span>
                 <span className="mx-menu__cta-icon">
-                  <MessageCircle size={20} strokeWidth={2.4} />
+                  <WhatsAppIcon size={20} strokeWidth={2.4} />
                 </span>
               </a>
               <div className="mx-menu__quick">

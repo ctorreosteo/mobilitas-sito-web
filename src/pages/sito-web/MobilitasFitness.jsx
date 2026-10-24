@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, Footprints, Zap, Check, MessageCircle, Users } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Footprints, Zap, Check, Users } from 'lucide-react'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../components/site/PageShell'
 import { Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
 import { EASE } from '../../components/home-sections/homeMotion'
@@ -264,7 +265,7 @@ const MobilitasFitness = () => {
           <Reveal className="mx-ctas">
             <a className="mx-btn mx-fit-final__btn" href={WHATSAPP_FITNESS} target="_blank" rel="noopener noreferrer">
               <span className="mx-fit-final__btn-icon-l">
-                <MessageCircle size={22} strokeWidth={2.4} />
+                <WhatsAppIcon size={22} strokeWidth={2.4} />
               </span>
               <span>
                 <small>Scrivici su WhatsApp</small>

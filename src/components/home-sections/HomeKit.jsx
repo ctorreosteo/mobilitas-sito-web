@@ -1,6 +1,7 @@
 import React, { Children, useEffect, useRef, useState } from 'react'
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring, animate } from 'framer-motion'
-import { ArrowUpRight, MessageCircle } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import WhatsAppIcon from '../whatsapp/WhatsAppIcon'
 import { EASE, MSG_CONSULTO, MSG_VISITA, openWhatsApp } from './homeMotion'
 
 // Bottone che segue leggermente il cursore
@@ -45,7 +46,7 @@ export const CtaPair = ({ className = '', inline = false }) => (
         Consulto gratuito
       </span>
       <span className="mx-btn__icon">
-        <MessageCircle size={20} strokeWidth={2.4} />
+        <WhatsAppIcon size={20} strokeWidth={2.4} />
       </span>
     </MagneticButton>
     <MagneticButton className="mx-btn mx-btn--ghost" onClick={() => openWhatsApp(MSG_VISITA)}>

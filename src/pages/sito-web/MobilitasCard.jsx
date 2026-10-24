@@ -14,13 +14,13 @@ import {
   Crown,
   Backpack,
   Phone,
-  MessageCircle,
   RefreshCw,
   Store,
   Coins,
   Sparkles,
   Check,
 } from 'lucide-react'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../components/site/PageShell'
 import { Counter, Kicker, MaskLines, Reveal, Snap } from '../../components/home-sections/HomeKit'
 import { EASE, useParallax } from '../../components/home-sections/homeMotion'
@@ -344,7 +344,7 @@ const MobilitasCard = () => {
                   Richiedi la tua Card
                 </span>
                 <span className="mx-btn__icon">
-                  <MessageCircle size={20} strokeWidth={2.4} />
+                  <WhatsAppIcon size={20} strokeWidth={2.4} />
                 </span>
               </button>
             </div>
@@ -499,7 +499,7 @@ const MobilitasCard = () => {
                   Scrivici su WhatsApp
                 </span>
                 <span className="mx-btn__icon">
-                  <MessageCircle size={20} strokeWidth={2.4} />
+                  <WhatsAppIcon size={20} strokeWidth={2.4} />
                 </span>
               </a>
               <a className="mx-btn mx-btn--ghost" href={PHONE_HREF}>

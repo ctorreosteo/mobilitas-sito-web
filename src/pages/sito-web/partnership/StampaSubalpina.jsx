@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowDown, BookOpen, Building2, Landmark, MessageCircle, Newspaper, Trophy } from 'lucide-react'
+import { ArrowDown, BookOpen, Building2, Landmark, Newspaper, Trophy } from 'lucide-react'
+import WhatsAppIcon from '../../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../../components/site/PageShell'
 import FinalCta from '../../../components/site/FinalCta'
 import { Kicker, MaskLines, Reveal } from '../../../components/home-sections/HomeKit'
@@ -82,7 +83,7 @@ const StampaSubalpina = () => (
                   Consulto gratuito
                 </span>
                 <span className="mx-btn__icon">
-                  <MessageCircle size={20} strokeWidth={2.4} />
+                  <WhatsAppIcon size={20} strokeWidth={2.4} />
                 </span>
               </button>
               <a className="mx-btn mx-btn--ghost" href="#benefici">

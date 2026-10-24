@@ -14,7 +14,6 @@ import {
   Laptop,
   Link2,
   MapPin,
-  MessageCircle,
   RefreshCcw,
   Scale,
   Search,
@@ -23,6 +22,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../components/site/PageShell'
 import { CtaPair, Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
 import { EASE, openWhatsApp } from '../../components/home-sections/homeMotion'
@@ -1098,7 +1098,7 @@ const FAQ = () => {
                         Chiedilo a noi
                       </span>
                       <span className="mx-btn__icon">
-                        <MessageCircle size={20} strokeWidth={2.4} />
+                        <WhatsAppIcon size={20} strokeWidth={2.4} />
                       </span>
                     </button>
                     <button type="button" className="mx-btn mx-btn--ghost" onClick={() => clearSearch()}>
@@ -1209,7 +1209,7 @@ const FAQ = () => {
                                     className="mx-faq-action mx-faq-action--wa"
                                     onClick={() => openWhatsApp(MSG_SU_FAQ(it.question))}
                                   >
-                                    <MessageCircle size={16} strokeWidth={2.4} />
+                                    <WhatsAppIcon size={16} strokeWidth={2.4} />
                                     <span>Chiedi di più</span>
                                   </button>
                                 </div>

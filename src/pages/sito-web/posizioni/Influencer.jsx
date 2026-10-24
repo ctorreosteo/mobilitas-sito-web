@@ -9,7 +9,6 @@ import {
   Coins,
   Flame,
   Megaphone,
-  MessageCircle,
   Package,
   Palette,
   Play,
@@ -23,6 +22,7 @@ import {
   Users,
   Wallet,
 } from 'lucide-react'
+import WhatsAppIcon from '../../../components/whatsapp/WhatsAppIcon'
 import PageShell from '../../../components/site/PageShell'
 import FinalCta from '../../../components/site/FinalCta'
 import { Counter, Kicker, MaskLines, Reveal, Snap } from '../../../components/home-sections/HomeKit'
@@ -250,7 +250,7 @@ const StoryPhone = () => {
 
         <button type="button" className="mx-infl-phone__reply" onClick={candidati}>
           <span>Candidati Ora</span>
-          <MessageCircle size={18} aria-hidden="true" />
+          <WhatsAppIcon size={18} aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -729,7 +729,7 @@ const Influencer = () => {
               Inizia la collaborazione
             </span>
             <span className="mx-btn__icon">
-              <MessageCircle size={20} strokeWidth={2.4} />
+              <WhatsAppIcon size={20} strokeWidth={2.4} />
             </span>
           </button>
         </div>
