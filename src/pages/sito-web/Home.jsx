@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { MotionConfig } from 'framer-motion'
 import HeroSection from '../../components/home-sections/HeroSection'
 import TargetAudienceSection from '../../components/home-sections/TargetAudienceSection'
 import ProblemsSection from '../../components/home-sections/ProblemsSection'
 import TestimonialsSection from '../../components/home-sections/TestimonialsSection'
 import ServicesOverviewSection from '../../components/home-sections/ServicesOverviewSection'
 import BioSection from '../../components/home-sections/BioSection'
+import TouchSpineSection from '../../components/home-sections/TouchSpineSection'
+import SpineProgress from '../../components/home-sections/SpineProgress'
+import MobileDock from '../../components/home-sections/MobileDock'
+import WhatsAppButtonSito from '../../components/WhatsAppButtonSito'
 import LoadingAnimation from '../../components/LoadingAnimation'
-import SectionDivider from '../../components/SectionDivider'
+import './Home.css'
 
 const Home = () => {
   const [showContent, setShowContent] = useState(false)
@@ -89,25 +94,27 @@ const Home = () => {
   return (
     <>
       {!showContent && <LoadingAnimation onComplete={handleLoadingComplete} />}
-      <div className={`min-h-screen transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
-        <HeroSection />
-        <SectionDivider />
-        <TargetAudienceSection />
-        <SectionDivider />
-        <ProblemsSection />
-        <SectionDivider />
-        <div id="testimonianze">
-          <TestimonialsSection />
+      <MotionConfig reducedMotion="user">
+        <div className={`mx-home min-h-screen transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+          {showContent && <SpineProgress />}
+          {showContent && <MobileDock />}
+          {/* Su mobile il dock sostituisce il bottone WhatsApp flottante */}
+          <div className="mx-desk-only">{showContent && <WhatsAppButtonSito />}</div>
+          <HeroSection play={showContent} />
+          <TargetAudienceSection />
+          <ProblemsSection />
+          <TouchSpineSection />
+          <div id="testimonianze">
+            <TestimonialsSection />
+          </div>
+          <div id="servizi">
+            <ServicesOverviewSection />
+          </div>
+          <div id="bio">
+            <BioSection />
+          </div>
         </div>
-        <SectionDivider />
-        <div id="servizi">
-          <ServicesOverviewSection />
-        </div>
-        <SectionDivider />
-        <div id="bio">
-          <BioSection />
-        </div>
-      </div>
+      </MotionConfig>
     </>
   )
 }

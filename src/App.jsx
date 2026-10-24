@@ -84,7 +84,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         {/* Main website routes with layout */}
-        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/" element={<Layout hideWhatsApp><Home /></Layout>} />
         <Route path="/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
         <Route path="/contatti" element={<Layout><Contatti /></Layout>} />
         <Route path="/lavora-con-noi" element={<Layout><LavoraConNoi /></Layout>} />

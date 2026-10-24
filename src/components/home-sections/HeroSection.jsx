@@ -1,208 +1,251 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles, Zap, Shield, Heart, Users, TrendingUp, Star, CheckCircle, MessageCircle, Calendar } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Star, CheckCircle } from 'lucide-react'
+import { CtaPair, MaskLines, Photo, Snap } from './HomeKit'
+import { EASE } from './homeMotion'
 
-const HeroSection = () => {
-  const [isVisible, setIsVisible] = useState(false)
+const benefits = [
+  {
+    title: 'Dolori e problemi',
+    text: 'Elimina finalmente quei dolori che ti trascini da mesi o anni e che ti stanno rubando energia, movimento e libertà.',
+  },
+  {
+    title: 'Energia',
+    text: "Non è normale svegliarsi già stanchi. Ritrova la tua energia vera, ogni giorno, quella che ti permette di vivere, non solo sopravvivere.",
+  },
+  {
+    title: 'Controllo totale',
+    text: 'Riprendi il controllo del tuo corpo oggi e costruisci una vecchiaia senza farmaci, dipendenze o rimpianti.',
+  },
+]
 
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
+const conditions = [
+  { label: 'Mal di schiena', to: '/maldischiena' },
+  { label: 'Cervicalgia', to: '/cervicalgia' },
+  { label: 'Sciatalgia', to: '/sciatalgia' },
+  { label: 'Emicrania', to: '/emicrania' },
+  { label: 'Vertigini', to: '/vertigini' },
+  { label: 'Bruxismo', to: '/bruxismo' },
+  { label: 'Reflusso', to: '/reflusso' },
+  { label: 'Fibromialgia', to: '/fibromialgia' },
+  { label: 'Tunnel carpale', to: '/tunnel-carpale' },
+  { label: 'Epicondilite', to: '/epicondilite' },
+  { label: 'Colon irritabile', to: '/colon-irritabile' },
+  { label: 'Ciclo doloroso', to: '/ciclo-doloroso' },
+  { label: 'Menopausa', to: '/menopausa' },
+]
+
+const values = ['Metodo scientifico', 'Approccio personalizzato', 'Risultati misurabili', 'Un tocco, una trasformazione']
+
+const fadeUp = (play, delay) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: play ? { opacity: 1, y: 0 } : undefined,
+  transition: { duration: 1, ease: EASE, delay },
+})
+
+const Ribbon = ({ children, variant, speed, reverse }) => (
+  <div className={`mx-ribbon mx-ribbon--${variant}`}>
+    {[0, 1].map((copy) => (
+      <div
+        key={copy}
+        className={`mx-marquee ${reverse ? 'mx-marquee--rev' : ''}`}
+        style={{ '--mx-speed': speed }}
+        aria-hidden={copy === 1 ? 'true' : undefined}
+      >
+        {children(copy === 1)}
+      </div>
+    ))}
+  </div>
+)
+
+const HeroSection = ({ play = true }) => {
+  const { scrollY } = useScroll()
+  // Su schermi stretti la foto sta sopra i benefici: niente spostamento verticale
+  const narrow = typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches
+  const photoY = useTransform(scrollY, [0, 800], [0, narrow ? 0 : 120])
+  const photoScale = useTransform(scrollY, [0, 800], [1, 1.08])
+  const copyY = useTransform(scrollY, [0, 800], [0, -60])
+
+  const moveSpotlight = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty('--mx-x', `${e.clientX - r.left}px`)
+    e.currentTarget.style.setProperty('--mx-y', `${e.clientY - r.top}px`)
+  }
 
   return (
-    <section className="relative min-h-screen bg-cream overflow-hidden">
-      {/* Modern Background Pattern */}
-      <div className="absolute inset-0">
-        {/* Geometric shapes with brand colors */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-green/20 rounded-full blur-2xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-blue-dark/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-40 left-1/4 w-28 h-28 bg-green/15 rounded-full blur-2xl animate-pulse delay-2000"></div>
-        <div className="absolute bottom-20 right-1/3 w-20 h-20 bg-blue-dark/15 rounded-full blur-xl animate-pulse delay-3000"></div>
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(90deg,transparent_0%,rgba(0,37,82,0.1)_50%,transparent_100%),linear-gradient(0deg,transparent_0%,rgba(0,37,82,0.1)_50%,transparent_100%)] bg-[length:60px_60px]"></div>
-        
-        {/* Floating dots */}
-        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-green/30 rounded-full animate-bounce delay-1000"></div>
-        <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-blue-dark/40 rounded-full animate-bounce delay-2000"></div>
-        <div className="absolute bottom-1/3 left-1/5 w-2.5 h-2.5 bg-green/25 rounded-full animate-bounce delay-3000"></div>
-      </div>
+    <>
+      <section className="mx-hero" onMouseMove={moveSpotlight}>
+        <div className="mx-aurora" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="mx-hero__grid-lines" aria-hidden="true" />
+        <div className="mx-hero__spot" aria-hidden="true" />
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-[24px] pt-8 pb-20 lg:pb-32">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-16 lg:gap-20 items-start">
-            
-            {/* Left Column - Content (2/3 width) */}
-            <div className={`lg:col-span-2 space-y-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              
-              {/* Badge */}
-              <div className="inline-flex items-center gap-3 bg-sky-400/10 border border-sky-400/30 rounded-full px-6 py-3 mt-4 mb-2 shadow-lg backdrop-blur-sm">
-                <Sparkles className="w-5 h-5 text-sky-400" />
-                <span className="text-sm font-semibold text-sky-400 font-montserrat">
-                  Rivoluzione nella cura della salute
-                </span>
-              </div>
+        <div className="mx-wrap">
+          <div className="mx-hero__layout">
+            <motion.div style={{ y: copyY }}>
+              <motion.p className="mx-kicker" {...fadeUp(play, 0.2)}>
+                <span className="mx-kicker__bar" />
+                Un tocco. Una trasformazione.
+              </motion.p>
 
-              {/* Main Headline */}
-              <div className="space-y-6 mt-2">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-montserrat leading-tight text-left">
-                  <span className="text-blue-dark">Studio Osteopatico Specializzato</span>
-                  <br />
-                  <span className="text-blue-dark">
-                    <span className="text-sky-400">Il più scelto di Torino</span>
+              <h1 className="mx-h mx-h--hero">
+                <motion.span className="mx-hero__pre" {...fadeUp(play, 0.3)}>
+                  Studio osteopatico specializzato
+                </motion.span>
+                <MaskLines
+                  immediate
+                  play={play}
+                  delay={0.4}
+                  lines={[
+                    { text: 'Il più' },
+                    { text: 'scelto', className: 'mx-gradient' },
+                    { text: 'di Torino.', className: 'mx-outline' },
+                  ]}
+                />
+              </h1>
+
+              <motion.p className="mx-lead mx-hero__sub" {...fadeUp(play, 0.9)}>
+                <strong>Riprendi il controllo sulla tua salute</strong> con un approccio scientifico e personalizzato che ti restituisce l'autonomia quotidiana.
+              </motion.p>
+
+              <motion.div {...fadeUp(play, 1.05)}>
+                <CtaPair />
+              </motion.div>
+
+              <motion.div className="mx-trust" {...fadeUp(play, 1.2)}>
+                <span className="mx-trust__item">
+                  <span className="mx-stars">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={15} />
+                    ))}
                   </span>
-                </h1>
-                <p className="text-xl md:text-2xl text-blue-dark/80 font-montserrat leading-relaxed max-w-2xl text-left">
-                  <span className="text-blue-dark font-bold"> Riprendi il controllo sulla tua salute</span> con un approccio scientifico e personalizzato che ti restituisce l'autonomia quotidiana.
-                </p>
-                
-                {/* Hero Image */}
-                <div className="mt-8 mb-8">
-                  <img 
-                    src="/home/home7.png" 
-                    alt="Approccio scientifico e personalizzato per la salute" 
-                    className="w-full max-w-2xl mx-auto rounded-2xl shadow-2xl"
+                  5.0/5 su Google
+                </span>
+                <span className="mx-trust__item">
+                  <CheckCircle size={16} />
+                  Metodo scientifico
+                </span>
+                <span className="mx-trust__item">
+                  <CheckCircle size={16} />
+                  Risultati misurabili
+                </span>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              className="mx-arch"
+              initial={{ opacity: 0, y: 60, scale: 0.94 }}
+              animate={play ? { opacity: 1, y: 0, scale: 1 } : undefined}
+              transition={{ duration: 1.4, ease: EASE, delay: 0.5 }}
+            >
+              <div className="mx-arch__halo" aria-hidden="true" />
+              <motion.div className="mx-arch__frame" style={{ y: photoY }}>
+                <motion.div style={{ scale: photoScale, height: '100%' }}>
+                  <Photo
+                    name="home7"
+                    eager
+                    sizes="(min-width: 1024px) 460px, 90vw"
+                    alt="Osteopata Mobilitas durante un trattamento nello studio di Torino"
                   />
-                </div>
+                </motion.div>
+                <p className="mx-arch__caption">Approccio scientifico e personalizzato</p>
+              </motion.div>
+
+              <div className="mx-stamp" aria-hidden="true">
+                <svg viewBox="0 0 132 132">
+                  <defs>
+                    <path id="mx-stamp-circle" d="M66,66 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0" />
+                  </defs>
+                  <text>
+                    <textPath href="#mx-stamp-circle">Un tocco · Una trasformazione · </textPath>
+                  </text>
+                </svg>
+                <img src="/pittogramma.png" alt="" />
               </div>
 
-              {/* Key Benefits Grid - Vertical Layout for Desktop */}
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-                <div className="group relative">
-                  <div className="relative bg-gradient-to-br from-red-50 to-orange-100 border border-white/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2">
-                    <div className="flex items-center gap-4">
-                      {/* Icon */}
-                      <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                        <Heart className="w-6 h-6" />
-                      </div>
-                      
-                       {/* Content */}
-                       <div>
-                         <div className="text-sm sm:text-xl font-bold text-blue-dark font-montserrat"><span className="font-bold">Dolori e problemi</span> - <span className="font-normal">elimina finalmente quei dolori che ti trascini da mesi o anni e che ti stanno rubando energia, movimento e libertà</span></div>
-                       </div>
-                    </div>
-                    
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 rounded-3xl opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
-                  </div>
-                </div>
-                
-                <div className="group relative">
-                  <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 border border-white/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2">
-                    <div className="flex items-center gap-4">
-                      {/* Icon */}
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                        <Zap className="w-6 h-6" />
-                      </div>
-                      
-                       {/* Content */}
-                       <div>
-                         <div className="text-sm sm:text-xl font-bold text-blue-dark font-montserrat"><span className="font-bold">Energia</span> - <span className="font-normal">Non è normale svegliarsi già stanchi. Ritrova la tua energia vera, ogni giorno, quella che ti permette di vivere, non solo sopravvivere.</span></div>
-                       </div>
-                    </div>
-                    
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
-                  </div>
-                </div>
-                
-                <div className="group relative">
-                  <div className="relative bg-gradient-to-br from-green-50 to-green-100 border border-white/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2">
-                    <div className="flex items-center gap-4">
-                      {/* Icon */}
-                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                        <Shield className="w-6 h-6" />
-                      </div>
-                      
-                       {/* Content */}
-                       <div>
-                         <div className="text-sm sm:text-xl font-bold text-blue-dark font-montserrat">Controllo totale - <span className="font-normal">Riprendi il controllo del tuo corpo oggi e costruisci una vecchiaia senza farmaci, dipendenze o rimpianti.</span></div>
-                       </div>
-                    </div>
-                    
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
-                  </div>
-                </div>
-              </div>
+              <motion.div
+                className="mx-chip mx-chip--a"
+                initial={{ opacity: 0, x: -30 }}
+                animate={play ? { opacity: 1, x: 0, y: [0, -10, 0] } : undefined}
+                transition={{ opacity: { delay: 1.2, duration: 0.8 }, x: { delay: 1.2, duration: 0.8, ease: EASE }, y: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
+              >
+                <span className="mx-chip__num">4000+</span>
+                <span className="mx-chip__txt">
+                  <b>Pazienti</b>
+                  soddisfatti
+                </span>
+              </motion.div>
 
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-blue-dark/20">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-blue-dark" />
-                  <span className="text-sm font-semibold text-blue-dark font-montserrat">Metodo scientifico</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-blue-dark" />
-                  <span className="text-sm font-semibold text-blue-dark font-montserrat">Approccio personalizzato</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-blue-dark" />
-                  <span className="text-sm font-semibold text-blue-dark font-montserrat">Risultati misurabili</span>
-                </div>
-              </div>
-            </div>
+              <motion.div
+                className="mx-chip mx-chip--b"
+                initial={{ opacity: 0, x: 30 }}
+                animate={play ? { opacity: 1, x: 0, y: [0, 10, 0] } : undefined}
+                transition={{ opacity: { delay: 1.4, duration: 0.8 }, x: { delay: 1.4, duration: 0.8, ease: EASE }, y: { duration: 6, repeat: Infinity, ease: 'easeInOut' } }}
+              >
+                <span className="mx-chip__num">98%</span>
+                <span className="mx-chip__txt">
+                  <b>Tasso di successo</b>
+                  100% specializzati
+                </span>
+              </motion.div>
+            </motion.div>
+          </div>
 
-            {/* Right Column - Visual Elements (1/3 width) */}
-            <div className={`lg:col-span-1 relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              
-              {/* Main Stats Card */}
-              <div className="relative bg-white/90 backdrop-blur-md border border-blue-dark/30 rounded-3xl p-8 lg:p-10 shadow-2xl">
-                <div className="space-y-8 lg:space-y-10">
-                  {/* Header */}
-                  <div className="text-left">
-                    <h3 className="text-2xl font-bold text-blue-dark font-montserrat mb-2">I nostri risultati</h3>
-                    <p className="text-blue-dark/70 font-montserrat">Numeri che parlano</p>
-                  </div>
-                  
-                  {/* Stats */}
-                  <div className="grid grid-cols-1 gap-6 lg:gap-8">
-                    <div className="text-left">
-                      <div className="text-4xl font-bold text-blue-dark font-montserrat mb-1">4000+</div>
-                      <div className="text-blue-dark/80 font-montserrat">Pazienti soddisfatti</div>
-                    </div>
-                    <div className="text-left">
-                      <div className="text-4xl font-bold text-blue-dark font-montserrat mb-1">98%</div>
-                      <div className="text-blue-dark/80 font-montserrat">Tasso di successo</div>
-                    </div>
-                    <div className="text-left">
-                      <div className="text-4xl font-bold text-blue-dark font-montserrat mb-1">100%</div>
-                      <div className="text-blue-dark/80 font-montserrat">Specializzazione dei professionisti</div>
-                    </div>
-                  </div>
-                  
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 pt-6 lg:pt-8 border-t border-blue-dark/20">
-                    <div className="flex gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-blue-dark fill-current" />
-                      ))}
-                    </div>
-                    <span className="text-blue-dark/80 font-montserrat font-semibold">Recensioni 5.0/5 su Google</span>
-                  </div>
-                </div>
+          <Snap className="mx-benefits">
+            {benefits.map((b, i) => (
+              <motion.div
+                key={b.title}
+                className="mx-benefit"
+                initial={{ opacity: 0, y: 30 }}
+                animate={play ? { opacity: 1, y: 0 } : undefined}
+                transition={{ duration: 1, ease: EASE, delay: 1.3 + i * 0.12 }}
+              >
+                <span className="mx-benefit__n">0{i + 1}</span>
+                <h3 className="mx-h mx-h--sm">{b.title}</h3>
+                <p className="mx-body">{b.text}</p>
+              </motion.div>
+            ))}
+          </Snap>
 
-                {/* Floating elements */}
-                <div className="absolute top-3 right-3 w-10 h-10 bg-blue-dark rounded-full flex items-center justify-center shadow-lg">
-                  <TrendingUp className="w-5 h-5 text-white" />
-                </div>
-                <div className="absolute bottom-3 right-3 w-10 h-10 bg-blue-dark/10 rounded-full flex items-center justify-center shadow-lg">
-                  <Users className="w-5 h-5 text-blue-dark" />
-                </div>
-              </div>
-
-              {/* Background decorative elements */}
-              <div className="absolute -z-10 top-10 -right-10 w-40 h-40 bg-blue-dark/10 rounded-full blur-3xl"></div>
-              <div className="absolute -z-10 bottom-10 -left-10 w-32 h-32 bg-blue-dark/10 rounded-full blur-2xl"></div>
-            </div>
+          <div className="mx-scrollhint">
+            <span className="mx-scrollhint__line" />
+            Scorri: la colonna si riallinea
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
-    </section>
+      <div className="mx-ribbons">
+        <Ribbon variant="line" speed="60s" reverse>
+          {(hidden) =>
+            [...values, ...values].map((v, i) => (
+              <span key={i} className="mx-ribbon__item" aria-hidden={hidden || undefined}>
+                {v}
+                <span className="mx-ribbon__dot" />
+              </span>
+            ))
+          }
+        </Ribbon>
+        <Ribbon variant="green" speed="55s">
+          {(hidden) =>
+            conditions.map((c) => (
+              <Link
+                key={c.to}
+                to={c.to}
+                className="mx-ribbon__item"
+                tabIndex={hidden ? -1 : undefined}
+              >
+                {c.label}
+                <span className="mx-ribbon__dot" />
+              </Link>
+            ))
+          }
+        </Ribbon>
+      </div>
+    </>
   )
 }
 
