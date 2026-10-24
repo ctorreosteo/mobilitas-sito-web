@@ -35,7 +35,8 @@ import Influencer from './pages/sito-web/posizioni/Influencer'
 
 // Partnership pages
 import GPADEL from './pages/sito-web/partnership/GPADEL'
-import Abylsen from './pages/sito-web/partnership/Abylsen'
+// Abylsen: pagina oscurata (il file resta nel repository ma non è raggiungibile)
+// import Abylsen from './pages/sito-web/partnership/Abylsen'
 import StampaSubalpina from './pages/sito-web/partnership/StampaSubalpina'
 import Robogest from './pages/sito-web/partnership/Robogest'
 import Edenred from './pages/sito-web/partnership/Edenred'
@@ -137,7 +138,7 @@ function App() {
         
         {/* Partnership pages with layout */}
         <Route path="/partnership/gpadel" element={<Layout><GPADEL /></Layout>} />
-        <Route path="/partnership/abylsen" element={<Layout><Abylsen /></Layout>} />
+        {/* Oscurata: <Route path="/partnership/abylsen" element={<Layout><Abylsen /></Layout>} /> */}
         <Route path="/partnership/stampa-subalpina" element={<Layout><StampaSubalpina /></Layout>} />
         <Route path="/partnership/robogest" element={<Layout><Robogest /></Layout>} />
         <Route path="/partnership/edenred" element={<Layout><Edenred /></Layout>} />

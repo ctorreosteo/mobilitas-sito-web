@@ -592,16 +592,6 @@
     }
   }
 
-  /* Nascondi il banner iubenda quando la classe hide-iubenda-banner è presente sul body */
-  body.hide-iubenda-banner #iubenda-cs-banner,
-  body.hide-iubenda-banner .iubenda-cs-banner,
-  body.hide-iubenda-banner [id*="iubenda"],
-  body.hide-iubenda-banner [class*="iubenda-cs"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-  }
-
 @keyframes offerta-marquee {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }

@@ -24,7 +24,6 @@ const primaryItems = [
 
 const partners = [
   { name: 'GPADEL', href: '/partnership/gpadel' },
-  { name: 'Abylsen', href: '/partnership/abylsen' },
   { name: 'Stampa Subalpina', href: '/partnership/stampa-subalpina' },
   { name: 'Robogest', href: '/partnership/robogest' },
   { name: 'Edenred', href: '/partnership/edenred' },
