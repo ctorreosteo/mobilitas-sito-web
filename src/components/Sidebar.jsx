@@ -41,11 +41,16 @@ const secondaryItems = [
   { name: 'Risorse', href: '/risorse' },
 ]
 
-// Il menu si apre come un'onda che parte dal bottone ☰ (in alto a sinistra)
-const panel = {
-  closed: { clipPath: 'circle(0px at 32px 40px)', transition: { duration: 0.6, ease: [0.7, 0, 0.84, 0] } },
-  open: { clipPath: 'circle(150vmax at 32px 40px)', transition: { duration: 0.9, ease: EASE } },
-}
+// Il menu si apre come un'onda che parte dal bottone ☰, ovunque si trovi in quel momento
+const panelVariants = (cx, cy) => ({
+  closed: { clipPath: `circle(0px at ${cx}px ${cy}px)`, transition: { duration: 0.6, ease: [0.7, 0, 0.84, 0] } },
+  open: { clipPath: `circle(150vmax at ${cx}px ${cy}px)`, transition: { duration: 0.9, ease: EASE } },
+})
+
+// La ✕ prende il posto esatto delle due linee del ☰ (quadrato di 44px a sinistra del bottone).
+// gridColumn auto: così il riferimento è la barra intera e non la cella della griglia.
+const closeStyle = (anchor) =>
+  anchor && { position: 'absolute', zIndex: 3, gridColumn: 'auto', left: anchor.x, top: anchor.y + (anchor.h - 44) / 2 }
 
 const rise = (i) => ({
   initial: { y: '110%' },
@@ -59,7 +64,7 @@ const fade = (delay) => ({
   exit: { opacity: 0, transition: { duration: 0.2 } },
 })
 
-const MenuContent = ({ onClose }) => {
+const MenuContent = ({ onClose, anchor }) => {
   const { pathname } = useLocation()
   const [preview, setPreview] = useState(
     Math.max(0, primaryItems.findIndex((item) => item.href === pathname))
@@ -94,7 +99,7 @@ const MenuContent = ({ onClose }) => {
       role="dialog"
       aria-modal="true"
       aria-label="Menu"
-      variants={panel}
+      variants={panelVariants(anchor ? anchor.x + 22 : 34, anchor ? anchor.y + anchor.h / 2 : 40)}
       initial="closed"
       animate="open"
       exit="closed"
@@ -109,7 +114,14 @@ const MenuContent = ({ onClose }) => {
 
       {/* Stessa geometria dell'header: il ☰ diventa ✕ nello stesso punto */}
       <div className="mx-menu__bar">
-        <button ref={closeRef} type="button" className="mx-menu__close" onClick={onClose} aria-label="Chiudi menu">
+        <button
+          ref={closeRef}
+          type="button"
+          className="mx-menu__close"
+          onClick={onClose}
+          aria-label="Chiudi menu"
+          style={closeStyle(anchor)}
+        >
           <X size={24} strokeWidth={2} />
         </button>
         <Link to="/" className="mx-menu__logo" onClick={go}>
@@ -272,7 +284,7 @@ const MenuContent = ({ onClose }) => {
   )
 }
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, anchor = null }) => {
   // Blocca lo scroll della pagina sotto il menu
   useEffect(() => {
     if (!isOpen) return
@@ -297,11 +309,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       body.style.top = prevBodyTop
       body.style.width = prevBodyWidth
       documentElement.style.overflow = prevHtmlOverflow
-      window.scrollTo(0, scrollY)
+      // Istantaneo: con lo scroll-behavior smooth globale la pagina scorrerebbe visibilmente
+      window.scrollTo({ top: scrollY, behavior: 'instant' })
     }
   }, [isOpen])
 
-  return <AnimatePresence>{isOpen && <MenuContent key="menu" onClose={onClose} />}</AnimatePresence>
+  return <AnimatePresence>{isOpen && <MenuContent key="menu" onClose={onClose} anchor={anchor} />}</AnimatePresence>
 }
 
 export default Sidebar

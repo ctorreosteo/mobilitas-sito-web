@@ -335,8 +335,11 @@
 }
 
 @media (min-width: 640px) {
-  .mx-spine--h { top: 80px; }
+  .mx-spine--h { top: 80px; transition: top 0.55s cubic-bezier(0.16, 1, 0.3, 1); }
 }
+
+/* L'header si nasconde scendendo: la striscia sale al suo posto */
+html[data-header="hidden"] .mx-spine--h { top: 0; }
 
 @media (min-width: 1360px) {
   .mx-spine--v { display: flex; }
