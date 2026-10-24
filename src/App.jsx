@@ -58,6 +58,7 @@ import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
 import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata'
 import Cervicalgia from './pages/Cervicalgia'
 import Reflusso from './pages/Reflusso'
+import YtPostura from './pages/YtPostura'
 import OffertaPostura from './pages/OffertaPostura'
 import Vertigini from './pages/Vertigini'
 import Bruxismo from './pages/Bruxismo'
@@ -110,6 +111,7 @@ function App() {
         <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
+        <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
         <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="uomo" /></Layout>} />
         <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="donna" /></Layout>} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
