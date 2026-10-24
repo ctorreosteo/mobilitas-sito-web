@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
+import '../styles/pages/gpadel-lm.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE
   || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
@@ -128,111 +131,139 @@ export default function GpadelInfortuniPopup({ isOpen, onClose }) {
     }
   }
 
+  // Esc per chiudere e pagina ferma sotto il pannello
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e) => {
+      if (e.key === 'Escape' && !isSubmitting) onClose()
+    }
+    const prev = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.documentElement.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [isOpen, isSubmitting, onClose])
+
   if (!isOpen) return null
 
-  return (
-    <div 
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  const fieldClass = (name) => `mx-gpl-field ${formErrors[name] ? 'is-error' : ''}`
+
+  return createPortal(
+    <div
+      className="mx-gpl-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mx-gpl-modal-title"
       onClick={(e) => {
         if (e.target === e.currentTarget && !isSubmitting) {
           onClose()
         }
       }}
     >
-      <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <motion.div
+        className="mx-gpl-sheet"
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      >
         {/* Close Button */}
         <button
+          type="button"
+          aria-label="Chiudi"
           onClick={() => {
             if (!isSubmitting) {
               onClose()
             }
           }}
           disabled={isSubmitting}
-          className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors font-montserrat disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mx-gpl-sheet__close"
         >
-          <X className="w-5 h-5 text-gray-600" />
+          <X size={20} />
         </button>
-        
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold text-blue-dark mb-4">Compila il form</h3>
-          <p className="text-blue-dark/70 text-sm leading-relaxed">
-            Dopo che avrai compilato il form, la nostra segreteria farà un controllo manuale che si tratti di una richiesta vera e ti inverà la guida gratuita. 
-            Compila subito il form! 👇🏼
-          </p>
+
+        <div className="mx-gpl-sheet__head">
+          <span className="mx-gpl-sheet__thumb" aria-hidden="true">
+            <img src="/landing-pages/web/lm-gpadel-copertina-480.jpg" alt="" width="1414" height="2000" />
+          </span>
+          <div>
+            <h3 id="mx-gpl-modal-title" className="mx-h mx-gpl-sheet__title">Compila il form</h3>
+          </div>
         </div>
-        
-        <form onSubmit={handleFormSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
+        <p className="mx-gpl-sheet__intro">
+          Dopo che avrai compilato il form, la nostra segreteria farà un controllo manuale che si tratti di una richiesta vera e ti inverà la guida gratuita. 
+          Compila subito il form! 👇🏼
+        </p>
+
+        <form onSubmit={handleFormSubmit} className="mx-gpl-form">
+          <div className="mx-gpl-form__row">
+            <div className={fieldClass('nome')}>
               <input
                 type="text"
                 name="nome"
                 placeholder="Nome *"
+                aria-label="Nome"
+                autoComplete="given-name"
                 value={formData.nome}
                 onChange={handleInputChange}
                 required
                 minLength={2}
                 disabled={isSubmitting}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-montserrat ${
-                  formErrors.nome ? 'border-red-500' : 'border-gray-300'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
               />
-              {formErrors.nome && <p className="text-red-500 text-xs mt-1">{formErrors.nome}</p>}
+              {formErrors.nome && <p className="mx-gpl-field__err">{formErrors.nome}</p>}
             </div>
-            <div>
+            <div className={fieldClass('cognome')}>
               <input
                 type="text"
                 name="cognome"
                 placeholder="Cognome *"
+                aria-label="Cognome"
+                autoComplete="family-name"
                 value={formData.cognome}
                 onChange={handleInputChange}
                 required
                 minLength={2}
                 disabled={isSubmitting}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-montserrat ${
-                  formErrors.cognome ? 'border-red-500' : 'border-gray-300'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
               />
-              {formErrors.cognome && <p className="text-red-500 text-xs mt-1">{formErrors.cognome}</p>}
+              {formErrors.cognome && <p className="mx-gpl-field__err">{formErrors.cognome}</p>}
             </div>
           </div>
-          
-          <div>
+
+          <div className={fieldClass('cellulare')}>
             <input
               type="tel"
               name="cellulare"
               placeholder="Cellulare *"
+              aria-label="Cellulare"
+              autoComplete="tel"
               value={formData.cellulare}
               onChange={handleInputChange}
               required
               minLength={10}
               pattern="[0-9+\s\-\(\)]+"
               disabled={isSubmitting}
-              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-montserrat ${
-                formErrors.cellulare ? 'border-red-500' : 'border-gray-300'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
             />
-            {formErrors.cellulare && <p className="text-red-500 text-xs mt-1">{formErrors.cellulare}</p>}
+            {formErrors.cellulare && <p className="mx-gpl-field__err">{formErrors.cellulare}</p>}
           </div>
-          
-          <div>
+
+          <div className={fieldClass('email')}>
             <input
               type="email"
               name="email"
               placeholder="Email *"
+              aria-label="Email"
+              autoComplete="email"
               value={formData.email}
               onChange={handleInputChange}
               required
               disabled={isSubmitting}
-              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-montserrat ${
-                formErrors.email ? 'border-red-500' : 'border-gray-300'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
             />
-            {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
+            {formErrors.email && <p className="mx-gpl-field__err">{formErrors.email}</p>}
           </div>
-          
+
           <div>
-            <div className="flex items-start space-x-3">
+            <div className="mx-gpl-consent">
               <input
                 type="checkbox"
                 name="privacy"
@@ -241,33 +272,30 @@ export default function GpadelInfortuniPopup({ isOpen, onClose }) {
                 onChange={handleInputChange}
                 required
                 disabled={isSubmitting}
-                className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               />
-              <label htmlFor="privacy" className="text-xs text-gray-600 leading-relaxed">
-                Accetto la <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">privacy policy</a> e autorizzo il trattamento dei miei dati personali
+              <label htmlFor="privacy">
+                Accetto la <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer">privacy policy</a> e autorizzo il trattamento dei miei dati personali
               </label>
             </div>
-            {formErrors.privacy && <p className="text-red-500 text-xs mt-1">{formErrors.privacy}</p>}
+            {formErrors.privacy && <p className="mx-gpl-field__err">{formErrors.privacy}</p>}
           </div>
 
           {formErrors.submit && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-              <p className="text-red-600 text-sm">{formErrors.submit}</p>
+            <div className="mx-gpl-form__fail">
+              <p>{formErrors.submit}</p>
             </div>
           )}
-          
-          <div className="pt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-600 transition-all font-montserrat disabled:opacity-50 disabled:cursor-not-allowed uppercase"
-            >
-              {isSubmitting ? 'Invio in corso...' : 'Scarica la guida gratis'}
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="mx-gpl-submit"
+          >
+            {isSubmitting ? 'Invio in corso...' : 'Scarica la guida gratis'}
+          </button>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </div>,
+    document.body
   )
 }
-

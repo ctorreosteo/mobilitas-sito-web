@@ -1,111 +1,58 @@
-import { motion } from 'framer-motion'
 import { Mail, FileText, Shield, MapPin, Phone } from 'lucide-react'
 
 export default function FooterSection() {
   return (
-    <footer className="bg-blue-dark text-cream py-16">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Main Footer Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
-        >
-          {/* Company Info */}
-          <div className="lg:col-span-2">
-            <h3 className="text-2xl font-bold text-green mb-4">Studio Mobilitas</h3>
-            <p className="text-cream/80 text-lg leading-relaxed mb-6">
-              Specializzati nel trattamento osteopatico del mal di schiena e delle disfunzioni 
+    <footer className="mx-mds-foot">
+      <div className="mx-wrap">
+        <div className="mx-mds-foot__grid">
+          <div className="mx-mds-foot__brand">
+            <img src="/pittogramma.png" alt="" width="44" height="44" loading="lazy" />
+            <h3 className="mx-h mx-h--md">Studio Mobilitas</h3>
+            <p>
+              Specializzati nel trattamento osteopatico del mal di schiena e delle disfunzioni
               posturali. La tua salute è la nostra priorità.
             </p>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <MapPin className="w-5 h-5 text-green" />
-                <span className="text-cream">Via Peyron 54, Torino (comodo con la metro)</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-green" />
-                <span className="text-cream">+39 3518198457</span>
-              </div>
-            </div>
           </div>
 
-          {/* Contact */}
+          <ul className="mx-mds-foot__list">
+            <li><MapPin size={18} /><span>Via Peyron 54, Torino (comodo con la metro)</span></li>
+            <li><Phone size={18} /><span>+39 3518198457</span></li>
+          </ul>
+
           <div>
-            <h4 className="text-xl font-bold text-green mb-4">Contatti</h4>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-green" />
-                <a 
-                  href="mailto:studio@studiomobilitas.it" 
-                  className="text-cream hover:text-green transition-colors duration-300"
-                >
-                  studio@studiomobilitas.it
-                </a>
-              </div>
-            </div>
+            <h4 className="mx-mds-foot__h">Contatti</h4>
+            <ul className="mx-mds-foot__list">
+              <li>
+                <Mail size={18} />
+                <a href="mailto:studio@studiomobilitas.it">studio@studiomobilitas.it</a>
+              </li>
+            </ul>
           </div>
 
-          {/* Legal */}
           <div>
-            <h4 className="text-xl font-bold text-green mb-4">Informazioni Legali</h4>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <FileText className="w-5 h-5 text-green" />
-                <span className="text-cream">P.IVA: 13020400019</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green" />
-                <a 
-                  href="https://www.iubenda.com/privacy-policy/67925714" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-cream hover:text-green transition-colors duration-300"
-                >
+            <h4 className="mx-mds-foot__h">Informazioni Legali</h4>
+            <ul className="mx-mds-foot__list">
+              <li><FileText size={18} /><span>P.IVA: 13020400019</span></li>
+              <li>
+                <Shield size={18} />
+                <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer">
                   Privacy Policy
                 </a>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green" />
-                <a 
-                  href="https://www.iubenda.com/privacy-policy/67925714/cookie-policy" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-cream hover:text-green transition-colors duration-300"
-                >
+              </li>
+              <li>
+                <Shield size={18} />
+                <a href="https://www.iubenda.com/privacy-policy/67925714/cookie-policy" target="_blank" rel="noopener noreferrer">
                   Cookie Policy
                 </a>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Divider */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="border-t border-green/20 mb-8"
-        ></motion.div>
-
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <p className="text-cream/60 text-sm">
-            © 2024 Studio Mobilitas. Tutti i diritti riservati.
-          </p>
-          <p className="text-cream/60 text-xs mt-2">
-            Trattamento osteopatico specializzato per mal di schiena e disfunzioni posturali
-          </p>
-        </motion.div>
+        <div className="mx-mds-foot__bottom">
+          <p>© 2024 Studio Mobilitas. Tutti i diritti riservati.</p>
+          <p>Trattamento osteopatico specializzato per mal di schiena e disfunzioni posturali</p>
+        </div>
       </div>
     </footer>
   )

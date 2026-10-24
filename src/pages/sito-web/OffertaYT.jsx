@@ -1,11 +1,152 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence, useInView, useScroll, useSpring, useTransform } from 'framer-motion'
+import {
+  ArrowUpRight,
+  Check,
+  Brain,
+  Bone,
+  BicepsFlexed,
+  Footprints,
+  Soup,
+  Wind,
+  Venus,
+  Stethoscope,
+  MapPin,
+  TrainFront,
+  CarFront,
+} from 'lucide-react'
+import PageShell from '../../components/site/PageShell'
+import LeadFormSheet from '../../components/landing/LeadFormSheet'
+import { Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
+import { EASE } from '../../components/home-sections/homeMotion'
+import '../../styles/pages/offerta-yt.css'
+
+// Concetto: "Dal video allo studio". Chi arriva da YouTube ha appena guardato un nostro video:
+// la pagina continua quel linguaggio. L'apertura è un player con la barra di avanzamento che
+// riparte da dove eri, le sezioni sono capitoli, i problemi sono una playlist e su telefono la
+// barra dei capitoli resta in basso insieme alla prenotazione.
+
+const bodyAreas = [
+  {
+    icon: Brain,
+    title: "Testa, Collo e Sistema Nervoso",
+    problems: [
+      "Cervicalgia", "Emicrania", "Mal di testa tensivo", "Vertigini", "Acufeni",
+      "Colpo di frusta", "Dolori mandibolari (ATM)", "Bruxismo", "Click mandibolare",
+      "Difficoltà di concentrazione", "Ansia somatizzata", "Disturbi del sonno",
+      "Tensione da postura al PC", "Cefalea da stress", "Tensione cranica nei bambini",
+      "Nebbia mentale", "Irritabilità nei neonati"
+    ]
+  },
+  {
+    icon: Bone,
+    title: "Schiena, Bacino e Postura",
+    problems: [
+      "Lombalgia", "Dorsalgia", "Sciatalgia", "Ernia del disco", "Dolore al coccige",
+      "Dolore pelvico cronico", "Mal di schiena da postura", "Problemi posturali",
+      "Asimmetrie bacino/spalle", "Tensioni posturali da ansia", "Postura curva da terza età",
+      "Rigidità articolare mattutina", "Dolore dopo cadute", "Instabilità da fermi",
+      "Dolori dopo uso di bastoni", "Recupero post-operatorio", "Tensioni lombari in gravidanza"
+    ]
+  },
+  {
+    icon: BicepsFlexed,
+    title: "Arti Superiori",
+    problems: [
+      "Epicondilite", "Tunnel carpale", "Formicolii a braccia e mani", "Dolori articolari diffusi",
+      "Dolore alla spalla", "Mani deboli o doloranti", "Rigidità articolare del braccio",
+      "Dolore durante l'allenamento", "Dolore da supporti tecnologici"
+    ]
+  },
+  {
+    icon: Footprints,
+    title: "Arti Inferiori",
+    problems: [
+      "Dolore al ginocchio", "Fascite plantare", "Piedi gonfi", "Dolori di crescita alle gambe",
+      "Anche rigide o artrosiche", "Difficoltà a camminare", "Salite e discese faticose",
+      "Edemi agli arti inferiori", "Debolezza posturale nel passo", "Dolori alle gambe in gravidanza"
+    ]
+  },
+  {
+    icon: Soup,
+    title: "Sistema Digestivo e Gastrointestinale",
+    problems: [
+      "Reflusso gastrico", "Gonfiore addominale", "Colon irritabile", "Stitichezza",
+      "Diarrea ricorrente", "Pancia gonfia o dura", "Digestione lenta", "Irritabilità intestinale da stress",
+      "Problemi digestivi legati alla postura", "Malassorbimento posturale", "Dolori addominali ciclici"
+    ]
+  },
+  {
+    icon: Wind,
+    title: "Sistema Respiratorio e Diaframma",
+    problems: [
+      "Fiato corto", "Diaframma rigido", "Difficoltà respiratorie", "Respirazione superficiale da stress",
+      "Respiro bloccato in gravidanza", "Asma funzionale", "Oppressione toracica da postura",
+      "Affaticamento nel parlare", "Difficoltà a respirare profondamente"
+    ]
+  },
+  {
+    icon: Venus,
+    title: "Area Donna e Sistema Uro-Ginecologico",
+    problems: [
+      "Dolori mestruali", "Ciclo irregolare", "Sindrome premestruale acuta", "Endometriosi (supporto sintomatico)",
+      "Dispareunia", "Tensioni pelviche", "Difficoltà nel concepimento", "Diastasi addominale post-parto",
+      "Rigidità del bacino post-parto", "Incontinenza urinaria", "Inestetismi da ritenzione",
+      "Dolori legati a scarpe con tacco"
+    ]
+  }
+]
+
+const specializations = [
+  "Gravidanza e Pediatria",
+  "Geriatria e Terza Età",
+  "Postura e Lavori Pesanti",
+  "Sport e Performance",
+  "Postura e Lavoro Sedentario",
+  "E tutto quello che ti serve!"
+]
+
+// I capitoli riprendono le etichette delle sezioni
+const CHAPTERS = [
+  { id: 'oyt-intro', label: 'Studio Osteopatico Torino' },
+  { id: 'oyt-problemi', label: 'Problemi che Risolviamo' },
+  { id: 'oyt-dove', label: 'Dove Siamo' },
+]
+
+const MAP_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2817.274078923546!2d7.65514387704107!3d45.08023495897442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfe2e29f381fdc93%3A0x97eee174cab07ada!2sMobilitas%20-%20Studio%20Osteopatico%20-%20Osteopata%20Torino!5e0!3m2!1sit!2sit!4v1760785981478!5m2!1sit!2sit'
+
+const pad = (n) => String(n).padStart(2, '0')
+
+const BookButton = ({ lines, onClick, className = '' }) => (
+  <motion.button type="button" whileTap={{ scale: 0.97 }} onClick={onClick} className={`mx-btn mx-btn--primary mx-oyt-cta ${className}`}>
+    <span className="mx-oyt-cta__txt">
+      {lines.map((l) => (
+        <span key={l}>{l}</span>
+      ))}
+    </span>
+    <span className="mx-btn__icon"><ArrowUpRight size={22} strokeWidth={2.4} /></span>
+  </motion.button>
+)
+
+// Barra dei capitoli: avanza con la lettura della pagina, come la timeline di un video
+const ChapterBar = ({ progress, compact = false }) => {
+  const width = useTransform(progress, (v) => `${Math.min(100, Math.max(0, v * 100))}%`)
+  return (
+    <div className={`mx-oyt-scrub ${compact ? 'mx-oyt-scrub--compact' : ''}`} aria-hidden="true">
+      <div className="mx-oyt-scrub__track">
+        {CHAPTERS.map((c) => (
+          <span key={c.id} className="mx-oyt-scrub__seg" />
+        ))}
+        <motion.i className="mx-oyt-scrub__fill" style={{ width }} />
+        <motion.b className="mx-oyt-scrub__head" style={{ left: width }} />
+      </div>
+    </div>
+  )
+}
 
 const OffertaYT = () => {
   const navigate = useNavigate()
-  const [scrollY, setScrollY] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const [hoveredCard, setHoveredCard] = useState(null)
   const [currentMonth, setCurrentMonth] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [formData, setFormData] = useState({
@@ -16,21 +157,39 @@ const OffertaYT = () => {
     privacy: false
   })
   const [formErrors, setFormErrors] = useState({})
+  const heroCtaRef = useRef(null)
+  const heroCtaInView = useInView(heroCtaRef, { margin: '0px 0px -40px 0px' })
+  const [scrolledPastTop, setScrolledPastTop] = useState(false)
+  const [chapter, setChapter] = useState(0)
+
+  // Avanzamento di lettura (guida la barra dei capitoli)
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.4 })
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    setCurrentMonth(
+      [
+        'GENNAIO', 'FEBBRAIO', 'MARZO', 'APRILE', 'MAGGIO', 'GIUGNO',
+        'LUGLIO', 'AGOSTO', 'SETTEMBRE', 'OTTOBRE', 'NOVEMBRE', 'DICEMBRE'
+      ][new Date().getMonth()]
+    )
   }, [])
 
+  // Capitolo corrente e comparsa del dock
   useEffect(() => {
-    setIsVisible(true)
-    // Get current month name in Italian
-    const months = [
-      'GENNAIO', 'FEBBRAIO', 'MARZO', 'APRILE', 'MAGGIO', 'GIUGNO',
-      'LUGLIO', 'AGOSTO', 'SETTEMBRE', 'OTTOBRE', 'NOVEMBRE', 'DICEMBRE'
-    ]
-    setCurrentMonth(months[new Date().getMonth()])
+    const onScroll = () => {
+      setScrolledPastTop(window.scrollY > 320)
+      const mid = window.innerHeight * 0.45
+      let current = 0
+      CHAPTERS.forEach((c, i) => {
+        const el = document.getElementById(c.id)
+        if (el && el.getBoundingClientRect().top < mid) current = i
+      })
+      setChapter(current)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   // Handle ESC key to close form
@@ -109,42 +268,42 @@ const OffertaYT = () => {
     e.preventDefault()
     console.log('Form submitted!') // Debug log
     setFormErrors({})
-    
+
     const errors = {}
-    
+
     // Validazione nome
     if (!formData.nome.trim() || formData.nome.length < 2) {
       errors.nome = 'Il nome deve essere di almeno 2 caratteri'
     }
-    
+
     // Validazione cognome
     if (!formData.cognome.trim() || formData.cognome.length < 2) {
       errors.cognome = 'Il cognome deve essere di almeno 2 caratteri'
     }
-    
+
     // Validazione cellulare
     if (!formData.cellulare.trim() || formData.cellulare.length < 10) {
       errors.cellulare = 'Inserisci un numero di cellulare valido'
     }
-    
+
     // Validazione email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!formData.email.trim() || !emailRegex.test(formData.email)) {
       errors.email = 'Inserisci un indirizzo email valido'
     }
-    
+
     // Validazione privacy
     if (!formData.privacy) {
       errors.privacy = 'Devi accettare la privacy policy'
     }
-    
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
       return
     }
-    
+
     console.log('Redirecting to confirmation page...') // Debug log
-    
+
     // Send data to Zapier webhook
     try {
       // Format date and time as requested: dd/mm/yyyy and hh:mm
@@ -154,7 +313,7 @@ const OffertaYT = () => {
       const year = now.getFullYear()
       const hours = String(now.getHours()).padStart(2, '0')
       const minutes = String(now.getMinutes()).padStart(2, '0')
-      
+
       const webhookData = {
         nome: formData.nome,
         cognome: formData.cognome,
@@ -166,17 +325,17 @@ const OffertaYT = () => {
         pagina: 'Offerta YT',
         privacy_accettata: formData.privacy
       }
-      
+
       // Send data to Zapier webhook (same approach as gravidanza landing)
       const response = await fetch('https://hooks.zapier.com/hooks/catch/19401274/urmpgqj/', {
         method: 'POST',
         body: JSON.stringify(webhookData)
       })
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+
       const result = await response.json()
       console.log('Zapier webhook response:', result)
       console.log('Data sent to Zapier successfully')
@@ -184,7 +343,7 @@ const OffertaYT = () => {
       console.error('Error sending data to Zapier:', error)
       // Don't block the user flow if webhook fails
     }
-    
+
     // Redirect to confirmation page
     try {
       navigate('/osteopata-torino-conferma')
@@ -203,531 +362,262 @@ const OffertaYT = () => {
     }))
   }
 
-  const bodyAreas = [
-    {
-      icon: "🧠",
-      title: "Testa, Collo e Sistema Nervoso",
-      problems: [
-        "Cervicalgia", "Emicrania", "Mal di testa tensivo", "Vertigini", "Acufeni",
-        "Colpo di frusta", "Dolori mandibolari (ATM)", "Bruxismo", "Click mandibolare",
-        "Difficoltà di concentrazione", "Ansia somatizzata", "Disturbi del sonno",
-        "Tensione da postura al PC", "Cefalea da stress", "Tensione cranica nei bambini",
-        "Nebbia mentale", "Irritabilità nei neonati"
-      ],
-      gradient: "from-purple-500 to-indigo-600",
-      bgGradient: "from-purple-50 to-indigo-100"
-    },
-    {
-      icon: "🦴",
-      title: "Schiena, Bacino e Postura",
-      problems: [
-        "Lombalgia", "Dorsalgia", "Sciatalgia", "Ernia del disco", "Dolore al coccige",
-        "Dolore pelvico cronico", "Mal di schiena da postura", "Problemi posturali",
-        "Asimmetrie bacino/spalle", "Tensioni posturali da ansia", "Postura curva da terza età",
-        "Rigidità articolare mattutina", "Dolore dopo cadute", "Instabilità da fermi",
-        "Dolori dopo uso di bastoni", "Recupero post-operatorio", "Tensioni lombari in gravidanza"
-      ],
-      gradient: "from-blue-500 to-cyan-600",
-      bgGradient: "from-blue-50 to-cyan-100"
-    },
-    {
-      icon: "💪",
-      title: "Arti Superiori",
-      problems: [
-        "Epicondilite", "Tunnel carpale", "Formicolii a braccia e mani", "Dolori articolari diffusi",
-        "Dolore alla spalla", "Mani deboli o doloranti", "Rigidità articolare del braccio",
-        "Dolore durante l'allenamento", "Dolore da supporti tecnologici"
-      ],
-      gradient: "from-green-500 to-emerald-600",
-      bgGradient: "from-green-50 to-emerald-100"
-    },
-    {
-      icon: "🦵",
-      title: "Arti Inferiori",
-      problems: [
-        "Dolore al ginocchio", "Fascite plantare", "Piedi gonfi", "Dolori di crescita alle gambe",
-        "Anche rigide o artrosiche", "Difficoltà a camminare", "Salite e discese faticose",
-        "Edemi agli arti inferiori", "Debolezza posturale nel passo", "Dolori alle gambe in gravidanza"
-      ],
-      gradient: "from-orange-500 to-red-600",
-      bgGradient: "from-orange-50 to-red-100"
-    },
-    {
-      icon: "🫁",
-      title: "Sistema Digestivo e Gastrointestinale",
-      problems: [
-        "Reflusso gastrico", "Gonfiore addominale", "Colon irritabile", "Stitichezza",
-        "Diarrea ricorrente", "Pancia gonfia o dura", "Digestione lenta", "Irritabilità intestinale da stress",
-        "Problemi digestivi legati alla postura", "Malassorbimento posturale", "Dolori addominali ciclici"
-      ],
-      gradient: "from-yellow-500 to-orange-600",
-      bgGradient: "from-yellow-50 to-orange-100"
-    },
-    {
-      icon: "🫁",
-      title: "Sistema Respiratorio e Diaframma",
-      problems: [
-        "Fiato corto", "Diaframma rigido", "Difficoltà respiratorie", "Respirazione superficiale da stress",
-        "Respiro bloccato in gravidanza", "Asma funzionale", "Oppressione toracica da postura",
-        "Affaticamento nel parlare", "Difficoltà a respirare profondamente"
-      ],
-      gradient: "from-teal-500 to-cyan-600",
-      bgGradient: "from-teal-50 to-cyan-100"
-    },
-    {
-      icon: "👩",
-      title: "Area Donna e Sistema Uro-Ginecologico",
-      problems: [
-        "Dolori mestruali", "Ciclo irregolare", "Sindrome premestruale acuta", "Endometriosi (supporto sintomatico)",
-        "Dispareunia", "Tensioni pelviche", "Difficoltà nel concepimento", "Diastasi addominale post-parto",
-        "Rigidità del bacino post-parto", "Incontinenza urinaria", "Inestetismi da ritenzione",
-        "Dolori legati a scarpe con tacco"
-      ],
-      gradient: "from-pink-500 to-rose-600",
-      bgGradient: "from-pink-50 to-rose-100"
-    }
-  ]
+  const openForm = () => setShowForm(true)
+  const showDock = scrolledPastTop && !heroCtaInView && !showForm
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-blue-dark font-montserrat overflow-hidden">
-      {/* Form Modal */}
-      {showForm && (
-        <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowForm(false)
-            }
-          }}
-        >
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
-            {/* Close Button */}
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors font-montserrat"
-            >
-              <span className="text-gray-600 text-lg font-bold">×</span>
-            </button>
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-blue-dark mb-4">Compila il form</h3>
-              <p className="text-blue-dark/70 text-sm leading-relaxed">
-                Dopo che avrai compilato il form, la nostra segreteria ti contatterà per prendere appuntamento. 
-                Prenota subito il tuo trattamento prima che i posti esauriscano! 👇🏼
-              </p>
-            </div>
-            
-            <form onSubmit={handleFormSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <input
-                    type="text"
-                    name="nome"
-                    placeholder="Nome *"
-                    value={formData.nome}
-                    onChange={handleInputChange}
-                    required
-                    minLength={2}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${formErrors.nome ? 'border-red-500' : 'border-gray-300'}`}
-                  />
-                  {formErrors.nome && <p className="text-red-500 text-xs mt-1">{formErrors.nome}</p>}
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="cognome"
-                    placeholder="Cognome *"
-                    value={formData.cognome}
-                    onChange={handleInputChange}
-                    required
-                    minLength={2}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${formErrors.cognome ? 'border-red-500' : 'border-gray-300'}`}
-                  />
-                  {formErrors.cognome && <p className="text-red-500 text-xs mt-1">{formErrors.cognome}</p>}
-                </div>
-              </div>
-              
-              <div>
-                <input
-                  type="tel"
-                  name="cellulare"
-                  placeholder="Cellulare *"
-                  value={formData.cellulare}
-                  onChange={handleInputChange}
-                  required
-                  minLength={10}
-                  pattern="[0-9+\s\-\(\)]+"
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${formErrors.cellulare ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {formErrors.cellulare && <p className="text-red-500 text-xs mt-1">{formErrors.cellulare}</p>}
-              </div>
-              
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email *"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${formErrors.email ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
-              </div>
-              
-              <div>
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    name="privacy"
-                    id="privacy"
-                    checked={formData.privacy}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="privacy" className="text-xs text-gray-600 leading-relaxed">
-                    Accetto la <a href="#" className="text-blue-600 underline">privacy policy</a> e autorizzo il trattamento dei miei dati personali
-                  </label>
-                </div>
-                {formErrors.privacy && <p className="text-red-500 text-xs mt-1">{formErrors.privacy}</p>}
-              </div>
-              
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold rounded-xl hover:from-blue-700 hover:to-green-600 transition-all font-montserrat"
-                >
-                  Prenota con sconto
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      <style jsx>{`
-        .horizontal-scroll::-webkit-scrollbar {
-          display: none;
+    <PageShell className="mx-oyt">
+      <LeadFormSheet
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        tone="yt"
+        title="Compila il form"
+        intro={
+          <>
+            Dopo che avrai compilato il form, la nostra segreteria ti contatterà per prendere appuntamento.
+            Prenota subito il tuo trattamento prima che i posti esauriscano! 👇🏼
+          </>
         }
-        .horizontal-scroll {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-      
-      {/* HERO SECTION */}
-        <section className="relative pt-10 pb-8 flex items-center justify-center overflow-hidden">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 via-transparent to-green-500/5"></div>
-          
-          {/* Animated geometric shapes */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-full blur-lg animate-pulse delay-1000"></div>
-          <div className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-br from-blue-300/15 to-green-400/15 rounded-full blur-2xl animate-pulse delay-2000"></div>
-          
-          {/* Floating particles */}
-          <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 right-1/4 w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce delay-500"></div>
-          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-blue-600 rounded-full animate-bounce delay-1000"></div>
-        </div>
+        formData={formData}
+        formErrors={formErrors}
+        onChange={handleInputChange}
+        onSubmit={handleFormSubmit}
+      />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-left">
-          {/* Badge */}
-          <div className={`inline-flex items-center px-5 py-2 bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 rounded-full mb-0 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mr-2"></div>
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Studio Osteopatico Torino</span>
-          </div>
-
-          {/* Main Headline */}
-          <div className={`mb-2 transition-all duration-1500 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-none mb-6">
-              <span className="block text-blue-dark">
-                Hai bisogno di
-              </span>
-              <span className="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent mt-2">
-                un Osteopata Bravo con Esperienza?
-              </span>
+      {/* ============ CAPITOLO 1: il player ============ */}
+      <header className="mx-oyt-hero" id="oyt-intro">
+        <div className="mx-oyt-hero__beam" aria-hidden="true" />
+        <div className="mx-wrap mx-oyt-hero__grid">
+          <div className="mx-oyt-hero__copy">
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE }}>
+              <Kicker n="01">Studio Osteopatico Torino</Kicker>
+            </motion.div>
+            <h1 className="mx-h mx-oyt-hero__title">
+              <MaskLines
+                immediate
+                delay={0.1}
+                lines={[{ text: 'Hai bisogno di' }, { text: 'un Osteopata Bravo con Esperienza?', className: 'mx-gradient' }]}
+              />
             </h1>
           </div>
 
-          {/* Subtitle */}
-          <div className={`mb-12 transition-all duration-1500 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <p className="text-xl md:text-2xl text-blue-dark/80 font-light leading-relaxed max-w-4xl mb-8">
-              <span className="font-bold text-blue-600">Mobilitas</span> è lo studio osteopatico più importante di Torino. 
+          {/* Il "video" prosegue: foto dello studio in un player */}
+          <motion.figure
+            className="mx-oyt-player"
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.25 }}
+          >
+            <div className="mx-oyt-player__screen">
+              <img
+                src="/home/web/home2-900.jpg"
+                srcSet="/home/web/home2-900.jpg 900w, /home/web/home2-1600.jpg 1600w"
+                sizes="(min-width: 1024px) 620px, 92vw"
+                alt="Trattamento osteopatico nello studio Mobilitas"
+                fetchPriority="high"
+                decoding="async"
+              />
+              <span className="mx-oyt-player__chip">
+                <img src="/pittogramma.png" alt="" />
+                Mobilitas
+              </span>
+            </div>
+            <div className="mx-oyt-player__bar">
+              <span className="mx-oyt-player__time" aria-hidden="true">
+                <motion.i initial={{ width: '0%' }} animate={{ width: '38%' }} transition={{ duration: 2.4, ease: EASE, delay: 0.6 }} />
+              </span>
+              <ol className="mx-oyt-player__chapters">
+                {CHAPTERS.map((c, i) => (
+                  <li key={c.id} className={i === 0 ? 'is-on' : ''}>
+                    <a href={`#${c.id}`}>
+                      <b>{pad(i + 1)}</b>
+                      {c.label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </motion.figure>
+
+          <motion.div
+            className="mx-oyt-hero__offer"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.4 }}
+          >
+            <p className="mx-oyt-seats">
+              <span className="mx-oyt-seats__dot" aria-hidden="true" />
+              35 posti con offerta SOLO per {currentMonth}
+            </p>
+            <p className="mx-oyt-price">
+              Da <s>90€</s> a <b className="mx-oyt-price__new">49€</b> <span>in offerta di {currentMonth.toLowerCase()}</span>
+            </p>
+            <div ref={heroCtaRef}>
+              <BookButton lines={['PRENOTA IL TRATTAMENTO', "CON L'OFFERTA"]} onClick={openForm} className="mx-oyt-cta--hero" />
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="mx-oyt-hero__more"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.55 }}
+          >
+            <p className="mx-lead mx-oyt-hero__lead">
+              <strong>Mobilitas</strong> è lo studio osteopatico più importante di Torino.
               Da noi trovi l'osteopata giusto per te, specializzato sul tuo problema.
             </p>
-            
-            {/* Benefits */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl">
+            <ul className="mx-oyt-benefits">
               {[
                 "Anamnesi completa e valutazione posturale",
-                "Trattamento osteopatico specializzato per te", 
+                "Trattamento osteopatico specializzato per te",
                 "Consigli per prevenire ricadute",
-              ].map((benefit, index) => (
-                <div key={index} className="flex items-center space-x-2 p-3 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl border border-blue-100">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                    ✓
-                  </div>
-                  <span className="text-blue-dark font-medium text-sm">{benefit}</span>
-                </div>
+              ].map((benefit) => (
+                <li key={benefit}>
+                  <Check size={16} strokeWidth={3} />
+                  {benefit}
+                </li>
               ))}
-            </div>
-          </div>
-
-          {/* Offer Details */}
-          <div className={`mt-8 transition-all duration-1500 delay-1200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <p className="text-red-600 font-bold text-lg">35 posti con offerta SOLO per {currentMonth}</p>
-            <p className="text-2xl text-blue-dark font-bold mt-1">
-              Da <span className="line-through text-red-500 font-black text-3xl">90€</span> a <span className="text-green-600 font-black text-4xl">49€</span> in offerta di {currentMonth.toLowerCase()}
-            </p>
-          </div>
-
-          {/* CTA Button */}
-          <div className={`mt-8 flex justify-center transition-all duration-1500 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <button 
-              onClick={() => setShowForm(true)}
-              className="group relative inline-flex items-center px-8 py-6 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold text-xl rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 font-montserrat"
-            >
-              <span className="relative z-10 text-center uppercase">
-                <div>PRENOTA IL TRATTAMENTO</div>
-                <div>CON L'OFFERTA</div>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-green-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
+            </ul>
+          </motion.div>
         </div>
+      </header>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-blue-400 rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* PROBLEMS SECTION */}
-      <section className="relative py-20 bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-green-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-l from-green-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-left mb-8">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 rounded-full mb-0">
-              <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mr-3"></div>
-              <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Problemi che Risolviamo</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-black text-blue-dark mb-8 leading-tight">
-              I problemi che trattiamo
-              <span className="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
-                e risolviamo
-              </span>
+      {/* ============ CAPITOLO 2: la playlist dei problemi ============ */}
+      <section className="mx-section mx-section--deep mx-oyt-problems" id="oyt-problemi">
+        <div className="mx-wrap">
+          <div className="mx-oyt-head">
+            <Kicker n="02">Problemi che Risolviamo</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              <MaskLines lines={[{ text: 'I problemi che trattiamo' }, { text: 'e risolviamo', className: 'mx-gradient' }]} />
             </h2>
-            <p className="text-xl text-blue-dark/70 max-w-3xl leading-relaxed">
-              Specializzati in tutte le aree del corpo, trattiamo ogni tipo di problema con approcci osteopatici mirati e personalizzati 💪🏼
-            </p>
+            <Reveal>
+              <p className="mx-lead mx-oyt-head__lead">
+                Specializzati in tutte le aree del corpo, trattiamo ogni tipo di problema con approcci osteopatici mirati e personalizzati 💪🏼
+              </p>
+            </Reveal>
           </div>
 
-          {/* Body Areas Horizontal Carousel */}
-          <div className="mb-20">
-            <div className="flex overflow-x-auto space-x-6 pb-4 horizontal-scroll">
-              {bodyAreas.map((area, index) => (
-                <div 
-                  key={index}
-                  className="group relative flex-shrink-0 w-80"
-                  onMouseEnter={() => setHoveredCard(index)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                >
-                  {/* Card */}
-                  <div className={`relative bg-gradient-to-br ${area.bgGradient} border border-white/50 rounded-3xl p-8 text-left shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 h-full`}>
-                    {/* Icon */}
-                    <div className={`w-16 h-16 bg-gradient-to-br ${area.gradient} rounded-2xl flex items-center justify-center text-white text-2xl mb-6 shadow-lg`}>
-                      {area.icon}
-                    </div>
-                    
-                    {/* Content */}
-                    <h3 className="text-xl font-bold text-blue-dark mb-4">{area.title}</h3>
-                    
-                    {/* Problems List */}
-                    <div className="space-y-2">
-                      {area.problems.slice(0, 8).map((problem, problemIndex) => (
-                        <div key={problemIndex} className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex-shrink-0"></div>
-                          <span className="text-blue-dark/70 text-sm">{problem}</span>
-                        </div>
+          <ol className="mx-oyt-playlist">
+            {bodyAreas.map((area, index) => {
+              const Icon = area.icon
+              return (
+                <Reveal as="li" key={area.title} className="mx-oyt-track" delay={(index % 2) * 0.08}>
+                  <span className="mx-oyt-track__thumb">
+                    <Icon size={30} strokeWidth={1.8} />
+                    <span className="mx-oyt-track__count">{area.problems.length}</span>
+                  </span>
+                  <span className="mx-oyt-track__body">
+                    <span className="mx-oyt-track__n">{pad(index + 1)}</span>
+                    <h3 className="mx-h mx-h--sm">{area.title}</h3>
+                    <span className="mx-oyt-track__list">
+                      {area.problems.slice(0, 8).map((problem) => (
+                        <span key={problem}>{problem}</span>
                       ))}
-                      {area.problems.length > 8 && (
-                        <div className="text-blue-dark/60 text-sm font-medium">
-                          +{area.problems.length - 8} altri problemi...
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Hover Effect */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${area.gradient} rounded-3xl opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
-                  </div>
-                  
-                  {/* Floating Elements */}
-                  {hoveredCard === index && (
-                    <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-blue-400 to-green-400 rounded-full animate-ping"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            {/* Scroll Indicator */}
-            <div className="flex justify-start mt-6">
-              <div className="flex space-x-2">
-                {bodyAreas.map((_, index) => (
-                  <div 
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      hoveredCard === index 
-                        ? 'bg-gradient-to-r from-blue-500 to-green-500 w-8' 
-                        : 'bg-blue-300'
-                    }`}
-                  ></div>
-                ))}
-              </div>
-            </div>
-          </div>
+                    </span>
+                    {area.problems.length > 8 && (
+                      <span className="mx-oyt-track__more">
+                        +{area.problems.length - 8} altri problemi...
+                      </span>
+                    )}
+                  </span>
+                </Reveal>
+              )
+            })}
+          </ol>
 
-          {/* Specializations Box */}
-          <div className="bg-gradient-to-br from-blue-600 to-green-500 rounded-3xl p-8 text-white shadow-2xl">
-            <div className="text-left">
-              <div className="text-4xl mb-4">👨‍⚕️</div>
-              <h3 className="text-2xl font-bold mb-4">Osteopati Specializzati per Ogni Area</h3>
-              <p className="text-lg opacity-90 leading-relaxed mb-6">
+          {/* Schermata finale: gli specialisti */}
+          <Reveal className="mx-oyt-end">
+            <div className="mx-oyt-end__copy">
+              <span className="mx-oyt-end__icon"><Stethoscope size={26} /></span>
+              <h3 className="mx-h mx-h--md">Osteopati Specializzati per Ogni Area</h3>
+              <p className="mx-body">
                 Il nostro team di osteopati è specializzato in diverse aree per garantirti il trattamento più efficace:
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  "Gravidanza e Pediatria",
-                  "Geriatria e Terza Età", 
-                  "Postura e Lavori Pesanti",
-                  "Sport e Performance",
-                  "Postura e Lavoro Sedentario",
-                  "E tutto quello che ti serve!"
-                ].map((specialization, index) => (
-                  <div key={index} className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-left">
-                    <div className="font-semibold">{specialization}</div>
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
+            <ul className="mx-oyt-end__grid">
+              {specializations.map((s, i) => (
+                <li key={s}>
+                  <span>{pad(i + 1)}</span>
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
 
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <button 
-              onClick={() => setShowForm(true)}
-              className="group relative inline-flex items-center px-12 py-6 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 font-montserrat"
-            >
-              <span className="relative z-10 text-center uppercase">
-                <div>PRENOTA LA TUA PRIMA</div>
-                <div> VISITACON OFFERTA</div>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-green-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
+          <Reveal className="mx-oyt-center">
+            <BookButton lines={['PRENOTA LA TUA PRIMA', 'VISITA CON OFFERTA']} onClick={openForm} />
+          </Reveal>
         </div>
       </section>
 
-      {/* LOCATION SECTION */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-green-700 overflow-hidden">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-900/90 via-blue-800/90 to-green-700/90"></div>
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cream/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cream/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          
-          {/* Floating particles */}
-          <div className="absolute top-1/3 left-1/3 w-2 h-2 bg-cream/30 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-cream/40 rounded-full animate-bounce delay-500"></div>
-          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-cream/50 rounded-full animate-bounce delay-1000"></div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            {/* Left Side - Content */}
-            <div className="text-white">
-              <div className="inline-flex items-center px-6 py-3 bg-cream/10 border border-white/20 rounded-full mb-8">
-                <div className="w-3 h-3 bg-cream rounded-full mr-3"></div>
-                <span className="text-white font-semibold text-sm uppercase tracking-wider">Dove Siamo</span>
-              </div>
-              
-              <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                Vieni a trovarci
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-green-200">
-                  nel cuore di Torino
-                </span>
-              </h2>
-              
-              <p className="text-xl text-white/80 leading-relaxed mb-8">
-                Il nostro studio si trova in una posizione strategica nel centro di Torino, 
+      {/* ============ CAPITOLO 3: dove siamo ============ */}
+      <section className="mx-section mx-section--glow mx-oyt-where" id="oyt-dove">
+        <div className="mx-wrap mx-oyt-where__grid">
+          <div>
+            <Kicker n="03">Dove Siamo</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              <MaskLines lines={[{ text: 'Vieni a trovarci' }, { text: 'nel cuore di Torino', className: 'mx-gradient' }]} />
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-oyt-where__lead">
+                Il nostro studio si trova in una posizione strategica nel centro di Torino,
                 facilmente raggiungibile con i mezzi pubblici e con parcheggio nelle vicinanze.
               </p>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-cream/20 rounded-full flex items-center justify-center">
-                    <span className="text-cream text-sm">📍</span>
-                  </div>
-                  <span className="text-white/90">Via Peyron 54, Torino</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-cream/20 rounded-full flex items-center justify-center">
-                    <span className="text-cream text-sm">🚇</span>
-                  </div>
-                  <span className="text-white/90">Metro: comodissimo da Bernini o Principi d'Acaja</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-cream/20 rounded-full flex items-center justify-center">
-                    <span className="text-cream text-sm">🚗</span>
-                  </div>
-                  <span className="text-white/90">2 parcheggi nelle vicinanze + strisce blu</span>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="flex justify-center">
-                <button 
-                  onClick={() => setShowForm(true)}
-                  className="group relative inline-flex items-center px-8 py-4 bg-cream text-blue-900 font-bold rounded-2xl hover:bg-cream/90 transition-all duration-300 hover:scale-105 font-montserrat"
-                >
-                  <span className="relative z-10 text-center uppercase">
-                    <div>PRENOTA LA TUA PRIMA</div>
-                    <div>VISITA CON OFFERTA</div>
-                  </span>
-                  <div className="absolute inset-0 bg-cream/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </button>
-              </div>
-            </div>
-
-            {/* Right Side - Map */}
-            <div className="relative">
-              <div className="bg-white rounded-3xl p-4 shadow-2xl">
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2817.274078923546!2d7.65514387704107!3d45.08023495897442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfe2e29f381fdc93%3A0x97eee174cab07ada!2sMobilitas%20-%20Studio%20Osteopatico%20-%20Osteopata%20Torino!5e0!3m2!1sit!2sit!4v1760785981478!5m2!1sit!2sit" 
-                  width="100%" 
-                  height="450" 
-                  style={{border: 0}} 
-                  allowFullScreen="" 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-2xl"
-                ></iframe>
-              </div>
-            </div>
+            </Reveal>
+            <Reveal className="mx-oyt-where__facts">
+              <span><MapPin size={18} />Via Peyron 54, Torino</span>
+              <span><TrainFront size={18} />Metro: comodissimo da Bernini o Principi d'Acaja</span>
+              <span><CarFront size={18} />2 parcheggi nelle vicinanze + strisce blu</span>
+            </Reveal>
+            <Reveal className="mx-oyt-where__cta">
+              <BookButton lines={['PRENOTA LA TUA PRIMA', 'VISITA CON OFFERTA']} onClick={openForm} />
+            </Reveal>
           </div>
+
+          <Reveal className="mx-oyt-where__map" delay={0.1}>
+            <div className="mx-oyt-where__frame">
+              <iframe
+                src={MAP_SRC}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Mappa Mobilitas Torino"
+              ></iframe>
+            </div>
+          </Reveal>
         </div>
       </section>
-    </div>
+
+      {/* Barra dei capitoli + prenotazione (telefono) */}
+      <AnimatePresence>
+        {showDock && (
+          <motion.div
+            className="mx-oyt-dock"
+            initial={{ y: 120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 120, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+          >
+            <ChapterBar progress={progress} compact />
+            <div className="mx-oyt-dock__row">
+              <span className="mx-oyt-dock__chapter">
+                <small>{pad(chapter + 1)} / {pad(CHAPTERS.length)}</small>
+                {CHAPTERS[chapter].label}
+              </span>
+              <button type="button" className="mx-oyt-dock__btn" onClick={openForm}>
+                <span>PRENOTA IL TRATTAMENTO</span>
+                <ArrowUpRight size={18} strokeWidth={2.6} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </PageShell>
   )
 }
 
 export default OffertaYT
-

@@ -1,12 +1,45 @@
 import { motion } from 'framer-motion'
-import { Mail } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Check, Mail, ShieldCheck } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import PageShell from '../../components/site/PageShell'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
+import { EASE } from '../../components/home-sections/homeMotion'
+import GuideBook from '../../components/gpadel/GuideBook'
+import '../../styles/pages/gpadel-lm.css'
+
+const PHOTO = '/landing-pages/web/lm-gpadel-foto1'
+
+const fade = (delay, y = 24) => ({
+  initial: { opacity: 0, y },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, ease: EASE, delay },
+})
+
+const benefits = [
+  {
+    title: 'Risoluzione dei dolori acuti o cronici',
+    text: ' che ti porti dietro da tempo, senza magari neanche accorgertene perché ti ci sei abituato',
+  },
+  {
+    title: 'Prevenzione degli infortuni più comuni',
+    text: ' nel padel: riduce il rischio di lesioni a spalla, gomito e caviglia attraverso il riequilibrio posturale e la mobilità articolare',
+  },
+  {
+    title: 'Recupero più rapido dopo le partite',
+    text: ': migliora la circolazione e riduce l\'accumulo di tensioni muscolari, permettendoti di giocare più spesso senza dolori',
+  },
+  {
+    title: 'Miglioramento delle performance',
+    text: ': ottimizza la postura e la coordinazione, rendendo i tuoi movimenti più fluidi e potenti',
+  },
+  {
+    title: 'Gestione del carico di gioco',
+    text: ': aiuta il corpo a gestire meglio lo stress ripetitivo tipico del padel, prevenendo sovraccarichi e infiammazioni',
+  },
+]
 
 export default function GpadelInfortuniThankYou() {
-  const navigate = useNavigate()
-
   const handleRequestTreatment = () => {
     // Navigate to contact page or open WhatsApp
     const message = encodeURIComponent("Ciao, dopo aver richiesto la guida gratuita per gli infortuni nel padel, vorrei prenotare il trattamento osteopatico scontato a 39€ per GPADEL. Quando avete posto? Grazie!");
@@ -14,145 +47,171 @@ export default function GpadelInfortuniThankYou() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <>
       <Header />
-      <div className="container mx-auto px-6 pt-24 pb-16">
-        <div className="max-w-3xl mx-auto">
-          
-          {/* Success Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8 text-left"
-          >
-            {/* Title */}
-            <h1 className="text-4xl font-black text-blue-dark mb-4">
-              Richiesta inviata con successo!
-            </h1>
+      <PageShell className="mx-gpl mx-gpl-ty">
+        {/* SUCCESSO: punto vinto, la guida è in arrivo */}
+        <section className="mx-gpl-ty__hero">
+          <div className="mx-gpl-arena mx-gpl-arena--soft" aria-hidden="true">
+            <span className="mx-gpl-arena__light mx-gpl-arena__light--l" />
+            <span className="mx-gpl-arena__light mx-gpl-arena__light--r" />
+            <div className="mx-gpl-arena__glass" />
+          </div>
 
-            {/* Description */}
-            <div className="text-blue-dark/80 text-lg leading-relaxed space-y-4">
-              <p>
-                La tua richiesta è stata registrata correttamente nel nostro sistema.
-              </p>
-              <p className="text-blue-dark/90">
-                La nostra segreteria farà un <strong>controllo manuale</strong> per verificare che si tratti di una richiesta vera. Dopo la verifica, ti invieremo la <strong>guida gratuita via email</strong> entro 48 ore lavorative.
-              </p>
-            </div>
-          </motion.div>
+          <div className="mx-wrap mx-gpl-ty__grid">
+            <div className="mx-gpl-ty__copy">
+              <div className="mx-gpl-ty__titlerow">
+                <motion.span
+                  className="mx-gpl-ty__seal"
+                  initial={{ scale: 0.4, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.1 }}
+                  aria-hidden="true"
+                >
+                  <svg viewBox="0 0 64 64">
+                    <motion.circle
+                      cx="32" cy="32" r="29"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
+                    />
+                    <motion.path
+                      d="M20 33 L28.5 41.5 L45 24"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 0.55, ease: EASE, delay: 0.95 }}
+                    />
+                  </svg>
+                </motion.span>
 
-          {/* Offer Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-lg p-8 border-2 border-green/30"
-          >
-            <h2 className="text-3xl font-black text-blue-dark mb-8 text-left">
-              Nel frattempo...
-            </h2>
-            
-            <div className="mb-0">
-              <img
-                src="/landing-pages/lm-gpadel-infortuni-foto1.png"
-                alt="Trattamento osteopatico per padelisti"
-                className="w-full rounded-xl"
-              />
-            </div>
-            
-            <div className="bg-gradient-to-br from-blue-dark/5 to-green/10 rounded-xl py-6 px-0 mb-6">
-              <p className="text-xl text-blue-dark/90 mb-4 text-left">
-                Se ti fa piacere, puoi usufruire della <strong className="text-azure-dark">scontistica GPADEL</strong>
-              </p>
-              
-              <div className="flex items-center gap-4 mb-6">
-                <span className="text-2xl font-bold line-through text-red-600">90€</span>
-                <span className="text-4xl font-black text-azure-dark">39€</span>
+                {/* Title */}
+                <motion.h1 className="mx-h mx-gpl-ty__title" {...fade(0.2)}>
+                  Richiesta inviata con successo!
+                </motion.h1>
               </div>
 
-              <p className="text-blue-dark/80 text-left mb-6">
-                Per un nostro trattamento osteopatico specializzato
-              </p>
-
-              <button
-                onClick={handleRequestTreatment}
-                className="w-full bg-blue-dark text-green font-bold px-8 py-5 text-lg rounded-xl shadow-lg hover:brightness-110 transition uppercase tracking-wide font-montserrat"
-              >
-                Richiedi il trattamento scontato
-              </button>
+              {/* Description: i passaggi, uno dopo l'altro */}
+              <ol className="mx-gpl-steps">
+                <motion.li className="mx-gpl-step is-done" {...fade(0.45, 16)}>
+                  <span className="mx-gpl-step__dot"><Check size={16} strokeWidth={3} /></span>
+                  <p>
+                    La tua richiesta è stata registrata correttamente nel nostro sistema.
+                  </p>
+                </motion.li>
+                <motion.li className="mx-gpl-step is-now" {...fade(0.6, 16)}>
+                  <span className="mx-gpl-step__dot"><ShieldCheck size={16} strokeWidth={2.4} /></span>
+                  <p>
+                    La nostra segreteria farà un <strong>controllo manuale</strong> per verificare che si tratti di una richiesta vera.
+                  </p>
+                </motion.li>
+                <motion.li className="mx-gpl-step" {...fade(0.75, 16)}>
+                  <span className="mx-gpl-step__dot"><Mail size={16} strokeWidth={2.4} /></span>
+                  <p>
+                    Dopo la verifica, ti invieremo la <strong>guida gratuita via email</strong> entro 48 ore lavorative.
+                  </p>
+                </motion.li>
+              </ol>
             </div>
+
+            <motion.div
+              className="mx-gpl-ty__visual"
+              initial={{ opacity: 0, y: 40, rotate: 6 }}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
+              transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
+              aria-hidden="true"
+            >
+              <GuideBook sizes="(min-width: 1024px) 300px, 1px" alt="" />
+              <span className="mx-gpl-ty__badge"><Mail size={28} strokeWidth={2.4} /></span>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* NEL FRATTEMPO: lo sconto GPADEL */}
+        <section className="mx-section mx-gpl-ty__offer">
+          <div className="mx-wrap">
+            <motion.div
+              className="mx-gpl-deal"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+              transition={{ duration: 1, ease: EASE }}
+            >
+              <div className="mx-gpl-deal__body">
+                <h2 className="mx-h mx-h--lg mx-gpl-deal__title">
+                  Nel frattempo...
+                </h2>
+
+                <p className="mx-gpl-deal__intro">
+                  Se ti fa piacere, puoi usufruire della <strong className="mx-gpl-deal__hl">scontistica GPADEL</strong>
+                </p>
+
+                <div className="mx-gpl-deal__price">
+                  <span className="mx-gpl-deal__old">90€</span>
+                  <span className="mx-gpl-deal__new">39€</span>
+                </div>
+
+                <p className="mx-gpl-deal__what">
+                  Per un nostro trattamento osteopatico specializzato
+                </p>
+
+                <button
+                  type="button"
+                  onClick={handleRequestTreatment}
+                  className="mx-btn mx-btn--primary mx-gpl-deal__cta"
+                >
+                  <span>Richiedi il trattamento scontato</span>
+                  <span className="mx-btn__icon">
+                    <WhatsAppIcon size={20} />
+                  </span>
+                </button>
+              </div>
+
+              <div className="mx-gpl-deal__photo">
+                <img
+                  src={`${PHOTO}-1600.jpg`}
+                  srcSet={`${PHOTO}-900.jpg 900w, ${PHOTO}-1600.jpg 1600w`}
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                  alt="Trattamento osteopatico per padelisti"
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </motion.div>
 
             {/* Benefits */}
-            <div className="mt-8">
-              <h3 className="text-2xl font-bold text-blue-dark mb-8">
+            <div className="mx-gpl-ty__benefits">
+              <h3 className="mx-h mx-h--md">
                 I benefici del trattamento osteopatico per chi pratica Padel anche amatoriale)
               </h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <span className="mt-1 mr-4 w-6 h-6 bg-azure-dark rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-bold">1</span>
-                  </span>
-                  <p className="text-blue-dark/90 mt-0">
-                    <strong>Risoluzione dei dolori acuti o cronici</strong> che ti porti dietro da tempo, senza magari neanche accorgertene perché ti ci sei abituato
-                  </p>
-                </div>
 
-                <div className="flex items-start">
-                  <span className="mt-1 mr-4 w-6 h-6 bg-azure-dark rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-bold">2</span>
-                  </span>
-                  <p className="text-blue-dark/90 mt-0">
-                    <strong>Prevenzione degli infortuni più comuni</strong> nel padel: riduce il rischio di lesioni a spalla, gomito e caviglia attraverso il riequilibrio posturale e la mobilità articolare
-                  </p>
-                </div>
-
-                <div className="flex items-start">
-                  <span className="mt-1 mr-4 w-6 h-6 bg-azure-dark rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-bold">3</span>
-                  </span>
-                  <p className="text-blue-dark/90 mt-0">
-                    <strong>Recupero più rapido dopo le partite</strong>: migliora la circolazione e riduce l'accumulo di tensioni muscolari, permettendoti di giocare più spesso senza dolori
-                  </p>
-                </div>
-
-                <div className="flex items-start">
-                  <span className="mt-1 mr-4 w-6 h-6 bg-azure-dark rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-bold">4</span>
-                  </span>
-                  <p className="text-blue-dark/90 mt-0">
-                    <strong>Miglioramento delle performance</strong>: ottimizza la postura e la coordinazione, rendendo i tuoi movimenti più fluidi e potenti
-                  </p>
-                </div>
-
-                <div className="flex items-start">
-                  <span className="mt-1 mr-4 w-6 h-6 bg-azure-dark rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-white text-sm font-bold">5</span>
-                  </span>
-                  <p className="text-blue-dark/90 mt-0">
-                    <strong>Gestione del carico di gioco</strong>: aiuta il corpo a gestire meglio lo stress ripetitivo tipico del padel, prevenendo sovraccarichi e infiammazioni
-                  </p>
-                </div>
-              </div>
+              <ol className="mx-gpl-blist">
+                {benefits.map((b, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+                    transition={{ duration: 0.8, ease: EASE, delay: i * 0.06 }}
+                  >
+                    <span className="mx-gpl-blist__n">{i + 1}</span>
+                    <p>
+                      <strong>{b.title}</strong>{b.text}
+                    </p>
+                  </motion.li>
+                ))}
+              </ol>
             </div>
-          </motion.div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-left mt-8"
-          >
-            <p className="text-blue-dark/70">
-              Hai domande? Contattaci al <strong>+39 3518198457</strong> o via email a <strong>studio@studiomobilitas.it</strong>
+            {/* Contact Info */}
+            <p className="mx-gpl-ty__contact">
+              Hai domande? Contattaci al <a href="tel:+393518198457"><strong>+39 3518198457</strong></a> o via email a <a href="mailto:studio@studiomobilitas.it"><strong>studio@studiomobilitas.it</strong></a>
             </p>
-          </motion.div>
-        </div>
-      </div>
+          </div>
+        </section>
+      </PageShell>
       <Footer />
-    </div>
+    </>
   )
 }
-

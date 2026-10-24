@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 
+// Barra di scarsità fissa in alto: stesso conteggio di prima (60 posti, -2 al giorno, minimo 1),
+// con un indicatore che mostra quanti dei 60 posti restano.
 export default function AnnouncementBar() {
   // Calcola i posti rimasti basandosi sui giorni del mese
   const calculateRemainingSpots = () => {
@@ -14,37 +16,22 @@ export default function AnnouncementBar() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -50 }}
+      initial={{ opacity: 0, y: -40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 shadow-sm"
-      style={{
-        background: 'linear-gradient(135deg, #FFB347 0%, #FFC966 50%, #FFD700 100%)',
-        borderBottom: '2px solid #FFB347',
-        boxShadow: '0 2px 10px rgba(255, 179, 71, 0.3)'
-      }}
+      className="mx-mds-bar"
+      role="status"
     >
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex items-center justify-center">
-          <motion.div
-            className="flex items-center space-x-2 font-semibold text-sm md:text-base"
-            style={{ color: '#002552' }}
-            animate={{
-              scale: [1, 1.02, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <span className="text-lg">⚠️</span>
-            <span>
-              Solo {remainingSpots} posti rimasti
-            </span>
-          </motion.div>
-        </div>
-      </div>
+      <span className="mx-mds-bar__dot" aria-hidden="true" />
+      <span className="mx-mds-bar__txt">
+        <span className="mx-mds-bar__emoji">⚠️</span>
+        <span>
+          Solo {remainingSpots} posti rimasti
+        </span>
+      </span>
+      <span className="mx-mds-bar__meter" aria-hidden="true">
+        <i style={{ transform: `scaleX(${remainingSpots / 60})` }} />
+      </span>
     </motion.div>
   )
 }
