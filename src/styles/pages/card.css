@@ -1,163 +1,373 @@
-/* Mobilitas Card: la tessera come oggetto protagonista */
+/* Mobilitas Card: "la tua card, col tuo nome" */
 
 @layer base {
   :is(.mx-home, .mx-page) .mx-card-hero__title {
-    font-size: clamp(3.6rem, 9vw, 9rem) !important;
+    font-size: clamp(3.6rem, 9vw, 8.6rem) !important;
     line-height: 0.86 !important;
     letter-spacing: -0.055em;
   }
+
+  :is(.mx-home, .mx-page) .mx-card-get__name { word-break: break-word; }
 }
 
-/* ---------- Hero ---------- */
+/* ======================================================================
+   Apertura
+   ====================================================================== */
+
 .mx-card-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(56px, 8vw, 110px) 0 clamp(72px, 9vw, 130px);
+  overflow: clip;
+  padding: clamp(48px, 7vw, 100px) 0 clamp(64px, 8vw, 120px);
   background: radial-gradient(120% 80% at 50% 0%, var(--navy-2) 0%, var(--navy) 45%, var(--ink) 100%);
 }
 
 .mx-card-hero__grid {
   display: grid;
-  gap: 40px;
+  gap: 28px;
+  grid-template-areas: "copy" "stage" "form";
   align-items: center;
 }
 
 @media (min-width: 1024px) {
-  .mx-card-hero__grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .mx-card-hero__grid {
+    grid-template-columns: 1fr 1.05fr;
+    grid-template-areas: "copy stage" "form stage";
+    column-gap: 48px;
+    row-gap: 36px;
+  }
 }
 
-:is(.mx-home, .mx-page) .mx-card-hero__lead { margin-top: 32px; max-width: 560px; }
-.mx-card-hero__ctas { margin-top: 36px; }
+.mx-card-hero__copy { grid-area: copy; align-self: end; }
+.mx-card-hero__stage { grid-area: stage; display: grid; justify-items: center; gap: 6px; }
+.mx-card-name { grid-area: form; align-self: start; }
 
-/* Palco con prospettiva */
-.mx-card-stage {
+:is(.mx-home, .mx-page) .mx-card-hero__lead { margin-top: 28px; max-width: 560px; }
+
+.mx-card-fliphint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(244, 244, 244, 0.04);
+  color: var(--muted);
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.mx-card-fliphint svg { color: var(--green); }
+.mx-card-fliphint:hover { color: var(--cream); border-color: rgba(114, 250, 147, 0.4); }
+
+/* Campo nome */
+.mx-card-name__label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.mx-card-name__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mx-card-name__input {
+  flex: 1 1 220px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 0 22px;
+  border: 1px solid rgba(244, 244, 244, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 15, 43, 0.55);
+  color: var(--cream);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.mx-card-name__input::placeholder { color: rgba(244, 244, 244, 0.38); font-weight: 600; }
+.mx-card-name__input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18); }
+
+.mx-card-name__cta { flex: 0 0 auto; }
+
+.mx-card-name__note {
+  margin: 12px 0 0;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 244, 0.45);
+}
+
+@media (max-width: 639px) {
+  .mx-card-name__row { flex-direction: column; }
+  .mx-card-name__input { flex-basis: auto; width: 100%; }
+}
+
+/* ======================================================================
+   La tessera (fronte/retro, inclinazione, nome inciso)
+   ====================================================================== */
+
+.mx-cc {
   position: relative;
-  display: grid;
-  place-items: center;
-  padding: clamp(24px, 4vw, 56px) 0;
-  perspective: 1100px;
+  width: min(100%, 520px);
+  padding: 8px 0 0;
+  perspective: 1200px;
   touch-action: pan-y;
 }
 
-.mx-card-stage::before {
+.mx-cc--hero { animation: mx-cc-bob 6s ease-in-out infinite; }
+.mx-cc--small { width: min(100%, 420px); }
+
+@keyframes mx-cc-bob {
+  50% { translate: 0 -10px; }
+}
+
+.mx-cc::before {
   content: '';
   position: absolute;
-  inset: 8% 4%;
+  inset: 0 -6% 10%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.28), transparent);
-  filter: blur(20px);
+  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.26), transparent);
+  filter: blur(22px);
   pointer-events: none;
 }
 
-.mx-card-float {
-  position: relative;
-  width: min(100%, 500px);
-  transform-style: preserve-3d;
-  animation: mx-card-bob 6s ease-in-out infinite;
-}
+.mx-cc__tilt { transform-style: preserve-3d; will-change: transform; }
 
-@keyframes mx-card-bob {
-  50% { translate: 0 -12px; }
-}
-
-.mx-card-phys {
+.mx-cc__flip {
   position: relative;
+  display: block;
+  width: 100%;
   aspect-ratio: 1.586;
-  border-radius: clamp(16px, 2.4vw, 24px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.9s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+  container-type: inline-size;
+}
+
+span.mx-cc__flip { cursor: default; }
+.mx-cc__flip.is-flipped { transform: rotateY(180deg); }
+.mx-cc__flip:focus-visible { outline: 2px solid var(--green); outline-offset: 6px; border-radius: 24px; }
+
+.mx-cc__face {
+  position: absolute;
+  inset: 0;
+  display: block;
   overflow: hidden;
+  border-radius: clamp(14px, 4.6cqw, 24px);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  text-align: left;
+  box-shadow:
+    inset 0 0 0 1px rgba(244, 244, 244, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 40px 80px -30px rgba(0, 0, 0, 0.75);
+}
+
+.mx-cc__front {
   background:
     radial-gradient(120% 120% at 100% 0%, #0b3f80 0%, transparent 60%),
     linear-gradient(150deg, #0a2f63 0%, #021a3d 70%);
-  box-shadow:
-    inset 0 0 0 1px rgba(244, 244, 244, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transform-style: preserve-3d;
-  will-change: transform;
 }
 
-.mx-card-phys__waves {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.85;
-}
+.mx-cc__waves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.85; }
 
-.mx-card-phys__logo {
-  position: absolute;
-  left: 9%;
-  right: 9%;
-  top: 50%;
-  width: 82%;
-  transform: translateY(-50%);
-  filter: drop-shadow(0 0 18px rgba(114, 250, 147, 0.35));
-}
-
-.mx-card-phys__member {
-  position: absolute;
-  right: 7%;
-  top: 9%;
-  font-weight: 800;
-  font-style: italic;
-  font-size: clamp(0.7rem, 1.3vw, 0.95rem);
-  color: var(--cream);
-}
-
-.mx-card-phys__program {
+.mx-cc__chip {
   position: absolute;
   left: 7%;
-  bottom: 10%;
-  font-weight: 700;
-  font-size: clamp(0.62rem, 1.1vw, 0.8rem);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(244, 244, 244, 0.75);
-}
-
-.mx-card-phys__chip {
-  position: absolute;
-  left: 7%;
-  top: 11%;
-  width: 13%;
+  top: 12%;
+  width: 12%;
   aspect-ratio: 1.3;
-  border-radius: 6px;
+  border-radius: 1.4cqw;
   background: linear-gradient(135deg, #c9d6e3, #8ea3b8 50%, #d7e1ea);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
-.mx-card-phys__glare {
+.mx-cc__member {
   position: absolute;
-  inset: 0;
-  mix-blend-mode: overlay;
-  pointer-events: none;
+  right: 7%;
+  top: 11%;
+  font-size: 3.4cqw;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--cream);
 }
 
-.mx-card-phys__sweep {
+.mx-cc__logo {
+  position: absolute;
+  left: 12%;
+  top: 31%;
+  width: 76%;
+  filter: drop-shadow(0 0 18px rgba(114, 250, 147, 0.35));
+}
+
+/* Nome inciso: argento in rilievo */
+.mx-cc__name {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 21%;
+  overflow: hidden;
+  font-size: 5cqw;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: linear-gradient(180deg, #ffffff 0%, #c9d4df 55%, #8fa2b5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.45));
+}
+
+.mx-cc__name.is-placeholder { opacity: 0.4; }
+
+.mx-cc__program {
+  position: absolute;
+  left: 7%;
+  bottom: 10%;
+  font-size: 2.2cqw;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 244, 0.7);
+}
+
+.mx-cc__glare { position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none; }
+
+.mx-cc__sweep {
   position: absolute;
   inset: -50% -60%;
-  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.28) 50%, transparent 58%);
-  animation: mx-card-sweep 5s var(--ease) infinite;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.26) 50%, transparent 58%);
+  animation: mx-cc-sweep 5s var(--ease) infinite;
   pointer-events: none;
 }
 
-@keyframes mx-card-sweep {
+@keyframes mx-cc-sweep {
   0%, 55% { transform: translateX(-60%); }
   100% { transform: translateX(60%); }
 }
 
-.mx-card-phys__shadow {
+/* Retro */
+.mx-cc__back {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #0a2f63 0%, #021a3d 75%);
+  color: var(--cream);
+}
+
+.mx-cc__stripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 9%;
+  height: 15%;
+  background: linear-gradient(180deg, #0b0f18, #1b2333);
+}
+
+.mx-cc__back-title {
+  position: absolute;
+  left: 7%;
+  top: 31%;
+  font-size: 2.4cqw;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.mx-cc__perks {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 39%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6cqw 4cqw;
+}
+
+.mx-cc__perk {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  font-size: 2.9cqw;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.mx-cc__perk svg { flex-shrink: 0; width: 3.6cqw; height: 3.6cqw; color: var(--green); }
+
+.mx-cc__signature {
+  position: absolute;
+  left: 7%;
+  right: 30%;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  padding: 1.4cqw 2.4cqw;
+  border-radius: 1cqw;
+  background: repeating-linear-gradient(135deg, #f4f4f4 0 2px, #e6eaf0 2px 4px);
+  color: var(--navy);
+}
+
+.mx-cc__signature small {
+  font-size: 1.8cqw;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.mx-cc__signature i {
+  overflow: hidden;
+  font-size: 3.4cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mx-cc__mark {
+  position: absolute;
+  right: 7%;
+  bottom: 7%;
+  width: 13%;
+  border-radius: 50%;
+}
+
+.mx-cc__shadow {
   display: block;
-  width: 78%;
-  height: 26px;
-  margin: 34px auto 0;
+  width: 76%;
+  height: 24px;
+  margin: 30px auto 0;
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
 }
 
-/* ---------- 01 Cos'è ---------- */
+/* ======================================================================
+   01 Cos'è
+   ====================================================================== */
+
 .mx-card-what {
   display: grid;
-  gap: 48px;
+  gap: 44px;
   align-items: center;
 }
 
@@ -167,431 +377,279 @@
 
 :is(.mx-home, .mx-page) .mx-card-what__text { margin-top: 28px; }
 
-.mx-card-what__visual { position: relative; padding-bottom: 90px; }
-
 .mx-card-photo {
   position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 28px;
+  aspect-ratio: 4 / 3;
+  border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--line);
+  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(244, 244, 244, 0.1);
 }
 
-.mx-card-what__digital {
+/* ======================================================================
+   02 Come funziona
+   ====================================================================== */
+
+.mx-card-steps {
+  position: relative;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+.mx-card-steps__track {
   position: absolute;
-  right: -2%;
-  bottom: 0;
-  width: min(62%, 300px);
-  transform: rotate(4deg);
+  background: var(--line);
+  border-radius: 99px;
 }
 
-/* Tessera digitale */
-.mx-card-digital {
-  position: relative;
-  padding: 22px 22px 20px;
-  border-radius: 24px;
-  color: var(--navy);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+.mx-card-steps__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--sky), var(--green));
 }
 
-.mx-card-digital--gold {
-  background: linear-gradient(140deg, var(--green), #b4ffc6 45%, #5be0ff);
-}
-
-.mx-card-digital--starter {
-  background: rgba(244, 244, 244, 0.06);
-  border: 1px solid rgba(244, 244, 244, 0.2);
-  color: var(--cream);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.mx-card-digital__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.mx-card-digital__brand { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.03em; }
-
-.mx-card-digital__ico {
+.mx-card-steps__coin {
+  position: absolute;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 37, 82, 0.12);
-}
-
-.mx-card-digital--starter .mx-card-digital__ico { background: rgba(244, 244, 244, 0.12); }
-
-.mx-card-digital__label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.72;
-}
-
-.mx-card-digital__credits {
-  display: block;
-  margin: 2px 0 14px;
-  font-weight: 900;
-  font-size: 2.6rem;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  font-variant-numeric: tabular-nums;
-}
-
-.mx-card-digital__credits em { font-style: normal; }
-
-.mx-card-digital__level {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.mx-card-digital b { display: block; font-size: 1.05rem; font-weight: 800; color: inherit; }
-
-.mx-card-digital__badge {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: var(--green);
-}
-
-.mx-card-digital--starter .mx-card-digital__badge { background: var(--green); color: var(--navy); }
-
-.mx-card-digital__prize {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(0, 37, 82, 0.18);
-}
-
-.mx-card-digital--starter .mx-card-digital__prize { border-color: var(--line); }
-
-/* Timbri */
-.mx-card-stamps {
-  display: grid;
-  gap: 32px;
-  margin-top: clamp(72px, 9vw, 120px);
-  align-items: center;
-}
-
-@media (min-width: 1000px) {
-  .mx-card-stamps { grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 0; }
-  .mx-card-stamps__head { grid-column: 1 / -1; margin-bottom: 24px; }
-}
-
-@media (max-width: 999px) {
-  .mx-card-stamps { gap: 20px; }
-  .mx-card-board { order: -1; }
-  .mx-card-stamps__head { order: -2; }
-}
-
-:is(.mx-home, .mx-page) .mx-card-stamps__hint { margin: 10px 0 0; color: var(--muted); }
-
-.mx-card-stamps ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-}
-
-@media (min-width: 640px) and (max-width: 999px) {
-  .mx-card-stamps ul { grid-template-columns: 1fr 1fr; }
-}
-
-.mx-card-way {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 60px;
-  padding: 8px 12px 8px 8px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  background: rgba(244, 244, 244, 0.04);
-  color: var(--cream);
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: 1rem;
-  text-align: left;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.35s var(--ease), border-color 0.35s var(--ease), transform 0.2s var(--ease);
-}
-
-.mx-card-way:hover { border-color: rgba(114, 250, 147, 0.4); }
-.mx-card-way:active { transform: scale(0.98); }
-.mx-card-way:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
-
-.mx-card-way__icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 14px;
-  background: rgba(114, 250, 147, 0.12);
-  color: var(--green);
-  transition: background 0.35s, color 0.35s;
-}
-
-.mx-card-way__text { flex: 1; }
-
-.mx-card-way__tick {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  font-weight: 800;
-  color: var(--muted);
-}
-
-.mx-card-way.is-on { background: rgba(114, 250, 147, 0.1); border-color: rgba(114, 250, 147, 0.5); }
-.mx-card-way.is-on .mx-card-way__icon { background: var(--green); color: var(--navy); }
-.mx-card-way.is-on .mx-card-way__tick { background: var(--green); border-color: var(--green); color: var(--navy); }
-
-.mx-card-board {
-  position: relative;
-  padding: clamp(22px, 3vw, 34px);
-  border-radius: 28px;
-  background: linear-gradient(150deg, #0a2f63, var(--ink));
-  border: 1px solid rgba(114, 250, 147, 0.25);
-  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8);
-  transition: box-shadow 0.6s var(--ease);
-}
-
-.mx-card-board.is-full { box-shadow: 0 0 0 2px var(--green), 0 40px 120px -30px rgba(114, 250, 147, 0.6); }
-
-.mx-card-board__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.mx-card-board__head img { width: min(60%, 220px); height: auto; }
-
-.mx-card-board__head span {
-  font-weight: 900;
-  font-size: 1.6rem;
-  letter-spacing: -0.04em;
-  color: var(--green);
-  font-variant-numeric: tabular-nums;
-}
-
-.mx-card-board__slots {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: clamp(8px, 1.4vw, 14px);
-  margin-top: 28px;
-}
-
-.mx-card-slot {
-  position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 2px dashed rgba(244, 244, 244, 0.22);
-}
-
-.mx-card-slot__stamp {
-  display: grid;
-  place-items: center;
-  width: 86%;
-  height: 86%;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--green);
   color: var(--navy);
-  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.2);
+  box-shadow: 0 0 0 6px rgba(114, 250, 147, 0.18), 0 0 30px rgba(114, 250, 147, 0.6);
 }
 
-.mx-card-board__bar {
-  position: relative;
-  height: 6px;
-  margin-top: 26px;
-  border-radius: 6px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.mx-card-board__bar i {
-  position: absolute;
-  inset: 0;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--sky), var(--green));
-  transform-origin: left;
-  transform: scaleX(0);
-}
-
-.mx-card-board__reset {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  margin-top: 10px;
-  padding: 0 4px;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-/* ---------- 02 Portafoglio ---------- */
-.mx-card-wallet-sec { overflow: clip; }
-
-.mx-card-wallet-grid {
-  display: grid;
-  gap: 48px;
-}
-
-@media (min-width: 1000px) {
-  .mx-card-wallet-grid { grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: start; }
-  .mx-card-wallet-intro { position: sticky; top: 140px; }
-}
-
-:is(.mx-home, .mx-page) .mx-card-wallet-intro__text { margin-top: 28px; max-width: 480px; }
-
-.mx-card-wallet {
+.mx-card-steps__list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 18px;
+  gap: 36px;
 }
 
-/* Le carte si impilano come in un portafoglio mentre scorri */
-.mx-card-pass {
-  position: sticky;
-  top: calc(96px + var(--i) * 14px);
-  min-height: 230px;
-  padding: 26px 26px 28px;
-  border-radius: 26px;
-  border: 1px solid rgba(244, 244, 244, 0.14);
-  box-shadow: 0 -18px 50px -20px rgba(0, 0, 0, 0.65);
-  color: var(--cream);
-}
+.mx-card-step { position: relative; }
 
-.mx-card-pass--1 { background: linear-gradient(150deg, #0b4a8f, #002552); }
-.mx-card-pass--2 { background: linear-gradient(150deg, #0e5e8a, #013058); }
-.mx-card-pass--3 { background: linear-gradient(150deg, #0c3a74, #000f2b); }
-.mx-card-pass--4 { background: linear-gradient(150deg, #155f6e, #00284d); }
-.mx-card-pass--5 { background: linear-gradient(150deg, #0a2a5a, #000f2b); border-color: rgba(114, 250, 147, 0.35); }
-.mx-card-pass--6 { background: linear-gradient(150deg, var(--green), #6ee0ff); color: var(--navy); border-color: transparent; }
-
-:is(.mx-home, .mx-page) .mx-card-pass--6 .mx-h { color: var(--navy); }
-
-:is(.mx-home, .mx-page) .mx-card-pass .mx-body { margin-top: 10px; color: rgba(244, 244, 244, 0.78); max-width: 440px; }
-:is(.mx-home, .mx-page) .mx-card-pass.mx-card-pass--6 .mx-body { color: rgba(0, 37, 82, 0.82); font-weight: 500; }
-
-.mx-card-pass__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-}
-
-.mx-card-pass__icon {
+.mx-card-step__dot {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  background: rgba(114, 250, 147, 0.14);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--green);
+  color: var(--green);
+  box-shadow: 0 0 0 8px var(--navy);
+}
+
+.mx-card-step__n {
+  display: block;
+  margin: 22px 0 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
   color: var(--green);
 }
 
-.mx-card-pass--6 .mx-card-pass__icon { background: var(--navy); color: var(--green); }
+:is(.mx-home, .mx-page) .mx-card-step .mx-h { margin-bottom: 12px; }
+.mx-card-steps__link { margin-top: 16px; }
 
-.mx-card-pass__n {
-  font-weight: 900;
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
-  opacity: 0.6;
+.mx-card-ways {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.mx-card-stats-title { margin-top: clamp(80px, 10vw, 140px); }
-.mx-card-stats { margin-top: 32px; }
+.mx-card-ways li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: rgba(114, 250, 147, 0.06);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
 
+.mx-card-ways svg { color: var(--green); }
+
+/* Desktop: tre colonne, binario orizzontale */
 @media (min-width: 1000px) {
-  .mx-card-stats { grid-template-columns: repeat(3, 1fr); }
+  .mx-card-steps__list { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .mx-card-steps__track { left: 32px; right: 32px; top: 31px; height: 2px; }
+  .mx-card-steps__fill { transform-origin: left; transform: scaleX(var(--p)); }
+  .mx-card-steps__coin { top: -19px; left: calc(var(--along) - 20px); }
 }
+
+/* Mobile: binario verticale a sinistra */
+@media (max-width: 999px) {
+  .mx-card-steps__list { gap: 40px; padding-left: 88px; }
+  .mx-card-step__dot { position: absolute; left: -88px; top: 0; }
+  .mx-card-step__n { margin-top: 4px; }
+  .mx-card-steps__track { left: 31px; top: 32px; bottom: 32px; width: 2px; }
+  .mx-card-steps__fill { transform-origin: top; transform: scaleY(var(--p)); background: linear-gradient(180deg, var(--sky), var(--green)); }
+  .mx-card-steps__coin { left: -19px; top: calc(var(--along) - 20px); z-index: 2; }
+}
+
+/* ======================================================================
+   03 Vantaggi: biglietti
+   ====================================================================== */
+
+.mx-card-tickets {
+  list-style: none;
+  margin: clamp(44px, 5vw, 72px) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .mx-card-tickets { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1200px) {
+  .mx-card-tickets { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+}
+
+.mx-card-ticket {
+  --stub: 92px;
+  position: relative;
+  display: flex;
+  min-height: 168px;
+  border-radius: 22px;
+  background: linear-gradient(150deg, #0b3a73, #021d44);
+  border: 1px solid rgba(244, 244, 244, 0.12);
+  overflow: hidden;
+  /* Le tacche ai lati della perforazione */
+  -webkit-mask: radial-gradient(circle 12px at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 12px at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle 12px at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 12px at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+  transition: transform 0.5s var(--ease);
+}
+
+.mx-card-ticket:hover { transform: translateY(-4px); }
+
+.mx-card-ticket__stub {
+  position: relative;
+  flex: 0 0 var(--stub);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--green);
+  border-right: 2px dashed rgba(244, 244, 244, 0.22);
+}
+
+.mx-card-ticket__n {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.mx-card-ticket__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 24px;
+}
+
+:is(.mx-home, .mx-page) .mx-card-ticket .mx-body { margin-top: 8px; font-size: 0.95rem !important; }
+
+.mx-card-ticket.is-featured {
+  background: linear-gradient(135deg, var(--green), #38d3c8);
+  border-color: transparent;
+}
+
+.mx-card-ticket.is-featured .mx-card-ticket__stub { color: var(--navy); border-right-color: rgba(0, 37, 82, 0.3); }
+.mx-card-ticket.is-featured .mx-card-ticket__n { color: rgba(0, 37, 82, 0.6); }
+:is(.mx-home, .mx-page) .mx-card-ticket.is-featured .mx-h { color: var(--navy); }
+:is(.mx-home, .mx-page) .mx-card-ticket.is-featured .mx-body { color: rgba(0, 37, 82, 0.82); font-weight: 600; }
+
+@media (max-width: 639px) {
+  .mx-card-ticket { --stub: 62px; }
+  .mx-card-ticket__body { padding: 20px 18px; }
+}
+
+.mx-card-numbers { margin-top: clamp(64px, 8vw, 110px); }
+.mx-card-stats { margin-top: 24px; }
 
 @media (max-width: 999px) {
-  .mx-card-stats { grid-template-columns: 1fr; }
+  .mx-card-stats { grid-template-columns: repeat(3, 1fr); }
+  .mx-card-stats .mx-stat { padding: 18px 12px; }
+  .mx-card-stats .mx-stat__num { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+  .mx-card-stats .mx-stat__label { font-size: 0.72rem; }
 }
 
-/* ---------- 03 Come ottenerla ---------- */
+/* ======================================================================
+   04 Richiedila
+   ====================================================================== */
+
 .mx-card-get__grid {
   display: grid;
-  gap: 56px;
+  gap: 48px;
   align-items: center;
 }
 
 @media (min-width: 1000px) {
-  .mx-card-get__grid { grid-template-columns: 1.2fr 0.8fr; gap: 72px; }
+  .mx-card-get__grid { grid-template-columns: 1.1fr 0.9fr; gap: 64px; }
 }
 
 :is(.mx-home, .mx-page) .mx-card-get__text { margin-top: 28px; }
 
 .mx-card-bring {
-  margin-top: 36px;
+  margin-top: 32px;
   padding: 24px 26px;
   border-radius: 24px;
-  background: rgba(244, 244, 244, 0.04);
   border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.04);
 }
 
 .mx-card-bring ul {
   list-style: none;
   margin: 16px 0 0;
   padding: 0;
+  display: grid;
+  gap: 12px;
 }
 
 .mx-card-bring li {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
+  gap: 12px;
   font-weight: 700;
-  color: var(--cream);
 }
 
-.mx-card-bring__n { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; color: var(--green); }
-
-:is(.mx-home, .mx-page) .mx-card-get__ctas { margin-top: 36px; }
-
-.mx-card-get__visual {
-  width: min(100%, 380px);
-  justify-self: center;
-  transform: rotate(-3deg);
+.mx-card-bring__tick {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--navy);
 }
 
-/* ---------- Telefono ---------- */
-@media (max-width: 767px) {
-  .mx-card-hero { padding: 40px 0 56px; }
-  .mx-card-hero__grid { gap: 16px; }
-  .mx-card-stage { padding: 12px 6px 0; }
-  .mx-card-phys__shadow { margin-top: 22px; }
-  .mx-card-what__visual { padding-bottom: 120px; }
-  .mx-card-what__digital { width: 66%; right: -4px; }
-  .mx-card-photo { border-radius: 22px; }
-  .mx-card-digital__credits { font-size: 2.1rem; }
-  .mx-card-pass { top: calc(76px + var(--i) * 10px); min-height: 210px; padding: 22px 22px 24px; }
+:is(.mx-home, .mx-page) .mx-card-get__ctas { margin-top: 32px; }
+:is(.mx-home, .mx-page) .mx-card-get__closing { margin-top: 28px; max-width: 560px; }
+
+.mx-card-get__visual { display: grid; justify-items: center; gap: 18px; }
+.mx-card-get__visual .mx-cc { transform: rotate(4deg); }
+
+@media (max-width: 999px) {
+  .mx-card-get__visual { order: -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-cc--hero,
+  .mx-cc__sweep { animation: none; }
+  .mx-cc__flip { transition: none; }
 }
