@@ -1,0 +1,741 @@
+/* Landing /yt-postura-v2 — direzione «Il filo a piombo».
+   Tutte le regole valgono solo dentro .ytp (radice della landing): Header, Footer e popup restano quelli del sito.
+   Il foglio globale (src/index.css) riduce su mobile h1/h2/h3 con !important in un layer: qui i titoli portano la
+   misura su uno <span class="…__t"> interno, che quella regola non tocca. Nessun file condiviso viene modificato. */
+
+.ytp, .ytp-bar, .ytp-pop {
+  --blue: #002552;
+  --blue-hi: #0a3466;
+  --green: #72fa93;
+  --green-hi: #9dfcb4;
+  --cream: #f4f4f4;
+  --ink-soft: rgb(0 37 82 / 0.78);
+  --line: rgb(0 37 82 / 0.16);
+  --line-strong: rgb(0 37 82 / 0.42);
+  --paper-soft: rgb(244 244 244 / 0.8);
+  --paper-line: rgb(244 244 244 / 0.24);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --font: 'Montserrat', sans-serif;
+}
+.ytp {
+  /* Griglia: margini, gutter, larghezza massima. L'asse (il filo) è una colonna di riferimento. */
+  --pad: 1.5rem;
+  --gap: 2rem;
+  --max: 90rem;
+  --inset: 2.75rem;          /* mobile: il testo comincia a destra dell'asse */
+  --axis: 1.25rem;           /* mobile: l'asse corre lungo il margine sinistro */
+  --pw: 0px;                 /* desktop: larghezza della foto d'apertura */
+  /* Posizione dell'asse dentro .ytp-wrap (per gli elementi posizionati nel contenitore centrale). */
+  --axis-in: calc(var(--axis) - var(--inset));
+
+  position: relative;
+  background: var(--cream);
+  color: var(--blue);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+@media (min-width: 40rem) {
+  .ytp { --pad: 3rem; --inset: 4.5rem; --axis: 2rem; }
+}
+@media (min-width: 64rem) {
+  .ytp {
+    --pad: 6rem;
+    --inset: var(--pad);
+    --wrap-left: max(var(--pad), (100% - var(--max)) / 2 + var(--pad));
+    --inner: calc(min(100%, var(--max)) - 2 * var(--pad));
+    /* L'asse cade dopo la settima colonna su dodici. */
+    --axis: calc(var(--wrap-left) + (var(--inner) + var(--gap)) * 7 / 12 - var(--gap) / 2);
+    --pw: 36vw;
+    --axis-in: calc((100% + var(--gap)) * 7 / 12 - var(--gap) / 2);
+    font-size: 1.125rem;
+  }
+}
+
+/* Solo su questa pagina: lo scorrimento orizzontale si taglia con clip invece di hidden (html, body, #root e il
+   contenitore di Layout), così gli elementi «sticky» della landing funzionano. Sotto i 768 px il foglio globale
+   impone hidden con !important a body e #root: lì la landing non usa sticky. */
+html:has(.ytp), body:has(.ytp), #root:has(.ytp), div:has(> main > .ytp) { overflow-x: clip; }
+
+/* ——— Base, solo dentro la landing ——— */
+.ytp :where(h1, h2, h3, h4, p, figure, blockquote, ol, ul) { margin: 0; }
+.ytp :where(ol, ul) { padding: 0; list-style: none; }
+.ytp :where(img) { display: block; max-width: 100%; height: auto; }
+.ytp :where(strong) { font-weight: 600; color: inherit; }
+.ytp :where(p) { text-wrap: pretty; }
+.ytp :where(a) { color: inherit; text-underline-offset: 0.3em; text-decoration-thickness: 1px; }
+.ytp :where(button) { font: inherit; color: inherit; }
+.ytp ::selection { background: var(--blue); color: var(--cream); }
+.ytp .ytp-dark ::selection, .ytp-bar ::selection { background: var(--green); color: var(--blue); }
+.ytp :focus-visible, .ytp-bar :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 2px; }
+.ytp .ytp-dark :focus-visible, .ytp-bar :focus-visible { outline-color: var(--green); }
+.ytp :where(button, a, summary, label), .ytp-bar :where(button) { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.ytp-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.ytp-wrap { position: relative; width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--inset) var(--pad); }
+@media (min-width: 80rem) { .ytp { --pw: min(46vw, 48rem); } }
+@media (min-width: 64rem) {
+  .ytp-wrap { padding-inline: var(--pad); }
+  .ytp-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+}
+
+/* ——— Il filo: asse verticale continuo della pagina ——— */
+.ytp-axis {
+  position: absolute; z-index: 0; top: 0; bottom: 0; left: var(--axis);
+  width: 1px; background: rgb(0 37 82 / 0.16); pointer-events: none;
+}
+.ytp-axis__ink {
+  position: absolute; inset: 0; background: var(--blue); transform-origin: 50% 0; transform: scaleY(0); will-change: transform;
+}
+.ytp-section { position: relative; z-index: 1; padding-block: clamp(3rem, 1.75rem + 5vw, 6.5rem); }
+
+/* ——— Tipografia ——— */
+.ytp-h1, .ytp-h2, .ytp-h3 { font-weight: inherit; letter-spacing: 0; line-height: 1; }
+.ytp-h1__t, .ytp-h2__t, .ytp-h3__t { display: block; font-family: var(--font); text-wrap: balance; }
+.ytp-h1__t {
+  font-size: clamp(2.375rem, 1.35rem + 4.4vw, 5.5rem);
+  font-weight: 300; line-height: 1.02; letter-spacing: -0.035em;
+}
+.ytp-h2__t {
+  font-size: clamp(2rem, 1.45rem + 2.3vw, 3.625rem);
+  font-weight: 300; line-height: 1.06; letter-spacing: -0.03em;
+}
+.ytp-h3__t { font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.015em; }
+.ytp-h1__t strong, .ytp-h2__t strong { font-weight: 800; letter-spacing: -0.04em; }
+.ytp-lean { display: inline-block; transform-origin: 15% 90%; }
+/* Seconda frase del titolo d'apertura: stessa voce, metà misura. */
+/* Titolo d'apertura: l'elenco di ciò che si è già provato, poi il verdetto grande in verde, poi il sottotitolo. */
+.ytp-h1__lista { display: block; font-weight: 300; }
+.ytp-h1__t .ytp-h1__no { display: block; margin-top: 0.08em; font-size: 1.18em; font-weight: 800; line-height: 0.98; letter-spacing: -0.045em; color: var(--green); }
+.ytp-h1__sub { display: block; margin-top: 0.5em; font-size: 0.5em; font-weight: 300; line-height: 1.2; letter-spacing: -0.015em; opacity: 0.86; }
+.ytp-lead { color: var(--ink-soft); max-width: 36rem; }
+.ytp-lead + .ytp-lead { margin-top: 1rem; }
+.ytp-note { font-size: 0.9375rem; line-height: 1.5; }
+.ytp-label { font-size: 0.875rem; font-weight: 500; line-height: 1.3; }
+
+/* ——— Azioni ——— */
+.ytp-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem;
+  min-height: 3.5rem; padding: 0.875rem 2rem; border: 0; border-radius: 999px; cursor: pointer;
+  font-family: var(--font); font-size: 1.0625rem; font-weight: 700; line-height: 1.2; text-align: center;
+  transition: background-color 160ms ease, transform 120ms var(--ease-out);
+}
+.ytp-cta:active { transform: scale(0.97); }
+.ytp-cta--green { background: var(--green); color: var(--blue); }
+.ytp-cta--ink { background: var(--blue); color: var(--cream); }
+.ytp-cta--line { background: transparent; color: var(--blue); box-shadow: inset 0 0 0 1.5px var(--blue); }
+.ytp-cta--block { width: 100%; }
+@media (hover: hover) and (pointer: fine) {
+  .ytp-cta--green:hover { background: var(--green-hi); }
+  .ytp-cta--ink:hover { background: var(--blue-hi); }
+  .ytp-cta--line:hover { background: rgb(0 37 82 / 0.06); }
+}
+.ytp-link {
+  display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--font); font-size: 1rem; font-weight: 500; color: inherit;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.35em;
+  transition: text-decoration-color 160ms ease;
+}
+@media (hover: hover) and (pointer: fine) { .ytp-link:hover { text-decoration-thickness: 2px; } }
+.ytp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.75rem; margin-top: 2.25rem; }
+
+/* ——— Superfici blu ——— */
+.ytp-dark { background: var(--blue); color: var(--cream); }
+.ytp-dark .ytp-lead, .ytp-dark .ytp-soft { color: var(--paper-soft); }
+.ytp-dark .ytp-cta--ink { background: var(--cream); color: var(--blue); }
+
+/* ——— 1. Apertura ———
+   Telefono e tablet: la foto del trattamento a tutta larghezza, inquadrata dalle teste alle mani dell'osteopata
+   (non si copre con il testo), poi sul blu notte il titolo e una barra in vetro con prezzo e azione. Sotto, le tre rassicurazioni. Desktop: testo a sinistra, foto a tutta altezza a destra. */
+.ytp-hero { position: relative; z-index: 1; }
+.ytp-hero__top { position: relative; display: grid; background: #002552; }
+.ytp-hero__photo { position: relative; margin: 0; aspect-ratio: 10 / 11; max-height: 72svh; overflow: hidden; background: #0c2a4e; }
+.ytp-hero__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 64%; }
+.ytp-hero__photo::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgb(0 37 82 / 0) 80%, #002552 100%);
+}
+.ytp-hero__copy { position: relative; z-index: 2; margin-top: -1.75rem; padding: 0 var(--pad) 1.25rem var(--inset); color: #f4f4f4; }
+.ytp-hero .ytp-h1__t { font-size: clamp(2rem, 1.25rem + 3.4vw, 3.25rem); line-height: 1.02; }
+
+/* Barra in vetro: prezzo e azione. Esce dal bordo della foto. */
+.ytp .ytp-offer { position: relative; z-index: 3; padding: 0.25rem 1rem 1.75rem; background: #002552; }
+.ytp-offer__dock {
+  display: flex; align-items: center; gap: 1rem; padding: 0.625rem 0.625rem 0.625rem 1.25rem;
+  border: 1px solid rgb(244 244 244 / 0.16); border-radius: 1.75rem;
+  background: rgb(0 30 68 / 0.6); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: 0 22px 44px -22px rgb(0 0 0 / 0.7);
+}
+.ytp .ytp-offer__price { flex: none; display: grid; gap: 0.25rem; line-height: 1; }
+.ytp-offer__now { font-size: 2.25rem; font-weight: 300; letter-spacing: -0.045em; line-height: 0.9; font-variant-numeric: lining-nums; color: #f4f4f4; }
+.ytp-offer__what strong { display: block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-soft); }
+.ytp-offer__what span { display: none; }
+.ytp-offer__dock .ytp-cta { flex: 1; min-height: 3.375rem; padding-inline: 1rem; }
+
+/* Tre rassicurazioni: icona sopra, testo sotto, divise da un filo. */
+.ytp .ytp-offer__plus { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 1.5rem 0 0; }
+.ytp-offer__plus li { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0 0.5rem; font-size: 0.8125rem; line-height: 1.3; text-align: center; color: rgb(244 244 244 / 0.86); text-wrap: balance; }
+.ytp-offer__plus li + li { border-left: 1px solid var(--paper-line); }
+.ytp-offer__plus svg { flex: none; width: 1.25rem; height: 1.25rem; color: var(--green); }
+.ytp-offer .ytp-link { display: flex; width: fit-content; margin: 1rem auto 0; font-size: 0.9375rem; color: #f4f4f4; }
+
+.ytp-hero__more { padding: 2.5rem var(--pad) 0 var(--inset); }
+.ytp-hero__more .ytp-lead { color: var(--blue); }
+.ytp-addresses { margin-top: 1.5rem; display: grid; gap: 0.25rem; font-size: 0.9375rem; color: var(--ink-soft); }
+
+@media (max-width: 23.9rem) {
+  .ytp-hero .ytp-h1__t { font-size: 2rem; }
+  .ytp-offer__now { font-size: 2rem; }
+  .ytp-offer__dock { gap: 0.75rem; padding-left: 1rem; }
+}
+/* Tablet: la foto non può essere alta come lo schermo intero. */
+@media (min-width: 40rem) and (max-width: 63.99rem) {
+  .ytp-hero__photo { aspect-ratio: auto; height: min(70svh, 42rem); }
+  .ytp-hero__photo img { object-position: 50% 46%; }
+  .ytp .ytp-offer { padding-inline: var(--inset) var(--pad); }
+  .ytp-offer__dock { max-width: 36rem; }
+  .ytp .ytp-offer__plus { max-width: 36rem; }
+  .ytp-offer .ytp-link { margin-left: 0; }
+}
+
+/* Desktop: due superfici al vivo che si toccano sul filo. A sinistra titolo, testo e la fascia blu con il
+   prezzo; a destra la foto a tutta altezza. */
+@media (min-width: 64rem) {
+  .ytp-hero {
+    display: grid; grid-template-columns: var(--axis) minmax(0, 1fr); grid-template-rows: auto 1fr auto;
+    min-height: min(calc(100svh - 5rem), 60rem);
+  }
+  .ytp-hero__top { display: contents; }
+  .ytp-hero__copy { grid-column: 1; grid-row: 1; margin-top: 0; padding: clamp(2.5rem, 7vh, 5rem) 3.5rem 0 var(--wrap-left); color: inherit; }
+  .ytp-hero .ytp-h1__t { font-size: min(clamp(2.375rem, 1rem + 3.3vw, 4.25rem), 4.3vw); }
+  .ytp-hero__photo { grid-column: 2; grid-row: 1 / 4; aspect-ratio: auto; max-height: none; height: auto; }
+  .ytp-hero__photo img { object-position: 30% 30%; }
+  .ytp-hero__photo::after { display: none; }
+  .ytp-hero__more { grid-column: 1; grid-row: 2; padding: 2rem 3.5rem 2.5rem var(--wrap-left); max-width: none; }
+  .ytp-hero__more .ytp-lead { max-width: 34rem; font-size: 1.1875rem; }
+  .ytp-addresses { grid-template-columns: auto auto; justify-content: start; column-gap: 2rem; }
+  .ytp .ytp-offer { grid-column: 1; grid-row: 3; margin: 0; padding: 2.25rem 3.5rem 2.5rem var(--wrap-left); background: #002552; }
+  .ytp-offer__dock { gap: 1.5rem; padding: 0.875rem 0.875rem 0.875rem 1.75rem; background: rgb(244 244 244 / 0.04); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .ytp .ytp-offer__price { display: flex; align-items: center; gap: 1.25rem; }
+  .ytp-offer__now { font-size: 3.5rem; }
+  .ytp-offer__what { display: grid; gap: 0.25rem; padding-left: 1.25rem; border-left: 1px solid var(--paper-line); }
+  .ytp-offer__what strong { font-size: 0.6875rem; }
+  .ytp-offer__what span { display: block; max-width: 11rem; font-size: 0.875rem; line-height: 1.35; color: rgb(244 244 244 / 0.86); }
+  .ytp-offer__dock .ytp-cta { flex: none; margin-left: auto; padding-inline: 2.25rem; }
+  .ytp .ytp-offer__plus { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; margin-top: 1.25rem; padding-left: 0.25rem; }
+  .ytp-offer__plus li { flex-direction: row; gap: 0.5rem; padding: 0; font-size: 0.9375rem; text-align: left; }
+  .ytp-offer__plus li + li { border-left: 0; }
+  .ytp-offer__plus svg { width: 1.125rem; height: 1.125rem; }
+  .ytp-offer .ytp-link { margin: 0.75rem 0 0 0.25rem; }
+  .ytp-video { padding-top: clamp(4rem, 2rem + 4vw, 7rem); }
+  .ytp-sticky { position: sticky; top: 7.5rem; }
+}
+
+/* ——— Capitoli: la tacca sull'asse ——— */
+.ytp-ch { position: relative; display: flex; align-items: center; min-height: 3rem; margin-bottom: clamp(2rem, 1rem + 3vw, 4rem); scroll-margin-top: 6rem; }
+.ytp-ch__tick { position: absolute; top: 50%; left: var(--axis-in); width: calc(-1 * var(--axis-in) - 0.625rem); height: 1px; background: var(--blue); }
+.ytp-ch__dot {
+  position: absolute; top: 50%; left: var(--axis-in); width: 0.75rem; height: 0.75rem; margin: -0.375rem 0 0 -0.34rem;
+  border: 1.5px solid var(--blue); border-radius: 999px; background: var(--cream);
+  transition: background-color 220ms var(--ease-out), transform 220ms var(--ease-out);
+}
+.ytp-ch.is-on .ytp-ch__dot { background: var(--blue); transform: scale(1.15); }
+.ytp-ch__word {
+  max-width: 13ch; font-size: clamp(2.625rem, 1.2rem + 5.2vw, 7rem); font-weight: 300; line-height: 0.94; letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+@media (min-width: 64rem) {
+  .ytp-ch { justify-content: flex-end; }
+  .ytp-ch__word { margin-right: calc(100% - var(--axis-in) + 2.75rem); text-align: right; }
+  /* linea di livello: dal filo al bordo, come su una tavola di misura */
+  .ytp-ch__tick { left: calc(var(--axis-in) - 2rem); width: calc(100% - var(--axis-in) + 2rem); background: var(--line-strong); }
+}
+
+/* ——— 2. Il video ——— */
+.ytp-video__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--blue); }
+.ytp-video__frame :where(img, iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+.ytp-video__cover { position: absolute; inset: 0; z-index: 1; background: var(--blue); transition: opacity 300ms ease; }
+.ytp-video__block { position: absolute; inset: 0; z-index: 1; }
+.ytp-video__say { margin-top: 2.5rem; }
+.ytp-video__say .ytp-h2__t { font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.75rem); }
+/* Il percorso come stazioni lungo un filo: visita, sedute, app. */
+.ytp-steps3, .ytp-deal__list { position: relative; margin-top: 2.25rem; padding-left: 2rem; }
+.ytp-steps3::before, .ytp-deal__list::before {
+  content: ''; position: absolute; left: 0.375rem; top: 1.6rem; bottom: 1.6rem; width: 1px; background: var(--line-strong);
+}
+.ytp-steps3 li { position: relative; padding: 0.875rem 0; color: var(--ink-soft); }
+.ytp-steps3 li::before, .ytp-deal__list li::before {
+  content: ''; position: absolute; left: -2rem; top: 1.3rem; width: 0.8125rem; height: 0.8125rem; box-sizing: border-box;
+  border: 1.5px solid var(--blue); border-radius: 999px; background: var(--cream);
+}
+.ytp-steps3 li:first-child::before { background: var(--blue); }
+.ytp-steps3 li strong { color: var(--blue); font-weight: 600; }
+.ytp-video__cap { margin-top: 0.75rem; font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
+@media (min-width: 64rem) {
+  .ytp-video__fig { grid-column: 1 / 8; margin-right: 1.5rem; }
+  .ytp-video__aside { grid-column: 8 / 13; padding-left: 1.5rem; align-self: end; }
+  .ytp-video__say { margin-top: 0; }
+}
+
+/* ——— 3. Testa: riconoscimento e autotest ——— */
+.ytp-intro .ytp-lead { margin-top: 1.5rem; }
+.ytp-test { margin-top: 2.5rem; }
+.ytp-test__list { border-top: 1px solid var(--line); }
+.ytp-test__row { border-bottom: 1px solid var(--line); }
+.ytp-test__row label {
+  position: relative; display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.875rem; align-items: start;
+  min-height: 3.5rem; padding: 0.9375rem 0.75rem 0.9375rem 0.5rem; margin-inline: -0.5rem; border-radius: 0.375rem; cursor: pointer;
+  transition: background-color 180ms ease;
+}
+.ytp-test__row label:has(input:checked) { background: rgb(0 37 82 / 0.05); }
+.ytp-test__row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ytp-test__box {
+  position: relative; width: 1.5rem; height: 1.5rem; margin-top: 0.1rem; border: 1.5px solid var(--blue); border-radius: 0.25rem;
+  transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.ytp-test__box svg { position: absolute; inset: 0.2rem; width: calc(100% - 0.4rem); height: calc(100% - 0.4rem); color: var(--cream); }
+.ytp-test__box path { stroke-dasharray: 20; stroke-dashoffset: 20; transition: stroke-dashoffset 180ms var(--ease-out); }
+.ytp-test__row input:checked + .ytp-test__box { background: var(--blue); }
+.ytp-test__row input:checked + .ytp-test__box path { stroke-dashoffset: 0; }
+.ytp-test__row label:active .ytp-test__box { transform: scale(0.92); }
+.ytp-test__row input:focus-visible + .ytp-test__box { outline: 2px solid var(--blue); outline-offset: 3px; }
+.ytp-test__title { display: block; font-size: 1.0625rem; font-weight: 600; line-height: 1.35; text-wrap: balance; }
+/* Spiegazione chiusa finché la frase non è spuntata: si apre in altezza, senza spostare il resto a scatti. */
+.ytp-test__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease-out); }
+.ytp-test__more > span { min-height: 0; overflow: hidden; }
+.ytp-test__row label:has(input:checked) .ytp-test__more { grid-template-rows: 1fr; }
+.ytp-test__body { display: block; padding-top: 0.5rem; color: var(--ink-soft); font-size: 1rem; line-height: 1.55; opacity: 0; transition: opacity 160ms ease; }
+.ytp-test__row label:has(input:checked) .ytp-test__body { opacity: 1; transition-duration: 260ms; transition-delay: 60ms; }
+@media (hover: hover) and (pointer: fine) { .ytp-test__row label:hover { background: rgb(0 37 82 / 0.03); } }
+.ytp-test__count { margin-top: 1.5rem; padding: 1.5rem; }
+.ytp-meter { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.25rem; margin-bottom: 1.125rem; }
+.ytp-meter li { height: 0.375rem; border-radius: 1px; background: var(--paper-line); transition: background-color 220ms var(--ease-out); }
+.ytp-meter li.is-on { background: var(--green); }
+.ytp-test__count p { font-size: 1.125rem; font-weight: 500; line-height: 1.4; }
+.ytp-test__n { font-variant-numeric: tabular-nums; }
+.ytp-test__count .ytp-cta { margin-top: 1.25rem; }
+@media (min-width: 64rem) {
+  .ytp-intro { grid-column: 1 / 7; align-self: start; }
+  .ytp-test { grid-column: 8 / 13; margin-top: 0; }
+}
+
+/* ——— 4. Petto: il meccanismo, su blu notte ——— */
+.ytp-dark .ytp-ch__tick { background: var(--paper-line); }
+.ytp-dark .ytp-ch__dot { border-color: var(--cream); background: var(--blue); }
+.ytp-dark .ytp-ch.is-on .ytp-ch__dot { background: var(--cream); }
+.ytp-petto .ytp-mech__text, .ytp-petto .ytp-claims p { color: var(--paper-soft); }
+.ytp-mech { margin-top: clamp(3.5rem, 2rem + 5vw, 7rem); }
+.ytp-mech__text { display: grid; gap: 1.25rem; font-size: 1.125rem; }
+.ytp-claims { margin-top: clamp(2.5rem, 2rem + 3vw, 4.5rem); display: grid; gap: 0; }
+/* Versione breve: solo le frasi, numerate dal filo. */
+.ytp-claims--brevi { counter-reset: claim; }
+.ytp-claims.ytp-claims--brevi li { position: relative; counter-increment: claim; padding: 1rem 0 1rem 2.5rem; }
+.ytp-claims.ytp-claims--brevi li::before { content: counter(claim); position: absolute; left: 0; top: 1.05rem; width: 1.625rem; height: 1.625rem; display: grid; place-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--green); color: var(--green); font-size: 0.875rem; font-weight: 700; }
+.ytp-claims--brevi h3 .ytp-h3__t { font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); }
+.ytp-claims li { padding: 1.5rem 0 1.75rem; border-top: 1px solid var(--paper-line); }
+.ytp-claims h3 .ytp-h3__t { font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; }
+.ytp-claims p { margin-top: 0.75rem; }
+.ytp-quote { margin-top: clamp(2rem, 1.5rem + 3vw, 4.5rem); font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3.375rem); font-weight: 300; line-height: 1.12; letter-spacing: -0.028em; text-wrap: balance; }
+.ytp-quote strong { font-weight: 700; }
+@media (min-width: 64rem) {
+  .ytp-mech { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .ytp-mech__text { grid-column: 1 / -1; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .ytp-mech__text p:first-child { grid-column: 1 / 7; font-size: clamp(1.375rem, 0.9rem + 0.9vw, 1.75rem); font-weight: 300; line-height: 1.35; letter-spacing: -0.01em; color: var(--cream); }
+  .ytp-mech__text p:last-child { grid-column: 8 / 13; padding-left: 1.5rem; }
+  .ytp-claims { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); }
+  .ytp-claims li { padding-right: 2rem; }
+  .ytp-quote { max-width: 62rem; }
+}
+@media (min-width: 80rem) { .ytp-claims { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* ——— 5. Bacino: cosa può tornare ——— */
+.ytp-plate { margin: clamp(2.5rem, 2rem + 4vw, 5.5rem) calc(-1 * var(--pad)) 0 calc(-1 * var(--inset)); }
+.ytp-plate img { width: 100%; aspect-ratio: 1440 / 1026; object-fit: cover; }
+/* Coppie «oggi | cosa cambia»: stesso peso, divise dal filo. */
+.ytp-pairs { margin-top: clamp(2.5rem, 2rem + 3vw, 5rem); }
+.ytp-pair-li { border-top: 1px solid var(--line); }
+.ytp-pair-li:last-child { border-bottom: 1px solid var(--line); }
+/* Voci apribili: si legge «oggi → cosa cambia», la spiegazione si apre toccando. */
+.ytp-pair__sum {
+  position: relative; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); column-gap: 1.25rem; align-items: start;
+  padding-block: 1.25rem; list-style: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.ytp-pair__sum::-webkit-details-marker { display: none; }
+.ytp-pair__sum:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; border-radius: 2px; }
+.ytp-pair__oggi, .ytp-pair h3 .ytp-h3__t { font-size: clamp(1.1875rem, 0.95rem + 1vw, 1.75rem); line-height: 1.18; letter-spacing: -0.02em; }
+.ytp-pair__oggi { display: block; font-weight: 300; color: var(--ink-soft); }
+.ytp-pair h3 .ytp-h3__t { font-weight: 500; }
+.ytp-pair__tick { position: absolute; top: 1.95rem; left: calc(var(--axis-in)); width: calc(-1 * var(--axis-in) - 0.625rem); height: 1px; background: var(--blue); }
+.ytp-pair__dopo { display: grid; grid-template-columns: minmax(0, 1fr) 1.25rem; gap: 0.75rem; align-items: start; }
+.ytp-pair__icon { position: relative; width: 1.125rem; height: 1.125rem; margin-top: 0.35rem; }
+.ytp-pair__icon::before, .ytp-pair__icon::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1.5px; background: var(--blue); }
+.ytp-pair__icon::after { transform: rotate(90deg); transition: transform 200ms var(--ease-out); }
+.ytp-pair[open] .ytp-pair__icon::after { transform: rotate(0deg); }
+.ytp .ytp-pair__body { padding: 0 2rem 1.5rem 0; color: var(--ink-soft); max-width: 34rem; }
+@media (hover: hover) and (pointer: fine) { .ytp-pair__sum:hover h3 .ytp-h3__t { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em; } }
+@media (min-width: 64rem) {
+  .ytp-pair__sum { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); padding-block: 1.75rem; align-items: baseline; }
+  .ytp-pair__oggi { grid-column: 1 / 8; padding-right: 3rem; text-align: right; font-size: clamp(1.75rem, 0.9rem + 1.7vw, 2.625rem); line-height: 1.05; letter-spacing: -0.03em; }
+  .ytp-pair__dopo { grid-column: 8 / 13; padding-left: 1.5rem; }
+  .ytp .ytp-pair__body { margin-left: calc((100% + var(--gap)) * 7 / 12 + 1.5rem - var(--gap)); padding-bottom: 1.75rem; }
+  .ytp-pair__tick { top: 2.55rem; left: calc(var(--axis-in) - 1.75rem); width: 3.5rem; }
+}
+
+/* ——— 6. Offerta: fascia blu ——— */
+.ytp-band { position: relative; z-index: 2; }
+.ytp-band__axis { position: absolute; top: 0; bottom: 0; left: var(--axis); width: 1px; background: var(--paper-line); }
+.ytp-deal__big { display: flex; align-items: flex-end; gap: 1rem; margin-top: 2rem; }
+.ytp-deal__now { font-size: clamp(6rem, 3.5rem + 11vw, 13rem); font-weight: 300; letter-spacing: -0.06em; line-height: 0.8; }
+.ytp-deal__was { padding-bottom: 0.5rem; font-size: 1.25rem; text-decoration: line-through; text-decoration-thickness: 1.5px; color: var(--paper-soft); }
+.ytp-deal__list { margin-top: 2.5rem; }
+.ytp-deal__list::before { background: var(--paper-line); }
+.ytp-deal__list li { position: relative; padding: 0.875rem 0; color: var(--paper-soft); }
+.ytp-deal__list li::before { border-color: var(--cream); background: var(--blue); }
+.ytp-deal__list li:last-child::before { border-color: var(--green); background: var(--green); }
+.ytp-deal__list strong { color: var(--cream); }
+.ytp-deal .ytp-lead { margin-top: 1rem; }
+@media (min-width: 64rem) {
+  .ytp-deal__left { grid-column: 1 / 7; }
+  .ytp-deal__right { grid-column: 8 / 13; padding-left: 1.5rem; align-self: end; }
+  .ytp-deal__big { margin-top: 3rem; }
+}
+
+/* ——— 7. Recensioni ——— */
+.ytp-reviews { margin-top: 3rem; display: grid; gap: 1.25rem; }
+.ytp-reviews li { border: 1px solid var(--line); background: #fff; }
+.ytp-reviews li:nth-child(n + 4) { display: none; }
+.ytp-reviews li { width: 70%; }
+.ytp-reviews li:nth-child(even) { margin-left: 30%; }
+.ytp-reviews img { width: 100%; }
+.ytp-reviews__more { margin-top: 1.5rem; }
+@media (min-width: 40rem) {
+  .ytp-reviews { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+  .ytp-reviews li, .ytp-reviews li:nth-child(even) { width: auto; margin-left: 0; }
+  .ytp-reviews li:nth-child(3n + 2) { margin-top: 3rem; }
+  .ytp-reviews li:nth-child(3n) { margin-top: 6rem; }
+}
+@media (min-width: 64rem) {
+  .ytp-reviews li:nth-child(n + 4) { display: block; }
+  .ytp-rev__head { grid-column: 1 / 7; }
+  .ytp-rev__close { grid-column: 8 / 13; padding-left: 1.5rem; align-self: end; }
+}
+.ytp-rev__close { margin-top: 3rem; }
+.ytp-rev__close .ytp-lead { color: var(--blue); }
+
+/* ——— 8. Piedi: come si entra ——— */
+.ytp-doors { margin-top: 2.5rem; display: grid; gap: 1rem; }
+.ytp-door { display: flex; flex-direction: column; padding: 1.5rem 1.25rem 1.5rem; }
+.ytp-door > .ytp-cta { margin-top: auto; }
+.ytp-door--line { box-shadow: inset 0 0 0 1px var(--line-strong); background: var(--cream); }
+.ytp-door__top { display: flex; justify-content: flex-start; align-items: baseline; gap: 1rem; font-size: 0.9375rem; font-weight: 500; }
+.ytp-door__price { display: flex; align-items: baseline; gap: 0.5rem; }
+.ytp-door__price s { font-size: 1rem; color: var(--paper-soft); }
+.ytp-door__price b { font-size: 2.5rem; font-weight: 300; letter-spacing: -0.04em; line-height: 1; }
+.ytp-door__free { font-size: 2.5rem; font-weight: 300; letter-spacing: -0.04em; line-height: 1; }
+.ytp-door h3 { margin-top: 1.25rem; }
+.ytp-door h3 .ytp-h3__t { font-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem); font-weight: 300; letter-spacing: -0.03em; }
+.ytp-door__lead { margin-top: 0.875rem; }
+.ytp-door ul { margin: 1.25rem 0 1.5rem; border-top: 1px solid var(--line); }
+.ytp-door.ytp-dark ul { border-color: var(--paper-line); }
+.ytp-door li { padding: 0.625rem 0; border-bottom: 1px solid var(--line); font-size: 1rem; line-height: 1.5; }
+.ytp-door.ytp-dark li { border-color: var(--paper-line); }
+@media (min-width: 64rem) {
+  .ytp-doors { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: stretch; }
+  .ytp-door--list { grid-column: 1 / 7; padding: 2.5rem 3rem 3rem; margin-right: 1.5rem; }
+  .ytp-door--line { grid-column: 8 / 13; padding: 2.5rem 2rem 3rem; margin-left: 0.5rem; }
+}
+.ytp-after { margin-top: clamp(3rem, 2rem + 4vw, 7rem); }
+.ytp-after__list { margin-top: 2rem; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.ytp-after__list li { position: relative; padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+.ytp-after__n { font-size: 0.875rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ytp-after__list h3 { margin-top: 0.5rem; }
+.ytp-after__list h3 .ytp-h3__t { font-size: 1.375rem; font-weight: 500; }
+.ytp-after__list p { margin-top: 0.5rem; color: var(--ink-soft); }
+.ytp-after__close { margin-top: 2rem; max-width: 36rem; }
+@media (min-width: 64rem) {
+  .ytp-after__list { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); border-top: 0; }
+  .ytp-after__list li { border-bottom: 0; border-top: 1px solid var(--blue); padding-top: 1.5rem; }
+}
+
+.ytp-places { margin-top: clamp(3rem, 2rem + 4vw, 6rem); }
+.ytp-places__list { margin-top: 2rem; display: grid; gap: 1.5rem; }
+.ytp-place__name { font-size: clamp(1.5rem, 1.2rem + 1.6vw, 2.75rem); font-weight: 300; letter-spacing: -0.03em; line-height: 1.05; }
+.ytp-place__area { margin-top: 0.375rem; font-weight: 600; }
+.ytp-place .ytp-link { margin-top: 0.25rem; }
+.ytp-places__notes { margin-top: 2rem; display: grid; gap: 0.5rem; color: var(--ink-soft); }
+@media (min-width: 64rem) {
+  .ytp-places__list { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .ytp-place:first-child { grid-column: 1 / 6; }
+  .ytp-place:last-child { grid-column: 8 / 13; padding-left: 1.5rem; }
+}
+
+/* ——— 9. Domande e chiusura ——— */
+.ytp-faq { margin-top: 2.5rem; border-top: 1px solid var(--line); }
+.ytp-faq details { border-bottom: 1px solid var(--line); }
+.ytp-faq summary {
+  display: grid; grid-template-columns: 1fr 1.5rem; gap: 1rem; align-items: center;
+  min-height: 3.5rem; padding: 1.25rem 0; cursor: pointer; list-style: none;
+  font-size: 1.125rem; font-weight: 500; line-height: 1.35;
+}
+.ytp-faq summary::-webkit-details-marker { display: none; }
+.ytp-faq summary em { font-style: normal; }
+.ytp-faq__icon { position: relative; width: 1.25rem; height: 1.25rem; justify-self: end; }
+.ytp-faq__icon::before, .ytp-faq__icon::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1.5px; background: currentColor; }
+.ytp-faq__icon::after { transform: rotate(90deg); transition: transform 200ms var(--ease-out); }
+.ytp-faq details[open] .ytp-faq__icon::after { transform: rotate(0deg); }
+.ytp-faq__a { padding: 0 2.5rem 1.5rem 0; color: var(--ink-soft); max-width: 44rem; }
+.ytp-faq__a em { font-style: italic; }
+@media (min-width: 64rem) {
+  .ytp-faq__head { grid-column: 8 / 13; padding-left: 1.5rem; grid-row: 1; align-self: start; }
+  .ytp-faq__head .ytp-h2__t { font-size: clamp(2rem, 1rem + 1.6vw, 2.75rem); }
+  .ytp-faq { grid-column: 1 / 7; grid-row: 1; margin-top: 0; }
+}
+.ytp-close { padding-block: clamp(4rem, 3rem + 5vw, 8rem); }
+.ytp-close__text { max-width: 44rem; font-size: clamp(1.625rem, 1.1rem + 1.8vw, 2.75rem); font-weight: 300; line-height: 1.3; letter-spacing: -0.015em; }
+.ytp-close { overflow: hidden; }
+.ytp-close__filo { position: absolute; top: 0; bottom: 0; left: var(--axis); width: 1px; background: var(--paper-line); }
+/* Figura allineata: il suo filo (x = 180 nel disegno, cioè 1/3 della larghezza) coincide con l'asse della pagina. */
+.ytp .ytp-close__fig { display: none; position: absolute; bottom: 2rem; width: 16rem; left: calc(var(--axis) - 16rem / 3); margin: 0; padding: 0; border: 0; }
+.ytp-close__svg { display: block; width: 100%; height: auto; }
+.ytp-close__fig .ytp-tav__mark { stroke: var(--green); fill: var(--blue); stroke-width: 1.5; }
+@media (min-width: 64rem) {
+  .ytp-close { min-height: 45rem; display: flex; align-items: center; }
+  .ytp-close > .ytp-wrap { flex: 1; }
+  .ytp .ytp-close__fig { display: block; }
+  .ytp-close__filo { bottom: calc(2rem + 16rem * 580 / 240); }
+}
+@media (min-width: 64rem) { .ytp-close__inner { grid-column: 1 / 7; } }
+
+/* ——— Barra mobile ——— */
+.ytp-bar {
+  position: fixed; inset: auto 0 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom));
+  background: var(--blue); color: var(--cream); border-top: 1px solid var(--paper-line);
+  font-family: 'Montserrat', sans-serif;
+  transform: translateY(110%); visibility: hidden;
+  transition: transform 180ms var(--ease-out), visibility 0s linear 180ms;
+}
+.ytp-bar.is-on { transform: none; visibility: visible; transition: transform 260ms var(--ease-out), visibility 0s; }
+.ytp-bar__label { display: grid; line-height: 1.25; }
+.ytp-bar__label b { font-size: 1.125rem; font-weight: 600; }
+.ytp-bar__label span { font-size: 0.875rem; color: var(--paper-soft); }
+.ytp-bar .ytp-cta { min-height: 3rem; padding-inline: 1.5rem; font-size: 1rem; }
+@media (min-width: 64rem) { .ytp-bar { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ytp *, .ytp-bar { transition-duration: 0s !important; }
+}
+
+
+/* ——— Modulo di prenotazione (Prenotazione.jsx): foglio dal basso su mobile, scheda centrata su desktop ———
+   Sempre scuro (blu notte, come le fasce scure della pagina) e compatto: su telefono si vede tutto senza scorrere. */
+.ytp-pop {
+  --pop-fondo: #002552;
+  --pop-ink: #f4f4f4;
+  --pop-soft: rgb(244 244 244 / 0.66);
+  --pop-campo: rgb(244 244 244 / 0.06);
+  --pop-bordo: rgb(244 244 244 / 0.16);
+  --pop-err: #ff9d9d;
+  position: fixed; inset: 0; z-index: 1000; display: flex; align-items: flex-end; justify-content: center;
+  font-family: var(--font); color: var(--pop-ink); -webkit-font-smoothing: antialiased;
+}
+.ytp-pop__fondo { position: absolute; inset: 0; background: rgb(0 10 24 / 0.72); }
+.ytp-pop__foglio {
+  position: relative; width: 100%; max-height: 100dvh; overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 1.25rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: var(--pop-fondo); border-radius: 1.25rem 1.25rem 0 0;
+  box-shadow: 0 -1px 0 rgb(244 244 244 / 0.1), 0 -16px 48px rgb(0 0 0 / 0.4);
+  outline: none;
+}
+.ytp-pop__maniglia { height: 1.25rem; margin: 0 -1.25rem; touch-action: none; cursor: grab; position: relative; }
+.ytp-pop__maniglia::before { content: ''; position: absolute; left: 50%; top: 0.5rem; width: 2.25rem; height: 0.25rem; margin-left: -1.125rem; border-radius: 999px; background: rgb(244 244 244 / 0.24); }
+.ytp-pop__testa { position: relative; padding: 0.25rem 2.75rem 1rem 0; touch-action: none; }
+.ytp-pop__sopra { margin: 0 0 0.25rem; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em; color: var(--green); }
+.ytp-pop__titolo { margin: 0; font-weight: 300; }
+.ytp-pop__titolo span { display: block; font-size: 1.75rem; line-height: 1.08; letter-spacing: -0.03em; font-weight: 300; color: var(--pop-ink); }
+.ytp-pop__sotto { margin: 0.375rem 0 0; font-size: 0.9375rem; line-height: 1.4; color: var(--pop-soft); text-wrap: pretty; }
+.ytp-pop__chiudi {
+  position: absolute; top: -0.5rem; right: -0.75rem; display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--pop-soft); cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.ytp-pop__chiudi svg { width: 1.25rem; height: 1.25rem; }
+.ytp-pop__chiudi:active { transform: scale(0.94); }
+.ytp-pop__chiudi:focus-visible { outline: 2px solid var(--green); outline-offset: 0; }
+@media (hover: hover) and (pointer: fine) { .ytp-pop__chiudi:hover { background: rgb(244 244 244 / 0.08); color: var(--pop-ink); } }
+
+.ytp-pop__form { display: grid; gap: 0.625rem; margin: 0; }
+.ytp-pop__riga2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
+
+/* Campo: etichetta piccola dentro il riquadro, in alto. */
+.ytp-pop__campo { position: relative; }
+.ytp-pop__label {
+  position: absolute; top: 0.5rem; left: 0.875rem; right: 0.875rem; margin: 0; padding: 0; pointer-events: none;
+  font-size: 0.75rem; font-weight: 500; line-height: 1; color: var(--pop-soft);
+}
+.ytp-pop__campo input {
+  display: block; width: 100%; height: 3.25rem; padding: 1.125rem 0.875rem 0; margin: 0;
+  border: 1px solid var(--pop-bordo); border-radius: 0.625rem; background: var(--pop-campo); color: var(--pop-ink);
+  font-family: var(--font); font-size: 1rem; font-weight: 500; outline: none; -webkit-appearance: none; appearance: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.ytp-pop__campo input::placeholder { color: rgb(244 244 244 / 0.3); font-weight: 400; }
+.ytp-pop__campo input:focus { border-color: var(--green); background: rgb(244 244 244 / 0.09); }
+.ytp-pop__campo input:-webkit-autofill {
+  -webkit-text-fill-color: var(--pop-ink); caret-color: var(--pop-ink);
+  -webkit-box-shadow: 0 0 0 100px #0f3460 inset; transition: background-color 9999s;
+}
+.ytp-pop__campo.is-err input { border-color: var(--pop-err); }
+.ytp-pop__errore { margin: 0.25rem 0 0; font-size: 0.8125rem; line-height: 1.3; color: var(--pop-err); }
+
+/* Fasce orarie: bottoni piccoli su due righe; gli orari della fascia scelta compaiono sotto. */
+.ytp-pop__fasce { margin: 0.25rem 0 0; padding: 0; border: 0; min-width: 0; }
+.ytp-pop__legenda { display: block; margin: 0 0 0.5rem; padding: 0; font-size: 0.875rem; font-weight: 500; color: var(--pop-ink); }
+.ytp-pop__chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+.ytp-pop__chip { position: relative; display: block; cursor: pointer; }
+.ytp-pop__chip:last-child { grid-column: span 2; }
+.ytp-pop__chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ytp-pop__chip > span {
+  display: flex; align-items: center; justify-content: center; height: 2.75rem; padding: 0 0.5rem;
+  border: 1px solid var(--pop-bordo); border-radius: 999px; background: var(--pop-campo);
+  font-size: 0.875rem; font-weight: 600; white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.ytp-pop__chip:active > span { transform: scale(0.96); }
+.ytp-pop__chip input:checked + span { background: var(--pop-ink); border-color: var(--pop-ink); color: var(--pop-fondo); }
+.ytp-pop__chip input:focus-visible + span { outline: 2px solid var(--green); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .ytp-pop__chip:hover input:not(:checked) + span { border-color: rgb(244 244 244 / 0.4); } }
+.ytp-pop__fasce[aria-invalid='true'] .ytp-pop__chip > span { border-color: var(--pop-err); }
+.ytp-pop__info { margin: 0.375rem 0 0; min-height: 1.25rem; font-size: 0.8125rem; line-height: 1.25rem; color: var(--pop-soft); }
+.ytp-pop__info.is-err { color: var(--pop-err); }
+
+.ytp-pop__invia {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; min-height: 3.25rem; margin-top: 0.25rem;
+  border: 0; border-radius: 999px; background: var(--green); color: #002552; cursor: pointer;
+  font-family: var(--font); font-size: 1rem; font-weight: 700;
+  transition: background-color 160ms ease, transform 120ms var(--ease-out);
+}
+.ytp-pop__invia:active { transform: scale(0.97); }
+.ytp-pop__invia:disabled { cursor: progress; opacity: 0.8; }
+@media (hover: hover) and (pointer: fine) { .ytp-pop__invia:hover:not(:disabled) { background: var(--green-hi); } }
+.ytp-pop__invia:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.ytp-pop__spin { width: 1.125rem; height: 1.125rem; border: 2px solid #002552; border-right-color: transparent; border-radius: 999px; animation: ytp-giro 700ms linear infinite; }
+@keyframes ytp-giro { to { transform: rotate(360deg); } }
+.ytp-pop__rete { margin: 0; padding: 0.5rem 0.75rem; border: 1px solid rgb(255 157 157 / 0.45); border-radius: 0.625rem; font-size: 0.8125rem; line-height: 1.4; color: #ffd9d9; }
+
+@media (min-width: 40rem) {
+  .ytp-pop { align-items: center; padding: 1.5rem; }
+  .ytp-pop__foglio { width: min(27rem, 100%); max-height: calc(100dvh - 3rem); padding: 1.75rem 1.75rem 1.75rem; border-radius: 1rem; box-shadow: 0 0 0 1px rgb(244 244 244 / 0.1), 0 24px 60px rgb(0 0 0 / 0.45); }
+  .ytp-pop__maniglia { display: none; }
+  .ytp-pop__testa { padding-top: 0; touch-action: auto; }
+  .ytp-pop__chiudi { top: -0.875rem; right: -0.875rem; }
+  .ytp-pop__titolo span { font-size: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) { .ytp-pop * { transition-duration: 0s !important; } .ytp-pop__spin { animation-duration: 2s; } }
+
+/* ——— Tema scuro (predefinito; ?tema=chiaro per la versione panna) ———
+   Stessa pagina: si ridefiniscono i colori. Fondo: blu del marchio schiarito; le fasce che erano blu notte
+   restano blu notte, così l'alternanza resta. Inchiostro panna; il verde (sempre su blu) diventa l'azione. */
+.ytp.ytp--scuro {
+  --fondo: #12365f;
+  --blue: #f4f4f4;            /* inchiostro */
+  --cream: var(--fondo);      /* fondo */
+  --blue-hi: #ffffff;
+  --ink-soft: rgb(244 244 244 / 0.78);
+  --line: rgb(244 244 244 / 0.16);
+  --line-strong: rgb(244 244 244 / 0.38);
+  background: var(--fondo);
+  color: var(--blue);
+}
+/* Le fasce blu notte: tornano ai colori originali (blu notte e panna). */
+.ytp.ytp--scuro .ytp-dark { --blue: #002552; --cream: #f4f4f4; --ink-soft: rgb(244 244 244 / 0.78); --line: rgb(244 244 244 / 0.16); --line-strong: rgb(244 244 244 / 0.38); }
+/* Su blu l'azione principale è sempre verde. */
+.ytp.ytp--scuro .ytp-cta--ink { background: var(--green); color: #002552; }
+@media (hover: hover) and (pointer: fine) { .ytp.ytp--scuro .ytp-cta--ink:hover { background: var(--green-hi); } }
+.ytp.ytp--scuro .ytp-cta--line { color: #f4f4f4; box-shadow: inset 0 0 0 1.5px rgb(244 244 244 / 0.6); }
+/* Superfici chiare diventano velature (trasparenza sul blu). */
+.ytp.ytp--scuro .ytp-door--line { background: rgb(244 244 244 / 0.05); }
+.ytp.ytp--scuro .ytp-test__row label:has(input:checked) { background: rgb(244 244 244 / 0.07); }
+.ytp.ytp--scuro .ytp-hero__photo { background: #0c2a4e; }
+.ytp.ytp--scuro ::selection { background: var(--green); color: #002552; }
+
+/* ——— Colore: profondità e luce al posto della tinta unita (riferimento: landing /reflusso) ———
+   Solo colori e luci: testi, forme e grafiche non cambiano. Fasce chiare: blu profondo con aloni di blu più
+   luminoso che si alternano a destra e a sinistra. Fasce blu notte: diagonale dal blu notte al blu, con un
+   alone verde in alto. Riquadri in vetro con una velatura verde. Parole forti dei titoli in verde. */
+.ytp.ytp--scuro { --fondo: #0c2f5c; background: #0a2b55; }
+/* Tutte le fasce usano lo stile della fascia blu notte (diagonale scura con alone verde), alternato a una
+   variante speculare: luce verde dal basso a sinistra e bagliore blu in alto a destra. Ogni fascia comincia e
+   finisce sul blu notte, così le giunture non si vedono. */
+.ytp.ytp--scuro > section:not(.ytp-hero) {
+  background:
+    linear-gradient(180deg, #001a3d 0, rgb(0 26 61 / 0) 9rem, rgb(0 26 61 / 0) calc(100% - 9rem), #001a3d 100%),
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgb(114 250 147 / 0.11), transparent 58%),
+    radial-gradient(ellipse 65% 50% at 100% 100%, rgb(0 88 176 / 0.34), transparent 62%),
+    linear-gradient(165deg, #001530 0%, #002552 40%, #003366 72%, #001a3d 100%);
+}
+.ytp.ytp--scuro > section:not(.ytp-hero):nth-of-type(odd) {
+  background:
+    linear-gradient(180deg, #001a3d 0, rgb(0 26 61 / 0) 9rem, rgb(0 26 61 / 0) calc(100% - 9rem), #001a3d 100%),
+    radial-gradient(ellipse 75% 50% at 0% 100%, rgb(114 250 147 / 0.09), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 100% 0%, rgb(0 88 176 / 0.36), transparent 62%),
+    linear-gradient(195deg, #001a3d 0%, #003366 30%, #002552 62%, #001530 100%);
+}
+.ytp.ytp--scuro { background: #001a3d; }
+.ytp.ytp--scuro .ytp-tav { --bg: #002552; --fill: #11335d; --fill-2: #224268; --pelle: #0f3159; --osso: #1c416d; --disco: #335785; --muscolo: #2a4c78; }
+
+/* Apertura: su telefono la foto sfuma nel blu notte, poi il testo scende verso il blu delle fasce chiare. */
+.ytp.ytp--scuro .ytp-hero__more {
+  background:
+    radial-gradient(ellipse 80% 60% at 100% 100%, rgb(0 88 176 / 0.3), transparent 62%),
+    linear-gradient(180deg, #002552 0%, #001a3d 100%);
+}
+@media (min-width: 64rem) {
+  .ytp.ytp--scuro .ytp-hero {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -8%, rgb(114 250 147 / 0.11), transparent 58%),
+      radial-gradient(ellipse 60% 55% at 60% 100%, rgb(0 88 176 / 0.34), transparent 62%),
+      linear-gradient(165deg, #001530 0%, #002552 40%, #003366 72%, #001a3d 100%);
+  }
+  .ytp.ytp--scuro .ytp-hero__more { background: none; }
+  .ytp.ytp--scuro .ytp-hero__photo { box-shadow: 0 -1px 0 #001a3d; }
+  .ytp.ytp--scuro .ytp .ytp-offer, .ytp.ytp--scuro .ytp-offer.ytp-dark {
+    background:
+      linear-gradient(180deg, rgb(0 26 61 / 0) 40%, #001a3d 100%),
+      radial-gradient(ellipse 70% 120% at 0% 0%, rgb(114 250 147 / 0.08), transparent 60%),
+      linear-gradient(165deg, #001530 0%, #002552 55%, #003366 100%);
+  }
+}
+
+/* Riquadri in vetro: contatore del test, scheda del percorso, scheda della telefonata. */
+.ytp.ytp--scuro .ytp-test__count.ytp-dark,
+.ytp.ytp--scuro .ytp-door--list.ytp-dark {
+  background:
+    linear-gradient(145deg, rgb(244 244 244 / 0.12) 0%, rgb(244 244 244 / 0.04) 50%, rgb(114 250 147 / 0.12) 100%),
+    rgb(0 21 48 / 0.55);
+  box-shadow: inset 0 0 0 1px rgb(244 244 244 / 0.12), 0 28px 56px -32px rgb(0 0 0 / 0.65);
+}
+.ytp.ytp--scuro .ytp-door--line {
+  background: linear-gradient(145deg, rgb(244 244 244 / 0.08) 0%, rgb(244 244 244 / 0.02) 60%, rgb(22 104 196 / 0.12) 100%);
+}
+
+/* Accento verde: parole forti dei titoli e bottoni che brillano. */
+.ytp.ytp--scuro .ytp-h1__t strong,
+.ytp.ytp--scuro .ytp-h2__t strong { color: var(--green); }
+.ytp.ytp--scuro .ytp-cta--green,
+.ytp.ytp--scuro .ytp-cta--ink { box-shadow: 0 14px 34px -14px rgb(114 250 147 / 0.6); }
+
+/* Barra mobile in vetro. */
+.ytp-bar { background: rgb(0 26 61 / 0.82); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); }
+
+/* Portatili stretti: nella barra del prezzo resta solo «Tutto incluso», così il bottone non esce. */
+@media (min-width: 64rem) and (max-width: 84.99rem) {
+  .ytp-offer__what span { display: none; }
+}
+
+/* Frase di chiusura della fascia «Perché la forza di volontà non basta»: la risposta va a capo, in verde. */
+.ytp-quote__si { display: block; margin-top: 0.25em; color: var(--green); }

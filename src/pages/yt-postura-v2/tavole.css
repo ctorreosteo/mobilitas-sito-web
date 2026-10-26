@@ -1,0 +1,318 @@
+/* Tavole interattive di /yt-postura-v2 (Tavole.jsx). Valgono solo dentro .ytp.
+   Due inchiostri: blu su panna, panna su blu notte (dentro .ytp-dark). I riempimenti sono opachi,
+   così le parti del corpo che si sovrappongono non si scuriscono. */
+
+.ytp .ytp-tav {
+  --ink: var(--blue);
+  --ink-2: rgb(0 37 82 / 0.74);
+  --bg: var(--cream);
+  --fill: #e2e5e9;
+  --fill-2: #d3d8df;
+  --dot: rgb(0 37 82 / 0.16);
+  --rule: rgb(0 37 82 / 0.16);
+  --rule-2: rgb(0 37 82 / 0.32);
+  --accent: var(--blue);
+  position: relative;
+  display: grid;
+  gap: 1.75rem;
+  margin-top: clamp(3.5rem, 2rem + 5vw, 7.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ink);
+}
+.ytp .ytp-dark .ytp-tav {
+  --ink: var(--cream);
+  --ink-2: rgb(244 244 244 / 0.78);
+  --bg: var(--blue);
+  --fill: #11335d;
+  --fill-2: #224268;
+  --dot: rgb(244 244 244 / 0.13);
+  --rule: rgb(244 244 244 / 0.18);
+  --rule-2: rgb(244 244 244 / 0.36);
+  --accent: var(--green);
+}
+
+.ytp-tav__title .ytp-h3__t { font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.875rem); font-weight: 300; line-height: 1.06; letter-spacing: -0.03em; }
+.ytp .ytp-tav__text { margin-top: 1.25rem; max-width: 34rem; color: var(--ink-2); }
+.ytp-tav__cap { padding-top: 0.875rem; border-top: 1px solid var(--rule); font-size: 0.875rem; line-height: 1.45; color: var(--ink-2); max-width: 48rem; }
+
+/* Il palco del disegno: carta a punti */
+.ytp-tav__stage {
+  position: relative;
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.4px);
+  background-size: 18px 18px;
+  background-position: 9px 9px;
+}
+.ytp-tav__svg { display: block; width: 100%; height: auto; overflow: hidden; }
+
+/* ——— Segni del disegno ——— */
+.ytp-tav__fig path, .ytp-tav__fig circle, .ytp-tav__body { fill: var(--fill); }
+.ytp-tav__body { stroke: var(--fill); }
+.ytp-tav__fig .ytp-tav__limb, .ytp-tav__limb { fill: none; stroke: var(--fill); stroke-linecap: round; stroke-linejoin: round; }
+.ytp-tav__arm { fill: none; stroke: var(--fill-2); stroke-linecap: round; stroke-linejoin: round; }
+.ytp-tav__ghost path, .ytp-tav__ghost circle { fill: none; stroke: var(--ink); stroke-opacity: 0.32; stroke-width: 1; stroke-dasharray: 3 4; }
+.ytp-tav__ghost .ytp-tav__limb { display: none; }
+.ytp-tav__vert { fill: var(--ink); }
+.ytp-tav__vert--soft { opacity: 0.35; }
+.ytp-tav__vert--ghost { fill: none; stroke: var(--ink); stroke-opacity: 0.4; stroke-width: 1; }
+.ytp-tav__sacrum { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-opacity: 0.85; }
+.ytp-tav__phone { fill: none; stroke: var(--ink); stroke-width: 9; stroke-linecap: round; }
+.ytp-tav__plumb { fill: none; stroke: var(--ink); stroke-width: 1; stroke-opacity: 0.6; }
+.ytp-tav__bob { fill: var(--ink); }
+.ytp-tav__leader { fill: none; stroke: var(--ink); stroke-width: 0.8; stroke-opacity: 0.45; }
+.ytp-tav__gap path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.ytp-tav__mark { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+.ytp-tav__mark-dot { fill: var(--ink); }
+.ytp-tav__gaze { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-opacity: 0.6; stroke-dasharray: 2 3; }
+.ytp-tav__ear { fill: none; stroke: var(--ink); stroke-opacity: 0.5; }
+.ytp-tav__guide { fill: none; stroke: var(--ink); stroke-opacity: 0.3; }
+.ytp-tav__tick { stroke: var(--ink); stroke-opacity: 0.55; }
+.ytp-tav__needle { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.ytp-tav__lever path { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.ytp-tav__weight path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ytp-tav__weight circle { fill: var(--accent); }
+.ytp-tav__shoulders { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-opacity: 0.7; stroke-dasharray: 5 4; }
+.ytp-tav__spine-line { fill: none; stroke: var(--ink); stroke-opacity: 0.35; }
+.ytp-tav__horizon { opacity: 0; transition: opacity 180ms ease; }
+.ytp-tav__horizon.is-on { opacity: 1; transition-duration: 320ms; }
+.ytp-tav__horizon-ref { stroke: var(--ink); stroke-width: 1; stroke-opacity: 0.45; stroke-dasharray: 3 4; }
+.ytp-tav__ground { stroke: var(--ink); stroke-width: 1.2; }
+.ytp-tav__turn path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ytp-tav__turn path:first-child { stroke-dasharray: 5 4; }
+.ytp-tav__bone path { fill: var(--bg); fill-opacity: 0.55; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.ytp-tav__joint { fill: var(--bg); stroke: var(--ink); stroke-width: 1.6; }
+.ytp-tav__measure path { fill: none; stroke: var(--accent); stroke-width: 2; }
+.ytp-tav__measure .ytp-tav__level { stroke: var(--ink); stroke-width: 1; stroke-opacity: 0.45; stroke-dasharray: 3 4; }
+
+/* ——— Comandi ——— */
+.ytp-range { display: grid; gap: 0.25rem; margin-top: 1.75rem; max-width: 30rem; }
+.ytp-range__label { font-size: 0.9375rem; font-weight: 600; }
+.ytp-range input[type='range'] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 2.75rem; margin: 0; padding: 0;
+  background: transparent; cursor: pointer; touch-action: pan-y;
+}
+.ytp-range input[type='range']::-webkit-slider-runnable-track {
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(to right, var(--ink) var(--pct), var(--rule-2) var(--pct));
+}
+.ytp-range input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 1.875rem; height: 1.875rem; margin-top: calc(-0.9375rem + 1px);
+  border: 2px solid var(--ink); border-radius: 999px; background: var(--bg);
+  box-shadow: 0 2px 6px rgb(0 18 41 / 0.18);
+  transition: transform 140ms var(--ease-out);
+}
+.ytp-range input[type='range']:active::-webkit-slider-thumb { transform: scale(1.12); }
+.ytp-range input[type='range']::-moz-range-track { height: 2px; background: var(--rule-2); border: 0; }
+.ytp-range input[type='range']::-moz-range-progress { height: 2px; background: var(--ink); }
+.ytp-range input[type='range']::-moz-range-thumb {
+  width: 1.625rem; height: 1.625rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--bg);
+}
+.ytp .ytp-range input[type='range']:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 0.375rem; }
+.ytp-range__ends { display: flex; justify-content: space-between; font-size: 0.875rem; font-weight: 500; color: var(--ink-2); }
+
+.ytp-seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.25rem; width: 100%; max-width: 26rem;
+  padding: 0.25rem; border-radius: 1.5rem; box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.ytp-seg__btn {
+  min-height: 2.75rem; padding: 0.375rem 0.75rem; border: 0; border-radius: 1.25rem; background: transparent; cursor: pointer;
+  font-family: var(--font); font-size: 0.9375rem; font-weight: 500; line-height: 1.2; color: var(--ink); text-wrap: balance;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.ytp-seg__btn:active { transform: scale(0.97); }
+.ytp-seg__btn.is-on { background: var(--ink); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .ytp-seg__btn:not(.is-on):hover { background: var(--fill); } }
+
+.ytp-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.25rem; align-items: end; margin-top: 1.75rem; border-bottom: 1px solid var(--rule); }
+.ytp-tabs__btn {
+  position: relative; min-height: 3rem; padding: 0.5rem 0 0.625rem; border: 0; background: none; cursor: pointer; text-align: left; line-height: 1.25;
+  font-family: var(--font); font-size: 1.0625rem; font-weight: 500; color: var(--ink-2);
+  transition: color 160ms ease;
+}
+.ytp-tabs__btn::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform 220ms var(--ease-out);
+}
+.ytp-tabs__btn.is-on { color: var(--ink); font-weight: 600; }
+.ytp-tabs__btn.is-on::after { transform: none; }
+
+/* ——— Tavola · testa ——— */
+.ytp-tav__readout { display: grid; gap: 0.25rem; }
+.ytp-tav__big { display: flex; align-items: baseline; gap: 0.5rem; line-height: 0.8; }
+.ytp-tav__approx { font-size: 1rem; font-weight: 500; color: var(--ink-2); }
+.ytp-tav__num {
+  min-width: 2ch; font-size: clamp(5.5rem, 3.5rem + 8vw, 9.5rem); font-weight: 300; letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+.ytp-tav__unit { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem); font-weight: 300; letter-spacing: -0.02em; }
+.ytp-tav__sub { font-size: 1rem; color: var(--ink-2); }
+.ytp-tav__controls .ytp-range { margin-top: 0; }
+.ytp .ytp-bars { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1.25rem; max-width: 30rem; }
+.ytp-bars button {
+  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 0.375rem; width: 100%; height: 8.5rem;
+  padding: 0; border: 0; background: none; cursor: pointer; font-family: var(--font); color: var(--ink);
+}
+.ytp-bars__bar {
+  display: block; height: calc(var(--h) * 4.75rem); background: var(--fill-2);
+  transform-origin: 50% 100%; transition: background-color 200ms ease;
+}
+.ytp-bars__kg { font-size: 0.9375rem; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums; }
+.ytp-bars__deg { padding-top: 0.375rem; border-top: 1px solid var(--rule-2); font-size: 0.875rem; color: var(--ink-2); text-align: center; }
+.ytp-bars .is-on .ytp-bars__bar { background: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .ytp-bars li:not(.is-on) button:hover .ytp-bars__bar { background: var(--rule-2); } }
+
+.ytp-tav__legend--row { display: grid; gap: 0.75rem; }
+.ytp-tav__legend--row li { display: grid; grid-template-columns: 1.75rem 1fr; gap: 0.75rem; align-items: baseline; color: var(--ink-2); }
+.ytp-tav__legend--row b { color: var(--ink); font-weight: 600; }
+.ytp-key { position: relative; display: block; width: 1.75rem; height: 0.875rem; }
+/* Freccia del peso: un solo disegno (asta e punta simmetriche), colorato con l'accento della tavola. */
+.ytp-key--peso::before {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 0.875rem; height: 1.375rem; margin: -0.6875rem 0 0 -0.4375rem;
+  background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 22' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 1.5v18M1.75 14.25L7 19.5l5.25-5.25'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 22' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 1.5v18M1.75 14.25L7 19.5l5.25-5.25'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ytp-key--leva::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1.5px dashed var(--ink); }
+.ytp-key--collo::before { content: ''; position: absolute; left: 50%; top: 50%; width: 0.75rem; height: 0.75rem; margin: -0.375rem 0 0 -0.375rem; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--bg); box-sizing: border-box; }
+
+/* ——— Tavola · filo ——— */
+.ytp-tav__stage--filo { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+.ytp-tav__svg--filo { width: auto; height: 27rem; }
+.ytp-tav__legend--side { position: relative; }
+.ytp-tav__legend--side li {
+  position: absolute; left: 0.5rem; right: 0; top: var(--y); transform: translateY(-0.75rem);
+  display: grid; gap: 0.125rem;
+}
+.ytp-tav__legend--side b { font-size: 1rem; font-weight: 600; line-height: 1.5; }
+.ytp-tav__legend--side span { font-size: 0.9375rem; line-height: 1.35; color: var(--ink-2); }
+
+/* ——— Tavola · osso ——— */
+.ytp-tav__panel { display: grid; gap: 1.5rem; }
+.ytp-tav__stage--osso { max-width: 30rem; }
+.ytp-tav__side { display: grid; align-content: start; gap: 0.875rem; }
+.ytp-tav__explain { display: grid; gap: 0.75rem; min-height: 9rem; margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.ytp-tav__explain p:first-child { font-size: 1.125rem; font-weight: 500; line-height: 1.45; color: var(--ink); }
+.ytp-tav__explain p + p { color: var(--ink-2); }
+
+@media (min-width: 40rem) {
+  .ytp-tav__svg--filo { height: 32rem; }
+}
+
+@media (min-width: 40rem) {
+  .ytp-tabs { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+}
+
+@media (min-width: 64rem) {
+  .ytp .ytp-tav { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: 2rem; padding-top: 2rem; }
+  .ytp-tav > * { grid-column: 1 / -1; }
+  .ytp-tav__cap { grid-column: 1 / 8; }
+
+  /* testa: testo, numero e comandi a sinistra; disegno grande a destra */
+  .ytp-tav--testa .ytp-tav__head { grid-column: 1 / 6; grid-row: 1; }
+  .ytp-tav--testa .ytp-tav__readout { grid-column: 1 / 6; grid-row: 2; align-self: end; }
+  .ytp-tav--testa .ytp-tav__controls { grid-column: 1 / 6; grid-row: 3; }
+  .ytp-tav--testa .ytp-tav__stage { grid-column: 6 / 13; grid-row: 1 / 4; align-self: center; }
+  .ytp-tav--testa .ytp-tav__legend--row { grid-column: 6 / 13; grid-row: 4; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); }
+  .ytp-tav--testa .ytp-tav__cap { grid-row: 5; }
+
+  /* filo: testo e cursore a sinistra, figura e legenda a destra del filo della pagina */
+  .ytp-tav--filo .ytp-tav__head { grid-column: 1 / 6; grid-row: 1; align-self: center; }
+  .ytp-tav--filo .ytp-tav__stage { grid-column: 7 / 13; grid-row: 1; }
+  .ytp-tav__svg--filo { height: 40rem; }
+  .ytp-tav__legend--side li { left: 1rem; }
+  .ytp-tav__legend--side b { font-size: 1.125rem; }
+  .ytp-tav__legend--side span { font-size: 1rem; }
+
+  /* osso */
+  .ytp-tav--osso .ytp-tav__head { grid-column: 1 / 6; grid-row: 1; }
+  .ytp-tav--osso .ytp-tav__panel { grid-column: 6 / 13; grid-row: 1; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 2rem; align-items: start; }
+  .ytp-tav--osso .ytp-tav__stage--osso { max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ytp-tav *, .ytp-tav *::after { transition-duration: 0s !important; }
+}
+
+/* ——— Figure anatomiche (anatomia.js): corpo in trasparenza, scheletro in inchiostro ——— */
+.ytp .ytp-tav {
+  --pelle: #e2e7ee;
+  --pelle-bordo: rgb(0 37 82 / 0.5);
+  --osso: #fbfaf6;
+  --osso-bordo: var(--blue);
+  --disco: #c4cfdd;
+  --muscolo: #cdd6e3;
+}
+.ytp .ytp-dark .ytp-tav {
+  --pelle: #0f3159;
+  --pelle-bordo: rgb(244 244 244 / 0.5);
+  --osso: #1c416d;
+  --osso-bordo: rgb(244 244 244 / 0.92);
+  --disco: #335785;
+  --muscolo: #2a4c78;
+}
+.ytp-an__tratto { fill: none; stroke: var(--pelle-bordo); stroke-width: 2.2; stroke-linejoin: round; }
+.ytp-an__fondo { fill: var(--pelle); }
+.ytp-an__pelle--braccio .ytp-an__tratto { stroke-width: 1; }
+.ytp-an__pelle--braccio .ytp-an__fondo { fill-opacity: 0.6; }
+.ytp-an__osso { fill: var(--osso); fill-opacity: 0.84; stroke: var(--osso-bordo); stroke-width: 0.75; stroke-linejoin: round; }
+.ytp-an__osso-fine { fill: none; stroke: var(--osso-bordo); stroke-width: 0.55; stroke-opacity: 0.7; }
+.ytp-an__osso-linea { fill: none; stroke: var(--osso-bordo); stroke-width: 0.65; stroke-linecap: round; }
+.ytp-an__disco { fill: var(--disco); }
+.ytp-an__costa { fill: none; stroke: var(--osso-bordo); stroke-width: 3.1; stroke-linecap: round; }
+.ytp-an__costa-in { fill: none; stroke: var(--osso); stroke-width: 1.7; stroke-linecap: round; }
+.ytp-an__pelle-linea { fill: none; stroke: var(--pelle-bordo); stroke-width: 0.8; stroke-linecap: round; }
+.ytp-an__telefono { fill: var(--ink); }
+.ytp-an__traccia path { fill: none; stroke: var(--ink); stroke-opacity: 0.35; stroke-width: 1; stroke-dasharray: 3 4; }
+.ytp-an__sfondo { transition: opacity 260ms ease; }
+.ytp-an__sfondo.is-dim { opacity: 0.28; }
+.ytp-an__riquadro { fill: var(--bg); stroke: var(--rule-2); stroke-width: 1; }
+.ytp-an__muscolo { fill: var(--muscolo); stroke: var(--osso-bordo); stroke-width: 0.5; }
+.ytp-an__schiena { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
+.ytp-an__tangente { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.ytp .ytp-tav__hint { font-size: 0.9375rem; color: var(--ink-2); }
+
+/* ——— Tavola · osso (osso.js): ossa dietro e in trasparenza, fori, misure e didascalie nel disegno ——— */
+.ytp-an__osso-dietro { fill: var(--osso); fill-opacity: 0.5; stroke: var(--osso-bordo); stroke-width: 0.5; stroke-opacity: 0.55; }
+.ytp-an__osso-lieve { fill: var(--osso); fill-opacity: 0.4; stroke: var(--osso-bordo); stroke-width: 0.55; stroke-opacity: 0.5; }
+.ytp-an__osso-foro { fill: var(--osso); fill-opacity: 0.84; fill-rule: evenodd; stroke: var(--osso-bordo); stroke-width: 0.75; stroke-linejoin: round; }
+.ytp-os__asse { fill: none; stroke: var(--ink); stroke-width: 0.7; stroke-opacity: 0.45; stroke-dasharray: 2 3; }
+.ytp-os__livello { fill: none; stroke: var(--ink); stroke-width: 0.8; stroke-opacity: 0.55; stroke-dasharray: 3 3; }
+.ytp-os__linea { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; }
+.ytp-os__linea--tratto { stroke-dasharray: 4 3; }
+.ytp-os__guida { fill: none; stroke: var(--ink); stroke-width: 0.6; stroke-opacity: 0.75; }
+.ytp-os__punto { fill: var(--ink); }
+.ytp-os__nota text { font-family: var(--font); font-size: 10px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
+.ytp-os__nota .is-valore { fill: var(--accent); font-size: 13px; font-weight: 700; }
+.ytp-os__strumento { fill: var(--bg); stroke: var(--ink); stroke-width: 1; }
+.ytp-os__tacca { stroke: var(--ink); stroke-width: 0.6; stroke-opacity: 0.7; }
+.ytp-os__lettura { font-family: var(--font); font-size: 9px; font-weight: 700; fill: var(--accent); }
+.ytp-os__riquadro { fill: var(--bg); stroke: var(--rule-2); stroke-width: 0.8; }
+.ytp-os__organo { fill: var(--disco); fill-opacity: 0.35; stroke: var(--osso-bordo); stroke-width: 0.5; stroke-opacity: 0.45; }
+.ytp-os__vaso { fill: var(--muscolo); stroke: var(--osso-bordo); stroke-width: 0.55; stroke-opacity: 0.7; }
+.ytp-os__etichetta { font-family: var(--font); font-size: 8.5px; font-weight: 600; fill: var(--ink-2); }
+
+/* Tema scuro: tutte le tavole usano l'inchiostro panna su blu. */
+.ytp.ytp--scuro .ytp-tav {
+  --ink: #f4f4f4;
+  --ink-2: rgb(244 244 244 / 0.78);
+  --bg: #0d3262;
+  --fill: #1d4672;
+  --fill-2: #2a5582;
+  --dot: rgb(244 244 244 / 0.13);
+  --rule: rgb(244 244 244 / 0.18);
+  --rule-2: rgb(244 244 244 / 0.36);
+  --accent: var(--green);
+  --pelle: #1d4672;
+  --pelle-bordo: rgb(244 244 244 / 0.5);
+  --osso: #26507e;
+  --osso-bordo: rgb(244 244 244 / 0.92);
+  --disco: #3d6694;
+  --muscolo: #345d8b;
+}
+.ytp.ytp--scuro .ytp-dark .ytp-tav { --bg: #002552; --fill: #11335d; --fill-2: #224268; --pelle: #0f3159; --osso: #1c416d; --disco: #335785; --muscolo: #2a4c78; }
+/* Figura piegata della tavola osso: è ridotta a un terzo, i tratti restano della misura delle altre tavole. */
+.ytp-os__figura path { vector-effect: non-scaling-stroke; }
+.ytp-os__figura .ytp-an__tratto { stroke-width: 1.3; }
+.ytp-os__figura .ytp-an__osso, .ytp-os__figura .ytp-an__osso-linea { stroke-width: 0.5; }
+.ytp-os__figura .ytp-an__osso-fine, .ytp-os__figura .ytp-an__pelle-linea { stroke-width: 0.4; }
+.ytp-os__figura .ytp-an__costa { stroke-width: 1.1; }
+.ytp-os__figura .ytp-an__costa-in { stroke-width: 0.6; }
