@@ -1,7 +1,15 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, Star, ChevronDown, ShoppingCart } from 'lucide-react'
+import { Check, Star, ShoppingCart, ArrowDown } from 'lucide-react'
+import { EASE } from '../home-sections/homeMotion'
 
-export default function VSLSection({ y }) {
+const benefits = [
+  "Risolviamo il dolore senza farmaci",
+  "Ripristiniamo la tua mobilità e libertà di movimento",
+  "Risolviamo il problema alla radice, non solo il sintomo"
+]
+
+// Apertura: titolo, VSL e "Acquista ora" tutti nel primo schermo su mobile.
+export default function VSLSection() {
   const scrollToOffer = () => {
     const offerSection = document.getElementById('offer-section');
     if (offerSection) {
@@ -10,147 +18,92 @@ export default function VSLSection({ y }) {
   };
 
   return (
-    <section style={{background: 'linear-gradient(to bottom right, #002552, rgba(0, 37, 82, 0.9))', minHeight: '100vh', padding: '48px 16px', position: 'relative', paddingTop: '80px'}}>
-      {/* Content */}
-      <div style={{maxWidth: '1200px', margin: '0 auto', textAlign: 'center', padding: '0 16px'}}>
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '12px 24px',
-            borderRadius: '50px',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-            border: '2px solid rgba(114, 250, 147, 0.3)',
-            backgroundColor: 'rgba(114, 250, 147, 0.2)',
-            color: '#F4F4F4',
-            margin: '0 auto 20px auto'
-          }}
-        >
-          <Star className="w-4 h-4 mr-2 fill-current" style={{color: '#72fa93'}} />
-          Trattamento Specifico
-        </motion.div>
-
-        {/* Main Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          style={{marginBottom: '32px'}}
-        >
-          <h1 style={{fontSize: '32px', fontWeight: '900', lineHeight: '1.1', marginBottom: '24px'}}>
-            <div style={{color: '#F4F4F4', display: 'block'}}>TRATTAMENTO</div>
-            <div style={{color: '#72fa93', display: 'block'}}>OSTEOPATICO</div>
-            <div style={{color: '#F4F4F4', display: 'block'}}>PER IL MAL DI SCHIENA 💪🏼</div>
-          </h1>
-        </motion.div>
-
-
-        {/* VSL Video - Pure Video Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          style={{marginBottom: '32px', width: '100%', maxWidth: '800px', margin: '0 auto 32px auto'}}
-        >
-          {/* Video Container - Solo Video */}
-          <div 
-            style={{
-              width: '100%',
-              height: '0',
-              paddingBottom: '56.25%',
-              position: 'relative',
-              borderRadius: '20px',
-              overflow: 'hidden',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
-              border: '3px solid rgba(114, 250, 147, 0.3)'
-            }}
+    <section className="mx-mds-hero" id="mds-hero">
+      <div className="mx-mds-hero__glow" aria-hidden="true" />
+      <div className="mx-wrap mx-mds-hero__grid">
+        <div className="mx-mds-hero__copy">
+          <motion.p
+            className="mx-mds-pill"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
           >
-            {/* Video Iframe - Solo Video */}
-            <iframe 
-              src="https://player.vimeo.com/video/1119431291?badge=0&autopause=0&player_id=0&app_id=58479" 
-              frameBorder="0" 
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                border: 'none'
-              }}
+            <Star size={14} strokeWidth={2.4} className="mx-mds-pill__star" />
+            Trattamento Specifico
+          </motion.p>
+
+          <h1 className="mx-h mx-mds-hero__title">
+            {['TRATTAMENTO', 'OSTEOPATICO', 'PER IL MAL DI SCHIENA 💪🏼'].map((line, i) => (
+              <span key={line} className="mx-mask">
+                <motion.span
+                  className={i === 1 ? 'mx-accent' : undefined}
+                  initial={{ y: '110%' }}
+                  animate={{ y: '0%' }}
+                  transition={{ duration: 1, ease: EASE, delay: 0.1 + i * 0.08 }}
+                >
+                  {line}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        <motion.div
+          className="mx-mds-video"
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1, ease: EASE, delay: 0.3 }}
+        >
+          <div className="mx-mds-video__frame">
+            <iframe
+              src="https://player.vimeo.com/video/1119431291?badge=0&autopause=0&player_id=0&app_id=58479"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               title="VSL_MAL_DI_SCHIENA01"
             />
           </div>
         </motion.div>
 
-
-        {/* Benefits */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          className="mx-mds-hero__cta"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-          className="w-full max-w-4xl mx-auto mb-8"
+          transition={{ duration: 0.8, ease: EASE, delay: 0.45 }}
         >
-          <h3 className="text-2xl md:text-3xl font-bold mb-6" style={{color: '#F4F4F4'}}>I 3 benefici immediati del Trattamento Osteopatico:</h3>
-          <div className="space-y-4">
-            {[
-              "Risolviamo il dolore senza farmaci",
-              "Ripristiniamo la tua mobilità e libertà di movimento", 
-              "Risolviamo il problema alla radice, non solo il sintomo"
-            ].map((benefit, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1 + index * 0.1 }}
-                className="flex items-center space-x-4 backdrop-blur-sm rounded-xl p-4 border"
-                style={{borderColor: 'rgba(114, 250, 147, 0.4)', backgroundColor: 'rgba(0, 37, 82, 0.3)'}}
-              >
-                <CheckCircle className="w-6 h-6 flex-shrink-0" style={{color: '#72fa93'}} />
-                <span className="text-lg font-semibold" style={{color: '#F4F4F4', textAlign: 'left'}}>{benefit}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-center space-y-8 mb-12"
-        >
-          <motion.button 
+          <motion.button
+            type="button"
             onClick={scrollToOffer}
-            className="group relative font-black py-6 px-12 rounded-3xl text-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 uppercase tracking-wide border-2 font-montserrat"
-            style={{backgroundColor: '#72fa93', color: '#002552', borderColor: 'rgba(114, 250, 147, 0.3)'}}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="mx-btn mx-btn--primary mx-mds-buy"
+            whileTap={{ scale: 0.97 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-green/20 to-green/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
-            <div className="relative flex items-center justify-center space-x-3">
-              <ShoppingCart style={{width: '24px', height: '24px'}} />
-              <span>ACQUISTA ORA</span>
-              <motion.div
-                className="w-5 h-5"
-                animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                ✨
-              </motion.div>
-            </div>
+            <span className="mx-mds-buy__label">
+              <ShoppingCart size={20} strokeWidth={2.4} />
+              ACQUISTA ORA
+            </span>
+            <span className="mx-btn__icon">
+              <ArrowDown size={20} strokeWidth={2.4} />
+            </span>
           </motion.button>
         </motion.div>
+
+        <div className="mx-mds-hero__benefits">
+          <h3 className="mx-h mx-h--sm mx-mds-hero__btitle">I 3 benefici immediati del Trattamento Osteopatico:</h3>
+          <ul className="mx-mds-checks">
+            {benefits.map((benefit, index) => (
+              <motion.li
+                key={benefit}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, ease: EASE, delay: 0.6 + index * 0.1 }}
+              >
+                <span className="mx-mds-checks__n">0{index + 1}</span>
+                <span className="mx-mds-checks__t">{benefit}</span>
+                <Check size={18} strokeWidth={3} className="mx-mds-checks__ok" />
+              </motion.li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )

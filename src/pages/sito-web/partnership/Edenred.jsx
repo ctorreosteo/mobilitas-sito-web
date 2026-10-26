@@ -1,217 +1,225 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
+import { ArrowDown, Check, CreditCard, Handshake, Target, Ticket } from 'lucide-react'
+import WhatsAppIcon from '../../../components/whatsapp/WhatsAppIcon'
+import PageShell from '../../../components/site/PageShell'
+import FinalCta from '../../../components/site/FinalCta'
+import { Kicker, MaskLines, Reveal } from '../../../components/home-sections/HomeKit'
+import { EASE, MSG_CONSULTO, openWhatsApp, trackSpotlight } from '../../../components/home-sections/homeMotion'
+import { ParallaxPhoto, SectionHead } from '../../../components/site/partnership/PartnerKit'
+import '../../../styles/pages/partner-edenred.css'
 
-const Edenred = () => {
-  const [scrollY, setScrollY] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
+const advantages = [
+  'Utilizzo dei welfare aziendali per i nostri servizi',
+  'Scontistiche specifiche per i titolari di voucher Edenred',
+  'Accesso facilitato ai trattamenti osteopatici',
+  'Benefici per il benessere di tutti i lavoratori',
+]
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+const steps = [
+  {
+    step: '1',
+    title: 'Accedi alla piattaforma Edenred',
+    description: 'Accedi alla piattaforma welfare della tua azienda e genera un voucher per i nostri servizi',
+  },
+  {
+    step: '2',
+    title: 'Prenota il tuo appuntamento',
+    description: 'Contattaci per prenotare la tua visita presso il nostro studio',
+  },
+  {
+    step: '3',
+    title: 'Presenta il voucher al pagamento',
+    description: 'Al momento del pagamento, presenta il voucher generato dalla piattaforma Edenred per usufruire delle scontistiche',
+  },
+  {
+    step: '4',
+    title: 'Goditi il benessere',
+    description: 'Ricevi i nostri trattamenti osteopatici e servizi di benessere con i vantaggi della convenzione',
+  },
+]
 
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
+const fade = (delay) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 1, ease: EASE, delay },
+})
 
-  return (
-    <div className="min-h-screen bg-cream text-blue-dark font-montserrat">
-      
-      {/* HERO SECTION */}
-      <section className="relative flex items-start justify-center overflow-hidden bg-cream pt-8 pb-0">
-        {/* Clean Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-cream"></div>
-        </div>
+// Codice a barre decorativo
+const Barcode = () => (
+  <span className="mx-ed-barcode" aria-hidden="true">
+    {[3, 1, 2, 1, 4, 1, 1, 3, 2, 1, 1, 2, 4, 1, 2, 1, 3, 1, 1, 2, 3, 1, 2, 4, 1, 1, 2].map((w, i) => (
+      <i key={i} style={{ width: w * 2 }} />
+    ))}
+  </span>
+)
 
-        {/* Minimal Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-blue-dark rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-1 h-1 bg-blue-400/60 rounded-full animate-pulse delay-2000"></div>
-        </div>
+const Edenred = () => (
+  <PageShell className="mx-ed">
+    {/* HERO: il voucher */}
+    <section className="mx-ed-hero">
+      <div className="mx-aurora" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pb-0">
-          <div className="text-left">
-            
-            {/* Badge - Top Left Alignment */}
-            <div className={`inline-flex items-center px-4 py-2 bg-transparent border border-gray-400 rounded-full mb-0 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-              <span className="text-blue-400 font-medium text-sm uppercase tracking-wider">Convenzione Welfare</span>
-            </div>
-
-            {/* Main Headline - Mobile Optimized */}
-            <div className={`mb-8 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight text-blue-dark mb-4">
-                <span className="block">Convenzione con</span>
-                <div className="flex items-center mt-2">
-                  <span className="block">Edenred</span>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mx-3"></div>
-                </div>
-              </h1>
-            </div>
-
-            {/* Subtitle */}
-            <div className={`mb-10 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <p className="text-lg text-blue-dark/90 font-light leading-relaxed">
-                Puoi utilizzare i welfare aziendali Edenred per i nostri servizi di osteopatia e benessere
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CONVENZIONE SECTION */}
-      <section className="pt-8 pb-20 bg-cream relative overflow-hidden">
-        {/* Clean Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-cream"></div>
-        </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-left mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-400/10 border border-blue-400/30 rounded-full mb-6">
-              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-              <span className="text-blue-400 font-medium text-sm uppercase tracking-wider">La Convenzione</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-blue-dark mb-6 mt-3 leading-tight">
-              Perché abbiamo scelto
-              <span className="block text-blue-dark">
-                Edenred
+      <div className="mx-wrap mx-ed-hero__layout">
+        <div className="mx-ed-hero__copy mx-pk-fitbox">
+          <motion.div {...fade(0.1)}>
+            <Kicker>Convenzione Welfare</Kicker>
+          </motion.div>
+          <h1 className="mx-h mx-h--xl mx-ed-hero__title">
+            <MaskLines
+              immediate
+              delay={0.2}
+              lines={[
+                { text: 'Convenzione con', className: 'mx-ed-hero__pre' },
+                { text: 'Edenred', className: 'mx-pk-name mx-gradient' },
+              ]}
+            />
+          </h1>
+          <motion.p className="mx-lead mx-ed-hero__lead" {...fade(0.55)}>
+            Puoi utilizzare i welfare aziendali Edenred per i nostri servizi di osteopatia e benessere
+          </motion.p>
+          <motion.div className="mx-ctas mx-ed-hero__ctas" {...fade(0.7)}>
+            <button type="button" className="mx-btn mx-btn--primary" onClick={() => openWhatsApp(MSG_CONSULTO)}>
+              <span>
+                <small>Prenota un</small>
+                Consulto gratuito
               </span>
-            </h2>
-            <p className="text-lg text-blue-dark/70 max-w-2xl leading-relaxed">
-              Una scelta strategica per rendere i nostri servizi accessibili a tutti attraverso i welfare aziendali
-            </p>
-          </div>
+              <span className="mx-btn__icon">
+                <WhatsAppIcon size={20} strokeWidth={2.4} />
+              </span>
+            </button>
+            <a className="mx-btn mx-btn--ghost" href="#come-funziona">
+              <span>
+                <small>Come Funziona</small>
+                Come utilizzare la convenzione
+              </span>
+              <span className="mx-btn__icon">
+                <ArrowDown size={20} strokeWidth={2.4} />
+              </span>
+            </a>
+          </motion.div>
+        </div>
 
-          {/* Main Content */}
-          <div className="max-w-3xl mx-auto mb-16">
-            <div className="space-y-8">
-              {/* Main Reason */}
-              <div className="bg-gradient-to-r from-blue-400/5 to-blue-dark/5 border border-blue-400/20 rounded-3xl p-8">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-4 space-y-4 sm:space-y-0 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white text-xl flex-shrink-0">
-                    💳
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-2xl font-bold text-blue-dark mb-3 mt-0">Accessibilità per Tutti</h3>
-                    <p className="text-blue-dark/80 leading-relaxed">
-                      Abbiamo deciso di fare la convenzione con <strong>Edenred</strong> per dare la possibilità a tutti quanti di usare i <strong>welfare aziendali</strong> per usufruire dei nostri servizi con scontistiche specifiche. Un modo per rendere il benessere accessibile a tutti i lavoratori.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Benefits */}
-              <div className="bg-gradient-to-r from-blue-dark/5 to-blue-400/5 border border-blue-dark/20 rounded-3xl p-8">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-4 space-y-4 sm:space-y-0 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-dark to-blue-600 rounded-xl flex items-center justify-center text-white text-xl flex-shrink-0">
-                    🎯
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-2xl font-bold text-blue-dark mb-3 mt-0">Vantaggi della Convenzione</h3>
-                    <div className="space-y-3">
-                      {[
-                        "Utilizzo dei welfare aziendali per i nostri servizi",
-                        "Scontistiche specifiche per i titolari di voucher Edenred",
-                        "Accesso facilitato ai trattamenti osteopatici",
-                        "Benefici per il benessere di tutti i lavoratori"
-                      ].map((benefit, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                            ✓
-                          </div>
-                          <span className="text-blue-dark/80 font-medium">{benefit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {/* Il voucher */}
+        <motion.div
+          className="mx-ed-ticket-wrap"
+          initial={{ opacity: 0, y: 60, rotate: -10 }}
+          animate={{ opacity: 1, y: 0, rotate: -4 }}
+          transition={{ duration: 1.4, ease: EASE, delay: 0.35 }}
+          aria-hidden="true"
+        >
+          <div className="mx-ed-ticket">
+            <div className="mx-ed-ticket__main">
+              <span className="mx-ed-ticket__label">
+                <Ticket size={16} /> Convenzione Welfare
+              </span>
+              <span className="mx-ed-ticket__title">
+                Mobilitas
+                <br />
+                <span>× Edenred</span>
+              </span>
+              <span className="mx-ed-ticket__line">Welfare aziendali · Osteopatia e benessere</span>
+              <Barcode />
+            </div>
+            <div className="mx-ed-ticket__stub">
+              <img src="/pittogramma.png" alt="" />
+              <span>Voucher</span>
             </div>
           </div>
+          <span className="mx-ed-ticket-shadow" />
+        </motion.div>
+      </div>
+    </section>
 
-          {/* Bottom Highlight */}
-          <div className="bg-gradient-to-r from-blue-400/10 to-blue-dark/10 border border-blue-400/30 rounded-3xl p-8 md:p-12 text-left">
-            <div className="text-5xl mb-6">🤝</div>
-            <h3 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4 mt-0">
-              Benessere accessibile per tutti
+    {/* LA CONVENZIONE */}
+    <section className="mx-section mx-section--glow">
+      <div className="mx-wrap">
+        <SectionHead
+          n="01"
+          kicker="La Convenzione"
+          lines={[{ text: 'Perché abbiamo scelto' }, { text: 'Edenred', className: 'mx-gradient' }]}
+          lead="Una scelta strategica per rendere i nostri servizi accessibili a tutti attraverso i welfare aziendali"
+        />
+
+        <div className="mx-ed-why">
+          <Reveal className="mx-card mx-ed-why__card" onMouseMove={trackSpotlight}>
+            <span className="mx-card__icon">
+              <CreditCard size={24} />
+            </span>
+            <h3 className="mx-h mx-h--md">Accessibilità per Tutti</h3>
+            <p className="mx-lead">
+              Abbiamo deciso di fare la convenzione con <strong>Edenred</strong> per dare la possibilità a tutti quanti di usare i <strong>welfare aziendali</strong> per usufruire dei nostri servizi con scontistiche specifiche. Un modo per rendere il benessere accessibile a tutti i lavoratori.
+            </p>
+          </Reveal>
+
+          <div className="mx-ed-coupons">
+            <h3 className="mx-h mx-h--sm mx-ed-coupons__title">
+              <Target size={20} aria-hidden="true" /> Vantaggi della Convenzione
             </h3>
-            <p className="text-lg text-blue-dark/80 max-w-2xl leading-relaxed">
+            <ul>
+              {advantages.map((a, i) => (
+                <Reveal as="li" key={a} delay={i * 0.08} y={24} className="mx-ed-coupon">
+                  <span className="mx-ed-coupon__check" aria-hidden="true">
+                    <Check size={18} strokeWidth={3} />
+                  </span>
+                  <span className="mx-ed-coupon__text">{a}</span>
+                </Reveal>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Chiusura con foto dello studio */}
+        <div className="mx-ed-band">
+          <ParallaxPhoto base="/home/web/home3" alt="Un trattamento osteopatico nello Studio Mobilitas" sizes="(min-width: 900px) 640px, 100vw" className="mx-ed-band__photo" />
+          <Reveal className="mx-ed-band__text">
+            <span className="mx-ed-band__icon" aria-hidden="true">
+              <Handshake size={24} />
+            </span>
+            <h3 className="mx-h mx-h--md">Benessere accessibile per tutti</h3>
+            <p className="mx-lead">
               Grazie alla convenzione con Edenred, tutti i lavoratori possono accedere ai nostri servizi di benessere utilizzando i welfare aziendali, rendendo la cura della salute più accessibile e conveniente.
             </p>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* COME FUNZIONA SECTION */}
-      <section className="pt-8 pb-20 bg-cream relative overflow-hidden">
-        {/* Clean Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-cream"></div>
-        </div>
+    {/* COME FUNZIONA: la striscia di biglietti */}
+    <section id="come-funziona" className="mx-section mx-section--deep">
+      <div className="mx-wrap">
+        <SectionHead
+          n="02"
+          kicker="Come Funziona"
+          lines={[{ text: 'Come utilizzare' }, { text: 'la convenzione', className: 'mx-gradient' }]}
+          lead="Passaggi semplici per accedere ai nostri servizi con i welfare aziendali"
+        />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-left mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-400/10 border border-blue-400/30 rounded-full mb-6">
-              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-              <span className="text-blue-400 font-medium text-sm uppercase tracking-wider">Come Funziona</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-blue-dark mb-6 mt-3 leading-tight">
-              Come utilizzare
-              <span className="block text-blue-dark">
-                la convenzione
+        <ol className="mx-ed-strip">
+          {steps.map((s, i) => (
+            <Reveal as="li" key={s.step} delay={i * 0.12} className="mx-ed-stub">
+              <span className="mx-ed-stub__n" aria-hidden="true">
+                {s.step.padStart(2, '0')}
               </span>
-            </h2>
-            <p className="text-lg text-blue-dark/70 max-w-2xl leading-relaxed">
-              Passaggi semplici per accedere ai nostri servizi con i welfare aziendali
-            </p>
-          </div>
+              <span className="mx-pk-sr">Passo {s.step}: </span>
+              <h3 className="mx-h mx-h--sm">{s.title}</h3>
+              <p className="mx-body">{s.description}</p>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </section>
 
-          {/* Steps */}
-          <div className="max-w-3xl mx-auto">
-            <div className="space-y-8">
-              {[
-                {
-                  step: "1",
-                  title: "Accedi alla piattaforma Edenred",
-                  description: "Accedi alla piattaforma welfare della tua azienda e genera un voucher per i nostri servizi"
-                },
-                {
-                  step: "2", 
-                  title: "Prenota il tuo appuntamento",
-                  description: "Contattaci per prenotare la tua visita presso il nostro studio"
-                },
-                {
-                  step: "3",
-                  title: "Presenta il voucher al pagamento",
-                  description: "Al momento del pagamento, presenta il voucher generato dalla piattaforma Edenred per usufruire delle scontistiche"
-                },
-                {
-                  step: "4",
-                  title: "Goditi il benessere",
-                  description: "Ricevi i nostri trattamenti osteopatici e servizi di benessere con i vantaggi della convenzione"
-                }
-              ].map((item, index) => (
-                <div key={index} className="flex flex-col sm:flex-row sm:items-start sm:space-x-4 space-y-4 sm:space-y-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                    {item.step}
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-xl font-bold text-blue-dark mb-2 mt-0">{item.title}</h3>
-                    <p className="text-blue-dark/80 leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
-}
+    <FinalCta
+      kicker="Mobilitas × Edenred"
+      titleLines={[{ text: 'Prenota il tuo' }, { text: 'appuntamento.', className: 'mx-gradient' }]}
+      text="Contattaci per prenotare la tua visita presso il nostro studio"
+    />
+  </PageShell>
+)
 
 export default Edenred

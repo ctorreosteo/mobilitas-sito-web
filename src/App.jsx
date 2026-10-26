@@ -35,7 +35,8 @@ import Influencer from './pages/sito-web/posizioni/Influencer'
 
 // Partnership pages
 import GPADEL from './pages/sito-web/partnership/GPADEL'
-import Abylsen from './pages/sito-web/partnership/Abylsen'
+// Abylsen: pagina oscurata (il file resta nel repository ma non è raggiungibile)
+// import Abylsen from './pages/sito-web/partnership/Abylsen'
 import StampaSubalpina from './pages/sito-web/partnership/StampaSubalpina'
 import Robogest from './pages/sito-web/partnership/Robogest'
 import Edenred from './pages/sito-web/partnership/Edenred'
@@ -86,7 +87,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         {/* Main website routes with layout */}
-        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/" element={<Layout hideWhatsApp><Home /></Layout>} />
         <Route path="/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
         <Route path="/contatti" element={<Layout><Contatti /></Layout>} />
         <Route path="/lavora-con-noi" element={<Layout><LavoraConNoi /></Layout>} />
@@ -108,13 +109,13 @@ function App() {
         <Route path="/links" element={<Layout><Links /></Layout>} />
         <Route path="/privacy-policy-applicazione" element={<Layout><PrivacyPolicyApplicazione /></Layout>} />
         <Route path="/supporto-app" element={<Layout><SupportoApp /></Layout>} />
-        <Route path="/cervicalgia" element={<Layout><Cervicalgia /></Layout>} />
+        <Route path="/cervicalgia" element={<Layout hideWhatsApp><Cervicalgia /></Layout>} />
         <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
         <Route path="/yt-postura-v2" element={<Layout hideWhatsApp><YtPosturaV2 /></Layout>} />
-        <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="uomo" /></Layout>} />
-        <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp overflowClip><OffertaPostura variant="donna" /></Layout>} />
+        <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp><OffertaPostura variant="uomo" /></Layout>} />
+        <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp><OffertaPostura variant="donna" /></Layout>} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />
@@ -141,7 +142,7 @@ function App() {
         
         {/* Partnership pages with layout */}
         <Route path="/partnership/gpadel" element={<Layout><GPADEL /></Layout>} />
-        <Route path="/partnership/abylsen" element={<Layout><Abylsen /></Layout>} />
+        {/* Oscurata: <Route path="/partnership/abylsen" element={<Layout><Abylsen /></Layout>} /> */}
         <Route path="/partnership/stampa-subalpina" element={<Layout><StampaSubalpina /></Layout>} />
         <Route path="/partnership/robogest" element={<Layout><Robogest /></Layout>} />
         <Route path="/partnership/edenred" element={<Layout><Edenred /></Layout>} />

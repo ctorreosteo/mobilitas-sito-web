@@ -1,0 +1,28 @@
+/* Piccoli complementi al guscio comune (components/ui/Dialog.css) per il modulo delle landing
+   a pagamento (components/landing/LeadFormSheet.jsx): errori per campo, nota sotto al codice sconto. */
+
+.mx-lsh .mx-lsh__row { grid-template-columns: 1fr 1fr; }
+
+.mx-lsh .mx-dlg-head__text b,
+.mx-lsh .mx-dlg-head__text strong { color: var(--green); font-weight: 800; }
+
+.mx-lsh--inf .mx-dlg-head__text b { color: #38bdf8; }
+
+.mx-lsh .mx-dlg-input { font-size: 16px; } /* niente zoom automatico su iOS */
+.mx-lsh .mx-dlg-input.is-error { border-color: #ff6869; }
+
+.mx-lsh__err {
+  margin: 0 2px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #ffb1b1;
+}
+
+.mx-lsh__hint {
+  margin: 0 2px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: rgba(244, 244, 244, 0.6);
+}
+
+.mx-lsh__link { color: inherit; text-decoration: underline; }

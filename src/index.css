@@ -27,12 +27,14 @@
   
   #root {
     overflow-x: hidden;
+    overflow-x: clip; /* non crea un contenitore di scroll: position: sticky continua a funzionare */
     width: 100%;
     max-width: 100vw;
   }
   
   html, body {
     overflow-x: hidden;
+    overflow-x: clip; /* non crea un contenitore di scroll: position: sticky continua a funzionare */
     width: 100%;
     max-width: 100vw;
   }
@@ -61,12 +63,14 @@
   @media (max-width: 768px) {
     body {
       overflow-x: hidden !important;
+      overflow-x: clip !important;
       width: 100vw !important;
       max-width: 100vw !important;
     }
     
     #root {
       overflow-x: hidden !important;
+      overflow-x: clip !important;
       width: 100vw !important;
       max-width: 100vw !important;
     }
@@ -334,38 +338,6 @@
     animation-delay: 4s;
   }
 
-  /* Sidebar animations */
-  .sidebar-enter {
-    transform: translateX(-100%);
-  }
-  
-  .sidebar-enter-active {
-    transform: translateX(0);
-    transition: transform 300ms ease-in-out;
-  }
-  
-  .sidebar-exit {
-    transform: translateX(0);
-  }
-  
-  .sidebar-exit-active {
-    transform: translateX(-100%);
-    transition: transform 300ms ease-in-out;
-  }
-
-  /* Scrollbar nativa nascosta: usiamo un indicatore custom sempre visibile */
-  .sidebar-scroll {
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .sidebar-scroll::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-  }
-
   /* Form premium – popup prenotazione (sfondo scuro, glow verde, nessun bianco) */
   .input-premium,
   .select-premium {
@@ -625,16 +597,6 @@
     66% {
       transform: translateY(10px) translateX(-10px);
     }
-  }
-
-  /* Nascondi il banner iubenda quando la classe hide-iubenda-banner è presente sul body */
-  body.hide-iubenda-banner #iubenda-cs-banner,
-  body.hide-iubenda-banner .iubenda-cs-banner,
-  body.hide-iubenda-banner [id*="iubenda"],
-  body.hide-iubenda-banner [class*="iubenda-cs"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
   }
 
 @keyframes offerta-marquee {

@@ -1,0 +1,337 @@
+/* Stampa Subalpina: la prima pagina. Testata, filetti, colonne, capilettera. */
+
+.mx-ss-rule {
+  display: block;
+  height: 2px;
+  background: var(--cream);
+  transform-origin: left;
+}
+
+.mx-ss-rule.is-double {
+  height: 6px;
+  background: none;
+  border-top: 2px solid var(--cream);
+  border-bottom: 1px solid var(--cream);
+}
+
+/* ---------- Hero / testata ---------- */
+.mx-ss-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(40px, 6vw, 80px) 0 clamp(72px, 9vw, 120px);
+  background:
+    radial-gradient(60% 50% at 90% 20%, rgba(56, 189, 248, 0.14), transparent 70%),
+    linear-gradient(180deg, var(--navy) 0%, var(--ink) 100%);
+}
+
+/* Righe orizzontali da carta stampata, appena visibili */
+.mx-ss-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, rgba(244, 244, 244, 0.025) 0 1px, transparent 1px 28px);
+}
+
+.mx-ss-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mx-ss-strip__mid { color: var(--green); }
+
+:is(.mx-home, .mx-page) h1.mx-ss-masthead {
+  padding: clamp(18px, 3vw, 36px) 0 clamp(14px, 2vw, 24px);
+}
+
+:is(.mx-home, .mx-page) .mx-ss-masthead__pre {
+  font-size: clamp(1.1rem, 2.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 0.3em;
+}
+
+.mx-ss-masthead__name { --mx-fit: 9; --mx-k: 0.6; --mx-max: 15rem; letter-spacing: -0.055em; }
+
+.mx-ss-front {
+  display: grid;
+  gap: 36px;
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+@media (min-width: 1024px) {
+  .mx-ss-front { grid-template-columns: 0.85fr 1.15fr; gap: 56px; align-items: start; }
+
+  .mx-ss-front__lead {
+    padding-right: 56px;
+    border-right: 1px solid var(--line);
+  }
+}
+
+.mx-ss-front__ctas { margin-top: 32px; }
+
+@media (min-width: 1024px) {
+  .mx-ss-front__ctas { flex-direction: column; align-items: stretch; }
+}
+
+/* Capolettera */
+.mx-ss-dropcap::first-letter {
+  float: left;
+  margin: 0.06em 0.12em 0 0;
+  font-weight: 900;
+  font-size: 3.6em;
+  line-height: 0.8;
+  color: var(--green);
+}
+
+.mx-ss-front__photo { margin: 0; }
+
+.mx-ss-front__frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(244, 244, 244, 0.25);
+  padding: 8px;
+  background: rgba(244, 244, 244, 0.04);
+}
+
+.mx-ss-front__frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1600 / 940;
+  object-fit: cover;
+  filter: saturate(0.9) contrast(1.05);
+}
+
+.mx-ss-front__photo figcaption {
+  margin-top: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--green);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.mx-ss-front__photo figcaption b { color: var(--cream); }
+
+/* ---------- Articolo in colonne ---------- */
+.mx-ss-article {
+  display: grid;
+  gap: 32px;
+  margin-top: clamp(48px, 6vw, 80px);
+  padding-top: 28px;
+  border-top: 2px solid var(--cream);
+}
+
+@media (min-width: 900px) {
+  .mx-ss-article { grid-template-columns: 1fr 1fr; gap: 0; }
+  .mx-ss-article__col { padding-right: 40px; }
+  .mx-ss-article__col + .mx-ss-article__col { padding: 0 0 0 40px; border-left: 1px solid var(--line); }
+}
+
+:is(.mx-home, .mx-page) .mx-ss-subhead {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Evento: data come titolo di cronaca */
+.mx-ss-event {
+  display: grid;
+  gap: 24px;
+  margin-top: clamp(72px, 9vw, 120px);
+  padding: clamp(24px, 4vw, 48px) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 900px) {
+  .mx-ss-event { grid-template-columns: auto 1fr; gap: 56px; align-items: center; }
+}
+
+.mx-ss-event__date {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mx-ss-event__date span:first-child {
+  font-weight: 900;
+  font-size: clamp(5.5rem, 12vw, 10rem);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--green);
+}
+
+.mx-ss-event__date span:last-child {
+  font-weight: 900;
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+:is(.mx-home, .mx-page) .mx-ss-event__title { margin-bottom: 18px; }
+
+/* ---------- Chi è: tre colonne ---------- */
+.mx-ss-columns {
+  display: grid;
+  gap: 0;
+  margin-top: clamp(48px, 6vw, 80px);
+  border-top: 2px solid var(--cream);
+}
+
+.mx-ss-col {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mx-ss-col > svg { color: var(--green); margin-bottom: 16px; }
+:is(.mx-home, .mx-page) .mx-ss-col h3.mx-h { margin-bottom: 12px; }
+
+@media (min-width: 1000px) {
+  .mx-ss-columns { grid-template-columns: repeat(3, 1fr); }
+  .mx-ss-col { padding: 32px 36px 36px 0; border-bottom: 0; }
+  .mx-ss-col + .mx-ss-col { padding-left: 36px; border-left: 1px solid var(--line); }
+}
+
+/* Sommario con puntini di guida */
+.mx-ss-index ol { margin: 0; padding: 0; list-style: none; }
+
+.mx-ss-index li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 0;
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--cream);
+}
+
+.mx-ss-index li i {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 2px dotted rgba(244, 244, 244, 0.25);
+  transform: translateY(-4px);
+}
+
+.mx-ss-index li b { font-weight: 900; color: var(--green); font-variant-numeric: tabular-nums; }
+
+.mx-ss-duo {
+  display: grid;
+  gap: 18px;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+@media (min-width: 1000px) {
+  .mx-ss-duo { grid-template-columns: 1fr 1fr; gap: 22px; }
+}
+
+:is(.mx-home, .mx-page) .mx-ss-values h3.mx-h { margin-bottom: 24px; }
+
+/* Colophon: la sede, come un riquadro "carta" */
+.mx-ss-colophon {
+  position: relative;
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--navy);
+  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8);
+}
+
+.mx-ss-colophon::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(0, 37, 82, 0.2);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.mx-ss-colophon__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0b5e2a;
+}
+
+:is(.mx-home, .mx-page) .mx-ss-colophon h3.mx-h { color: var(--navy); margin-bottom: 18px; }
+:is(.mx-home, .mx-page) .mx-ss-colophon .mx-body { color: rgba(0, 37, 82, 0.8); }
+.mx-ss-colophon strong { color: var(--navy) !important; }
+.mx-ss-colophon .mx-tags { margin: 24px 0 0; padding: 0; list-style: none; }
+.mx-ss-colophon .mx-tag { color: var(--navy); border-color: rgba(0, 37, 82, 0.3); font-weight: 700; }
+
+/* ---------- Benefici: la prima pagina ---------- */
+.mx-ss-page {
+  display: grid;
+  margin-top: clamp(56px, 7vw, 96px);
+  border-top: 6px double var(--cream);
+}
+
+.mx-ss-page__bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cream);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mx-ss-story {
+  position: relative;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mx-ss-story__n {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--green);
+}
+
+:is(.mx-home, .mx-page) .mx-ss-story h3.mx-h { margin-bottom: 16px; }
+:is(.mx-home, .mx-page) .mx-ss-story--lead h3.mx-h { font-size: clamp(2rem, 4.4vw, 4rem) !important; }
+
+@media (min-width: 1000px) {
+  .mx-ss-page { grid-template-columns: 1.35fr 0.65fr; }
+  .mx-ss-page__bar { grid-column: 1 / -1; }
+  .mx-ss-story--lead { padding: 40px 48px 40px 0; border-right: 1px solid var(--line); }
+  .mx-ss-page__side .mx-ss-story { padding: 40px 0 40px 40px; }
+  .mx-ss-page__side .mx-ss-story:last-child { border-bottom: 0; }
+  .mx-ss-story--wide {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 0.45fr 1fr;
+    column-gap: 48px;
+    border-top: 1px solid var(--line);
+  }
+  .mx-ss-story--wide .mx-ss-story__n { grid-column: 1 / -1; }
+}
+
+@media (max-width: 767px) {
+  .mx-ss-strip { font-size: 0.62rem; letter-spacing: 0.14em; }
+  .mx-ss-strip > span:last-child { display: none; }
+  .mx-ss-hero { padding: 28px 0 72px; }
+  .mx-ss-front__frame { padding: 6px; }
+}

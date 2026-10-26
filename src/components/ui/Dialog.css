@@ -1,0 +1,445 @@
+/* Popup del sito (Dialog.jsx): guscio, intestazione e campi del form */
+
+.mx-dlg {
+  --navy: #002552;
+  --ink: #000f2b;
+  --green: #72fa93;
+  --sky: #38bdf8;
+  --cream: #f4f4f4;
+  --red: #ff6869;
+  --line: rgba(244, 244, 244, 0.14);
+  --muted: rgba(244, 244, 244, 0.68);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 10, 30, 0.62);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-primary), 'Montserrat', sans-serif;
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 640px) {
+  .mx-dlg { align-items: center; padding: 24px; }
+}
+
+/* ---------- Pannello ---------- */
+
+.mx-dlg__panel {
+  position: relative;
+  width: 100%;
+  max-height: 92svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 26px 22px calc(24px + env(safe-area-inset-bottom));
+  border-radius: 28px 28px 0 0;
+  background:
+    radial-gradient(90% 60% at 100% 0%, rgba(56, 189, 248, 0.16), transparent 60%),
+    radial-gradient(70% 50% at 0% 100%, rgba(114, 250, 147, 0.1), transparent 60%),
+    linear-gradient(180deg, #002f66 0%, var(--navy) 40%, var(--ink) 100%);
+  color: var(--cream);
+  box-shadow: 0 -20px 60px -20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  outline: none;
+  scrollbar-width: thin;
+}
+
+/* Filo verde in alto */
+.mx-dlg__panel::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), var(--sky), transparent);
+  opacity: 0.8;
+}
+
+@media (min-width: 640px) {
+  .mx-dlg__panel {
+    padding: 34px 34px 32px;
+    border-radius: 28px;
+    box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(244, 244, 244, 0.1);
+  }
+  .mx-dlg__panel--sm { max-width: 460px; }
+  .mx-dlg__panel--md { max-width: 560px; }
+  .mx-dlg__panel--lg { max-width: 760px; }
+}
+
+.mx-dlg__grip {
+  position: absolute;
+  left: 50%;
+  top: 9px;
+  width: 44px;
+  height: 5px;
+  margin-left: -22px;
+  border-radius: 99px;
+  background: rgba(244, 244, 244, 0.25);
+}
+
+@media (min-width: 640px) {
+  .mx-dlg__grip { display: none; }
+}
+
+.mx-dlg__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.mx-dlg__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(244, 244, 244, 0.06);
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.4s var(--ease), border-color 0.2s;
+}
+
+.mx-dlg__close:hover:not(:disabled) { background: rgba(244, 244, 244, 0.14); transform: rotate(90deg); }
+.mx-dlg__close:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.mx-dlg__close:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------- Intestazione ---------- */
+
+.mx-dlg-head { padding-right: 44px; margin-bottom: 22px; }
+
+.mx-dlg-head__kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.mx-dlg-head__kicker::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Titoli: dimensioni fissate qui per non subire le regole mobile di index.css */
+@layer base {
+  .mx-dlg .mx-dlg-head__title {
+    margin: 0;
+    font-family: var(--font-primary), 'Montserrat', sans-serif !important;
+    font-size: clamp(1.55rem, 5.6vw, 2rem) !important;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--cream);
+  }
+}
+
+.mx-dlg-head__subtitle {
+  display: inline-flex;
+  margin: 14px 0 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(114, 250, 147, 0.14);
+  border: 1px solid rgba(114, 250, 147, 0.35);
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.mx-dlg-head__text {
+  margin: 14px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---------- Form ---------- */
+
+.mx-dlg-form { display: grid; gap: 14px; }
+
+.mx-dlg-row { display: grid; gap: 14px; }
+
+.mx-dlg-row--2 { grid-template-columns: 1fr 1fr; }
+
+@media (max-width: 339px) {
+  .mx-dlg-row--2 { grid-template-columns: 1fr; }
+}
+
+.mx-dlg-field { display: grid; gap: 7px; }
+
+.mx-dlg-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 244, 0.75);
+}
+
+.mx-dlg-input,
+.mx-dlg-select,
+.mx-dlg-textarea {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 18px;
+  border: 1px solid rgba(244, 244, 244, 0.18);
+  border-radius: 16px;
+  background: rgba(0, 15, 43, 0.55);
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.mx-dlg-textarea { min-height: 110px; padding: 14px 18px; resize: vertical; line-height: 1.5; }
+
+.mx-dlg-input::placeholder,
+.mx-dlg-textarea::placeholder { color: rgba(244, 244, 244, 0.32); font-weight: 500; }
+
+.mx-dlg-input:focus,
+.mx-dlg-select:focus,
+.mx-dlg-textarea:focus {
+  border-color: var(--green);
+  background: rgba(0, 15, 43, 0.75);
+  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.16);
+}
+
+.mx-dlg-select {
+  padding-right: 46px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2372fa93' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+}
+
+.mx-dlg-select option { background: #001a3d; color: var(--cream); }
+.mx-dlg-select:invalid { color: rgba(244, 244, 244, 0.45); }
+
+/* Scelte a pillola (es. fascia oraria) */
+.mx-dlg-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.mx-dlg-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(244, 244, 244, 0.18);
+  border-radius: 999px;
+  background: rgba(244, 244, 244, 0.04);
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.mx-dlg-chip:hover { border-color: rgba(114, 250, 147, 0.5); }
+.mx-dlg-chip[aria-pressed='true'],
+.mx-dlg-chip[aria-checked='true'] { background: var(--green); border-color: var(--green); color: var(--navy); }
+.mx-dlg-chip:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+.mx-dlg-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.mx-dlg-check input { width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0; accent-color: var(--green); }
+
+.mx-dlg-error {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 104, 105, 0.35);
+  background: rgba(255, 104, 105, 0.1);
+  color: #ffc9c9;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.mx-dlg-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  margin-top: 6px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green);
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 18px 40px -16px rgba(114, 250, 147, 0.8);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s, opacity 0.2s;
+}
+
+.mx-dlg-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 22px 46px -14px rgba(114, 250, 147, 0.9); }
+.mx-dlg-submit:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+.mx-dlg-submit:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+.mx-dlg-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(0, 37, 82, 0.3);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: mx-dlg-spin 0.8s linear infinite;
+}
+
+@keyframes mx-dlg-spin { to { transform: rotate(360deg); } }
+
+.mx-dlg-note {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 244, 0.5);
+}
+
+/* Variante chiara (se una pagina ne ha bisogno) */
+.mx-dlg--light .mx-dlg__panel { background: #fff; color: var(--navy); }
+.mx-dlg--light .mx-dlg__close { color: var(--navy); border-color: rgba(0, 37, 82, 0.15); background: rgba(0, 37, 82, 0.04); }
+.mx-dlg--light .mx-dlg-head__text,
+.mx-dlg--light .mx-dlg-label { color: rgba(0, 37, 82, 0.72); }
+
+@layer base {
+  .mx-dlg--light .mx-dlg-head__title { color: var(--navy); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-dlg-spinner { animation-duration: 2s; }
+}
+
+/* ---------- Stato "inviato" dentro il popup ---------- */
+
+.mx-dlg-done { display: grid; justify-items: start; gap: 4px; }
+
+.mx-dlg-done__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--navy);
+  box-shadow: 0 0 0 10px rgba(114, 250, 147, 0.14), 0 18px 40px -12px rgba(114, 250, 147, 0.7);
+}
+
+.mx-dlg-done__info {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.05);
+}
+
+.mx-dlg-done__info p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--cream);
+}
+
+.mx-dlg-done__info svg { flex-shrink: 0; margin-top: 2px; color: var(--green); }
+
+/* Errore sotto un singolo campo */
+.mx-dlg-fielderr {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffb3b3;
+}
+
+.mx-dlg-input[aria-invalid='true'] { border-color: rgba(255, 104, 105, 0.7); }
+.mx-dlg-check a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Elenco di azioni (es. condivisione) */
+.mx-dlg-actions { display: grid; gap: 10px; }
+
+.mx-dlg-action {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 18px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(244, 244, 244, 0.05);
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.mx-dlg-action:hover { background: rgba(114, 250, 147, 0.1); border-color: rgba(114, 250, 147, 0.4); }
+.mx-dlg-action:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+.mx-dlg-action__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(114, 250, 147, 0.14);
+  color: var(--green);
+}
+
+/* Telefono: form più compatto, il bottone d'invio deve stare nello schermo */
+@media (max-width: 639px) {
+  .mx-dlg__panel { padding-top: 24px; }
+  .mx-dlg-head { margin-bottom: 16px; }
+  .mx-dlg-head__subtitle { margin-top: 10px; }
+  .mx-dlg-head__text { margin-top: 10px; font-size: 0.86rem; }
+  .mx-dlg-form,
+  .mx-dlg-row { gap: 11px; }
+  .mx-dlg-field { gap: 5px; }
+  .mx-dlg-input,
+  .mx-dlg-select { min-height: 50px; padding: 0 14px; border-radius: 14px; }
+  .mx-dlg-select { padding-right: 40px; background-position: right 14px center; }
+  .mx-dlg-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .mx-dlg-chip { min-height: 44px; padding: 6px 10px; justify-content: center; text-align: center; font-size: 0.76rem; line-height: 1.2; border-radius: 14px; }
+  .mx-dlg-chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .mx-dlg-submit { min-height: 56px; font-size: 0.95rem; }
+}

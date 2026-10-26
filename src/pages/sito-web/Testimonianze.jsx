@@ -1,11 +1,19 @@
-import React, { useEffect } from 'react'
-import { Star, Users, Award, TrendingUp, ExternalLink, Shield, CheckCircle, Heart } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Star, Users, Award, Shield, CheckCircle, Plus } from 'lucide-react'
+import PageShell from '../../components/site/PageShell'
+import FinalCta from '../../components/site/FinalCta'
+import { Counter, Kicker, MaskLines, Reveal, Snap } from '../../components/home-sections/HomeKit'
+import { trackSpotlight } from '../../components/home-sections/homeMotion'
+import { RECENSIONI_IMAGES } from '../../data/recensioni'
+import { RECENSIONI_TOTALI } from '../../data/studi'
+import GoogleReviewsLinks from '../../components/GoogleReviewsLinks'
+import '../../styles/pages/testimonianze.css'
 
 const Testimonianze = () => {
   // SEO metadata for Testimonianze page
   useEffect(() => {
     const previousTitle = document.title
-    document.title = 'Testimonianze Osteopata Torino | Recensioni Studio Mobilitas – 420+ Recensioni 5 Stelle'
+    document.title = `Testimonianze Osteopata Torino | Recensioni Studio Mobilitas – Oltre ${RECENSIONI_TOTALI} Recensioni 5 Stelle`
 
     const ensureMetaByName = (name, content) => {
       let tag = document.querySelector(`meta[name="${name}"]`)
@@ -37,7 +45,7 @@ const Testimonianze = () => {
       link.setAttribute('href', href)
     }
 
-    const description = 'Leggi le testimonianze dei pazienti dello Studio Osteopatico Mobilitas Torino. 420+ recensioni verificate con 5 stelle su Google. Storie di successo su mal di schiena, cervicale, sciatalgia e postura.'
+    const description = `Leggi le testimonianze dei pazienti dello Studio Osteopatico Mobilitas Torino. Oltre ${RECENSIONI_TOTALI} recensioni verificate con 5 stelle su Google nei nostri due studi. Storie di successo su mal di schiena, cervicale, sciatalgia e postura.`
     const pageUrl = `${window.location.origin}/testimonianze`
 
     // Standard SEO
@@ -62,171 +70,193 @@ const Testimonianze = () => {
 
 
   const stats = [
-    { number: "420+", label: "Recensioni verificate", icon: Star, color: "text-yellow-500" },
-    { number: "5.0/5", label: "Valutazione media", icon: Award, color: "text-azure-dark" },
-    { number: "95%", label: "Soddisfazione clienti", icon: Heart, color: "text-azure-dark" },
-    { number: "1°", label: "Studio più richiesto d'Italia", icon: TrendingUp, color: "text-blue-dark" }
+    { to: RECENSIONI_TOTALI, suffix: '+', label: 'Recensioni verificate' },
+    { to: 5, decimals: 1, suffix: '/5', label: 'Valutazione media' },
+    { to: 95, suffix: '%', label: 'Soddisfazione clienti' },
+    { to: 1, suffix: '°', label: "Studio più richiesto d'Italia" },
   ]
 
   const achievements = [
     {
-        icon: Shield,
-        title: "Grandezza",
-        description: "Siamo lo Studio Osteopatico più grande d'Italia",
-        highlight: false
-    },
-    {
-        icon: Shield,
-        title: "Specializzazione",
-        description: "I nostri professionisti sono specializzati in ogni area della salute",
-        highlight: false
+      icon: Award,
+      title: 'Grandezza',
+      description: "Siamo lo Studio Osteopatico più grande d'Italia",
     },
     {
       icon: Shield,
-      title: "Recensioni Verificate",
-      description: "Tutte le nostre recensioni sono autentiche e verificate da Google",
-      highlight: false
+      title: 'Specializzazione',
+      description: 'I nostri professionisti sono specializzati in ogni area della salute',
+    },
+    {
+      icon: Star,
+      title: 'Recensioni Verificate',
+      description: 'Tutte le nostre recensioni sono autentiche e verificate da Google',
     },
     {
       icon: Users,
-      title: "Oltre 4000 Clienti Soddisfatti",
-      description: "Persone che hanno scelto di riprendere il controllo della propria salute",
-      highlight: false
+      title: 'Oltre 4000 Clienti Soddisfatti',
+      description: 'Persone che hanno scelto di riprendere il controllo della propria salute',
     },
     {
       icon: CheckCircle,
-      title: "Risultati Duraturi",
-      description: "I nostri clienti mantengono i risultati nel tempo, non solo durante il trattamento",
-      highlight: false
-    }
+      title: 'Risultati Duraturi',
+      description: 'I nostri clienti mantengono i risultati nel tempo, non solo durante il trattamento',
+    },
   ]
 
-  const handleGoogleReviewsClick = () => {
-    window.open('https://www.google.com/search?q=Studio+Osteopatico+-+OsteoTouch+SRL+-+Osteopata+Torino&stick=H4sIAAAAAAAA_-NgU1IxqEhLNUo1skwztjBMS0m2NLYyqLA0T01NNTQ3SU5MMjBPTElcxGoWXFKakpmv4F9ckppfkFiSmZyvoAvhheSXJmcoBAf5wASA0okKI%20flFmXn5AE3a9AxhAAAA&hl=it&mat=CXo9HS-cpKcEElYBmzl_pSjKAk19ZjNmiUWNb1lVW4Rrxha9bmGQktuOJIndl5ahaBrVIi0EYe_OIThjlUSv5uUay4jbSfowMvuOp2Pwo4pd9UW4rHzQpGMyOnvtsuDoxg&authuser=0#mpd=~335417687974690170/customers/reviews', '_blank')
-  }
+
+  const PAGE_SIZE = 9
+
+  // Quattro colonne per il muro dell'apertura (le prime 48 recensioni)
+  const wallColumns = [0, 1, 2, 3].map((c) => RECENSIONI_IMAGES.slice(0, 48).filter((_, i) => i % 4 === c))
+  const [visibleReviews, setVisibleReviews] = useState(PAGE_SIZE)
 
   return (
-    <div className="min-h-screen bg-cream">
-      <div className="max-w-7xl mx-auto px-8 py-16">
-        <div className="text-left">
-              <div className="flex items-center gap-3 bg-sky-400/10 border border-sky-400/30 rounded-full px-6 py-3 shadow-lg backdrop-blur-sm w-fit">
-                <Award className="w-6 h-6 text-sky-400 flex-shrink-0" />
-                <span className="text-lg font-bold text-sky-400 font-montserrat leading-tight">
-                  #1 Studio Osteopatico<br />d'Italia
-                </span>
-              </div>
-              
-              <h1 className="text-4xl md:text-6xl font-bold mb-8 font-montserrat text-blue-dark">
-                Lo Studio Osteopatico più
-                <span className="text-azure-dark block">richiesto d'Italia</span>
-              </h1>
-              
-              <p className="text-xl md:text-2xl text-blue-dark/80 mb-12 font-montserrat leading-relaxed">
-                Con oltre <span className="font-bold text-azure-dark">420+ recensioni verificate</span> e una valutazione di <span className="font-bold text-azure-dark">5.0/5 stelle</span>, 
-                siamo lo studio osteopatico con più testimonianze e richieste di tutta Italia.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-6 justify-start items-start">
-                <button 
-                  onClick={handleGoogleReviewsClick}
-                  className="group bg-blue-dark hover:bg-blue-dark/90 text-green font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-montserrat text-lg"
-                >
-                  <ExternalLink className="inline-block mr-3 w-6 h-6" />
-                  Leggi tutte le recensioni su Google
-                </button>
-                <div className="flex items-center gap-2 text-blue-dark/70">
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span className="font-montserrat">5.0/5 su Google Reviews</span>
+    <PageShell>
+      {/* Apertura: il titolo davanti a un muro di recensioni vere che scorre in colonne */}
+      <section className="mx-testi-hero">
+        <div className="mx-testi-wall" aria-hidden="true">
+          {wallColumns.map((col, c) => (
+            <div key={c} className="mx-testi-wall__col" style={{ '--mx-dur': `${70 + c * 14}s` }}>
+              {[0, 1].map((copy) => (
+                <div key={copy} className={`mx-testi-wall__track ${c % 2 ? 'is-down' : ''}`}>
+                  {col.map((src) => (
+                    <img key={src} src={src} alt="" loading="lazy" decoding="async" />
+                  ))}
                 </div>
-              </div>
+              ))}
+            </div>
+          ))}
         </div>
+        <div className="mx-testi-hero__veil" aria-hidden="true" />
 
-        <div className="text-left mb-16 mt-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-6 font-montserrat">
-                Perché siamo il <span className="text-azure-dark">#1</span>
-              </h2>
-              <p className="text-lg text-blue-dark/80 max-w-3xl font-montserrat">
+        <div className="mx-wrap mx-testi-hero__content">
+          <Kicker>#1 Studio Osteopatico d'Italia</Kicker>
+          <h1 className="mx-h mx-h--xl">
+            <MaskLines
+              immediate
+              delay={0.2}
+              lines={[
+                { text: 'Lo Studio' },
+                { text: 'Osteopatico più' },
+                { text: 'richiesto', className: 'mx-gradient' },
+                { text: "d'Italia.", className: 'mx-outline' },
+              ]}
+            />
+          </h1>
+          <Reveal delay={0.5}>
+            <p className="mx-lead mx-testi-hero__lead">
+              Con oltre <strong>{RECENSIONI_TOTALI} recensioni verificate</strong> e una valutazione di <strong>5.0/5 stelle</strong>,
+              siamo lo studio osteopatico con più testimonianze e richieste di tutta Italia.
+            </p>
+          </Reveal>
+          <Reveal delay={0.65}>
+            <GoogleReviewsLinks />
+            <p className="mx-trust">
+              <span className="mx-trust__item">
+                <span className="mx-stars">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={15} />
+                  ))}
+                </span>
+                5.0/5 su Google Reviews
+              </span>
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="mx-section mx-section--deep">
+        <div className="mx-wrap">
+          <Kicker n="01">I numeri</Kicker>
+          <div className="mx-split" style={{ marginTop: 0, alignItems: 'end' }}>
+            <h2 className="mx-h mx-h--lg">
+              <MaskLines lines={[{ text: 'Perché siamo' }, { text: 'il #1.', className: 'mx-gradient' }]} />
+            </h2>
+            <Reveal>
+              <p className="mx-lead">
                 I numeri parlano chiaro: siamo lo studio osteopatico più richiesto e recensito d'Italia
               </p>
-            </div>
+            </Reveal>
+          </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-              {achievements.map((achievement, index) => {
-                const IconComponent = achievement.icon
-                return (
-                  <div key={index} className={`text-left p-8 rounded-2xl transition-all duration-300 hover:shadow-lg ${
-                    achievement.highlight 
-                      ? 'bg-gradient-to-br from-azure-dark/10 to-azure-dark/20 border-2 border-azure-dark/30' 
-                      : 'bg-cream shadow-sm'
-                  }`}>
-                    <div className={`w-16 h-16 mb-6 rounded-full flex items-center justify-center ${
-                      achievement.highlight ? 'bg-azure-dark/20' : 'bg-blue-dark/10'
-                    }`}>
-                      <IconComponent className={`w-8 h-8 ${
-                        achievement.highlight ? 'text-azure-dark' : 'text-blue-dark'
-                      }`} />
-                    </div>
-                    <h3 className={`text-xl font-bold mb-4 font-montserrat ${
-                      achievement.highlight ? 'text-azure-dark' : 'text-blue-dark'
-                    }`}>
-                      {achievement.title}
-                    </h3>
-                    <p className="text-blue-dark/70 font-montserrat">
-                      {achievement.description}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {stats.map((stat, index) => {
-                const IconComponent = stat.icon
-                return (
-                  <div key={index} className="text-left bg-cream rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <IconComponent className={`w-8 h-8 mb-3 ${stat.color}`} />
-                    <div className="text-2xl md:text-3xl font-bold text-blue-dark mb-2 font-montserrat">
-                      {stat.number}
-                    </div>
-                    <div className="text-sm text-blue-dark/70 font-montserrat">
-                      {stat.label}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-        <div className="text-left mt-16">
-              <div className="inline-flex items-center gap-2 bg-blue-dark/10 rounded-full p-0 m-0">
-                <ExternalLink className="w-5 h-5 text-blue-dark" />
-                <span className="text-sm font-medium text-blue-dark font-montserrat">
-                  Leggi tutte le recensioni
+          <div className="mx-stats">
+            {stats.map((s) => (
+              <div key={s.label} className="mx-stat">
+                <span className="mx-stat__num">
+                  <Counter to={s.to} decimals={s.decimals || 0} suffix={s.suffix} />
                 </span>
+                <span className="mx-stat__label">{s.label}</span>
               </div>
-              
-              <h3 className="text-2xl md:text-3xl font-bold mb-6 font-montserrat text-blue-dark">
-                Vuoi leggere tutte le nostre recensioni?
-              </h3>
-              
-              <p className="text-lg text-blue-dark/80 mb-8 font-montserrat">
-                Su Google puoi trovare oltre <span className="font-semibold text-azure-dark">420+ recensioni verificate</span> di persone che hanno scelto di cambiare vita con noi.
-              </p>
+            ))}
+          </div>
 
-              <button 
-                onClick={handleGoogleReviewsClick}
-                className="group bg-blue-dark hover:bg-blue-dark/90 text-green font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-montserrat text-lg"
-              >
-                <ExternalLink className="inline-block mr-3 w-6 h-6" />
-                Leggi tutte le recensioni su Google
-              </button>
+          <Snap className="mx-cards3 mx-achievements">
+            {achievements.map((a, i) => {
+              const Icon = a.icon
+              return (
+                <Reveal key={a.title} delay={i * 0.06} className="mx-card" onMouseMove={trackSpotlight}>
+                  <span className="mx-card__icon">
+                    <Icon size={24} />
+                  </span>
+                  <h3 className="mx-h mx-h--sm">{a.title}</h3>
+                  <p className="mx-body">{a.description}</p>
+                </Reveal>
+              )
+            })}
+          </Snap>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section className="mx-section mx-section--glow">
+        <div className="mx-wrap">
+          <Kicker n="02">Recensioni Google</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines lines={[{ text: 'Non credere solo' }, { text: 'alle nostre parole.', className: 'mx-outline' }]} />
+          </h2>
+
+          <div className="mx-review-wall">
+            {RECENSIONI_IMAGES.slice(0, visibleReviews).map((src, i) => (
+              <Reveal key={src} delay={(i % PAGE_SIZE) * 0.03} y={24} className="mx-review-wall__item">
+                <img src={src} alt={`Recensione Google ${i + 1}`} loading="lazy" decoding="async" />
+              </Reveal>
+            ))}
+          </div>
+
+          {visibleReviews < RECENSIONI_IMAGES.length && (
+            <div className="mx-review-wall__more">
+              <button
+                type="button"
+                className="mx-btn mx-btn--ghost"
+                onClick={() => setVisibleReviews((n) => n + PAGE_SIZE)}
+              >
+                <span>
+                  <small>
+                    {visibleReviews} di {RECENSIONI_IMAGES.length}
+                  </small>
+                  Mostra altre recensioni
+                </span>
+                <span className="mx-btn__icon">
+                  <Plus size={20} strokeWidth={2.4} />
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <FinalCta
+        kicker="Leggi tutte le recensioni"
+        titleLines={[{ text: 'Vuoi leggerle' }, { text: 'tutte?', className: 'mx-gradient' }]}
+        text={
+          <>
+            Su Google puoi trovare oltre <strong>{RECENSIONI_TOTALI} recensioni verificate</strong> di persone che hanno scelto di cambiare vita con noi.
+          </>
+        }
+      >
+        <GoogleReviewsLinks align="center" className="mx-testi-final-reviews" />
+      </FinalCta>
+    </PageShell>
   )
 }
 

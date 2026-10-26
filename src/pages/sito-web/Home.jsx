@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { MotionConfig } from 'framer-motion'
 import HeroSection from '../../components/home-sections/HeroSection'
 import TargetAudienceSection from '../../components/home-sections/TargetAudienceSection'
 import ProblemsSection from '../../components/home-sections/ProblemsSection'
 import TestimonialsSection from '../../components/home-sections/TestimonialsSection'
 import ServicesOverviewSection from '../../components/home-sections/ServicesOverviewSection'
 import BioSection from '../../components/home-sections/BioSection'
-import LoadingAnimation from '../../components/LoadingAnimation'
-import SectionDivider from '../../components/SectionDivider'
+import TouchSpineSection from '../../components/home-sections/TouchSpineSection'
+import SpineProgress from '../../components/home-sections/SpineProgress'
+import MobileDock from '../../components/home-sections/MobileDock'
+import WhatsAppButtonSito from '../../components/WhatsAppButtonSito'
+import '../../styles/mx.css'
 
 const Home = () => {
-  const [showContent, setShowContent] = useState(false)
-
   // SEO metadata for Home page
   useEffect(() => {
     const previousTitle = document.title
@@ -69,45 +71,31 @@ const Home = () => {
     }
   }, [])
 
-  const handleLoadingComplete = () => {
-    setShowContent(true)
-    // Rimuovi la classe che nasconde il banner iubenda dopo che l'animazione è completata
-    document.body.classList.remove('hide-iubenda-banner')
-  }
-
-  // Nascondi il banner iubenda all'inizio se siamo nella homepage
-  useEffect(() => {
-    // Aggiungi la classe per nascondere il banner all'inizio
-    document.body.classList.add('hide-iubenda-banner')
-    
-    // Cleanup: rimuovi la classe quando il componente viene smontato
-    return () => {
-      document.body.classList.remove('hide-iubenda-banner')
-    }
-  }, [])
-
   return (
     <>
-      {!showContent && <LoadingAnimation onComplete={handleLoadingComplete} />}
-      <div className={`min-h-screen transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
-        <HeroSection />
-        <SectionDivider />
-        <TargetAudienceSection />
-        <SectionDivider />
-        <ProblemsSection />
-        <SectionDivider />
-        <div id="testimonianze">
-          <TestimonialsSection />
+      <MotionConfig reducedMotion="user">
+        <div className="mx-home min-h-screen">
+          <SpineProgress />
+          <MobileDock />
+          {/* Su mobile il dock sostituisce il bottone WhatsApp flottante */}
+          <div className="mx-desk-only">
+            <WhatsAppButtonSito />
+          </div>
+          <HeroSection />
+          <TargetAudienceSection />
+          <ProblemsSection />
+          <TouchSpineSection />
+          <div id="testimonianze">
+            <TestimonialsSection />
+          </div>
+          <div id="servizi">
+            <ServicesOverviewSection />
+          </div>
+          <div id="bio">
+            <BioSection />
+          </div>
         </div>
-        <SectionDivider />
-        <div id="servizi">
-          <ServicesOverviewSection />
-        </div>
-        <SectionDivider />
-        <div id="bio">
-          <BioSection />
-        </div>
-      </div>
+      </MotionConfig>
     </>
   )
 }

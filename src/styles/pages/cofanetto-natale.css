@@ -1,0 +1,769 @@
+/* Landing /cofanetto-natale — "l'unboxing". Prefisso .mx-xmas- */
+
+.mx-page.mx-xmas {
+  --x-paper: #f6f1e7;
+  --x-paper-2: #efe7d8;
+  --x-ink: #002552;
+  --x-muted: rgba(0, 37, 82, 0.72);
+  --x-gold: #ffd27a;
+  --x-berry: #e5484d;
+  background: var(--ink);
+}
+
+/* ---------- Tipografia ---------- */
+
+@layer base {
+  .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(1.9rem, 8.6vw, 4.6rem) !important; line-height: 1; }
+  .mx-page.mx-xmas h2.mx-h.mx-xmas-h2 { font-size: clamp(1.8rem, 7.4vw, 3.8rem) !important; line-height: 1.04; letter-spacing: -0.035em; }
+  .mx-page.mx-xmas h2.mx-h.mx-xmas-h2--dark,
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-h3,
+  .mx-page.mx-xmas .mx-xmas-label h4.mx-h,
+  .mx-page.mx-xmas .mx-xmas-woe h4.mx-h,
+  .mx-page.mx-xmas .mx-xmas-tag h3.mx-h,
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-ask__q { color: var(--x-ink); }
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-h3 { font-size: clamp(1.35rem, 5.4vw, 2.2rem) !important; line-height: 1.15; letter-spacing: -0.03em; }
+  .mx-page.mx-xmas h4.mx-h.mx-xmas-label__t,
+  .mx-page.mx-xmas h4.mx-h.mx-xmas-woe__t { font-size: 1.08rem !important; line-height: 1.25; letter-spacing: -0.02em; font-weight: 800; }
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-tag__name { font-size: 1.3rem !important; line-height: 1.2; letter-spacing: -0.025em; }
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-why__t { font-size: 1.1rem !important; line-height: 1.3; letter-spacing: -0.02em; font-weight: 800; }
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-ask__q,
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-wish__q { font-size: clamp(1.3rem, 5.2vw, 2.1rem) !important; line-height: 1.2; letter-spacing: -0.025em; }
+  .mx-page.mx-xmas h3.mx-h.mx-xmas-foot__brand { font-size: 1.6rem !important; color: var(--green); }
+  .mx-page.mx-xmas :is(h4, h5).mx-xmas-foot__h { margin: 0 0 12px; font-size: 0.74rem !important; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); }
+  .mx-page.mx-xmas p.mx-xmas-lead { margin: 16px 0 0; font-size: 1.05rem !important; line-height: 1.6; color: var(--muted); max-width: 680px; }
+  .mx-page.mx-xmas p.mx-xmas-lead--dark { color: var(--x-muted); }
+
+  @media (min-width: 1024px) {
+    .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(2.6rem, 4.6vw, 4.8rem) !important; }
+  }
+}
+
+.mx-xmas-main { position: relative; z-index: 1; }
+
+/* Neve che scende */
+.mx-xmas-fall {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mx-xmas-fall span {
+  position: absolute;
+  top: 0;
+  font-size: 1.3rem;
+  opacity: 0.55;
+  will-change: transform;
+  animation: mx-xmas-fall 30s linear infinite;
+}
+
+.mx-xmas-fall span.is-snow { color: #bfe6ff; font-size: 1.6rem; opacity: 0.45; }
+
+@keyframes mx-xmas-fall {
+  from { transform: translateY(-60px) rotate(0deg); }
+  to { transform: translateY(calc(100vh + 60px)) rotate(360deg); }
+}
+
+/* ---------- Apertura ---------- */
+
+.mx-xmas-hero {
+  position: relative;
+  overflow: hidden;
+  padding: calc(64px + 30px) 0 56px;
+  background:
+    radial-gradient(70% 45% at 50% 52%, rgba(255, 210, 122, 0.16), transparent 70%),
+    radial-gradient(90% 60% at 100% 0%, rgba(56, 189, 248, 0.18), transparent 60%),
+    linear-gradient(180deg, var(--navy) 0%, var(--ink) 100%);
+}
+
+.mx-xmas-lights {
+  position: absolute;
+  top: 64px;
+  left: -2%;
+  right: -2%;
+  height: 34px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.mx-xmas-lights::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px;
+  height: 20px;
+  border-bottom: 1px solid rgba(244, 244, 244, 0.22);
+  border-radius: 0 0 50% 50%;
+}
+
+.mx-xmas-lights i {
+  position: relative;
+  width: 7px;
+  height: 11px;
+  margin-top: 8px;
+  border-radius: 50% 50% 45% 45%;
+  background: var(--x-gold);
+  box-shadow: 0 0 10px var(--x-gold);
+  animation: mx-xmas-twinkle 2.4s ease-in-out infinite;
+}
+
+.mx-xmas-lights i:nth-child(3n + 1) { background: var(--green); box-shadow: 0 0 10px var(--green); }
+.mx-xmas-lights i:nth-child(3n + 2) { background: var(--sky); box-shadow: 0 0 10px var(--sky); margin-top: 12px; }
+
+@keyframes mx-xmas-twinkle {
+  50% { opacity: 0.35; }
+}
+
+.mx-xmas-hero__grid { position: relative; display: grid; gap: 8px; }
+
+.mx-xmas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.25);
+  background: linear-gradient(90deg, rgba(114, 250, 147, 0.12), rgba(56, 189, 248, 0.1));
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.mx-xmas-badge__dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(90deg, var(--green), var(--sky)); }
+
+.mx-xmas-hero__title .mx-mask { display: block; white-space: nowrap; }
+
+.mx-xmas-hero__sub { margin: 14px 0 0; font-weight: 600; font-size: 1rem; line-height: 1.5; color: var(--muted); max-width: 520px; }
+
+.mx-xmas-hero__cta { display: grid; gap: 12px; }
+.mx-xmas-buy { width: 100%; }
+.mx-xmas-buy__label { display: inline-flex; align-items: center; gap: 12px; font-weight: 900; font-size: 1.05rem; letter-spacing: 0.02em; }
+
+.mx-xmas-hero__prices {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 0;
+  font-weight: 800;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.mx-xmas-hero__prices s { opacity: 0.6; text-decoration-color: var(--x-berry); }
+.mx-xmas-hero__prices b { color: var(--green); font-size: 1.05rem; }
+
+/* La scatola regalo */
+.mx-xmas-hero__gift { display: grid; place-items: center; }
+
+.mx-xmas-gift {
+  position: relative;
+  width: 260px;
+  height: 290px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mx-xmas-gift:focus-visible { outline: 2px solid var(--green); outline-offset: 6px; border-radius: 24px; }
+
+.mx-xmas-gift__glow {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  width: 300px;
+  height: 300px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 122, 0.35), rgba(114, 250, 147, 0.08) 45%, transparent 70%);
+  opacity: 0;
+  transition: opacity 1s 0.3s;
+}
+
+.mx-xmas-gift.is-open .mx-xmas-gift__glow { opacity: 1; }
+
+.mx-xmas-gift__card {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  width: 168px;
+  height: 214px;
+  margin-left: -84px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 0 3px rgba(244, 244, 244, 0.9);
+  background: #0d2a55;
+}
+
+.mx-xmas-gift__card img { width: 100%; height: 100%; object-fit: cover; object-position: 34% 60%; }
+
+.mx-xmas-gift__base {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0;
+  width: 220px;
+  height: 128px;
+  margin-left: -110px;
+  border-radius: 8px 8px 18px 18px;
+  background: linear-gradient(170deg, #0a3b7a, #001f47 70%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.12), 0 30px 50px -20px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+.mx-xmas-gift__base::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 18px, rgba(255, 255, 255, 0.035) 18px 22px);
+}
+
+.mx-xmas-gift__ribbon {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 26px;
+  margin-left: -13px;
+  background: linear-gradient(90deg, #4fd877, var(--green) 40%, #b6ffc8 55%, var(--green));
+}
+
+.mx-xmas-gift__lid {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 118px;
+  width: 240px;
+  height: 46px;
+  margin-left: -120px;
+  border-radius: 10px;
+  background: linear-gradient(170deg, #0f4a94, #00285a);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.8), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.mx-xmas-gift__bow {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: 120px;
+  margin-left: -60px;
+  fill: var(--green);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+}
+
+.mx-xmas-gift__bow circle { fill: #b6ffc8; }
+
+.mx-xmas-gift__sparks { position: absolute; left: 50%; bottom: 150px; z-index: 4; pointer-events: none; }
+
+.mx-xmas-gift__sparks i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  background: var(--x-gold);
+  box-shadow: 0 0 12px var(--x-gold);
+}
+
+.mx-xmas-gift__sparks i:nth-child(even) { background: var(--green); box-shadow: 0 0 12px var(--green); }
+
+@media (min-width: 1024px) {
+  .mx-xmas-hero { padding: calc(80px + 70px) 0 110px; min-height: 92svh; }
+  .mx-xmas-lights { top: 80px; }
+  .mx-xmas-hero__grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-areas: "copy gift" "cta gift";
+    column-gap: 40px;
+    align-items: center;
+  }
+  .mx-xmas-hero__copy { grid-area: copy; align-self: end; }
+  .mx-xmas-hero__gift { grid-area: gift; }
+  .mx-xmas-hero__cta { grid-area: cta; align-self: start; margin-top: 24px; justify-items: start; }
+  .mx-xmas-hero__cta .mx-xmas-buy { width: auto; min-width: 340px; }
+  .mx-xmas-hero__sub { font-size: 1.2rem; margin-top: 24px; }
+  .mx-xmas-gift { transform: scale(1.45); transform-origin: center 60%; height: 340px; }
+}
+
+@media (max-width: 767px) {
+  .mx-xmas .mx-btn--primary { animation: none; }
+}
+
+/* ---------- Video ---------- */
+
+.mx-xmas-vsl { padding: 24px 0 56px; background: var(--ink); }
+
+.mx-xmas-vsl__frame {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3px;
+  border-radius: 24px;
+  background: linear-gradient(140deg, var(--x-gold), var(--green) 50%, var(--sky));
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+}
+
+.mx-xmas-vsl__frame video {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  border-radius: 21px;
+  object-fit: contain;
+  background: #000;
+}
+
+/* ---------- Offerte ---------- */
+
+.mx-xmas-offers {
+  position: relative;
+  padding: 56px 0 72px;
+  background:
+    radial-gradient(60% 40% at 50% 30%, rgba(114, 250, 147, 0.1), transparent 70%),
+    var(--ink);
+  scroll-margin-top: 60px;
+}
+
+.mx-xmas-offers__head { text-align: center; max-width: 820px; margin: 0 auto; }
+.mx-xmas-offers__head .mx-xmas-lead { margin-left: auto; margin-right: auto; }
+
+.mx-xmas-photos { margin-top: 28px; }
+
+.mx-xmas-photo {
+  margin: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+}
+
+.mx-xmas-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 900px) {
+  .mx-xmas-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1000px; margin: 40px auto 0; }
+}
+
+.mx-xmas-tickets { display: grid; gap: 30px; margin-top: 40px; }
+
+@media (min-width: 900px) {
+  .mx-xmas-tickets { grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1000px; margin: 64px auto 0; align-items: stretch; }
+}
+
+/* Bigliettino regalo */
+.mx-xmas-tag {
+  position: relative;
+  padding: 34px 22px 24px;
+  border-radius: 18px 18px 28px 28px;
+  background: linear-gradient(180deg, #fffaf0, var(--x-paper));
+  color: var(--x-ink);
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  clip-path: polygon(14% 0, 86% 0, 100% 9%, 100% 100%, 0 100%, 0 9%);
+}
+
+.mx-xmas-tag__hole {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: inset 0 0 0 3px rgba(0, 37, 82, 0.2);
+}
+
+.mx-xmas-tag--best {
+  background: linear-gradient(180deg, #f2fff5, #e2f7e8);
+  box-shadow: 0 40px 80px -30px rgba(114, 250, 147, 0.45), 0 0 0 3px var(--green);
+}
+
+.mx-xmas-tag__ribbon {
+  position: absolute;
+  top: 34px;
+  right: 16px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--x-ink);
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mx-xmas-tag__boxes { display: flex; gap: 6px; margin: 8px 0 14px; }
+
+.mx-xmas-tag__boxes span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--x-ink);
+  color: var(--cream);
+}
+
+.mx-xmas-tag__boxes span.is-free { background: var(--green); color: var(--x-ink); box-shadow: 0 0 0 3px rgba(114, 250, 147, 0.35); animation: mx-xmas-bounce 2.4s ease-in-out infinite; }
+
+@keyframes mx-xmas-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px) rotate(-6deg); }
+}
+
+.mx-xmas-price { display: flex; align-items: flex-end; gap: 14px; margin-top: 8px; }
+.mx-xmas-price s { font-weight: 800; font-size: 1.6rem; color: rgba(0, 37, 82, 0.45); text-decoration-color: var(--x-berry); text-decoration-thickness: 3px; padding-bottom: 8px; }
+.mx-xmas-price b { font-weight: 900; font-size: 4.4rem; line-height: 0.85; letter-spacing: -0.06em; color: var(--x-ink); }
+
+.mx-xmas-tag__per { margin: 10px 0 0; font-weight: 700; font-size: 0.9rem; color: var(--x-muted); }
+
+.mx-xmas-tag__gift {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--x-ink);
+  color: var(--cream);
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.mx-xmas-tag__list { list-style: none; margin: 18px 0 22px; padding: 0; display: grid; gap: 10px; }
+.mx-xmas-tag__list li { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; line-height: 1.4; }
+.mx-xmas-tag__list svg { flex-shrink: 0; color: #0a6ea8; margin-top: 1px; }
+
+.mx-xmas-tag__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--x-ink);
+  color: var(--green);
+  font-family: var(--font-primary);
+  font-weight: 900;
+  font-size: 1.02rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  box-shadow: 0 16px 30px -14px rgba(0, 37, 82, 0.7);
+}
+
+.mx-xmas-tag__btn--best { background: var(--green); color: var(--x-ink); box-shadow: 0 16px 34px -12px rgba(114, 250, 147, 0.7); }
+.mx-xmas-tag__btn:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+@media (min-width: 900px) {
+  .mx-xmas-tag { padding: 44px 34px 34px; }
+}
+
+.mx-xmas-deadline {
+  max-width: 640px;
+  margin: 36px auto 0;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px dashed rgba(255, 210, 122, 0.55);
+  background: rgba(255, 210, 122, 0.08);
+  text-align: center;
+}
+
+.mx-xmas-deadline p { margin: 0; font-weight: 800; line-height: 1.5; color: var(--cream); }
+.mx-xmas-deadline span { font-size: 0.9rem; font-style: italic; font-weight: 600; color: var(--x-gold); }
+
+/* ---------- Problemi (carta da pacco) ---------- */
+
+.mx-xmas-pain {
+  position: relative;
+  padding: 76px 0;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(0, 37, 82, 0.07) 1px, transparent 1.5px) 0 0 / 18px 18px,
+    var(--x-paper);
+  color: var(--x-ink);
+}
+
+.mx-xmas-strike {
+  position: relative;
+  color: var(--x-berry);
+  text-decoration: line-through;
+  text-decoration-thickness: 0.08em;
+  text-decoration-color: var(--x-ink);
+}
+
+.mx-xmas-hl { color: #0a6ea8; }
+
+.mx-xmas-story { margin-top: 44px; }
+
+.mx-xmas-swipe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 12px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: rgba(0, 37, 82, 0.55);
+}
+
+.mx-xmas-story__list { margin-top: 6px; }
+
+.mx-xmas-woe {
+  padding: 22px 20px;
+  border-radius: 26px;
+  background: #fff;
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  box-shadow: 0 24px 50px -36px rgba(0, 37, 82, 0.5);
+}
+
+.mx-xmas-woe__ic {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: #fde9e7;
+  color: var(--x-berry);
+}
+
+.mx-xmas-woe p, .mx-xmas-label p { margin: 10px 0 0; line-height: 1.6; font-size: 0.95rem; color: var(--x-muted); }
+
+.mx-xmas-story__count { margin: 8px 0 0; font-size: 0.78rem; font-weight: 700; color: rgba(0, 37, 82, 0.5); }
+
+@media (min-width: 900px) {
+  .mx-xmas-swipe, .mx-xmas-story__count { display: none; }
+  .mx-xmas-story__list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 28px; }
+}
+
+.mx-xmas-who { margin-top: 56px; }
+
+.mx-xmas-labels { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 22px; }
+
+.mx-xmas-label {
+  position: relative;
+  padding: 30px 20px 22px 22px;
+  border-radius: 10px 22px 22px 10px;
+  background: #fff;
+  box-shadow: 0 24px 50px -34px rgba(0, 37, 82, 0.55);
+  border-left: 6px solid var(--green);
+  transform: rotate(var(--tilt));
+}
+
+.mx-xmas-label__string {
+  position: absolute;
+  top: -14px;
+  left: 28px;
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(var(--x-berry), #ff9d9d);
+  border-radius: 2px;
+}
+
+.mx-xmas-label__string::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 37, 82, 0.25);
+  background: var(--x-paper);
+}
+
+.mx-xmas-label__ic {
+  float: right;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -8px 0 6px 12px;
+  border-radius: 14px;
+  background: var(--x-ink);
+  color: var(--green);
+}
+
+@media (min-width: 900px) {
+  .mx-xmas-pain { padding: 120px 0; }
+  .mx-xmas-labels { grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+  .mx-xmas-who { margin-top: 90px; }
+}
+
+.mx-xmas-ask {
+  margin-top: 56px;
+  padding: 30px 22px;
+  border-radius: 30px;
+  background: var(--x-paper-2);
+  border: 2px dashed rgba(0, 37, 82, 0.2);
+}
+
+.mx-xmas-ask p { margin: 12px 0 0; font-weight: 700; font-size: 1.05rem; line-height: 1.5; color: var(--x-muted); }
+.mx-xmas-ask .mx-xmas-ask__go { color: var(--x-ink); font-weight: 900; font-size: 1.2rem; }
+.mx-xmas-ask .mx-xmas-buy { margin-top: 24px; }
+
+@media (min-width: 900px) {
+  .mx-xmas-ask { padding: 56px; margin-top: 90px; }
+  .mx-xmas-ask .mx-xmas-buy { width: auto; min-width: 320px; }
+}
+
+/* ---------- Perché ---------- */
+
+.mx-xmas-why {
+  padding: 76px 0;
+  background:
+    radial-gradient(60% 40% at 0% 0%, rgba(56, 189, 248, 0.16), transparent 70%),
+    var(--navy);
+}
+
+.mx-xmas-gallery { margin-top: 30px; }
+
+.mx-xmas-gallery__item { margin: 0; border-radius: 22px; overflow: hidden; aspect-ratio: 4 / 3; }
+.mx-xmas-gallery__item img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 900px) {
+  .mx-xmas-gallery {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .mx-xmas-gallery__item { flex: 0 0 32%; scroll-snap-align: start; }
+}
+
+.mx-xmas-why__list { list-style: none; margin: 36px 0 0; padding: 0; display: grid; gap: 12px; }
+
+.mx-xmas-why__list li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: 24px;
+  background: rgba(244, 244, 244, 0.04);
+  border: 1px solid var(--line);
+}
+
+.mx-xmas-why__ic {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(114, 250, 147, 0.14);
+  color: var(--green);
+}
+
+.mx-xmas-why__list p { margin: 8px 0 0; line-height: 1.6; color: var(--muted); font-size: 0.97rem; }
+
+@media (min-width: 900px) {
+  .mx-xmas-why { padding: 130px 0; }
+  .mx-xmas-why__list { grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 56px; }
+  .mx-xmas-why__list li { padding: 30px; }
+}
+
+.mx-xmas-wish {
+  margin-top: 40px;
+  padding: 30px 22px;
+  border-radius: 30px;
+  background: linear-gradient(150deg, rgba(114, 250, 147, 0.16), rgba(114, 250, 147, 0.03));
+  border: 1px solid rgba(114, 250, 147, 0.3);
+}
+
+.mx-xmas-wish p { margin: 14px 0 22px; font-weight: 700; font-size: 1.1rem; color: var(--cream); }
+
+@media (min-width: 900px) {
+  .mx-xmas-wish { padding: 56px; margin-top: 64px; }
+  .mx-xmas-wish .mx-xmas-buy { width: auto; min-width: 320px; }
+}
+
+/* ---------- FAQ ---------- */
+
+.mx-xmas-faq { padding: 76px 0; background: var(--x-paper); color: var(--x-ink); }
+.mx-xmas-faq__grid { display: grid; gap: 28px; }
+
+.mx-xmas-acc.mx-acc {
+  --acc-bg: #ffffff;
+  --acc-bg-open: #ffffff;
+  --acc-line: rgba(0, 37, 82, 0.12);
+  --acc-text: #002552;
+  --acc-muted: rgba(0, 37, 82, 0.74);
+  --acc-accent: #0a6ea8;
+  --acc-icon-bg: #002552;
+  --acc-chev-bg: rgba(0, 37, 82, 0.06);
+  --acc-chev-open-bg: #002552;
+  --acc-chev-open-fg: #72fa93;
+}
+
+.mx-xmas-acc .mx-acc__icon { color: var(--green); }
+
+@media (min-width: 1024px) {
+  .mx-xmas-faq { padding: 120px 0; }
+  .mx-xmas-faq__grid { grid-template-columns: 0.8fr 1.2fr; gap: 64px; align-items: start; }
+  .mx-xmas-faq__head { position: sticky; top: 120px; }
+  .mx-xmas-faq__cta { grid-column: 2; }
+  .mx-xmas-faq__cta .mx-xmas-tag__btn { width: auto; padding: 0 36px; }
+}
+
+/* ---------- Footer ---------- */
+
+.mx-xmas-foot { position: relative; z-index: 1; padding: 60px 0 110px; background: #000a1e; color: var(--muted); }
+.mx-xmas-foot__grid { display: grid; gap: 30px; }
+.mx-xmas-foot__about { margin: 12px 0 18px; line-height: 1.6; max-width: 480px; }
+.mx-xmas-foot__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.mx-xmas-foot__list li { display: flex; gap: 12px; align-items: center; color: var(--cream); }
+.mx-xmas-foot__list svg { color: var(--green); flex-shrink: 0; }
+.mx-xmas-foot__list a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(114, 250, 147, 0.35); }
+.mx-xmas-foot__p { margin: 0 0 10px; }
+.mx-xmas-foot__h--social { margin-top: 24px !important; }
+.mx-xmas-foot__social { display: flex; gap: 10px; }
+
+.mx-xmas-foot__social a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--cream);
+}
+
+.mx-xmas-foot__social a:hover { background: var(--green); color: var(--navy); }
+.mx-xmas-foot__bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); text-align: center; font-size: 0.8rem; }
+.mx-xmas-foot__bottom p { margin: 0 0 6px; }
+
+@media (min-width: 900px) {
+  .mx-xmas-foot { padding-bottom: 60px; }
+  .mx-xmas-foot__grid { grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+}
+
+/* Titolo che va a capo senza allargare la griglia */
+.mx-xmas-hero__grid { grid-template-columns: minmax(0, 1fr); }
+.mx-xmas-hero__title .mx-mask { white-space: normal; text-wrap: balance; }
+
+@layer base {
+  .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(2.2rem, 10.4vw, 4.6rem) !important; line-height: 0.98; }
+  @media (min-width: 1024px) {
+    .mx-xmas-hero__grid { grid-template-columns: 1.05fr 0.95fr; }
+    .mx-page.mx-xmas h1.mx-h.mx-xmas-hero__title { font-size: clamp(2.6rem, 4.6vw, 4.8rem) !important; }
+  }
+}
+
+.mx-xmas-pain b, .mx-xmas-faq b, .mx-xmas-tag b { color: inherit; }
+
+/* Spazio per il cofanetto che esce dalla scatola */
+@media (max-width: 1023px) {
+  .mx-xmas-hero__gift { margin-top: 34px; }
+  .mx-xmas-gift { height: 250px; }
+  .mx-xmas-gift__card { width: 150px; height: 190px; margin-left: -75px; }
+}
+
+@media (min-width: 1024px) {
+  .mx-xmas-hero { min-height: 0; padding-bottom: 90px; }
+  .mx-xmas-hero__gift { padding-top: 70px; }
+}

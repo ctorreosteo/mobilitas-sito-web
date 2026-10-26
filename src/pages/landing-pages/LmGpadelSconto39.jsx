@@ -1,15 +1,51 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, animate, useReducedMotion } from 'framer-motion'
+import { Activity, BatteryCharging, Check, Timer, Trophy } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import { CheckCircle2, Check } from 'lucide-react'
+import PageShell from '../../components/site/PageShell'
+import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
+import { EASE } from '../../components/home-sections/homeMotion'
+import '../../styles/pages/gpadel-39.css'
 
-export default function LmGpadelSconto39() {
-  const [isVisible, setIsVisible] = useState(false)
+const PHOTO = '/landing-pages/web/lm-gpadel-foto1'
+const PHOTO2 = '/landing-pages/web/inf1'
+
+const fade = (delay, y = 24) => ({
+  initial: { opacity: 0, y },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, ease: EASE, delay },
+})
+
+// Il prezzo scende da 90 a 39 una volta sola, all'apertura
+const PriceDrop = () => {
+  const reduce = useReducedMotion()
+  const [value, setValue] = useState(reduce ? 39 : 90)
 
   useEffect(() => {
-    setIsVisible(true)
-  }, [])
+    if (reduce) return
+    const controls = animate(90, 39, {
+      duration: 1.5,
+      delay: 0.7,
+      ease: [0.3, 0, 0.2, 1],
+      onUpdate: (v) => setValue(Math.round(v)),
+    })
+    return () => controls.stop()
+  }, [reduce])
+
+  return (
+    <span className={`mx-g39-price__new ${value === 39 ? 'is-landed' : ''}`}>{value}€</span>
+  )
+}
+
+const offerItems = ['Anamnesi generale', 'Valutazione posturale', 'Trattamento specifico per te', 'Consigli per stare meglio']
+
+const benefitIcons = [Activity, Timer, BatteryCharging, Trophy]
+
+export default function LmGpadelSconto39() {
+  const [showDock, setShowDock] = useState(false)
+  const heroCtaRef = useRef(null)
+  const endCtaRef = useRef(null)
 
   // SEO metadata for GPADEL Sconto 39€ landing page
   useEffect(() => {
@@ -74,6 +110,24 @@ export default function LmGpadelSconto39() {
     }
   }, [])
 
+  // Barra fissa su mobile quando la CTA dell'hero non è più visibile
+  useEffect(() => {
+    const hero = heroCtaRef.current
+    const end = endCtaRef.current
+    if (!hero || !('IntersectionObserver' in window)) return
+    const seen = { hero: true, end: false }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.target === hero) seen.hero = e.isIntersecting
+        if (e.target === end) seen.end = e.isIntersecting
+      })
+      setShowDock(!seen.hero && !seen.end && hero.getBoundingClientRect().top < 0)
+    })
+    io.observe(hero)
+    if (end) io.observe(end)
+    return () => io.disconnect()
+  }, [])
+
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent("Ciao, vorrei prenotare il trattamento osteopatico scontato a 39€ tramite offerta GPADEL. Quando avete posto? Grazie e a presto!");
     window.open(`https://wa.me/393518198457?text=${message}`, '_blank');
@@ -98,210 +152,198 @@ export default function LmGpadelSconto39() {
     }
   ]
 
+  const renderCta = (btnRef) => (
+    <button
+      ref={btnRef}
+      type="button"
+      onClick={handleWhatsAppClick}
+      className="mx-btn mx-btn--primary mx-g39-cta"
+    >
+      <span className="mx-g39-cta__txt">
+        <span className="mx-g39-cta__main">Prenota il trattamento scontato</span>
+        <span className="mx-g39-cta__sub">(Con offerta esclusiva GPADEL)</span>
+      </span>
+      <span className="mx-btn__icon">
+        <WhatsAppIcon size={22} />
+      </span>
+    </button>
+  )
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-blue-dark font-montserrat">
+    <>
       <Header />
 
-      {/* HERO SECTION */}
-      <section className="relative pt-20 pb-16 flex items-center justify-center overflow-hidden">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 via-transparent to-green-500/5"></div>
-          
-          {/* Animated geometric shapes */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-full blur-lg animate-pulse delay-1000"></div>
-          <div className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-br from-blue-300/15 to-green-400/15 rounded-full blur-2xl animate-pulse delay-2000"></div>
-          
-          {/* Floating particles */}
-          <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 right-1/4 w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce delay-500"></div>
-          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-blue-600 rounded-full animate-bounce delay-1000"></div>
-        </div>
+      <PageShell className="mx-g39">
+        {/* HERO SECTION: il prezzo come protagonista */}
+        <section className="mx-g39-hero">
+          <motion.div
+            className="mx-g39-hero__photo"
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.6, ease: EASE }}
+          >
+            <img
+              src={`${PHOTO}-1600.jpg`}
+              srcSet={`${PHOTO}-900.jpg 900w, ${PHOTO}-1600.jpg 1600w`}
+              sizes="(min-width: 1024px) 55vw, 100vw"
+              alt="Trattamento osteopatico per padelisti"
+              width="1600"
+              height="900"
+              fetchPriority="high"
+            />
+          </motion.div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-start lg:mt-32">
-            {/* Left: Badge + Title */}
-            <div className="order-1 lg:order-1 w-full">
+          <div className="mx-wrap mx-g39-hero__grid">
+            <div className="mx-g39-hero__head">
               {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="inline-flex items-center px-5 py-2 bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 rounded-full mt-4 mb-0"
-              >
-                <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mr-2"></div>
-                <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Offerta Esclusiva GPADEL</span>
+              <motion.div className="mx-g39-badge" {...fade(0.15, 14)}>
+                <span className="mx-g39-badge__dot" />
+                <span>Offerta Esclusiva GPADEL</span>
               </motion.div>
 
               {/* Main Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-3 lg:mb-0"
-              >
-                <span className="block text-blue-dark">
+              <motion.h1 className="mx-h mx-g39-title" {...fade(0.25)}>
+                <span className="mx-g39-title__a">
                   Trattamento Osteopatico
                 </span>
-                <span className="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent mt-0">
+                <span className="mx-g39-title__b mx-gradient">
                   Specifico per le tue esigenze
                 </span>
               </motion.h1>
             </div>
 
-            {/* Right Column: Image + Offer - Desktop: right side, Mobile: after title */}
-            <div className="order-2 lg:order-2 w-full flex flex-col">
-              {/* Image */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="flex justify-start mb-6 lg:mb-8"
+            {/* Offer: il biglietto */}
+            <motion.div
+              className="mx-g39-ticket"
+              initial={{ opacity: 0, y: 40, rotate: -2.5 }}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
+              transition={{ duration: 1.1, ease: EASE, delay: 0.35 }}
+            >
+              <div className="mx-g39-ticket__card">
+              <div className="mx-g39-ticket__main">
+                <h3 className="mx-h mx-g39-ticket__title">
+                  Trattamento Osteopatico (durata di 1h)
+                </h3>
+                <ul className="mx-g39-ticket__list">
+                  {offerItems.map((item) => (
+                    <li key={item}>
+                      <span className="mx-g39-ticket__check"><Check size={13} strokeWidth={3.4} /></span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mx-g39-ticket__stub">
+                <span className="mx-g39-price__lbl">A soli:</span>
+                <span className="mx-g39-price__old">
+                  90€
+                  <motion.i
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.5, ease: EASE, delay: 0.55 }}
+                  />
+                </span>
+                <PriceDrop />
+              </div>
+              </div>
+            </motion.div>
+
+            {/* CTA Button */}
+            <motion.div className="mx-g39-hero__cta" {...fade(0.55)}>
+              {renderCta(heroCtaRef)}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* BENEFITS SECTION */}
+        <section className="mx-section mx-g39-benefits">
+          <div className="mx-wrap">
+            <div className="mx-g39-benefits__head">
+              <div className="mx-g39-badge mx-g39-badge--soft">
+                <span className="mx-g39-badge__dot" />
+                <span>I Benefici del trattamento</span>
+              </div>
+              <h2 className="mx-h mx-h--lg mx-g39-benefits__title">
+                Perché scegliere il
+                <span className="mx-gradient">
+                  Trattamento Osteopatico?
+                </span>
+              </h2>
+            </div>
+
+            <div className="mx-g39-benefits__layout">
+              <motion.figure
+                className="mx-g39-figure"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                transition={{ duration: 1.1, ease: EASE }}
               >
                 <img
-                  src="/landing-pages/lm-gpadel-infortuni-foto1.png"
-                  alt="Trattamento osteopatico per padelisti"
-                  className="w-full rounded-2xl shadow-2xl"
+                  src={`${PHOTO2}-1600.jpg`}
+                  srcSet={`${PHOTO2}-900.jpg 900w, ${PHOTO2}-1600.jpg 1600w`}
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                  alt="Trattamento osteopatico"
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
                 />
-              </motion.div>
+                <span className="mx-g39-figure__tag" aria-hidden="true">39€</span>
+              </motion.figure>
 
-              {/* Offer */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mb-8 lg:mb-0"
-              >
-                <div className="bg-gradient-to-br from-blue-50/50 to-green-50/50 rounded-2xl p-6 border border-blue-100/50">
-                  <h3 className="text-2xl lg:text-3xl font-black text-blue-dark mb-6 leading-tight">
-                    Trattamento Osteopatico (durata di 1h)
-                  </h3>
-                  <ul className="list-none mb-8 space-y-1.5 pl-4">
-                    <li className="flex items-start group">
-                      <div className="bg-azure-dark rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform">
-                        <Check className="text-white w-4 h-4" strokeWidth={3} />
+              {/* Benefits List */}
+              <ul className="mx-g39-blist">
+                {benefits.map((benefit, index) => {
+                  const Icon = benefitIcons[index]
+                  return (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+                      transition={{ duration: 0.8, ease: EASE, delay: index * 0.07 }}
+                      className="mx-g39-benefit"
+                    >
+                      <span className="mx-g39-benefit__icon"><Icon size={22} strokeWidth={2.2} /></span>
+                      <div>
+                        <h3 className="mx-h mx-h--sm">{benefit.title}</h3>
+                        <p className="mx-g39-benefit__text">{benefit.description}</p>
                       </div>
-                      <span className="text-blue-dark font-medium pt-1">Anamnesi generale</span>
-                    </li>
-                    <li className="flex items-start group">
-                      <div className="bg-azure-dark rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform">
-                        <Check className="text-white w-4 h-4" strokeWidth={3} />
-                      </div>
-                      <span className="text-blue-dark font-medium pt-1">Valutazione posturale</span>
-                    </li>
-                    <li className="flex items-start group">
-                      <div className="bg-azure-dark rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform">
-                        <Check className="text-white w-4 h-4" strokeWidth={3} />
-                      </div>
-                      <span className="text-blue-dark font-medium pt-1">Trattamento specifico per te</span>
-                    </li>
-                    <li className="flex items-start group">
-                      <div className="bg-azure-dark rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform">
-                        <Check className="text-white w-4 h-4" strokeWidth={3} />
-                      </div>
-                      <span className="text-blue-dark font-medium pt-1">Consigli per stare meglio</span>
-                    </li>
-                  </ul>
-                  <div className="pt-4 border-t border-blue-200/50">
-                    <div className="flex items-baseline gap-3">
-                      <span className="text-blue-dark/70 text-sm font-medium">A soli:</span>
-                      <span className="text-2xl font-bold line-through text-red-500/80">90€</span>
-                      <span className="text-5xl lg:text-6xl font-black text-azure-dark leading-none">39€</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+                    </motion.li>
+                  )
+                })}
+              </ul>
             </div>
-          </div>
 
-          {/* CTA Button - Centered below the grid on desktop, after offer on mobile */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex justify-center mt-8 lg:mt-12"
-          > 
-            <button
-              onClick={handleWhatsAppClick}
-              className="group relative inline-flex items-center px-8 py-6 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold text-xl rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 font-montserrat"
+            {/* CTA Button */}
+            <motion.div
+              className="mx-g39-end"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, ease: EASE }}
             >
-              <span className="relative z-10 flex flex-col items-center">
-                <span className="uppercase">Prenota il trattamento scontato</span>
-                <span className="text-sm font-normal normal-case">(Con offerta esclusiva GPADEL)</span>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-green-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* BENEFITS SECTION */}
-      <section className="relative py-20 bg-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-green-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-gradient-to-l from-green-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-left mb-12">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 rounded-full mb-6">
-              <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mr-3"></div>
-              <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">I Benefici del trattamento</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black text-blue-dark mb-6 leading-tight">
-              Perché scegliere il
-              <span className="block bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
-                Trattamento Osteopatico?
-              </span>
-            </h2>
-            <div className="mb-8">
-              <img
-                src="/influencer/inf1.png"
-                alt="Trattamento osteopatico"
-                className="w-full max-w-2xl mx-auto rounded-2xl shadow-lg"
-              />
-            </div>
+              <div className="mx-g39-end__price" aria-hidden="true">
+                <s>90€</s>
+                <b>39€</b>
+              </div>
+              {renderCta(endCtaRef)}
+            </motion.div>
           </div>
+        </section>
 
-          {/* Benefits List */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mb-12">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                className="flex items-start p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl border border-blue-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg"
-              >
-                <CheckCircle2 className="mt-1 mr-4 text-azure-dark w-6 h-6 shrink-0" />
-                <div className="flex-1">
-                  <h3 className="text-blue-dark font-bold text-lg mb-2 mt-0">{benefit.title}</h3>
-                  <p className="text-blue-dark/90 leading-relaxed mt-0">{benefit.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <div className="flex justify-center">
-            <button
-              onClick={handleWhatsAppClick}
-              className="group relative inline-flex items-center px-8 py-6 bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold text-xl rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 font-montserrat"
-            >
-              <span className="relative z-10 flex flex-col items-center">
-                <span className="uppercase">Prenota il trattamento scontato</span>
-                <span className="text-sm font-normal normal-case">(Con offerta esclusiva GPADEL)</span>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-green-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
+        {/* Barra fissa mobile */}
+        <div className={`mx-g39-dock ${showDock ? 'is-on' : ''}`} aria-hidden={!showDock}>
+          <button type="button" className="mx-g39-dock__btn" onClick={handleWhatsAppClick} tabIndex={showDock ? 0 : -1}>
+            <span className="mx-g39-dock__price" aria-hidden="true">39€</span>
+            <span className="mx-g39-dock__lbl">Prenota il trattamento scontato</span>
+            <WhatsAppIcon size={20} />
+          </button>
         </div>
-      </section>
+      </PageShell>
 
       <Footer />
-    </div>
+    </>
   )
 }
-

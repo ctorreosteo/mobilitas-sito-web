@@ -1,0 +1,84 @@
+/* Pagine partner: mattoncini condivisi (prefisso .mx-pk-).
+   Ogni partner ha poi il suo file: partner-gpadel.css, partner-subalpina.css, ... */
+
+/* Contenitore per i nomi che si adattano alla larghezza (container query) */
+.mx-pk-fitbox { container-type: inline-size; }
+
+/* Nome del partner: riempie la riga. --mx-fit = n. caratteri della riga più lunga */
+:is(.mx-home, .mx-page) .mx-pk-name {
+  font-size: min(var(--mx-max, 9.5rem), calc(100cqi / (var(--mx-fit, 8) * var(--mx-k, 0.7))));
+  line-height: 0.92;
+}
+
+/* Intestazione di sezione */
+.mx-pk-head {
+  display: grid;
+  gap: 24px;
+  align-items: end;
+}
+
+@media (min-width: 900px) {
+  .mx-pk-head:not(.is-stacked) { grid-template-columns: 1.15fr 0.85fr; gap: 64px; }
+}
+
+.mx-pk-head.is-stacked .mx-lead { max-width: 680px; }
+
+/* Foto in cornice con parallasse */
+.mx-pk-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  aspect-ratio: 16 / 10;
+  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--line);
+  background: var(--ink);
+}
+
+/* Riquadro di chiusura sezione */
+.mx-pk-hl {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  margin-top: clamp(56px, 7vw, 96px);
+  padding: clamp(28px, 5vw, 60px);
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(114, 250, 147, 0.13), rgba(56, 189, 248, 0.07) 55%, rgba(244, 244, 244, 0.02));
+  border: 1px solid rgba(114, 250, 147, 0.28);
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .mx-pk-hl { grid-template-columns: auto 1fr; gap: 36px; align-items: start; }
+}
+
+.mx-pk-hl h3.mx-h { margin-bottom: 14px; max-width: 760px; }
+.mx-pk-hl .mx-lead { max-width: 820px; }
+
+.mx-pk-hl__icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: var(--green);
+  color: var(--navy);
+}
+
+/* Etichetta tecnica in alto nelle card */
+.mx-pk-tag {
+  display: block;
+  margin-bottom: 18px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+
+.mx-pk-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

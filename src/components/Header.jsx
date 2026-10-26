@@ -1,28 +1,65 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Menu, Phone } from 'lucide-react'
+import { motion, useScroll, useSpring } from 'framer-motion'
+import { Phone } from 'lucide-react'
+import WhatsAppIcon from './whatsapp/WhatsAppIcon'
 import Sidebar from './Sidebar'
+import './Header.css'
 
 const PHONE_HREF = 'tel:+393518198457'
+const BOOKING_HREF =
+  'https://wa.me/393518198457?text=' +
+  encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
 
-const iconBtnClass =
-  'inline-flex h-11 w-11 shrink-0 items-center justify-center border-none bg-transparent p-0 text-cream outline-none transition-colors hover:text-green focus-visible:text-green [-webkit-tap-highlight-color:transparent] appearance-none cursor-pointer'
-
+// In cima: barra piena. Scorrendo: capsula di vetro sospesa, sempre visibile su desktop;
+// su schermi stretti si nasconde quando scendi e torna quando risali.
+// La linea verde segna quanto hai letto.
 const Header = ({ topOffset = 0 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [menuAnchor, setMenuAnchor] = useState(null)
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastY = useRef(0)
+  const menuBtnRef = useRef(null)
   const location = useLocation()
   const navigate = useNavigate()
 
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.3 })
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => {
+      // Con il menu aperto il body è bloccato e scrollY vale 0: non toccare lo stato
+      if (document.body.style.position === 'fixed') return
+
+      const y = window.scrollY
+      const delta = y - lastY.current
+      lastY.current = y
+      setScrolled(y > 12)
+      // In cima e su desktop l'header è sempre visibile (anche dopo un salto, es. cambio pagina)
+      if (y < 240 || window.matchMedia('(min-width: 1024px)').matches) {
+        setHidden(false)
+        return
+      }
+      // Salti grandi = scroll programmatico (es. ripristino alla chiusura del menu): non nascondere
+      if (Math.abs(delta) > 400) return
+      if (delta > 6) setHidden(true)
+      else if (delta < -6) setHidden(false)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((open) => !open)
+  // Altri elementi fissi (es. la colonna della home) possono adeguarsi
+  useEffect(() => {
+    document.documentElement.dataset.header = hidden ? 'hidden' : scrolled ? 'floating' : 'top'
+  }, [hidden, scrolled])
+
+  const openSidebar = () => {
+    const r = menuBtnRef.current?.getBoundingClientRect()
+    setMenuAnchor(r ? { x: r.left, y: r.top, w: r.width, h: r.height } : null)
+    setIsSidebarOpen(true)
   }
 
   const closeSidebar = () => {
@@ -43,64 +80,45 @@ const Header = ({ topOffset = 0 }) => {
   return (
     <>
       <header
-        className={`fixed left-0 right-0 z-50 w-full bg-blue-dark transition-shadow duration-300 ${
-          scrolled ? 'shadow-lg' : ''
-        }`}
-        style={{
-          top: topOffset !== 0 ? `${topOffset}px` : '0',
-          borderBottom: '1px solid rgba(114, 250, 147, 0.28)',
-        }}
+        className={`mx-header ${scrolled ? 'is-floating' : ''} ${hidden && !isSidebarOpen ? 'is-hidden' : ''}`}
+        style={{ top: `${topOffset}px` }}
       >
-        <div className="container mx-auto w-full max-w-full px-2 sm:px-4">
-          <div className="grid h-16 grid-cols-[2.75rem_1fr_2.75rem] items-center sm:h-20">
-            <button
-              type="button"
-              onClick={toggleSidebar}
-              className={iconBtnClass}
-              aria-label="Apri menu"
-              aria-expanded={isSidebarOpen}
-            >
-              <Menu size={24} strokeWidth={2} />
-            </button>
+        <div className="mx-header__bar">
+          <button
+            ref={menuBtnRef}
+            type="button"
+            onClick={openSidebar}
+            className="mx-header__menu"
+            aria-label="Apri menu"
+            aria-expanded={isSidebarOpen}
+          >
+            <span className="mx-burger" aria-hidden="true">
+              <i />
+              <i />
+            </span>
+            <span className="mx-header__menu-label">Menu</span>
+          </button>
 
-            <a
-              href="/"
-              className="flex items-center justify-center justify-self-center"
-              onClick={handleLogoClick}
-            >
-              <img
-                src="/logo_verde.png"
-                alt="Mobilitas"
-                className="h-6 w-auto sm:h-[1.875rem]"
-                decoding="async"
-              />
+          <a href="/" className="mx-header__logo" onClick={handleLogoClick} aria-label="Mobilitas, torna alla home">
+            <img src="/logo_verde.png" alt="Mobilitas" decoding="async" />
+          </a>
+
+          <div className="mx-header__actions">
+            <a href={PHONE_HREF} className="mx-header__call" aria-label="Chiama Mobilitas">
+              <Phone size={18} strokeWidth={2} />
+              <span>Chiama</span>
             </a>
-
-            <div className="flex items-center justify-end justify-self-end">
-              <a
-                href={PHONE_HREF}
-                className={`${iconBtnClass} sm:hidden`}
-                aria-label="Chiama Mobilitas"
-              >
-                <Phone size={22} strokeWidth={2} />
-              </a>
-
-              <a
-                href={PHONE_HREF}
-                className="hidden items-center gap-2 border-none bg-transparent px-2 py-2 text-cream no-underline outline-none transition-colors hover:text-green focus-visible:text-green sm:inline-flex"
-                aria-label="Chiama Mobilitas"
-              >
-                <Phone size={18} strokeWidth={2} />
-                <span className="text-xs font-bold uppercase tracking-wider">
-                  Chiama
-                </span>
-              </a>
-            </div>
+            <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-header__book">
+              <WhatsAppIcon size={16} strokeWidth={2.4} />
+              Prenota
+            </a>
           </div>
+
+          <motion.span className="mx-header__progress" style={{ scaleX: progress }} aria-hidden="true" />
         </div>
       </header>
 
-      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} anchor={menuAnchor} />
     </>
   )
 }

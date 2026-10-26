@@ -1,0 +1,655 @@
+/* Mobilitas Card: "la tua card, col tuo nome" */
+
+@layer base {
+  :is(.mx-home, .mx-page) .mx-card-hero__title {
+    font-size: clamp(3.6rem, 9vw, 8.6rem) !important;
+    line-height: 0.86 !important;
+    letter-spacing: -0.055em;
+  }
+
+  :is(.mx-home, .mx-page) .mx-card-get__name { word-break: break-word; }
+}
+
+/* ======================================================================
+   Apertura
+   ====================================================================== */
+
+.mx-card-hero {
+  position: relative;
+  overflow: hidden;
+  overflow: clip;
+  padding: clamp(48px, 7vw, 100px) 0 clamp(64px, 8vw, 120px);
+  background: radial-gradient(120% 80% at 50% 0%, var(--navy-2) 0%, var(--navy) 45%, var(--ink) 100%);
+}
+
+.mx-card-hero__grid {
+  display: grid;
+  gap: 28px;
+  grid-template-areas: "copy" "stage" "form";
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .mx-card-hero__grid {
+    grid-template-columns: 1fr 1.05fr;
+    grid-template-areas: "copy stage" "form stage";
+    column-gap: 48px;
+    row-gap: 36px;
+  }
+}
+
+.mx-card-hero__copy { grid-area: copy; align-self: end; }
+.mx-card-hero__stage { grid-area: stage; display: grid; justify-items: center; gap: 6px; }
+.mx-card-name { grid-area: form; align-self: start; }
+
+:is(.mx-home, .mx-page) .mx-card-hero__lead { margin-top: 28px; max-width: 560px; }
+
+.mx-card-fliphint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(244, 244, 244, 0.04);
+  color: var(--muted);
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.mx-card-fliphint svg { color: var(--green); }
+.mx-card-fliphint:hover { color: var(--cream); border-color: rgba(114, 250, 147, 0.4); }
+
+/* Campo nome */
+.mx-card-name__label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.mx-card-name__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mx-card-name__input {
+  flex: 1 1 220px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 0 22px;
+  border: 1px solid rgba(244, 244, 244, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 15, 43, 0.55);
+  color: var(--cream);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.mx-card-name__input::placeholder { color: rgba(244, 244, 244, 0.38); font-weight: 600; }
+.mx-card-name__input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18); }
+
+.mx-card-name__cta { flex: 0 0 auto; }
+
+.mx-card-name__note {
+  margin: 12px 0 0;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 244, 0.45);
+}
+
+@media (max-width: 639px) {
+  .mx-card-name__row { flex-direction: column; }
+  .mx-card-name__input { flex-basis: auto; width: 100%; }
+}
+
+/* ======================================================================
+   La tessera (fronte/retro, inclinazione, nome inciso)
+   ====================================================================== */
+
+.mx-cc {
+  position: relative;
+  width: min(100%, 520px);
+  padding: 8px 0 0;
+  perspective: 1200px;
+  touch-action: pan-y;
+}
+
+.mx-cc--hero { animation: mx-cc-bob 6s ease-in-out infinite; }
+.mx-cc--small { width: min(100%, 420px); }
+
+@keyframes mx-cc-bob {
+  50% { translate: 0 -10px; }
+}
+
+.mx-cc::before {
+  content: '';
+  position: absolute;
+  inset: 0 -6% 10%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.26), transparent);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+.mx-cc__tilt { transform-style: preserve-3d; will-change: transform; }
+
+.mx-cc__flip {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.586;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.9s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+  container-type: inline-size;
+}
+
+span.mx-cc__flip { cursor: default; }
+.mx-cc__flip.is-flipped { transform: rotateY(180deg); }
+.mx-cc__flip:focus-visible { outline: 2px solid var(--green); outline-offset: 6px; border-radius: 24px; }
+
+.mx-cc__face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: clamp(14px, 4.6cqw, 24px);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  text-align: left;
+  box-shadow:
+    inset 0 0 0 1px rgba(244, 244, 244, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 40px 80px -30px rgba(0, 0, 0, 0.75);
+}
+
+.mx-cc__front {
+  background:
+    radial-gradient(120% 120% at 100% 0%, #0b3f80 0%, transparent 60%),
+    linear-gradient(150deg, #0a2f63 0%, #021a3d 70%);
+}
+
+.mx-cc__waves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.85; }
+
+.mx-cc__chip {
+  position: absolute;
+  left: 7%;
+  top: 12%;
+  width: 12%;
+  aspect-ratio: 1.3;
+  border-radius: 1.4cqw;
+  background: linear-gradient(135deg, #c9d6e3, #8ea3b8 50%, #d7e1ea);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.mx-cc__member {
+  position: absolute;
+  right: 7%;
+  top: 11%;
+  font-size: 3.4cqw;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--cream);
+}
+
+.mx-cc__logo {
+  position: absolute;
+  left: 12%;
+  top: 31%;
+  width: 76%;
+  filter: drop-shadow(0 0 18px rgba(114, 250, 147, 0.35));
+}
+
+/* Nome inciso: argento in rilievo */
+.mx-cc__name {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 21%;
+  overflow: hidden;
+  font-size: 5cqw;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: linear-gradient(180deg, #ffffff 0%, #c9d4df 55%, #8fa2b5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.45));
+}
+
+.mx-cc__name.is-placeholder { opacity: 0.4; }
+
+.mx-cc__program {
+  position: absolute;
+  left: 7%;
+  bottom: 10%;
+  font-size: 2.2cqw;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 244, 0.7);
+}
+
+.mx-cc__glare { position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none; }
+
+.mx-cc__sweep {
+  position: absolute;
+  inset: -50% -60%;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.26) 50%, transparent 58%);
+  animation: mx-cc-sweep 5s var(--ease) infinite;
+  pointer-events: none;
+}
+
+@keyframes mx-cc-sweep {
+  0%, 55% { transform: translateX(-60%); }
+  100% { transform: translateX(60%); }
+}
+
+/* Retro */
+.mx-cc__back {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #0a2f63 0%, #021a3d 75%);
+  color: var(--cream);
+}
+
+.mx-cc__stripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 9%;
+  height: 15%;
+  background: linear-gradient(180deg, #0b0f18, #1b2333);
+}
+
+.mx-cc__back-title {
+  position: absolute;
+  left: 7%;
+  top: 31%;
+  font-size: 2.4cqw;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.mx-cc__perks {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 39%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6cqw 4cqw;
+}
+
+.mx-cc__perk {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  font-size: 2.9cqw;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.mx-cc__perk svg { flex-shrink: 0; width: 3.6cqw; height: 3.6cqw; color: var(--green); }
+
+.mx-cc__signature {
+  position: absolute;
+  left: 7%;
+  right: 30%;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  padding: 1.4cqw 2.4cqw;
+  border-radius: 1cqw;
+  background: repeating-linear-gradient(135deg, #f4f4f4 0 2px, #e6eaf0 2px 4px);
+  color: var(--navy);
+}
+
+.mx-cc__signature small {
+  font-size: 1.8cqw;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.mx-cc__signature i {
+  overflow: hidden;
+  font-size: 3.4cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mx-cc__mark {
+  position: absolute;
+  right: 7%;
+  bottom: 7%;
+  width: 13%;
+  border-radius: 50%;
+}
+
+.mx-cc__shadow {
+  display: block;
+  width: 76%;
+  height: 24px;
+  margin: 30px auto 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+}
+
+/* ======================================================================
+   01 Cos'è
+   ====================================================================== */
+
+.mx-card-what {
+  display: grid;
+  gap: 44px;
+  align-items: center;
+}
+
+@media (min-width: 1000px) {
+  .mx-card-what { grid-template-columns: 1fr 1fr; gap: 64px; }
+}
+
+:is(.mx-home, .mx-page) .mx-card-what__text { margin-top: 28px; }
+
+.mx-card-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(244, 244, 244, 0.1);
+}
+
+/* ======================================================================
+   02 Come funziona
+   ====================================================================== */
+
+.mx-card-steps {
+  position: relative;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+.mx-card-steps__track {
+  position: absolute;
+  background: var(--line);
+  border-radius: 99px;
+}
+
+.mx-card-steps__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--sky), var(--green));
+}
+
+.mx-card-steps__coin {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--navy);
+  box-shadow: 0 0 0 6px rgba(114, 250, 147, 0.18), 0 0 30px rgba(114, 250, 147, 0.6);
+}
+
+.mx-card-steps__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 36px;
+}
+
+.mx-card-step { position: relative; }
+
+.mx-card-step__dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--green);
+  color: var(--green);
+  box-shadow: 0 0 0 8px var(--navy);
+}
+
+.mx-card-step__n {
+  display: block;
+  margin: 22px 0 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--green);
+}
+
+:is(.mx-home, .mx-page) .mx-card-step .mx-h { margin-bottom: 12px; }
+.mx-card-steps__link { margin-top: 16px; }
+
+.mx-card-ways {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mx-card-ways li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: rgba(114, 250, 147, 0.06);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.mx-card-ways svg { color: var(--green); }
+
+/* Desktop: tre colonne, binario orizzontale */
+@media (min-width: 1000px) {
+  .mx-card-steps__list { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .mx-card-steps__track { left: 32px; right: 32px; top: 31px; height: 2px; }
+  .mx-card-steps__fill { transform-origin: left; transform: scaleX(var(--p)); }
+  .mx-card-steps__coin { top: -19px; left: calc(var(--along) - 20px); }
+}
+
+/* Mobile: binario verticale a sinistra */
+@media (max-width: 999px) {
+  .mx-card-steps__list { gap: 40px; padding-left: 88px; }
+  .mx-card-step__dot { position: absolute; left: -88px; top: 0; }
+  .mx-card-step__n { margin-top: 4px; }
+  .mx-card-steps__track { left: 31px; top: 32px; bottom: 32px; width: 2px; }
+  .mx-card-steps__fill { transform-origin: top; transform: scaleY(var(--p)); background: linear-gradient(180deg, var(--sky), var(--green)); }
+  .mx-card-steps__coin { left: -19px; top: calc(var(--along) - 20px); z-index: 2; }
+}
+
+/* ======================================================================
+   03 Vantaggi: biglietti
+   ====================================================================== */
+
+.mx-card-tickets {
+  list-style: none;
+  margin: clamp(44px, 5vw, 72px) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .mx-card-tickets { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1200px) {
+  .mx-card-tickets { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+}
+
+.mx-card-ticket {
+  --stub: 92px;
+  position: relative;
+  display: flex;
+  min-height: 168px;
+  border-radius: 22px;
+  background: linear-gradient(150deg, #0b3a73, #021d44);
+  border: 1px solid rgba(244, 244, 244, 0.12);
+  overflow: hidden;
+  /* Le tacche ai lati della perforazione */
+  -webkit-mask: radial-gradient(circle 12px at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 12px at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle 12px at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 12px at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+  transition: transform 0.5s var(--ease);
+}
+
+.mx-card-ticket:hover { transform: translateY(-4px); }
+
+.mx-card-ticket__stub {
+  position: relative;
+  flex: 0 0 var(--stub);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--green);
+  border-right: 2px dashed rgba(244, 244, 244, 0.22);
+}
+
+.mx-card-ticket__n {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.mx-card-ticket__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 24px;
+}
+
+:is(.mx-home, .mx-page) .mx-card-ticket .mx-body { margin-top: 8px; font-size: 0.95rem !important; }
+
+.mx-card-ticket.is-featured {
+  background: linear-gradient(135deg, var(--green), #38d3c8);
+  border-color: transparent;
+}
+
+.mx-card-ticket.is-featured .mx-card-ticket__stub { color: var(--navy); border-right-color: rgba(0, 37, 82, 0.3); }
+.mx-card-ticket.is-featured .mx-card-ticket__n { color: rgba(0, 37, 82, 0.6); }
+:is(.mx-home, .mx-page) .mx-card-ticket.is-featured .mx-h { color: var(--navy); }
+:is(.mx-home, .mx-page) .mx-card-ticket.is-featured .mx-body { color: rgba(0, 37, 82, 0.82); font-weight: 600; }
+
+@media (max-width: 639px) {
+  .mx-card-ticket { --stub: 62px; }
+  .mx-card-ticket__body { padding: 20px 18px; }
+}
+
+.mx-card-numbers { margin-top: clamp(64px, 8vw, 110px); }
+.mx-card-stats { margin-top: 24px; }
+
+@media (max-width: 999px) {
+  .mx-card-stats { grid-template-columns: repeat(3, 1fr); }
+  .mx-card-stats .mx-stat { padding: 18px 12px; }
+  .mx-card-stats .mx-stat__num { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+  .mx-card-stats .mx-stat__label { font-size: 0.72rem; }
+}
+
+/* ======================================================================
+   04 Richiedila
+   ====================================================================== */
+
+.mx-card-get__grid {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1000px) {
+  .mx-card-get__grid { grid-template-columns: 1.1fr 0.9fr; gap: 64px; }
+}
+
+:is(.mx-home, .mx-page) .mx-card-get__text { margin-top: 28px; }
+
+.mx-card-bring {
+  margin-top: 32px;
+  padding: 24px 26px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.04);
+}
+
+.mx-card-bring ul {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.mx-card-bring li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.mx-card-bring__tick {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--navy);
+}
+
+:is(.mx-home, .mx-page) .mx-card-get__ctas { margin-top: 32px; }
+:is(.mx-home, .mx-page) .mx-card-get__closing { margin-top: 28px; max-width: 560px; }
+
+.mx-card-get__visual { display: grid; justify-items: center; gap: 18px; }
+.mx-card-get__visual .mx-cc { transform: rotate(4deg); }
+
+@media (max-width: 999px) {
+  .mx-card-get__visual { order: -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-cc--hero,
+  .mx-cc__sweep { animation: none; }
+  .mx-cc__flip { transition: none; }
+}

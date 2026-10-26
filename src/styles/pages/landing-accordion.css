@@ -1,0 +1,120 @@
+/* Fisarmonica FAQ delle landing (components/landing-kit/LandingAccordion.jsx).
+   Colori dai token della pagina: --acc-bg, --acc-line, --acc-text, --acc-muted, --acc-accent, --acc-icon-bg */
+
+.mx-acc {
+  --acc-bg: rgba(244, 244, 244, 0.04);
+  --acc-bg-open: rgba(244, 244, 244, 0.07);
+  --acc-line: rgba(244, 244, 244, 0.12);
+  --acc-text: #f4f4f4;
+  --acc-muted: rgba(244, 244, 244, 0.72);
+  --acc-accent: #72fa93;
+  --acc-icon-bg: rgba(114, 250, 147, 0.12);
+  --acc-chev-bg: rgba(244, 244, 244, 0.08);
+  --acc-chev-open-bg: #72fa93;
+  --acc-chev-open-fg: #002552;
+
+  display: grid;
+  gap: 10px;
+}
+
+.mx-acc__item {
+  border: 1px solid var(--acc-line);
+  border-radius: 22px;
+  background: var(--acc-bg);
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.mx-acc__item.is-open {
+  background: var(--acc-bg-open);
+  border-color: color-mix(in srgb, var(--acc-accent) 45%, transparent);
+}
+
+.mx-acc__q {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 16px 16px 16px 18px;
+  border: 0;
+  background: none;
+  color: var(--acc-text);
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mx-acc__q:focus-visible {
+  outline: 2px solid var(--acc-accent);
+  outline-offset: 2px;
+  border-radius: 22px;
+}
+
+.mx-acc__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--acc-icon-bg);
+  color: var(--acc-accent);
+}
+
+.mx-acc__label { flex: 1; }
+
+.mx-acc__chev {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--acc-chev-bg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s, color 0.3s;
+}
+
+.mx-acc__item.is-open .mx-acc__chev {
+  transform: rotate(180deg);
+  background: var(--acc-chev-open-bg);
+  color: var(--acc-chev-open-fg);
+}
+
+.mx-acc__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.5s;
+}
+
+.mx-acc__item.is-open .mx-acc__a {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mx-acc__a-inner { overflow: hidden; }
+
+@layer base {
+  .mx-acc .mx-acc__a-inner p {
+    margin: 0;
+    padding: 0 20px 22px 18px;
+    color: var(--acc-muted);
+    font-size: 0.98rem !important;
+    line-height: 1.7;
+  }
+}
+
+@media (min-width: 768px) {
+  .mx-acc__q { padding: 20px 22px; font-size: 1.08rem; }
+  .mx-acc .mx-acc__a-inner p { padding: 0 28px 26px 76px; }
+}
+
+@media (min-width: 768px) {
+  .mx-acc.mx-acc--noicon .mx-acc__a-inner p { padding-left: 22px; }
+}

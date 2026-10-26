@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useInView, useMotionValueEvent, useScroll, useSpring } from 'framer-motion'
 import {
   Phone,
   ArrowRight,
@@ -19,8 +19,21 @@ import {
   Play,
   FileText,
   Users,
+  TrainFront,
+  ScanLine,
+  UserRound,
 } from 'lucide-react'
 import BookingPopup from '../components/BookingPopup'
+import PageShell from '../components/site/PageShell'
+import { Kicker, MaskLines, Reveal, Snap } from '../components/home-sections/HomeKit'
+import { EASE } from '../components/home-sections/homeMotion'
+import PlumbFigure from '../components/postura/PlumbFigure'
+import '../styles/pages/postura.css'
+
+// Concetto: "Il filo a piombo". La postura si legge di profilo, contro una linea
+// verticale: la pagina è un foglio di analisi posturale (righelli, griglia,
+// scansione) e il momento firmato è la figura che, scorrendo il metodo
+// Valuta → Correggi → Consolida, si riallinea al filo. L'offerta è uno scontrino.
 
 const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
@@ -134,13 +147,7 @@ const CAUSE_SYMPTOMS = [
 
 function TodoMark({ children, onDark = false }) {
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 align-middle text-[9px] font-semibold uppercase tracking-[0.14em] ${
-        onDark
-          ? 'border border-amber-200/30 bg-amber-200/10 text-amber-100'
-          : 'border border-amber-800/20 bg-amber-100 text-amber-900'
-      }`}
-    >
+    <span className={`mx-post-todo ${onDark ? 'is-dark' : 'is-light'}`}>
       TODO{children ? ` · ${children}` : ''}
     </span>
   )
@@ -304,8 +311,6 @@ const TEAM_PHOTOS = [
   { src: '/home/home3.png', alt: 'Studio Mobilitas Torino' },
 ]
 
-const _MOTION = motion
-
 function getVariantCopy(variant) {
   const isUomo = variant === 'uomo'
   return {
@@ -435,587 +440,6 @@ function getVariantCopy(variant) {
   }
 }
 
-function Eyebrow({ children, dark = false }) {
-  return (
-    <p
-      className={`mb-5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.22em] ${
-        dark ? 'text-green' : 'text-blue-dark/70'
-      }`}
-    >
-      {children}
-    </p>
-  )
-}
-
-function Fade({ children, className = '', delay = 0 }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
-
-const LIQUID_DRIFT = {
-  tl: { x: [0, 120, 50, 95, 0], y: [0, 95, 35, 80, 0] },
-  tr: { x: [0, -120, -45, -90, 0], y: [0, 90, 30, 70, 0] },
-  bl: { x: [0, 110, 40, 85, 0], y: [0, -100, -30, -75, 0] },
-  br: { x: [0, -110, -40, -85, 0], y: [0, -95, -25, -70, 0] },
-  c: { x: [0, 80, -90, 45, 0], y: [0, -70, 85, -35, 0] },
-}
-
-const LIQUID_MORPH = [
-  '42% 58% 56% 44% / 48% 42% 58% 52%',
-  '62% 38% 32% 68% / 40% 62% 38% 60%',
-  '32% 68% 58% 42% / 68% 32% 62% 38%',
-  '58% 42% 36% 64% / 42% 58% 42% 58%',
-  '42% 58% 56% 44% / 48% 42% 58% 52%',
-]
-
-function LiquidBlob({
-  className = '',
-  size = 280,
-  color = 'rgba(114, 250, 147, 0.5)',
-  duration = 9,
-  delay = 0,
-  drift = 'c',
-  blur = 42,
-  centered = false,
-}) {
-  const reduceMotion = useReducedMotion()
-  const path = LIQUID_DRIFT[drift] ?? LIQUID_DRIFT.c
-  return (
-    <motion.div
-      aria-hidden
-      className={`absolute ${className}`}
-      style={{
-        width: size,
-        height: size,
-        willChange: reduceMotion ? undefined : 'transform',
-        ...(centered
-          ? { left: '50%', top: '50%', marginLeft: -size / 2, marginTop: -size / 2 }
-          : null),
-      }}
-      animate={
-        reduceMotion
-          ? undefined
-          : {
-              x: path.x,
-              y: path.y,
-              scale: [1, 1.22, 0.84, 1.12, 1],
-              rotate: [0, 14, -10, 8, 0],
-            }
-      }
-      transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <motion.div
-        className="h-full w-full"
-        style={{ background: color, filter: `blur(${blur}px)`, borderRadius: LIQUID_MORPH[0] }}
-        animate={reduceMotion ? undefined : { borderRadius: LIQUID_MORPH }}
-        transition={{ duration: duration * 0.9, delay, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </motion.div>
-  )
-}
-
-function LiquidField({ variant = 'light' }) {
-  const blobs =
-    variant === 'dark'
-      ? [
-          { className: '-top-24 -right-24', size: 300, color: 'rgba(114, 250, 147, 0.22)', duration: 8, drift: 'tr' },
-          { className: '-bottom-28 -left-24', size: 280, color: 'rgba(114, 250, 147, 0.16)', duration: 11, delay: 0.6, drift: 'bl' },
-        ]
-      : [
-          { className: '-top-10 -left-8', size: 400, color: 'rgba(114, 250, 147, 0.55)', duration: 8, drift: 'tl' },
-          { className: 'top-8 -right-12', size: 320, color: 'rgba(114, 250, 147, 0.4)', duration: 11, delay: 0.5, drift: 'tr' },
-          { className: 'bottom-16 left-[26%]', size: 260, color: 'rgba(114, 250, 147, 0.18)', duration: 9.5, delay: 1, drift: 'c', blur: 30 },
-        ]
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-      {blobs.map((blob) => (
-        <LiquidBlob key={blob.className} {...blob} />
-      ))}
-    </div>
-  )
-}
-
-const HERO_EASE = [0.16, 1, 0.3, 1]
-const HOVER_SPRING = { type: 'spring', stiffness: 340, damping: 24 }
-
-function useFineHover() {
-  const [fine, setFine] = useState(false)
-  useEffect(() => {
-    const query = window.matchMedia('(hover: hover) and (pointer: fine)')
-    const sync = () => setFine(query.matches)
-    sync()
-    query.addEventListener('change', sync)
-    return () => query.removeEventListener('change', sync)
-  }, [])
-  return fine
-}
-
-function HoverCard({ children, className = '', tone = 'dark', as = 'article' }) {
-  const Comp = motion[as]
-  const reduceMotion = useReducedMotion()
-  const fine = useFineHover()
-  const ref = useRef(null)
-
-  return (
-    <Comp
-      ref={ref}
-      onPointerMove={
-        fine
-          ? (event) => {
-              const box = ref.current?.getBoundingClientRect()
-              if (!box) return
-              ref.current.style.setProperty('--hx', `${((event.clientX - box.left) / box.width) * 100}%`)
-              ref.current.style.setProperty('--hy', `${((event.clientY - box.top) / box.height) * 100}%`)
-            }
-          : undefined
-      }
-      whileHover={fine && !reduceMotion ? { y: -7 } : undefined}
-      transition={HOVER_SPRING}
-      className={`offerta-hover-card offerta-hover-card--${tone} relative overflow-hidden ${className}`}
-    >
-      <span className="offerta-hover-spot" aria-hidden />
-      {children}
-    </Comp>
-  )
-}
-
-function HoverChip({ children, className = '' }) {
-  const reduceMotion = useReducedMotion()
-  const fine = useFineHover()
-  return (
-    <motion.span
-      whileHover={fine && !reduceMotion ? { y: -2, scale: 1.05, backgroundColor: 'rgba(114,250,147,0.16)' } : undefined}
-      transition={HOVER_SPRING}
-      className={className}
-    >
-      {children}
-    </motion.span>
-  )
-}
-
-function MagneticCta({ onClick }) {
-  const reduceMotion = useReducedMotion()
-  const fine = useFineHover()
-  const ref = useRef(null)
-  const x = useSpring(0, { stiffness: 260, damping: 20, mass: 0.32 })
-  const y = useSpring(0, { stiffness: 260, damping: 20, mass: 0.32 })
-
-  return (
-    <motion.button
-      ref={ref}
-      type="button"
-      onClick={onClick}
-      style={fine && !reduceMotion ? { x, y } : undefined}
-      onPointerMove={
-        fine && !reduceMotion
-          ? (event) => {
-              const box = ref.current?.getBoundingClientRect()
-              if (!box) return
-              x.set((event.clientX - box.left - box.width / 2) * 0.3)
-              y.set((event.clientY - box.top - box.height / 2) * 0.38)
-            }
-          : undefined
-      }
-      onPointerLeave={() => {
-        x.set(0)
-        y.set(0)
-      }}
-      whileHover={fine && !reduceMotion ? { scale: 1.045 } : undefined}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-      className="offerta-cta-liquid inline-flex items-center gap-2 rounded-full bg-green px-6 py-3.5 sm:px-8 text-[13px] sm:text-sm font-black uppercase tracking-[0.06em] text-blue-dark shadow-[0_10px_28px_-12px_rgba(114,250,147,0.7)]"
-    >
-      <span className="relative z-10 sm:hidden">Blocca a 500€</span>
-      <span className="relative z-10 hidden sm:inline">Blocca il tuo posto a 500€</span>
-      <ArrowRight className="offerta-cta-arrow relative z-10 w-4 h-4" strokeWidth={2.4} />
-    </motion.button>
-  )
-}
-
-function GhostCta({ onClick, dark = false }) {
-  const reduceMotion = useReducedMotion()
-  const fine = useFineHover()
-  return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      whileHover={fine && !reduceMotion ? { y: -3 } : undefined}
-      whileTap={{ scale: 0.98 }}
-      transition={HOVER_SPRING}
-      className={`inline-flex items-center gap-2 rounded-full px-6 py-3.5 sm:px-8 text-[13px] sm:text-sm font-semibold tracking-[0.02em] border transition-[background-color,border-color,color] duration-300 ${
-        dark
-          ? 'border-cream/25 text-cream hover:border-green/50 hover:bg-cream/10'
-          : 'border-blue-dark/15 text-blue-dark hover:border-green hover:bg-green/10'
-      }`}
-    >
-      <Phone className="w-4 h-4" strokeWidth={2} />
-      Hai dubbi? Chiamaci
-    </motion.button>
-  )
-}
-
-function SplitLine({ text, delay = 0, className = '' }) {
-  const reduceMotion = useReducedMotion()
-  const words = text.split(' ')
-  if (reduceMotion) return <span className={className}>{text}</span>
-  return (
-    <span className={className}>
-      {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="offerta-hero-word">
-          <motion.span
-            className="inline-block"
-            initial={{ y: '110%' }}
-            animate={{ y: '0%' }}
-            transition={{ duration: 0.95, delay: delay + i * 0.055, ease: HERO_EASE }}
-          >
-            {word}
-          </motion.span>
-        </span>
-      ))}
-    </span>
-  )
-}
-
-function HeroSpine({ className = '' }) {
-  const reduceMotion = useReducedMotion()
-  const drawn = { pathLength: 1, opacity: 1 }
-
-  return (
-    <svg viewBox="0 0 200 360" className={className} fill="none" aria-hidden>
-      <motion.circle
-        cx="118"
-        cy="42"
-        r="21"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.38 }}
-        transition={{ duration: 1.2, delay: 0.15, ease: HERO_EASE }}
-      />
-      <motion.path
-        d="M118 63 C108 88 86 118 78 152 C70 186 78 222 96 258 C108 282 114 308 116 338"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.3 }}
-        transition={{ duration: 1.7, delay: 0.28, ease: HERO_EASE }}
-      />
-      {[92, 128, 168, 214, 258].map((y, i) => (
-        <motion.line
-          key={`g-${y}`}
-          x1={108 - i * 4}
-          x2={128 - i * 3}
-          y1={y}
-          y2={y + 4}
-          stroke="currentColor"
-          strokeWidth="1.15"
-          strokeLinecap="round"
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 0.22 }}
-          transition={{ duration: 0.4, delay: 0.55 + i * 0.08 }}
-        />
-      ))}
-
-      <motion.circle
-        cx="100"
-        cy="40"
-        r="21"
-        stroke="#72fa93"
-        strokeWidth="1.75"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.95 }}
-        transition={{ duration: 1.2, delay: 0.75, ease: HERO_EASE }}
-      />
-      <motion.path
-        d="M100 61 C100 96 98 138 100 180 C102 222 100 268 100 338"
-        stroke="#72fa93"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: 1.75, delay: 0.9, ease: HERO_EASE }}
-      />
-      <motion.path
-        d="M78 92h44"
-        stroke="#72fa93"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.8 }}
-        transition={{ duration: 0.7, delay: 1.35, ease: HERO_EASE }}
-      />
-      {[78, 108, 140, 174, 210, 248, 286].map((y, i) => (
-        <motion.path
-          key={`v-${y}`}
-          d={`M${88 - (i % 3)} ${y} h${24 + (i > 3 ? 4 : 0)}`}
-          stroke="#72fa93"
-          strokeWidth="1.35"
-          strokeLinecap="round"
-          initial={reduceMotion ? drawn : { pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 0.75 }}
-          transition={{ duration: 0.45, delay: 1.15 + i * 0.07, ease: HERO_EASE }}
-        />
-      ))}
-    </svg>
-  )
-}
-
-function HeroChip({ label, className, delay }) {
-  const reduceMotion = useReducedMotion()
-  return (
-    <motion.div
-      className={`pointer-events-auto absolute z-20 hidden lg:block ${className}`}
-      initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.94 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      whileHover={reduceMotion ? undefined : { scale: 1.06 }}
-      transition={{ duration: 0.7, delay, ease: HERO_EASE }}
-    >
-      <motion.div
-        animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
-        transition={{ duration: 4.4, delay: delay + 0.4, repeat: Infinity, ease: 'easeInOut' }}
-        className="inline-flex items-center gap-2 rounded-full border border-blue-dark/15 bg-white px-3.5 py-1.5 text-[11px] font-semibold tracking-wide text-blue-dark shadow-[0_10px_28px_-14px_rgba(0,37,82,0.45)]"
-      >
-        <span className="h-1.5 w-1.5 rounded-full bg-green" />
-        {label}
-      </motion.div>
-    </motion.div>
-  )
-}
-
-function useLocalTilt(enabled) {
-  const ref = useRef(null)
-  const rotateX = useSpring(0, { stiffness: 160, damping: 22, mass: 0.28 })
-  const rotateY = useSpring(0, { stiffness: 160, damping: 22, mass: 0.28 })
-  const glowX = useSpring(50, { stiffness: 90, damping: 20 })
-  const glowY = useSpring(40, { stiffness: 90, damping: 20 })
-
-  useEffect(() => {
-    if (!enabled) return undefined
-    const el = ref.current
-    if (!el) return undefined
-    const onMove = (event) => {
-      const box = el.getBoundingClientRect()
-      const px = (event.clientX - box.left) / box.width
-      const py = (event.clientY - box.top) / box.height
-      rotateY.set((px - 0.5) * 11)
-      rotateX.set((0.5 - py) * 8)
-      glowX.set(px * 100)
-      glowY.set(py * 100)
-    }
-    const onLeave = () => {
-      rotateX.set(0)
-      rotateY.set(0)
-      glowX.set(50)
-      glowY.set(40)
-    }
-    el.addEventListener('pointermove', onMove)
-    el.addEventListener('pointerleave', onLeave)
-    return () => {
-      el.removeEventListener('pointermove', onMove)
-      el.removeEventListener('pointerleave', onLeave)
-    }
-  }, [enabled, glowX, glowY, rotateX, rotateY])
-
-  return { ref, rotateX, rotateY, glowX, glowY }
-}
-
-function HeroMedia({
-  video,
-  videoSrc,
-  videoCover,
-  loading,
-  fallbackImage,
-  chips,
-  y,
-  scale,
-}) {
-  const reduceMotion = useReducedMotion()
-  const tilt = useLocalTilt(!reduceMotion)
-  const glow = useMotionTemplate`radial-gradient(420px circle at ${tilt.glowX}% ${tilt.glowY}%, rgba(114,250,147,0.28), transparent 58%)`
-
-  return (
-    <div
-      ref={tilt.ref}
-      className="relative z-10 mx-auto mt-2 w-full max-w-6xl px-0 sm:px-4 lg:px-16"
-      style={{ perspective: 1400 }}
-    >
-      <HeroChip label={chips[0]} delay={1.05} className="left-3 top-[18%] xl:left-6" />
-      <HeroChip label={chips[1]} delay={1.18} className="right-3 top-[24%] xl:right-6" />
-      <HeroChip label={chips[2]} delay={1.32} className="left-8 bottom-[18%] xl:left-12" />
-
-      <motion.div
-        style={{ y, scale, rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1400 }}
-        className="origin-center will-change-transform"
-      >
-        <div className="relative">
-          <div
-            className="pointer-events-none absolute -inset-3 sm:-inset-5 rounded-[2rem] sm:rounded-[2.75rem] bg-[radial-gradient(ellipse_at_center,rgba(114,250,147,0.22),transparent_68%)] blur-2xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute left-8 right-8 -bottom-5 h-10 rounded-[100%] bg-blue-dark/20 blur-2xl sm:left-16 sm:right-16"
-            aria-hidden
-          />
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.05, delay: 0.45, ease: HERO_EASE }}
-            className="relative p-[1.5px] rounded-[1.75rem] sm:rounded-[2.5rem] lg:rounded-[3rem] bg-[linear-gradient(145deg,rgba(114,250,147,0.9)_0%,rgba(0,37,82,0.18)_38%,rgba(114,250,147,0.35)_72%,rgba(0,37,82,0.28)_100%)] shadow-[0_28px_60px_-24px_rgba(0,37,82,0.45),0_0_0_1px_rgba(114,250,147,0.16)]"
-          >
-            <div className="relative overflow-hidden rounded-[1.68rem] sm:rounded-[2.42rem] lg:rounded-[2.9rem] aspect-[16/10] sm:aspect-[16/9] bg-blue-dark">
-              {video ? (
-                <>
-                  {video.anteprimaUrl ? (
-                    <img
-                      src={video.anteprimaUrl}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-cover"
-                      decoding="async"
-                    />
-                  ) : null}
-                  <iframe
-                    src={videoSrc}
-                    title="Percorso Posturale — Mobilitas Torino"
-                    className="absolute inset-0 h-full w-full border-0 pointer-events-none"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowFullScreen
-                  />
-                  <div
-                    className={`absolute inset-0 z-[1] bg-blue-dark transition-opacity duration-300 ${
-                      videoCover ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    aria-hidden
-                  />
-                  <div className="absolute inset-0 z-[1]" aria-hidden />
-                </>
-              ) : (
-                <>
-                  <img
-                    src={fallbackImage}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover scale-105 blur-[2px]"
-                  />
-                  <div className="absolute inset-0 bg-blue-dark/70" />
-                  <div className="absolute inset-0 grid place-items-center p-6 text-center">
-                    <div>
-                      <span className="relative mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-green text-blue-dark">
-                        <span className="absolute inset-0 animate-ping rounded-full bg-green/50" />
-                        <Play className="relative w-6 h-6 ml-0.5" strokeWidth={2.2} />
-                      </span>
-                      <p className="text-cream font-bold text-xl sm:text-2xl drop-shadow-[0_2px_12px_rgba(0,37,82,0.9)]">
-                        Video o immagine di profilo
-                      </p>
-                      <p className="mt-2">
-                        <TodoMark onDark>asset hero</TodoMark>
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-              {loading && !video ? (
-                <div className="absolute inset-0 bg-blue-dark" aria-hidden />
-              ) : null}
-              <motion.div
-                className="pointer-events-none absolute inset-0 z-[2] mix-blend-screen"
-                style={{ background: glow }}
-                aria-hidden
-              />
-              {!reduceMotion ? <div className="offerta-hero-shine" aria-hidden /> : null}
-              <div className="absolute inset-0 z-[2] ring-1 ring-inset ring-cream/15 rounded-[inherit] pointer-events-none" />
-              <div className="absolute bottom-4 left-1/2 z-[4] -translate-x-1/2 rounded-full bg-cream/95 px-4 py-2 text-[11px] sm:text-xs font-semibold tracking-wide text-blue-dark whitespace-nowrap shadow-[0_8px_20px_-12px_rgba(0,37,82,0.5)]">
-                Valuta → Correggi → Consolida
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
-function DarkBlock({ children, className = '', id, innerRef }) {
-  return (
-    <section
-      id={id}
-      ref={innerRef}
-      className={`relative mx-3 sm:mx-5 lg:mx-8 my-2 overflow-hidden rounded-[2rem] sm:rounded-[2.75rem] lg:rounded-[3.5rem] bg-blue-dark text-cream ${className}`}
-    >
-      <LiquidField variant="dark" />
-      <div className="relative z-10 px-6 py-10 sm:px-12 sm:py-14 lg:px-20 lg:py-16">{children}</div>
-    </section>
-  )
-}
-
-function LightSection({ children, className = '' }) {
-  return (
-    <section className={`px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-16 ${className}`}>
-      {children}
-    </section>
-  )
-}
-
-function Marquee({ items, dark = false, reverse = false }) {
-  const row = [...items, ...items]
-  return (
-    <div
-      className={`relative overflow-hidden py-5 sm:py-6 ${dark ? 'bg-blue-dark text-cream' : 'text-blue-dark'}`}
-    >
-      <div
-        className={`flex w-max items-center will-change-transform ${reverse ? 'offerta-marquee-rev' : 'offerta-marquee'}`}
-      >
-        {row.map((item, i) => (
-          <span key={`${item}-${i}`} className="flex items-center whitespace-nowrap px-4 sm:px-6">
-            <span className="font-black text-xl sm:text-3xl opacity-80">{item}</span>
-            <span className={`mx-4 sm:mx-6 text-lg ${dark ? 'text-green' : 'text-blue-dark/25'}`}>·</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function PinGallery({
-  eyebrow,
-  title,
-  intro,
-  children,
-  dark = true,
-  gridClass = 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3',
-}) {
-  return (
-    <section
-      className={`relative mx-3 sm:mx-5 lg:mx-8 my-2 overflow-hidden rounded-[2rem] sm:rounded-[2.75rem] lg:rounded-[3.25rem] ${
-        dark ? 'bg-blue-dark text-cream' : 'bg-white text-blue-dark'
-      }`}
-    >
-      {dark ? <LiquidField variant="dark" /> : <LiquidField variant="light" />}
-      <div className="relative z-10 px-6 sm:px-10 lg:px-16 pt-10 sm:pt-12 pb-6 sm:pb-8 text-center max-w-3xl mx-auto">
-        <Eyebrow dark={dark}>{eyebrow}</Eyebrow>
-        <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-4">{title}</h2>
-        {        intro ? (
-          <p className={`text-base sm:text-lg leading-relaxed ${dark ? 'text-cream/75' : 'text-blue-dark/70'}`}>
-            {intro}
-          </p>
-        ) : null}
-      </div>
-      <div className={`relative z-10 grid ${gridClass} gap-4 sm:gap-5 px-5 sm:px-8 lg:px-12 pb-10 lg:pb-12`}>
-        {children}
-      </div>
-    </section>
-  )
-}
-
 function ensureCloudflarePreconnect() {
   const origins = ['https://iframe.videodelivery.net', 'https://videodelivery.net']
   origins.forEach((href) => {
@@ -1082,6 +506,135 @@ function pad2(n) {
   return String(n).padStart(2, '0')
 }
 
+// Foto ottimizzate (cartelle web/ accanto agli originali)
+const WEB_PHOTOS = {
+  '/maldischiena/maldischiena1.JPG': ['/maldischiena/web/maldischiena1-900.jpg', '/maldischiena/web/maldischiena1-1600.jpg'],
+  '/cervicalgia/cerv11.JPG': ['/cervicalgia/web/cerv11-900.jpg', '/cervicalgia/web/cerv11-1600.jpg'],
+  '/lavori/osteo_leader.png': ['/lavori/web/osteo_leader-700.jpg', '/lavori/web/osteo_leader-1200.jpg'],
+  '/lavori/osteo_senior.png': ['/lavori/web/osteo_senior-700.jpg', '/lavori/web/osteo_senior-1200.jpg'],
+  '/storia/trattamento.png': ['/storia/web/trattamento-900.jpg', '/storia/web/trattamento-1600.jpg'],
+  '/home/home3.png': ['/home/web/home3-900.jpg', '/home/web/home3-1600.jpg'],
+}
+const webSmall = (src) => WEB_PHOTOS[src]?.[0] ?? src
+const webLarge = (src) => WEB_PHOTOS[src]?.[1] ?? src
+
+const STEP_NAMES = ['Valuta', 'Correggi', 'Consolida']
+
+// Coppia di CTA: blocca il posto (offerta) o chiedi una chiamata (dubbi)
+const PostCtas = ({ onOffer, onInfo, className = '', compact = false }) => (
+  <div className={`mx-ctas mx-post-ctas ${compact ? 'is-compact' : ''} ${className}`}>
+    <button type="button" className="mx-btn mx-btn--primary mx-post-btn" onClick={onOffer}>
+      <span className="mx-post-btn__label">
+        <span className="mx-post-btn__short">Blocca a 500€</span>
+        <span className="mx-post-btn__long">Blocca il tuo posto a 500€</span>
+      </span>
+      <span className="mx-btn__icon">
+        <ArrowRight size={20} strokeWidth={2.4} />
+      </span>
+    </button>
+    <button type="button" className="mx-btn mx-btn--ghost mx-post-btn" onClick={onInfo}>
+      <span className="mx-post-btn__label">Hai dubbi? Chiamaci</span>
+      <span className="mx-btn__icon">
+        <Phone size={18} strokeWidth={2.2} />
+      </span>
+    </button>
+  </div>
+)
+
+const Countdown = ({ cells, className = '' }) => (
+  <div className={`mx-post-count ${className}`} role="timer">
+    {cells.map((c, i) => (
+      <React.Fragment key={c.l}>
+        {i > 0 && (
+          <span className="mx-post-count__sep" aria-hidden="true">
+            :
+          </span>
+        )}
+        <span className="mx-post-count__cell">
+          <b>{c.v}</b>
+          <small>{c.l}</small>
+        </span>
+      </React.Fragment>
+    ))}
+  </div>
+)
+
+// Sintomi sparsi che, entrando in vista, si raccolgono verso una causa sola
+const ConvergingChips = ({ items }) => {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -20% 0px' })
+  const scatter = [
+    { x: -60, y: -46, r: -12 },
+    { x: 54, y: -38, r: 10 },
+    { x: -38, y: 30, r: 8 },
+    { x: 70, y: 22, r: -9 },
+    { x: -74, y: 10, r: 14 },
+    { x: 40, y: 48, r: -6 },
+  ]
+  return (
+    <div className="mx-post-chips" ref={ref}>
+      {items.map((s, i) => {
+        const o = scatter[i % scatter.length]
+        return (
+          <motion.span
+            key={s}
+            className="mx-post-chip"
+            initial={{ x: o.x, y: o.y, rotate: o.r, opacity: 0.35 }}
+            animate={inView ? { x: 0, y: 0, rotate: 0, opacity: 1 } : undefined}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.1 + i * 0.07 }}
+          >
+            {s}
+          </motion.span>
+        )
+      })}
+    </div>
+  )
+}
+
+// Momento firmato: il metodo, con la figura che si riallinea al filo
+const PlumbScene = () => {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 })
+  const [active, setActive] = useState(0)
+
+  useMotionValueEvent(progress, 'change', (v) => {
+    const next = v < 0.33 ? 0 : v < 0.66 ? 1 : 2
+    setActive((cur) => (cur === next ? cur : next))
+  })
+
+  return (
+    <section className="mx-post-plumb" ref={ref}>
+      <div className="mx-post-plumb__pin">
+        <div className="mx-wrap mx-post-plumb__grid">
+          <div className="mx-post-plumb__stage">
+            <PlumbFigure progress={progress} />
+            <ol className="mx-post-plumb__rail" aria-hidden="true">
+              {STEP_NAMES.map((t, i) => (
+                <li key={t} className={i <= active ? 'is-on' : ''}>
+                  <i />
+                </li>
+              ))}
+            </ol>
+          </div>
+          <ol className="mx-post-steps">
+            {METHOD_STEPS.map((step, i) => (
+              <li key={step.k} className={`mx-post-step ${i === active ? 'is-active' : ''} ${i < active ? 'is-past' : ''}`}>
+                <span className="mx-post-step__k">{step.k}</span>
+                <div className="mx-post-step__body">
+                  <p className="mx-post-step__t">{step.t}</p>
+                  <h3 className="mx-h mx-h--sm">{step.title}</h3>
+                  <p className="mx-body">{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function OffertaPostura({ variant = 'uomo' }) {
   const copy = getVariantCopy(variant)
   const { video: heroVideo, loading: heroVideoLoading } = useHeroVideo(copy.videoCode)
@@ -1091,30 +644,12 @@ function OffertaPostura({ variant = 'uomo' }) {
   const [openFaqIndex, setOpenFaqIndex] = useState(null)
   const [heroVideoCover, setHeroVideoCover] = useState(true)
   const [showSticky, setShowSticky] = useState(false)
+  const [recognized, setRecognized] = useState(() => new Set())
   const offerRef = useRef(null)
-  const heroRef = useRef(null)
 
   const heroVideoSrc = heroVideo
     ? `https://iframe.videodelivery.net/${heroVideo.cloudflareUid}?autoplay=true&muted=true&loop=true&controls=false&preload=auto&letterboxColor=%23002552&poster=${encodeURIComponent(heroVideo.anteprimaUrl ?? '')}`
     : ''
-
-  const { scrollYProgress } = useScroll()
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.15 })
-  const { scrollYProgress: heroProg } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  })
-  const heroY = useTransform(heroProg, [0, 1], [0, 88])
-  const heroScale = useTransform(heroProg, [0, 1], [1, 1.12])
-  const heroTextY = useTransform(heroProg, [0, 1], [0, -32])
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const cursorX = useSpring(mouseX, { stiffness: 90, damping: 22, mass: 0.28 })
-  const cursorY = useSpring(mouseY, { stiffness: 90, damping: 22, mass: 0.28 })
-  const cursorXLag = useSpring(mouseX, { stiffness: 38, damping: 18, mass: 0.55 })
-  const cursorYLag = useSpring(mouseY, { stiffness: 38, damping: 18, mass: 0.55 })
-  const [cursorFx, setCursorFx] = useState(false)
 
   useEffect(() => {
     if (!heroVideo) return
@@ -1133,27 +668,6 @@ function OffertaPostura({ variant = 'uomo' }) {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  useEffect(() => {
-    const fine = window.matchMedia('(pointer: fine)')
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const sync = () => setCursorFx(fine.matches && !reduce.matches)
-    sync()
-    fine.addEventListener('change', sync)
-    reduce.addEventListener('change', sync)
-    mouseX.set(window.innerWidth * 0.55)
-    mouseY.set(window.innerHeight * 0.28)
-    const onMove = (event) => {
-      mouseX.set(event.clientX)
-      mouseY.set(event.clientY)
-    }
-    window.addEventListener('pointermove', onMove, { passive: true })
-    return () => {
-      fine.removeEventListener('change', sync)
-      reduce.removeEventListener('change', sync)
-      window.removeEventListener('pointermove', onMove)
-    }
-  }, [mouseX, mouseY])
 
   useEffect(() => {
     const prevTitle = document.title
@@ -1264,12 +778,14 @@ function OffertaPostura({ variant = 'uomo' }) {
     setShowBooking(true)
   }
 
-  const CtaPair = ({ dark = false, className = '' }) => (
-    <div className={`flex flex-col sm:flex-row items-center justify-center gap-3 ${className}`}>
-      <MagneticCta onClick={openOfferta} />
-      <GhostCta onClick={openInfo} dark={dark} />
-    </div>
-  )
+  const toggleSignal = (title) => {
+    setRecognized((prev) => {
+      const next = new Set(prev)
+      if (next.has(title)) next.delete(title)
+      else next.add(title)
+      return next
+    })
+  }
 
   const countdownCells = [
     { v: pad2(countdown.days), l: 'giorni' },
@@ -1278,682 +794,674 @@ function OffertaPostura({ variant = 'uomo' }) {
     { v: pad2(countdown.seconds), l: 'sec' },
   ]
 
+  const heroPhoto = useMemo(() => copy.heroImage, [copy.heroImage])
+  const ctas = <PostCtas onOffer={openOfferta} onInfo={openInfo} />
+
   return (
-    <div
-      className={`offerta-postura min-h-screen bg-cream text-blue-dark font-montserrat [&_*]:font-montserrat overflow-x-clip ${
-        showSticky ? 'pb-24 md:pb-0' : ''
-      }`}
-    >
-      <motion.div
-        className="fixed left-0 right-0 top-0 z-[70] h-[3px] origin-left bg-green"
-        style={{ scaleX: smoothProgress }}
-      />
-
-      {cursorFx ? (
-        <div className="pointer-events-none fixed inset-0 z-[8] overflow-hidden" aria-hidden>
+    <PageShell className={`mx-post ${showSticky ? 'has-sticky' : ''}`}>
+      {/* ——— 1. Apertura ——— */}
+      <header className="mx-post-hero">
+        <div className="mx-post-grid-bg" aria-hidden="true" />
+        <div className="mx-wrap mx-post-hero__grid">
           <motion.div
-            className="offerta-cursor-gradient absolute h-[32rem] w-[32rem] rounded-full"
-            style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%' }}
-          />
-          <motion.div
-            className="absolute h-[16rem] w-[16rem] rounded-full blur-md"
-            style={{
-              x: cursorXLag,
-              y: cursorYLag,
-              translateX: '-50%',
-              translateY: '-50%',
-              background:
-                'radial-gradient(circle, rgba(114,250,147,0.28) 0%, rgba(0,37,82,0.08) 46%, transparent 70%)',
-            }}
-          />
-        </div>
-      ) : null}
-
-      {/* ——— 1. HERO ——— */}
-      <section
-        ref={heroRef}
-        className="relative isolate overflow-hidden px-5 pt-10 pb-12 sm:px-10 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20 text-center"
-      >
-        <LiquidField variant="light" />
-        <div className="offerta-hero-grain" aria-hidden />
-        <HeroSpine className="pointer-events-none absolute left-1/2 top-6 z-[1] h-[340px] w-[200px] -translate-x-1/2 text-blue-dark opacity-[0.22] sm:top-2 sm:h-[440px] sm:w-[240px]" />
-
-        <motion.div className="relative z-10" style={{ y: heroTextY }}>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            className="mx-post-hero__badge"
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: HERO_EASE }}
-            className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-blue-dark/10 bg-white/55 px-3.5 py-1.5 backdrop-blur-sm"
+            transition={{ duration: 0.8, ease: EASE }}
           >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inset-0 animate-ping rounded-full bg-green opacity-70" />
-              <span className="relative h-1.5 w-1.5 rounded-full bg-green" />
-            </span>
-            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.22em] text-blue-dark/70">
-              Percorso Posturale · Black Friday
-            </span>
+            <span className="mx-post-hero__ping" aria-hidden="true" />
+            Percorso Posturale · Black Friday
           </motion.div>
 
-          <h1 className="font-black tracking-[-0.03em] leading-[1.06] text-blue-dark max-w-4xl mx-auto mb-5">
-            <SplitLine text={copy.headlineLead} delay={0.12} />
-            <br />
-            <SplitLine text={copy.headlineAccent} delay={0.38} className="text-blue-dark" />
+          <h1 className="mx-h mx-post-hero__title">
+            <MaskLines
+              immediate
+              delay={0.1}
+              lines={[
+                { text: copy.headlineLead },
+                { text: copy.headlineAccent, className: 'mx-gradient' },
+              ]}
+            />
           </h1>
 
-          <motion.span
-            className="mx-auto mb-6 block h-px w-20 origin-center bg-green sm:w-24"
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.55, ease: HERO_EASE }}
-          />
-
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.5, ease: HERO_EASE }}
-            className="text-blue-dark/70 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8 font-medium"
+          <motion.div
+            className="mx-post-hero__media"
+            initial={{ opacity: 0, y: 28, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.25 }}
           >
-            Il percorso che lavora sulla causa — non sul sintomo — in studio e nelle 16 ore in cui
-            vivi.
-          </motion.p>
-
-          <div className="mb-8 sm:mb-10 flex flex-wrap items-center justify-center gap-1.5 sm:gap-3">
-            {['Valuta', 'Correggi', 'Consolida'].map((step, i) => (
-              <React.Fragment key={step}>
-                {i > 0 ? (
-                  <motion.span
-                    className="hidden h-px w-8 origin-left bg-blue-dark/15 sm:block"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.45, delay: 0.72 + i * 0.12, ease: HERO_EASE }}
+            <div className="mx-post-frame">
+              {heroVideo ? (
+                <>
+                  {heroVideo.anteprimaUrl ? (
+                    <img src={heroVideo.anteprimaUrl} alt="" className="mx-post-frame__fill" decoding="async" />
+                  ) : null}
+                  <iframe
+                    src={heroVideoSrc}
+                    title="Percorso Posturale — Mobilitas Torino"
+                    className="mx-post-frame__fill mx-post-frame__video"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowFullScreen
                   />
-                ) : null}
-                <motion.span
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.62 + i * 0.12, ease: HERO_EASE }}
-                  className="offerta-step-pill inline-flex shrink-0 items-center rounded-full border border-blue-dark/10 bg-white/65 px-2.5 sm:px-3 py-1 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.16em] text-blue-dark/70"
-                >
-                  <span className="mr-1 sm:mr-1.5 text-blue-dark">{String(i + 1).padStart(2, '0')}</span>
-                  {step}
-                </motion.span>
-              </React.Fragment>
-            ))}
-          </div>
+                  <div className={`mx-post-frame__cover ${heroVideoCover ? 'is-on' : ''}`} aria-hidden />
+                </>
+              ) : (
+                <>
+                  <img
+                    src={webLarge(heroPhoto)}
+                    srcSet={`${webSmall(heroPhoto)} 900w, ${webLarge(heroPhoto)} 1600w`}
+                    sizes="(min-width: 1024px) 640px, 92vw"
+                    alt=""
+                    className="mx-post-frame__fill mx-post-frame__photo"
+                    decoding="async"
+                  />
+                  <div className="mx-post-frame__shade" aria-hidden="true" />
+                  <p className="mx-post-frame__placeholder">
+                    <span className="mx-post-frame__play" aria-hidden="true">
+                      <Play size={14} strokeWidth={2.4} />
+                    </span>
+                    <span>Video o immagine di profilo</span>
+                    <TodoMark onDark>asset hero</TodoMark>
+                  </p>
+                </>
+              )}
+              {heroVideoLoading && !heroVideo ? <div className="mx-post-frame__loading" aria-hidden /> : null}
+
+              {/* Filo a piombo sopra l'immagine */}
+              <span className="mx-post-frame__plumb" aria-hidden="true">
+                <i />
+                <b />
+              </span>
+              <span className="mx-post-frame__ruler" aria-hidden="true" />
+
+              <ul className="mx-post-frame__chips">
+                {copy.heroChips.map((label, i) => (
+                  <motion.li
+                    key={label}
+                    initial={{ opacity: 0, x: 14 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: EASE, delay: 0.9 + i * 0.12 }}
+                  >
+                    <span aria-hidden="true" />
+                    {label}
+                  </motion.li>
+                ))}
+              </ul>
+              <div className="mx-post-frame__method">Valuta → Correggi → Consolida</div>
+            </div>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            className="mx-post-hero__ctas"
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.78, ease: HERO_EASE }}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
           >
-            <CtaPair className="mb-10 sm:mb-12" />
+            <PostCtas onOffer={openOfferta} onInfo={openInfo} compact />
+            <Countdown cells={countdownCells} className="mx-post-hero__count" />
           </motion.div>
-        </motion.div>
 
-        <HeroMedia
-          video={heroVideo}
-          videoSrc={heroVideoSrc}
-          videoCover={heroVideoCover}
-          loading={heroVideoLoading}
-          fallbackImage={copy.heroImage}
-          chips={copy.heroChips}
-          y={heroY}
-          scale={heroScale}
-        />
+          <motion.div
+            className="mx-post-hero__copy"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.5 }}
+          >
+            <p className="mx-lead mx-post-hero__sub">
+              Il percorso che lavora sulla causa — non sul sintomo — in studio e nelle 16 ore in cui
+              vivi.
+            </p>
+            <div className="mx-post-hero__steps">
+              {['Valuta', 'Correggi', 'Consolida'].map((step, i) => (
+                <React.Fragment key={step}>
+                  {i > 0 ? <span className="mx-post-hero__dash" aria-hidden="true" /> : null}
+                  <span className="mx-post-pill">
+                    <span>{String(i + 1).padStart(2, '0')}</span>
+                    {step}
+                  </span>
+                </React.Fragment>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </header>
+
+      {/* Nastri */}
+      <div className="mx-ribbons mx-post-ribbons" aria-hidden="false">
+        <div className="mx-ribbon mx-ribbon--line">
+          {[0, 1].map((k) => (
+            <div key={k} className="mx-marquee mx-marquee--rev" style={{ '--mx-speed': '46s' }} aria-hidden={k === 1}>
+              {CAUSE_SYMPTOMS.map((item) => (
+                <span key={item} className="mx-ribbon__item">
+                  {item}
+                  <span className="mx-ribbon__dot" />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="mx-ribbon mx-ribbon--green">
+          {[0, 1].map((k) => (
+            <div key={k} className="mx-marquee" style={{ '--mx-speed': '40s' }} aria-hidden={k === 1}>
+              {['2 sedi a Torino', '20+ professionisti', 'San Donato', 'Crocetta', 'Valuta', 'Correggi', 'Consolida'].map((item) => (
+                <span key={item} className="mx-ribbon__item">
+                  {item}
+                  <span className="mx-ribbon__dot" />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ——— 2. I segnali ——— */}
+      <section className="mx-section mx-post-signals">
+        <div className="mx-wrap">
+          <div className="mx-post-head">
+            <Kicker>I segnali</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Ti riconosci in almeno uno
+              <br />
+              <span className="mx-accent">di questi?</span>
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-post-head__lead">
+                Non serve averli tutti. Anche uno solo può essere il modo in cui il corpo sta dicendo che si è adattato.
+              </p>
+            </Reveal>
+          </div>
+
+          <ol className="mx-post-signal-list">
+            {copy.signals.map((item, i) => {
+              const on = recognized.has(item.title)
+              return (
+                <Reveal as="li" key={item.title} delay={(i % 3) * 0.06} y={24}>
+                  <button
+                    type="button"
+                    className={`mx-post-signal ${on ? 'is-on' : ''}`}
+                    aria-pressed={on}
+                    onClick={() => toggleSignal(item.title)}
+                  >
+                    <span className="mx-post-signal__n">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="mx-post-signal__txt">
+                      <span className="mx-post-signal__t">{item.title}</span>
+                      <span className="mx-post-signal__d">{item.body}</span>
+                    </span>
+                    <span className="mx-post-signal__box" aria-hidden="true">
+                      <Check size={16} strokeWidth={3.2} />
+                    </span>
+                  </button>
+                </Reveal>
+              )
+            })}
+          </ol>
+        </div>
       </section>
 
-      <Marquee
-        dark
-        items={[
-          '2 sedi a Torino',
-          '20+ professionisti',
-          'San Donato',
-          'Crocetta',
-          'Valuta',
-          'Correggi',
-          'Consolida',
-        ]}
-      />
-
-      {/* ——— 2. IDENTIFICAZIONE ——— */}
-      <PinGallery
-        eyebrow="I segnali"
-        title={
-          <>
-            Ti riconosci in almeno uno
-            <br />
-            <span className="text-green">di questi?</span>
-          </>
-        }
-        intro="Non serve averli tutti. Anche uno solo può essere il modo in cui il corpo sta dicendo che si è adattato."
-      >
-        {copy.signals.map((item, i) => (
-          <HoverCard
-            key={item.title}
-            className="w-full rounded-[1.75rem] border border-cream/15 bg-[#041f45] p-6 sm:p-7 flex flex-col"
-          >
-            <p className="relative font-black text-green text-4xl sm:text-5xl mb-6 leading-none">
-              {String(i + 1).padStart(2, '0')}
-            </p>
-            <h3 className="relative text-cream font-semibold text-lg sm:text-xl leading-snug mb-3 mt-0">
-              {item.title}
-            </h3>
-            <p className="relative text-cream/75 text-sm leading-relaxed mt-auto">{item.body}</p>
-          </HoverCard>
-        ))}
-      </PinGallery>
-
-      {/* ——— 3. LA CAUSA ——— */}
-      <LightSection>
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <Fade>
-            <Eyebrow>La causa</Eyebrow>
-            <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-5">
+      {/* ——— 3. La causa ——— */}
+      <section className="mx-section mx-post-cause">
+        <div className="mx-wrap mx-post-cause__grid">
+          <div>
+            <Kicker>La causa</Kicker>
+            <h2 className="mx-h mx-h--lg">
               Non sono problemi diversi.
               <br />
-              <span className="text-blue-dark">È una causa sola.</span>
+              <span className="mx-gradient">È una causa sola.</span>
             </h2>
-            <p className="text-blue-dark/70 text-base sm:text-lg leading-relaxed mb-6">
-              Il corpo non si rompe a pezzi. Si adatta alle 16 ore da seduti, allo schermo, al modo
-              in cui stai fermo senza accorgertene. Testa avanti, nodo, mal di testa, schiena:
-              sembrano storie separate. Sono tessere dello stesso puzzle.
-            </p>
-            <p className="font-black text-xl sm:text-2xl text-blue-dark leading-snug">
-              Il sintomo è il pezzo che fa rumore. La causa è lo schema che lo tiene acceso.
-            </p>
-          </Fade>
-          <Fade delay={0.08}>
-            <div className="rounded-[2rem] sm:rounded-[2.5rem] bg-blue-dark text-cream p-7 sm:p-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-green mb-5">
-                Tanti sintomi → una causa
+            <Reveal>
+              <p className="mx-lead mx-post-cause__text">
+                Il corpo non si rompe a pezzi. Si adatta alle 16 ore da seduti, allo schermo, al modo
+                in cui stai fermo senza accorgertene. Testa avanti, nodo, mal di testa, schiena:
+                sembrano storie separate. Sono tessere dello stesso puzzle.
               </p>
-              <div className="flex flex-wrap gap-2 mb-8">
-                {CAUSE_SYMPTOMS.map((s) => (
-                  <HoverChip
-                    key={s}
-                    className="rounded-full border border-cream/15 bg-cream/5 px-3 py-1.5 text-xs font-medium text-cream/80"
-                  >
-                    {s}
-                  </HoverChip>
-                ))}
-              </div>
-              <div className="rounded-[1.5rem] bg-green px-5 py-6 text-center text-blue-dark">
-                <p className="font-black text-2xl sm:text-3xl text-blue-dark leading-snug">
-                  Un adattamento alle 16 ore
-                </p>
-                <p className="text-blue-dark text-sm mt-2 leading-relaxed font-medium">
-                  Seduti, schermo, stesso gesto ripetuto. Il corpo trova una strategia — e la tiene.
-                </p>
-              </div>
-            </div>
-          </Fade>
-        </div>
-      </LightSection>
-
-      <Marquee reverse items={CAUSE_SYMPTOMS} />
-
-      {/* ——— 4. SOLUZIONI FALLIMENTARI ——— */}
-      <PinGallery
-        eyebrow="Aiuti di superficie"
-        title={
-          <>
-            Perché quello che hai già provato
-            <br />
-            <span className="text-green">non ha funzionato.</span>
-          </>
-        }
-        intro="Non perché «non ti sei impegnato abbastanza». Perché erano aiuti di superficie: utili per un pezzo, silenziosi sulla causa."
-      >
-        {FAILED_SOLUTIONS.map((item) => {
-          const Icon = item.icon
-          return (
-            <HoverCard
-              key={item.title}
-              className="w-full rounded-[1.75rem] border border-cream/15 bg-[#041f45] p-6 sm:p-7 flex flex-col"
-            >
-              <Icon className="relative w-5 h-5 text-green mb-5" strokeWidth={1.6} />
-              <h3 className="relative text-cream font-semibold text-lg mb-3 mt-0">{item.title}</h3>
-              <p className="relative text-cream/80 text-sm leading-relaxed mb-3">{item.does}</p>
-              <p className="relative text-cream/80 text-sm leading-relaxed mt-auto">{item.why}</p>
-            </HoverCard>
-          )
-        })}
-      </PinGallery>
-
-      {/* ——— 5. IL METODO ——— */}
-      <LightSection>
-        <Fade className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <Eyebrow>Il metodo</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-5">
-            Metodo Mobilitas:{' '}
-            <span className="text-blue-dark">Valuta → Correggi → Consolida.</span>
-          </h2>
-          <p className="text-blue-dark/70 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-            Tre passi, in quest’ordine. Perché sbloccare senza capire, o capire senza consolidare,
-            è di nuovo un aiuto di superficie.
-          </p>
-        </Fade>
-        <ol className="max-w-6xl mx-auto grid md:grid-cols-3 gap-4 lg:gap-6 list-none m-0 p-0">
-          {METHOD_STEPS.map((step) => (
-            <HoverCard
-              as="li"
-              key={step.k}
-              tone="light"
-              className="rounded-[1.75rem] bg-white/70 border border-blue-dark/10 p-6 sm:p-8 flex flex-col"
-            >
-              <p className="relative font-black text-blue-dark text-5xl sm:text-6xl leading-none m-0 mb-5">
-                {step.k}
+            </Reveal>
+            <Reveal>
+              <p className="mx-post-quote">
+                Il sintomo è il pezzo che fa rumore. La causa è lo schema che lo tiene acceso.
               </p>
-              <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-dark/70 mb-2">
-                {step.t}
-              </p>
-              <h3 className="relative font-bold text-xl sm:text-2xl leading-snug mb-3 mt-0 text-blue-dark">
-                {step.title}
-              </h3>
-              <p className="relative text-blue-dark/70 text-sm sm:text-base leading-relaxed mt-auto">
-                {step.body}
-              </p>
-            </HoverCard>
-          ))}
-        </ol>
-        <Fade className="mt-10 sm:mt-12 text-center max-w-2xl mx-auto">
-          <p className="font-black text-xl sm:text-2xl text-blue-dark leading-snug mb-10">
-            Funziona perché combina lo studio e la vita quotidiana.
-          </p>
-          <CtaPair />
-        </Fade>
-      </LightSection>
-
-      {/* ——— 6. COSA INCLUDE ——— */}
-      <LightSection className="pt-0 sm:pt-0 lg:pt-0">
-        <Fade className="text-center max-w-3xl mx-auto mb-12">
-          <Eyebrow>Lo stack</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-4">
-            Tutto quello che <span className="text-blue-dark">ricevi.</span>
-          </h2>
-          <p className="text-blue-dark/70 text-base sm:text-lg leading-relaxed">
-            Tre pezzi, un percorso. Qui c’è il valore di ciascun pezzo — non ancora il prezzo
-            dell’offerta.
-          </p>
-        </Fade>
-        <div className="max-w-3xl mx-auto space-y-3">
-          {STACK_ITEMS.map((item, i) => (
-            <Fade key={item.k} delay={i * 0.05}>
-              <HoverCard
-                tone="light"
-                className="rounded-[1.5rem] bg-white/70 border border-blue-dark/10 px-6 py-6 sm:px-8 flex flex-col sm:flex-row sm:items-center gap-4"
-              >
-                <span className="relative font-black text-blue-dark text-2xl leading-none">
-                  {item.k}
-                </span>
-                <div className="relative min-w-0 flex-1">
-                  <h3 className="text-blue-dark font-semibold text-base sm:text-lg mt-0 mb-1">
-                    {item.title}
-                  </h3>
-                  <p className="text-blue-dark/70 text-sm leading-relaxed">{item.body}</p>
-                </div>
-                <p className="relative text-blue-dark font-black text-xl whitespace-nowrap flex items-center gap-2">
-                  {item.value} <TodoMark>stack</TodoMark>
-                </p>
-              </HoverCard>
-            </Fade>
-          ))}
-        </div>
-        <Fade className="max-w-3xl mx-auto mt-4">
-          <div className="rounded-[1.5rem] bg-blue-dark px-6 py-5 sm:px-8 flex items-center justify-between">
-            <p className="text-cream/70 font-medium m-0">Valore totale</p>
-            <p className="font-black text-cream text-3xl sm:text-4xl m-0">1.000€</p>
+            </Reveal>
           </div>
-        </Fade>
-      </LightSection>
-
-      {/* ——— 7. PROVE ——— */}
-      <PinGallery
-        eyebrow="Le prove"
-        title={
-          <>
-            Cosa cambia, <span className="text-green">davvero.</span>
-          </>
-        }
-        intro={copy.proofs.intro}
-        gridClass="grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-      >
-        {copy.proofs.beforeAfter.map((item) => (
-          <HoverCard
-            as="div"
-            key={item.label}
-            className="w-full rounded-[1.75rem] bg-[#041f45] border border-cream/15 min-h-[240px] grid place-items-center p-6 sm:p-8 text-center"
-          >
-            <div className="relative">
-              <p className="font-black text-xl text-cream mb-2">{item.label}</p>
-              <p className="text-cream/70 text-sm leading-relaxed mb-3">{item.hint}</p>
-              <TodoMark onDark>foto prima/dopo</TodoMark>
+          <Reveal className="mx-post-cause__card" delay={0.08}>
+            <p className="mx-post-cause__label">Tanti sintomi → una causa</p>
+            <ConvergingChips items={CAUSE_SYMPTOMS} />
+            <span className="mx-post-cause__funnel" aria-hidden="true" />
+            <div className="mx-post-cause__one">
+              <p className="mx-post-cause__one-t">Un adattamento alle 16 ore</p>
+              <p className="mx-post-cause__one-d">
+                Seduti, schermo, stesso gesto ripetuto. Il corpo trova una strategia — e la tiene.
+              </p>
             </div>
-          </HoverCard>
-        ))}
-        {copy.proofs.videos.map((item) => (
-          <HoverCard
-            as="div"
-            key={item.title}
-            className="w-full rounded-[1.75rem] bg-[#041f45] border border-cream/15 min-h-[240px] grid place-items-center p-6 sm:p-8 text-center"
-          >
-            <div className="relative">
-              <span className="offerta-play-pop grid place-items-center w-11 h-11 mx-auto mb-3 rounded-full bg-green text-blue-dark">
-                <Play className="w-4 h-4 ml-0.5" strokeWidth={2.2} />
-              </span>
-              <p className="font-black text-lg text-cream mb-1">{item.title}</p>
-              <p className="text-cream/70 text-sm mb-3">{item.hint}</p>
-              <TodoMark onDark>video testimonianza</TodoMark>
-            </div>
-          </HoverCard>
-        ))}
-        <HoverCard
-          as="div"
-          className="w-full rounded-[1.75rem] border border-cream/15 bg-[#041f45] p-6 sm:p-7 flex flex-col justify-center min-h-[240px]"
-        >
-          <FileText className="relative w-5 h-5 text-green mb-4" strokeWidth={1.6} />
-          <p className="relative text-cream font-semibold mb-2 flex items-center gap-2 flex-wrap">
-            Report della valutazione <TodoMark onDark>asset report</TodoMark>
-          </p>
-          <p className="relative text-cream/80 text-sm leading-relaxed">{copy.proofs.report}</p>
-        </HoverCard>
-      </PinGallery>
+          </Reveal>
+        </div>
+      </section>
 
-      {/* ——— 8. OFFERTA BLACK FRIDAY ——— */}
-      <DarkBlock id="offerta" innerRef={offerRef}>
-        <Fade className="text-center max-w-2xl mx-auto">
-          <Eyebrow dark>Offerta Black Friday</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-3">
-            Da 1.000€ a 500€.
-            <br />
-            <span className="text-green">Solo fino al {OFFER_DEADLINE_LABEL}.</span>
+      {/* ——— 4. Aiuti di superficie ——— */}
+      <section className="mx-section mx-section--deep mx-post-failed">
+        <div className="mx-wrap">
+          <div className="mx-post-head">
+            <Kicker>Aiuti di superficie</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Perché quello che hai già provato
+              <br />
+              <span className="mx-accent">non ha funzionato.</span>
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-post-head__lead">
+                Non perché «non ti sei impegnato abbastanza». Perché erano aiuti di superficie: utili per un pezzo, silenziosi sulla causa.
+              </p>
+            </Reveal>
+          </div>
+
+          <Snap as="ul" className="mx-post-fails">
+            {FAILED_SOLUTIONS.map((item) => {
+              const Icon = item.icon
+              return (
+                <li key={item.title} className="mx-post-fail">
+                  <span className="mx-post-fail__icon">
+                    <Icon size={20} strokeWidth={1.8} />
+                  </span>
+                  <h3 className="mx-h mx-h--sm">{item.title}</h3>
+                  <p className="mx-post-fail__does">{item.does}</p>
+                  <span className="mx-post-fail__cut" aria-hidden="true" />
+                  <p className="mx-post-fail__why">{item.why}</p>
+                </li>
+              )
+            })}
+          </Snap>
+        </div>
+      </section>
+
+      {/* ——— 5. Il metodo ——— */}
+      <section className="mx-section mx-post-method-intro">
+        <div className="mx-wrap mx-post-head is-center">
+          <Kicker>Il metodo</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            Metodo Mobilitas:{' '}
+            <span className="mx-gradient">Valuta → Correggi → Consolida.</span>
           </h2>
-          <p className="mb-10">
-            <TodoMark onDark>data scadenza</TodoMark>
-          </p>
+          <Reveal>
+            <p className="mx-lead mx-post-head__lead">
+              Tre passi, in quest’ordine. Perché sbloccare senza capire, o capire senza consolidare,
+              è di nuovo un aiuto di superficie.
+            </p>
+          </Reveal>
+          <span className="mx-post-scrollcue" aria-hidden="true">
+            <ScanLine size={18} />
+          </span>
+        </div>
+      </section>
+      <PlumbScene />
+      <section className="mx-section mx-post-method-out">
+        <div className="mx-wrap mx-post-head is-center">
+          <Reveal>
+            <p className="mx-post-quote is-center">Funziona perché combina lo studio e la vita quotidiana.</p>
+          </Reveal>
+          {ctas}
+        </div>
+      </section>
 
-          <p className="text-cream/50 text-lg font-medium line-through decoration-cream/40 mb-1">
-            1.000€
-          </p>
-          <p className="font-black text-cream text-7xl sm:text-8xl leading-none mb-2">
-            500€
-          </p>
-          <p className="text-cream/75 text-sm mb-8">Percorso Posturale completo</p>
+      {/* ——— 6. Cosa include: lo scontrino ——— */}
+      <section className="mx-section mx-section--deep mx-post-stack">
+        <div className="mx-wrap mx-post-stack__grid">
+          <div className="mx-post-head">
+            <Kicker>Lo stack</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Tutto quello che <span className="mx-gradient">ricevi.</span>
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-post-head__lead">
+                Tre pezzi, un percorso. Qui c’è il valore di ciascun pezzo — non ancora il prezzo
+                dell’offerta.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal className="mx-post-receipt" delay={0.08}>
+            <img className="mx-post-receipt__logo" src="/pittogramma.png" alt="" />
+            <ul className="mx-post-receipt__rows">
+              {STACK_ITEMS.map((item) => (
+                <li key={item.k} className="mx-post-receipt__row">
+                  <span className="mx-post-receipt__k">{item.k}</span>
+                  <div className="mx-post-receipt__main">
+                    <h3 className="mx-h mx-post-receipt__t">{item.title}</h3>
+                    <p className="mx-post-receipt__d">{item.body}</p>
+                  </div>
+                  <p className="mx-post-receipt__v">
+                    {item.value} <TodoMark>stack</TodoMark>
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <div className="mx-post-receipt__total">
+              <p>Valore totale</p>
+              <p className="mx-post-receipt__sum">1.000€</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-          <ul className="space-y-2.5 text-left max-w-sm mx-auto mb-10">
-            {STACK_ITEMS.map((item) => (
-              <li key={item.k} className="flex items-center gap-3">
-                <span className="grid place-items-center w-5 h-5 rounded-full bg-green shrink-0">
-                  <Check className="w-3 h-3 text-blue-dark" strokeWidth={3} />
-                </span>
-                <span className="text-cream/80 text-sm">{item.title}</span>
+      {/* ——— 7. Le prove ——— */}
+      <section className="mx-section mx-post-proofs">
+        <div className="mx-wrap">
+          <div className="mx-post-head">
+            <Kicker>Le prove</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Cosa cambia, <span className="mx-accent">davvero.</span>
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-post-head__lead">{copy.proofs.intro}</p>
+            </Reveal>
+          </div>
+
+          <Snap as="ul" className="mx-post-proofgrid">
+            {copy.proofs.beforeAfter.map((item) => (
+              <li key={item.label} className="mx-post-proof is-ba">
+                <div className="mx-post-proof__split" aria-hidden="true">
+                  <span>
+                    <UserRound size={40} strokeWidth={1.4} />
+                  </span>
+                  <span>
+                    <UserRound size={40} strokeWidth={1.4} />
+                  </span>
+                </div>
+                <p className="mx-post-proof__t">{item.label}</p>
+                <p className="mx-post-proof__d">{item.hint}</p>
+                <TodoMark onDark>foto prima/dopo</TodoMark>
               </li>
             ))}
-          </ul>
-
-          <div className="grid grid-cols-4 gap-2 sm:gap-3 max-w-md mx-auto mb-8">
-            {countdownCells.map((c) => (
-              <div key={c.l} className="rounded-2xl border border-cream/15 bg-[#041f45] py-4">
-                <p className="font-black text-2xl sm:text-3xl text-cream leading-none">
-                  {c.v}
-                </p>
-                <p className="text-cream/70 text-[10px] font-semibold uppercase tracking-[0.16em] mt-1.5">
-                  {c.l}
-                </p>
-              </div>
+            {copy.proofs.videos.map((item) => (
+              <li key={item.title} className="mx-post-proof is-video">
+                <span className="mx-post-proof__play" aria-hidden="true">
+                  <Play size={18} strokeWidth={2.2} />
+                </span>
+                <p className="mx-post-proof__t">{item.title}</p>
+                <p className="mx-post-proof__d">{item.hint}</p>
+                <TodoMark onDark>video testimonianza</TodoMark>
+              </li>
             ))}
+            <li className="mx-post-proof is-report">
+              <span className="mx-post-proof__file" aria-hidden="true">
+                <FileText size={20} strokeWidth={1.8} />
+              </span>
+              <p className="mx-post-proof__t">
+                Report della valutazione <TodoMark onDark>asset report</TodoMark>
+              </p>
+              <p className="mx-post-proof__d">{copy.proofs.report}</p>
+            </li>
+          </Snap>
+        </div>
+      </section>
+
+      {/* ——— 8. Offerta Black Friday ——— */}
+      <section className="mx-post-offer" id="offerta" ref={offerRef}>
+        <div className="mx-post-grid-bg" aria-hidden="true" />
+        <div className="mx-wrap">
+          <Reveal className="mx-post-ticket">
+            <div className="mx-post-ticket__main">
+              <Kicker>Offerta Black Friday</Kicker>
+              <h2 className="mx-h mx-h--md mx-post-ticket__title">
+                Da 1.000€ a 500€.
+                <br />
+                <span className="mx-accent">Solo fino al {OFFER_DEADLINE_LABEL}.</span>
+              </h2>
+              <p className="mx-post-ticket__todo">
+                <TodoMark onDark>data scadenza</TodoMark>
+              </p>
+
+              <div className="mx-post-price">
+                <p className="mx-post-price__old">1.000€</p>
+                <p className="mx-post-price__new">500€</p>
+                <p className="mx-post-price__what">Percorso Posturale completo</p>
+              </div>
+
+              <ul className="mx-post-ticket__list">
+                {STACK_ITEMS.map((item) => (
+                  <li key={item.k}>
+                    <span aria-hidden="true">
+                      <Check size={13} strokeWidth={3} />
+                    </span>
+                    {item.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mx-post-ticket__stub">
+              <Countdown cells={countdownCells} className="is-big" />
+              <p className="mx-post-ticket__seats">
+                Posti limitati: <span className="mx-accent">{SPOTS_LEFT} rimasti</span>{' '}
+                <TodoMark onDark>posti</TodoMark>
+              </p>
+              {ctas}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ——— 9. Garanzia ——— */}
+      <section className="mx-section mx-section--deep mx-post-guarantee">
+        <div className="mx-wrap mx-post-guarantee__grid">
+          <div>
+            <Kicker>Garanzia</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Il rischio ce lo <span className="mx-gradient">prendiamo noi.</span>
+            </h2>
           </div>
-
-          <p className="text-cream/70 text-sm mb-10">
-            Posti limitati: <span className="text-green font-semibold">{SPOTS_LEFT} rimasti</span>{' '}
-            <TodoMark onDark>posti</TodoMark>
-          </p>
-
-          <CtaPair dark />
-        </Fade>
-      </DarkBlock>
-
-      {/* ——— 9. GARANZIA ——— */}
-      <LightSection>
-        <Fade className="max-w-2xl mx-auto text-center">
-          <Eyebrow>Garanzia</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-8">
-            Il rischio ce lo <span className="text-blue-dark">prendiamo noi.</span>
-          </h2>
-          <div className="rounded-[2rem] bg-white/70 border border-blue-dark/10 px-6 py-8 sm:px-10 text-left">
-            <Shield className="w-6 h-6 text-blue-dark mb-4" strokeWidth={1.6} />
-            <p className="mb-3">
-              <TodoMark>testo garanzia</TodoMark>
+          <Reveal className="mx-post-shield">
+            <span className="mx-post-shield__icon" aria-hidden="true">
+              <Shield size={26} strokeWidth={1.8} />
+            </span>
+            <p className="mx-post-shield__todo">
+              <TodoMark onDark>testo garanzia</TodoMark>
             </p>
-            <p className="text-blue-dark/70 text-sm sm:text-base leading-relaxed">
+            <p className="mx-body">
               Placeholder: se dalla valutazione non emerge un quadro su cui vale la pena lavorare,
               nessun obbligo di proseguire. Formulazione esatta da definire (rimborso / non si va
               avanti / condizioni).
             </p>
-          </div>
-        </Fade>
-      </LightSection>
+          </Reveal>
+        </div>
+      </section>
 
-      {/* ——— 10. CHI SIAMO E DOVE ——— */}
-      <LightSection className="pt-0 sm:pt-0 lg:pt-0">
-        <Fade className="text-center max-w-3xl mx-auto mb-12">
-          <Eyebrow>Studio e sedi</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-5">
-            Due sedi nel centro
-            <br />
-            <span className="text-blue-dark">di Torino.</span>
-          </h2>
-          <p className="text-blue-dark/70 text-base sm:text-lg leading-relaxed">
-            Mobilitas è uno studio osteopatico con un team di oltre 20 professionisti. Il Percorso
-            Posturale nasce da anni di lavoro su postura, sedentarietà e recupero della funzione —
-            in studio e nella giornata vera.
+      {/* ——— 10. Studio e sedi ——— */}
+      <section className="mx-section mx-section--glow mx-post-place">
+        <div className="mx-wrap">
+          <div className="mx-post-head">
+            <Kicker>Studio e sedi</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Due sedi nel centro
+              <br />
+              <span className="mx-accent">di Torino.</span>
+            </h2>
+            <Reveal>
+              <p className="mx-lead mx-post-head__lead">
+                Mobilitas è uno studio osteopatico con un team di oltre 20 professionisti. Il Percorso
+                Posturale nasce da anni di lavoro su postura, sedentarietà e recupero della funzione —
+                in studio e nella giornata vera.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="mx-post-team">
+            {TEAM_PHOTOS.map((photo, i) => (
+              <figure key={photo.src} className="mx-post-team__photo" style={{ '--i': i }}>
+                <img
+                  src={webSmall(photo.src)}
+                  srcSet={`${webSmall(photo.src)} 700w, ${webLarge(photo.src)} 1200w`}
+                  sizes="(min-width: 1000px) 300px, 62vw"
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))}
+          </div>
+          <p className="mx-post-team__todo">
+            <TodoMark onDark>foto team / studio</TodoMark>
           </p>
-        </Fade>
-        <div className="offerta-hscroll flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6 sm:mx-0 sm:px-0 max-w-5xl sm:mx-auto mb-4">
-          {TEAM_PHOTOS.map((photo) => (
-            <div
-              key={photo.src}
-              className="offerta-photo-frame relative aspect-[4/5] w-[min(62vw,260px)] sm:w-[240px] shrink-0 snap-center overflow-hidden rounded-[1.5rem]"
-            >
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                className="offerta-photo-zoom absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))}
+
+          <div className="mx-post-maps">
+            {MAPS.map((map) => (
+              <div key={map.label} className="mx-post-map">
+                <div className="mx-post-map__label">
+                  <MapPin size={16} />
+                  {map.label}
+                </div>
+                <iframe
+                  src={map.src}
+                  title={map.title}
+                  width="100%"
+                  height="260"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mx-post-transit">
+            <p>
+              <TrainFront size={18} aria-hidden="true" />
+              <span>
+                Entrambe le sedi sono raggiungibili in metro: San Donato (Bernini o Principi d’Acaja),
+                Crocetta (fermata Crocetta).
+              </span>
+            </p>
+            <p>
+              <Car size={18} aria-hidden="true" />
+              <span>Parcheggio vicino a entrambe le sedi · strisce blu</span>
+            </p>
+          </div>
         </div>
-        <p className="text-center mb-10">
-          <TodoMark>foto team / studio</TodoMark>
-        </p>
-        <div className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto mb-8">
-          {MAPS.map((map) => (
-            <div key={map.label} className="rounded-[1.75rem] overflow-hidden bg-white border border-blue-dark/10">
-              <div className="px-5 py-3 text-sm font-semibold text-blue-dark">{map.label}</div>
-              <iframe
-                src={map.src}
-                title={map.title}
-                width="100%"
-                height="260"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
-                className="block w-full h-[260px]"
-              />
-            </div>
-          ))}
-        </div>
-        <p className="text-blue-dark/70 text-sm text-center max-w-xl mx-auto mb-6">
-          Entrambe le sedi sono raggiungibili in metro: San Donato (Bernini o Principi d’Acaja),
-          Crocetta (fermata Crocetta).
-        </p>
-        <div className="max-w-5xl mx-auto flex items-center gap-3 rounded-[1.5rem] bg-white/70 border border-blue-dark/10 px-5 py-4">
-          <Car className="w-5 h-5 text-blue-dark shrink-0" strokeWidth={1.6} />
-          <p className="text-sm text-blue-dark/70 m-0">
-            Parcheggio vicino a entrambe le sedi · strisce blu
-          </p>
-        </div>
-      </LightSection>
+      </section>
 
       {/* ——— 11. FAQ ——— */}
-      <LightSection>
-        <Fade className="text-center max-w-3xl mx-auto mb-12">
-          <Eyebrow>Domande</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12]">
-            Le domande che arrivano
-            <br />
-            <span className="text-blue-dark">prima di bloccare il posto.</span>
-          </h2>
-        </Fade>
-        <div className="max-w-3xl mx-auto divide-y divide-blue-dark/10">
-          {FAQ_ITEMS.map((item, index) => {
-            const isOpen = openFaqIndex === index
-            return (
-              <div key={item.id}>
-                <button
-                  type="button"
-                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                  aria-expanded={isOpen}
-                  className="offerta-faq-btn w-full text-left py-5 sm:py-6 flex items-start gap-4 bg-transparent cursor-pointer"
-                >
-                  <span className="flex-1 font-bold text-xl sm:text-2xl leading-snug text-blue-dark">
-                    {item.question}
-                  </span>
-                  <span
-                    className={`offerta-faq-plus grid place-items-center w-8 h-8 rounded-full border border-blue-dark/15 shrink-0 mt-1 transition-[transform,background-color,border-color,color] duration-300 ${
-                      isOpen ? 'rotate-45 bg-green border-green text-blue-dark' : 'text-blue-dark/50'
-                    }`}
+      <section className="mx-section mx-section--deep mx-post-faq">
+        <div className="mx-wrap mx-post-faq__grid">
+          <div className="mx-post-faq__intro">
+            <Kicker>Domande</Kicker>
+            <h2 className="mx-h mx-h--lg">
+              Le domande che arrivano
+              <br />
+              <span className="mx-gradient">prima di bloccare il posto.</span>
+            </h2>
+          </div>
+          <ul className="mx-post-faq__list">
+            {FAQ_ITEMS.map((item, index) => {
+              const isOpen = openFaqIndex === index
+              return (
+                <li key={item.id} className={`mx-post-faq__item ${isOpen ? 'is-open' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                    aria-expanded={isOpen}
+                    aria-controls={`mx-post-faq-${item.id}`}
+                    className="mx-post-faq__q"
                   >
-                    <Plus className="w-4 h-4" strokeWidth={2.2} />
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-[grid-template-rows] duration-300 ${
-                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                  }`}
-                >
-                  <div className="overflow-hidden min-h-0">
-                    <p className="pb-6 text-blue-dark/70 text-sm sm:text-base leading-relaxed pr-12">
-                      {item.answer}
-                    </p>
+                    <span className="mx-post-faq__qt">{item.question}</span>
+                    <span className="mx-post-faq__plus" aria-hidden="true">
+                      <Plus size={18} strokeWidth={2.4} />
+                    </span>
+                  </button>
+                  <div className="mx-post-faq__a" id={`mx-post-faq-${item.id}`} role="region">
+                    <div>
+                      <p className="mx-body">{item.answer}</p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )
-          })}
+                </li>
+              )
+            })}
+          </ul>
         </div>
-      </LightSection>
+      </section>
 
-      {/* ——— 12. CTA FINALE ——— */}
-      <DarkBlock>
-        <Fade className="text-center max-w-3xl mx-auto">
-          <Eyebrow dark>La scelta</Eyebrow>
-          <h2 className="font-black tracking-[-0.02em] leading-[1.12] mb-12">
-            Due strade. <span className="text-green">Una scelta.</span>
-          </h2>
-        </Fade>
-        <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-12">
-          <HoverCard
-            as="div"
-            className="rounded-[1.75rem] border border-cream/15 bg-[#041f45] p-6 sm:p-8 text-left"
-          >
-            <p className="relative text-[11px] font-semibold uppercase tracking-[0.18em] text-cream/75 mb-2">
-              Strada 1
-            </p>
-            <h3 className="relative font-black text-2xl text-cream mb-3 mt-0">
-              Continuare a tamponare
-            </h3>
-            <p className="relative text-cream/80 text-sm leading-relaxed">
-              Stretching, cuscino, «da oggi sto dritto», una seduta quando il nodo torna. Il
-              sintomo si calma. La causa resta. Tra tre mesi, la stessa foto di profilo.
-            </p>
-          </HoverCard>
-          <HoverCard
-            as="div"
-            tone="green"
-            className="rounded-[1.75rem] bg-green p-6 sm:p-8 text-left text-blue-dark"
-          >
-            <LiquidBlob
-              className="-right-10 -top-12"
-              size={160}
-              color="rgba(255, 255, 255, 0.45)"
-              duration={8}
-              drift="tr"
-              blur={22}
-            />
-            <p className="relative z-10 text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-dark mb-2">
-              Strada 2
-            </p>
-            <h3 className="relative z-10 font-black text-2xl text-blue-dark mb-3 mt-0">
-              Lavorare sulla causa
-            </h3>
-            <p className="relative z-10 text-blue-dark text-sm leading-relaxed">
-              Valutare, sbloccare in studio, consolidare nelle 16 ore. Non è più veloce: è l’unica
-              direzione in cui il cambiamento può tenersi.
-            </p>
-          </HoverCard>
-        </div>
-        <Fade className="text-center mb-10">
-          <p className="text-cream/50 text-base line-through mb-1">1.000€</p>
-          <p className="font-black text-cream text-6xl leading-none mb-3">500€</p>
-          <p className="text-cream/75 text-sm mb-2">
-            Valutazione + 3 trattamenti + 12 mesi di app · fino al {OFFER_DEADLINE_LABEL} ·{' '}
-            {SPOTS_LEFT} posti
-          </p>
-          <p className="mb-8 flex justify-center gap-2">
-            <TodoMark onDark>data</TodoMark>
-            <TodoMark onDark>posti</TodoMark>
-          </p>
-          <CtaPair dark />
-        </Fade>
-        <div className="grid sm:grid-cols-2 gap-3 max-w-3xl mx-auto pt-8 border-t border-cream/10">
-          <a
-            href={PHONE_HREF}
-            className="offerta-link-row flex items-center gap-3 rounded-2xl px-4 py-3 text-cream/70 text-sm transition-colors duration-300"
-          >
-            <Phone className="w-4 h-4 text-green shrink-0" strokeWidth={1.8} />
-            {PHONE_DISPLAY}
-          </a>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="offerta-link-row flex items-center gap-3 rounded-2xl px-4 py-3 text-cream/70 text-sm transition-colors duration-300"
-          >
-            <Mail className="w-4 h-4 text-green shrink-0" strokeWidth={1.8} />
-            {EMAIL}
-          </a>
-          <div className="flex items-center gap-3 rounded-2xl px-4 py-3 text-cream/70 text-sm">
-            <Clock className="w-4 h-4 text-green shrink-0" strokeWidth={1.8} />
-            {HOURS}
+      {/* ——— 12. La scelta ——— */}
+      <section className="mx-post-final">
+        <span className="mx-final__ring" aria-hidden="true" />
+        <span className="mx-final__ring" aria-hidden="true" />
+        <span className="mx-final__ring" aria-hidden="true" />
+        <div className="mx-wrap">
+          <div className="mx-post-head is-center">
+            <Kicker>La scelta</Kicker>
+            <h2 className="mx-h mx-h--xl">
+              Due strade. <span className="mx-gradient">Una scelta.</span>
+            </h2>
           </div>
-          <div className="flex items-center gap-3 rounded-2xl px-4 py-3 text-cream/70 text-sm">
-            <MapPin className="w-4 h-4 text-green shrink-0" strokeWidth={1.8} />
-            Peyron 54 · Lamarmora 35
+
+          <div className="mx-post-roads">
+            <Reveal className="mx-post-road is-1">
+              <p className="mx-post-road__tag">Strada 1</p>
+              <h3 className="mx-h mx-h--md">Continuare a tamponare</h3>
+              <p className="mx-body">
+                Stretching, cuscino, «da oggi sto dritto», una seduta quando il nodo torna. Il
+                sintomo si calma. La causa resta. Tra tre mesi, la stessa foto di profilo.
+              </p>
+            </Reveal>
+            <Reveal className="mx-post-road is-2" delay={0.08}>
+              <p className="mx-post-road__tag">Strada 2</p>
+              <h3 className="mx-h mx-h--md">Lavorare sulla causa</h3>
+              <p className="mx-post-road__body">
+                Valutare, sbloccare in studio, consolidare nelle 16 ore. Non è più veloce: è l’unica
+                direzione in cui il cambiamento può tenersi.
+              </p>
+            </Reveal>
           </div>
-        </div>
-      </DarkBlock>
 
-      <div className="h-6 sm:h-8" />
+          <Reveal className="mx-post-recap">
+            <p className="mx-post-recap__old">1.000€</p>
+            <p className="mx-post-recap__new">500€</p>
+            <p className="mx-post-recap__info">
+              Valutazione + 3 trattamenti + 12 mesi di app · fino al {OFFER_DEADLINE_LABEL} ·{' '}
+              {SPOTS_LEFT} posti
+            </p>
+            <p className="mx-post-recap__todo">
+              <TodoMark onDark>data</TodoMark>
+              <TodoMark onDark>posti</TodoMark>
+            </p>
+            {ctas}
+          </Reveal>
 
-      {showSticky && (
-        <div className="md:hidden fixed bottom-0 inset-x-0 z-[45] border-t border-blue-dark/10 bg-cream/95 backdrop-blur-md px-3 pt-2.5 pb-[max(0.65rem,env(safe-area-inset-bottom))]">
-          <div className="flex items-center gap-3">
-            <div className="shrink-0 leading-none">
-              <p className="text-blue-dark/45 text-[11px] line-through">1.000€</p>
-              <p className="font-black text-blue-dark text-2xl">500€</p>
+          <div className="mx-post-contacts">
+            <a href={PHONE_HREF} className="mx-post-contact is-link">
+              <Phone size={16} strokeWidth={1.8} />
+              {PHONE_DISPLAY}
+            </a>
+            <a href={`mailto:${EMAIL}`} className="mx-post-contact is-link">
+              <Mail size={16} strokeWidth={1.8} />
+              {EMAIL}
+            </a>
+            <div className="mx-post-contact">
+              <Clock size={16} strokeWidth={1.8} />
+              {HOURS}
             </div>
-            <button
-              type="button"
-              onClick={openOfferta}
-              className="flex-1 inline-flex items-center justify-center gap-2 min-h-[48px] rounded-full font-black uppercase tracking-[0.06em] text-sm text-blue-dark bg-green px-4"
-            >
-              Blocca il tuo posto
-              <ArrowRight className="w-4 h-4" strokeWidth={2.4} />
-            </button>
+            <div className="mx-post-contact">
+              <MapPin size={16} strokeWidth={1.8} />
+              Peyron 54 · Lamarmora 35
+            </div>
           </div>
         </div>
-      )}
+      </section>
+
+      <AnimatePresence>
+        {showSticky && !showBooking && (
+          <motion.div
+            className="mx-post-sticky"
+            initial={{ y: 110, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 110, opacity: 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            <div className="mx-post-sticky__price">
+              <p className="mx-post-sticky__old">1.000€</p>
+              <p className="mx-post-sticky__new">500€</p>
+            </div>
+            <button type="button" onClick={openOfferta} className="mx-post-sticky__btn">
+              Blocca il tuo posto
+              <ArrowRight size={16} strokeWidth={2.4} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <BookingPopup
         isOpen={showBooking}
@@ -1961,7 +1469,7 @@ function OffertaPostura({ variant = 'uomo' }) {
         pageContext={variant === 'uomo' ? 'offerta-postura-uomo' : 'offerta-postura-donna'}
         ctaType={bookingCtaType}
       />
-    </div>
+    </PageShell>
   )
 }
 
