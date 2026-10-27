@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  ArrowUpRight,
   Check,
   Brain,
   Bone,
@@ -16,16 +14,14 @@ import {
   Venus,
   Stethoscope,
   MapPin,
-  TrainFront,
-  CarFront,
 } from 'lucide-react'
-import { RECENSIONI_IMAGES } from '../../data/recensioni'
-import { RECENSIONI_TOTALI, STUDI } from '../../data/studi'
-import GoogleReviewsLinks from '../../components/GoogleReviewsLinks'
+import { STUDI } from '../../data/studi'
+import { PAROLE_GENERICHE, TAG_RECENSIONI_GENERICHE } from '../../data/dolori'
 import PageShell from '../../components/site/PageShell'
-import { parseCellulare } from '../../utils/phone'
-import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
-import LeadFormSheet from '../../components/landing/LeadFormSheet'
+import BookingPopup from '../../components/BookingPopup'
+import StudiMap from '../../components/studi-map/StudiMap'
+import RecensioniTag from '../../components/recensioni-tag/RecensioniTag'
+import { VisitaCtas, VisitaDock } from '../../components/landing/VisitaCtas'
 import { Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
 import { EASE } from '../../components/home-sections/homeMotion'
 import '../../styles/pages/osteopata-torino.css'
@@ -34,34 +30,6 @@ import '../../styles/pages/osteopata-torino.css'
 // se siamo affidabili, vicini e veloci da prenotare. In apertura: conto alla rovescia dell'offerta,
 // foto dello studio con i due indirizzi, prezzo e prenotazione. Momenti firma: la mappa del corpo
 // ("dove ti fa male?" → l'area si accende) e la mappa di Torino con i due studi e la metro.
-
-const API_BASE = import.meta.env.VITE_API_BASE
-  || 'https://mobilitas-backend-990845221858.europe-west8.run.app'
-
-const cleanName = (name) =>
-  name.trim().replace(/\s+/g, ' ').split(' ').map(word =>
-    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  ).join(' ')
-
-// Testi comuni per i bottoni CTA
-const CTA_TEXTS = {
-  prenotaTrattamento: {
-    line1: 'PRENOTA IL TRATTAMENTO',
-    line2: "CON L'OFFERTA",
-    subtitle: '(clicca qui)'
-  },
-  prenotaPrimaVisita: {
-    line1: 'PRENOTA LA TUA PRIMA',
-    line2: 'VISITA CON OFFERTA',
-    subtitle: '(clicca qui)'
-  },
-  richiediConsulto: {
-    line1: 'RICHIEDI UN BREVE',
-    line2: 'CONSULTO GRATUITO',
-    subtitle: '(per avere maggiori informazioni)'
-  },
-  oppure: 'oppure'
-}
 
 // Foto dello studio (versioni ottimizzate di /home/homeN.png)
 const homeImages = ['home7', 'home4', 'home1', 'home2', 'home5', 'home8', 'home3']
@@ -144,6 +112,32 @@ const bodyAreas = [
   }
 ]
 
+// Foto dei trattamenti in versione web (public/trattamenti/web, larghe 900 e 1600 px)
+const webImg = (nome, w = 900) => `/trattamenti/web/${nome}_orizzontale-${w}.jpg`
+
+// Collage "un trattamento per ogni zona" (foto sovrapposte, poco spazio): le stesse aree della mappa del corpo
+const FOTO_ZONE = [
+  { nome: 'collo_presa-cervicale-supino_02', pos: '45% 45%', zona: 'Collo', alt: 'Trattamento osteopatico del collo' },
+  { nome: 'schiena_lombare-prono_14', pos: '45% 55%', zona: 'Schiena', alt: 'Trattamento osteopatico della schiena' },
+  { nome: 'pancia_addome-supino_08', pos: '50% 55%', zona: 'Pancia', alt: "Trattamento osteopatico dell'addome" },
+  { nome: 'spalla_scapola-decubito-laterale_06', pos: '50% 60%', zona: 'Spalle', alt: 'Trattamento osteopatico di spalla e scapola' },
+  { nome: 'gamba_ginocchio-supino_01', pos: '55% 55%', zona: 'Gambe', alt: 'Trattamento osteopatico del ginocchio' },
+  { nome: 'anca_flessa-supino_06', pos: '45% 70%', zona: 'Bacino', alt: "Trattamento osteopatico dell'anca e del bacino" },
+]
+
+// Osteopati diversi per specializzazioni diverse (accanto all'elenco)
+const FOTO_TEAM = [
+  { nome: 'spalla_supino-con-bambino_01', pos: '35% 40%', etichetta: 'Pediatria', alt: 'Osteopata Mobilitas con una mamma e il suo bambino' },
+  { nome: 'gamba_gamba-tesa-sollevata_01', pos: '75% 50%', etichetta: 'Sport', alt: 'Osteopata Mobilitas lavora sulla gamba di uno sportivo' },
+  { nome: 'schiena_lombare-prono_03', pos: '45% 55%', etichetta: 'Postura', alt: 'Osteopata Mobilitas tratta la schiena di un paziente' },
+]
+
+// Due foto sovrapposte accanto alle domande frequenti
+const FOTO_FAQ = [
+  { nome: 'pancia_addome-dettaglio-mani_01', pos: '50% 50%', alt: "Le mani dell'osteopata durante il trattamento" },
+  { nome: 'collo_presa-cervicale-supino_16', pos: '40% 50%', alt: 'Trattamento osteopatico del collo nello studio Mobilitas' },
+]
+
 const specializations = [
   "Gravidanza e Pediatria",
   "Geriatria e Terza Età",
@@ -155,8 +149,8 @@ const specializations = [
 
 const faqs = [
   {
-    question: "Dove si trova lo studio?",
-    answer: "Il nostro studio si trova in Via Peyron 54, nel cuore di Torino. Siamo facilmente raggiungibili con i mezzi pubblici (metro fermate Bernini o Principi d'Acaja) e con parcheggio nelle vicinanze, inclusi 2 parcheggi privati e strisce blu."
+    question: "Dove si trovano gli studi?",
+    answer: "Abbiamo due studi a Torino: in Via Peyron 54 (San Donato) e in Via Lamarmora 35 (Crocetta). Via Peyron è comoda con la metro (fermate Bernini o Principi d'Acaja) e ha 2 parcheggi vicini e strisce blu; Via Lamarmora è a due passi dalla metro Re Umberto, con parcheggi vicini e strisce blu. Quando prenoti ti mandiamo le indicazioni precise."
   },
   {
     question: "Quanto dura un trattamento osteopatico?",
@@ -188,32 +182,8 @@ const faqs = [
   }
 ]
 
-const MAP_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2817.274078923546!2d7.65514387704107!3d45.08023495897442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfe2e29f381fdc93%3A0x97eee174cab07ada!2sMobilitas%20-%20Studio%20Osteopatico%20-%20Osteopata%20Torino!5e0!3m2!1sit!2sit!4v1760785981478!5m2!1sit!2sit'
 
 const pad = (n) => String(n).padStart(2, '0')
-
-// ---------- Bottoni ----------
-const CtaText = ({ t }) => (
-  <span className="mx-ot-cta__txt">
-    <span className="mx-ot-cta__line">{t.line1}</span>
-    <span className="mx-ot-cta__line">{t.line2}</span>
-    <small>{t.subtitle}</small>
-  </span>
-)
-
-const CtaRow = ({ book, onBook, onWhatsApp, className = '' }) => (
-  <div className={`mx-ot-ctarow ${className}`}>
-    <motion.button type="button" whileTap={{ scale: 0.97 }} onClick={onBook} className="mx-btn mx-btn--primary mx-ot-cta">
-      <CtaText t={book} />
-      <span className="mx-btn__icon"><ArrowUpRight size={22} strokeWidth={2.4} /></span>
-    </motion.button>
-    <span className="mx-ot-ctarow__or">{CTA_TEXTS.oppure}</span>
-    <motion.button type="button" whileTap={{ scale: 0.97 }} onClick={onWhatsApp} className="mx-btn mx-btn--ghost mx-ot-cta mx-ot-cta--wa">
-      <CtaText t={CTA_TEXTS.richiediConsulto} />
-      <span className="mx-btn__icon"><WhatsAppIcon size={20} /></span>
-    </motion.button>
-  </div>
-)
 
 // ---------- Conto alla rovescia ----------
 const Countdown = ({ timeLeft, compact = false }) => (
@@ -399,24 +369,28 @@ const CityMap = () => {
           {...draw(0.2)}
         />
         <g className="mx-ot-city__stop">
+          {/* Da ovest verso il centro: prima Bernini, poi Principi d'Acaja */}
           <circle cx="104" cy="144" r="7" />
-          <text x="104" y="126" textAnchor="middle">Principi d'Acaja</text>
+          <text x="104" y="126" textAnchor="middle">Bernini</text>
           <circle cx="212" cy="136" r="7" />
-          <text x="212" y="118" textAnchor="middle">Bernini</text>
+          <text x="212" y="118" textAnchor="middle">Principi d'Acaja</text>
+          {/* Re Umberto: la fermata vicina allo studio di Via Lamarmora */}
+          <circle cx="356" cy="250" r="7" />
+          <text x="372" y="255" textAnchor="start">Re Umberto</text>
         </g>
         <text className="mx-ot-city__line" x="30" y="176">M1</text>
 
         {/* Via Peyron 54 */}
         <motion.g {...drop(0.9)}>
-          <circle cx="160" cy="96" r="46" fill="url(#mx-ot-pinglow)" />
-          <path className="mx-ot-city__pin" d="M160 100 C 160 100, 140 78, 140 64 A 20 20 0 1 1 180 64 C 180 78, 160 100, 160 100 Z" />
-          <circle cx="160" cy="64" r="7" fill="#002552" />
+          <circle cx="150" cy="74" r="46" fill="url(#mx-ot-pinglow)" />
+          <path className="mx-ot-city__pin" d="M150 78 C 150 78, 130 56, 130 42 A 20 20 0 1 1 170 42 C 170 56, 150 78, 150 78 Z" />
+          <circle cx="150" cy="42" r="7" fill="#002552" />
         </motion.g>
-        {/* Via Lamarmora 35 */}
+        {/* Via Lamarmora 35, a due passi dalla fermata Re Umberto */}
         <motion.g {...drop(1.15)}>
-          <circle cx="300" cy="300" r="46" fill="url(#mx-ot-pinglow)" />
-          <path className="mx-ot-city__pin" d="M300 304 C 300 304, 280 282, 280 268 A 20 20 0 1 1 320 268 C 320 282, 300 304, 300 304 Z" />
-          <circle cx="300" cy="268" r="7" fill="#002552" />
+          <circle cx="280" cy="286" r="46" fill="url(#mx-ot-pinglow)" />
+          <path className="mx-ot-city__pin" d="M280 290 C 280 290, 260 268, 260 254 A 20 20 0 1 1 300 254 C 300 268, 280 290, 280 290 Z" />
+          <circle cx="280" cy="254" r="7" fill="#002552" />
         </motion.g>
       </svg>
 
@@ -433,19 +407,11 @@ const CityMap = () => {
 }
 
 const OsteopataTorino = () => {
-  const navigate = useNavigate()
   const [currentMonth, setCurrentMonth] = useState('')
-  const [showForm, setShowForm] = useState(false)
-  const [formData, setFormData] = useState({
-    nome: '',
-    cognome: '',
-    cellulare: '',
-    email: '',
-    privacy: false
-  })
-  const [formErrors, setFormErrors] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState('')
+  // Popup di prenotazione comune alle landing: prima visita a 49€ o consulto gratuito
+  const [showBooking, setShowBooking] = useState(false)
+  const [zonaAttiva, setZonaAttiva] = useState(null) // foto del collage "ogni zona" portata davanti
+  const [bookingCtaType, setBookingCtaType] = useState('primaVisita') // 'consulto' | 'primaVisita'
   const carouselRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -540,20 +506,6 @@ const OsteopataTorino = () => {
     return () => clearInterval(interval)
   }, [])
 
-  // Handle ESC key to close form
-  useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape' && showForm) {
-        setShowForm(false)
-      }
-    }
-
-    if (showForm) {
-      document.addEventListener('keydown', handleEscKey)
-      return () => document.removeEventListener('keydown', handleEscKey)
-    }
-  }, [showForm])
-
   // SEO metadata for Osteopata Torino landing page (keyword-optimized)
   useEffect(() => {
     const previousTitle = document.title
@@ -612,121 +564,20 @@ const OsteopataTorino = () => {
     }
   }, [])
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault()
-    console.log('Form submitted!') // Debug log
-    setFormErrors({})
-
-    const errors = {}
-
-    // Validazione nome
-    if (!formData.nome.trim() || formData.nome.length < 2) {
-      errors.nome = 'Il nome deve essere di almeno 2 caratteri'
-    }
-
-    // Validazione cognome
-    if (!formData.cognome.trim() || formData.cognome.length < 2) {
-      errors.cognome = 'Il cognome deve essere di almeno 2 caratteri'
-    }
-
-    // Validazione cellulare
-    if (!formData.cellulare.trim() || formData.cellulare.length < 10) {
-      errors.cellulare = 'Inserisci un numero di cellulare valido'
-    }
-
-    // Validazione email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!formData.email.trim() || !emailRegex.test(formData.email)) {
-      errors.email = 'Inserisci un indirizzo email valido'
-    }
-
-    // Validazione privacy
-    if (!formData.privacy) {
-      errors.privacy = 'Devi accettare la privacy policy'
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors)
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitError('')
-
-    const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
-    const body = {
-      nome: cleanName(formData.nome),
-      cognome: cleanName(formData.cognome),
-      email: formData.email.trim(),
-      prefissoCellulare,
-      cellulare,
-      statusRichiesta: 'LEAD',
-      fonteString: 'GOOGLE_ADS',
-      leadMagnetString: 'COUPON49',
-      leadMagnetRequestedString: 'COUPON49',
-      campagna: 'Google | Osteopata Torino',
-      tag: 'Osteopata Torino',
-      note: 'Pagina: Osteopata Torino. Offerta: trattamento da 90€ a 49€.'
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/api/richieste`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-
-      const json = await response.json()
-      if (!response.ok || !json.success) {
-        throw new Error(json.error || json.message || `Errore ${response.status}`)
-      }
-
-      navigate('/osteopata-torino-conferma')
-    } catch (error) {
-      console.error('API richieste:', error)
-      setSubmitError(error.message || 'Si è verificato un errore durante l\'invio. Riprova.')
-      setIsSubmitting(false)
-    }
+  const openPrimaVisita = () => {
+    setBookingCtaType('primaVisita')
+    setShowBooking(true)
+  }
+  const openConsulto = () => {
+    setBookingCtaType('consulto')
+    setShowBooking(true)
   }
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const handleWhatsAppClick = () => {
-    const phoneNumber = '393518198457'
-    const message = 'Ciao, vorrei richiedere un breve consulto telefonico gratuito per avere maggiori informazioni. Grazie e a presto!'
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
-  }
-
-  const openForm = () => setShowForm(true)
-  const showDock = scrolledPastTop && !heroCtaInView && !showForm
+  const showDock = scrolledPastTop && !heroCtaInView && !showBooking
+  const ctas = <VisitaCtas onVisita={openPrimaVisita} onConsulto={openConsulto} />
 
   return (
     <PageShell className="mx-ot">
-      <LeadFormSheet
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        tone="ot"
-        title="Compila il form"
-        intro={
-          <>
-            Dopo che avrai compilato il form, la nostra segreteria ti contatterà per prendere appuntamento.
-            Prenota subito il tuo trattamento prima che i posti esauriscano! 👇🏼
-          </>
-        }
-        formData={formData}
-        formErrors={formErrors}
-        onChange={handleInputChange}
-        onSubmit={handleFormSubmit}
-        isSubmitting={isSubmitting}
-        submitError={submitError}
-      />
 
       {/* ============ APERTURA ============ */}
       <header className="mx-ot-hero">
@@ -835,7 +686,7 @@ const OsteopataTorino = () => {
             </p>
 
             <div ref={heroCtaRef}>
-              <CtaRow book={CTA_TEXTS.prenotaTrattamento} onBook={openForm} onWhatsApp={handleWhatsAppClick} className="mx-ot-ctarow--hero" />
+              <VisitaCtas onVisita={openPrimaVisita} onConsulto={openConsulto} className="mx-ot-hero__ctas" />
             </div>
           </motion.div>
 
@@ -866,35 +717,21 @@ const OsteopataTorino = () => {
       </header>
 
       {/* ============ RECENSIONI ============ */}
+      {/* Recensioni Google dal gestionale (come la landing cervicalgia): chi cerca un osteopata può avere qualsiasi
+          problema, quindi recensioni a caso con le parole dei dolori evidenziate */}
       <section className="mx-section mx-section--deep mx-ot-reviews">
         <div className="mx-wrap">
-          <div className="mx-ot-reviews__head">
-            <h2 className="mx-h mx-h--lg">
-              <MaskLines lines={[{ text: 'Lo Studio Osteopatico più' }, { text: 'Scelto, Richiesto e Recensito di Torino', className: 'mx-gradient' }]} />
-            </h2>
-            <Reveal>
-              <p className="mx-lead mx-ot-reviews__sub">
-                ⭐ Oltre {RECENSIONI_TOTALI} persone hanno raccontato pubblicamente le loro storie meravigliose ⭐
-              </p>
-            </Reveal>
-          </div>
-        </div>
-
-        <div className="mx-ot-revs" tabIndex={0} aria-label="Recensioni">
-          {RECENSIONI_IMAGES.map((image, index) => (
-            <figure key={image} className="mx-ot-revs__card" style={{ '--tilt': `${(index % 3) - 1}deg` }}>
-              <img src={image} alt={`Recensione ${index + 1}`} loading="lazy" decoding="async" />
-            </figure>
-          ))}
-        </div>
-
-        <div className="mx-wrap">
-          <div className="mx-ot-hint mx-ot-reviews__hint">
-            <ChevronLeft size={16} />
-            <span>Scorri per vedere tutte le recensioni</span>
-            <ChevronRight size={16} />
-          </div>
-          <GoogleReviewsLinks align="center" variant="dark" className="mx-ot-reviews__links" />
+          <RecensioniTag
+            tags={TAG_RECENSIONI_GENERICHE}
+            evidenzia={PAROLE_GENERICHE}
+            mescola
+            titolo={
+              <>
+                Lo studio osteopatico più scelto, richiesto e <span className="mx-accent">recensito di Torino</span>
+              </>
+            }
+            sottotitolo="Recensioni Google a 5 stelle di pazienti dei nostri studi di Torino."
+          />
         </div>
       </section>
 
@@ -911,6 +748,44 @@ const OsteopataTorino = () => {
             </p>
           </Reveal>
 
+          {/* Un trattamento per ogni zona del corpo: foto sovrapposte e ruotate come quelle delle FAQ,
+              su telefono due file da tre, su desktop un ventaglio in una fila. Niente scritte sulle foto
+              (coprirebbero le persone): i nomi delle zone sono sotto e portano davanti la foto scelta */}
+          <div className="mx-ot-zone">
+            {FOTO_ZONE.map((f, i) => (
+              <motion.figure
+                key={f.nome}
+                className={`mx-ot-zone__photo ${zonaAttiva === i ? 'is-on' : ''}`}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-8% 0px' }}
+                transition={{ duration: 0.7, ease: EASE, delay: i * 0.07 }}
+                onMouseEnter={() => setZonaAttiva(i)}
+                onMouseLeave={() => setZonaAttiva(null)}
+              >
+                <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
+              </motion.figure>
+            ))}
+          </div>
+          <ul className="mx-ot-zone__legend">
+            {FOTO_ZONE.map((f, i) => (
+              <li key={f.zona}>
+                <button
+                  type="button"
+                  className={zonaAttiva === i ? 'is-on' : ''}
+                  aria-pressed={zonaAttiva === i}
+                  onMouseEnter={() => setZonaAttiva(i)}
+                  onMouseLeave={() => setZonaAttiva(null)}
+                  onFocus={() => setZonaAttiva(i)}
+                  onBlur={() => setZonaAttiva(null)}
+                  onClick={() => setZonaAttiva(i)}
+                >
+                  {f.zona}
+                </button>
+              </li>
+            ))}
+          </ul>
+
           <Reveal>
             <BodyMap />
           </Reveal>
@@ -924,6 +799,17 @@ const OsteopataTorino = () => {
                 Non un osteopata generico, ma il professionista giusto per te. Ogni membro del nostro team si dedica a una specifica area, garantendoti il trattamento più mirato ed efficace per la tua problematica:
               </p>
             </div>
+            {/* Le foto tra il testo e i riquadri: spezzano la lettura (su desktop sotto il testo, a sinistra) */}
+            <div className="mx-ot-team">
+              {FOTO_TEAM.map((f) => (
+                <figure key={f.nome} className="mx-ot-team__item">
+                  <div className="mx-ot-team__photo">
+                    <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
+                  </div>
+                  <figcaption>{f.etichetta}</figcaption>
+                </figure>
+              ))}
+            </div>
             <ol className="mx-ot-spec__list">
               {specializations.map((s, i) => (
                 <li key={s} className={i === specializations.length - 1 ? 'is-last' : ''}>
@@ -934,9 +820,7 @@ const OsteopataTorino = () => {
             </ol>
           </Reveal>
 
-          <Reveal>
-            <CtaRow book={CTA_TEXTS.prenotaPrimaVisita} onBook={openForm} onWhatsApp={handleWhatsAppClick} />
-          </Reveal>
+          <Reveal>{ctas}</Reveal>
         </div>
       </section>
 
@@ -950,24 +834,8 @@ const OsteopataTorino = () => {
             </h2>
             <Reveal>
               <p className="mx-lead mx-ot-where__lead">
-                Il nostro studio si trova in una posizione strategica nel centro di Torino,
-                facilmente raggiungibile con i mezzi pubblici e con parcheggio nelle vicinanze.
+                Due studi, a San Donato e in Crocetta: scegli il più comodo per te e apri le indicazioni con un clic.
               </p>
-            </Reveal>
-
-            <Reveal className="mx-ot-where__facts">
-              <div className="mx-ot-fact">
-                <span className="mx-ot-fact__icon"><MapPin size={18} /></span>
-                <span>Via Peyron 54, Torino</span>
-              </div>
-              <div className="mx-ot-fact">
-                <span className="mx-ot-fact__icon"><TrainFront size={18} /></span>
-                <span>Metro: comodissimo da Bernini o Principi d'Acaja</span>
-              </div>
-              <div className="mx-ot-fact">
-                <span className="mx-ot-fact__icon"><CarFront size={18} /></span>
-                <span>2 parcheggi nelle vicinanze + strisce blu</span>
-              </div>
             </Reveal>
           </div>
 
@@ -976,23 +844,10 @@ const OsteopataTorino = () => {
           </Reveal>
 
           <Reveal className="mx-ot-where__map">
-            <div className="mx-ot-iframe">
-              <iframe
-                src={MAP_SRC}
-                width="100%"
-                height="450"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Mappa Mobilitas Torino"
-              ></iframe>
-            </div>
+            <StudiMap />
           </Reveal>
 
-          <Reveal className="mx-ot-where__cta">
-            <CtaRow book={CTA_TEXTS.prenotaPrimaVisita} onBook={openForm} onWhatsApp={handleWhatsAppClick} />
-          </Reveal>
+          <Reveal className="mx-ot-where__cta">{ctas}</Reveal>
         </div>
       </section>
 
@@ -1008,6 +863,13 @@ const OsteopataTorino = () => {
               <p className="mx-lead mx-ot-faq__lead">
                 Tutto quello che vuoi sapere sul nostro studio e sui trattamenti osteopatici
               </p>
+            </Reveal>
+            <Reveal className="mx-ot-faq__photos" delay={0.1}>
+              {FOTO_FAQ.map((f) => (
+                <figure key={f.nome} className="mx-ot-faq__photo">
+                  <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
+                </figure>
+              ))}
             </Reveal>
           </div>
 
@@ -1044,31 +906,20 @@ const OsteopataTorino = () => {
             })}
           </div>
 
-          <Reveal className="mx-ot-faq__cta">
-            <CtaRow book={CTA_TEXTS.prenotaPrimaVisita} onBook={openForm} onWhatsApp={handleWhatsAppClick} />
-          </Reveal>
+          <Reveal className="mx-ot-faq__cta">{ctas}</Reveal>
         </div>
       </section>
 
-      {/* Dock su telefono: conto alla rovescia + prenotazione sempre a portata di pollice */}
+      {/* Dock su telefono: la prenotazione sempre a portata di pollice (lo stesso della landing cervicalgia) */}
+      <VisitaDock visible={showDock} onVisita={openPrimaVisita} onConsulto={openConsulto} />
+
       <AnimatePresence>
-        {showDock && (
-          <motion.div
-            className="mx-ot-dock"
-            initial={{ y: 120, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 120, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-          >
-            <button type="button" className="mx-ot-dock__btn" onClick={openForm}>
-              <span className="mx-ot-dock__txt">
-                <b>{CTA_TEXTS.prenotaTrattamento.line1}</b>
-                <small>{CTA_TEXTS.prenotaTrattamento.line2}</small>
-              </span>
-              <Countdown timeLeft={timeLeft} compact />
-            </button>
-          </motion.div>
-        )}
+        <BookingPopup
+          isOpen={showBooking}
+          onClose={() => setShowBooking(false)}
+          pageContext="osteopata-torino"
+          ctaType={bookingCtaType}
+        />
       </AnimatePresence>
     </PageShell>
   )

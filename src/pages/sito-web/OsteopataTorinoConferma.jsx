@@ -1,16 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Download, Info, Clock3, CalendarDays, BadgePercent } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
 import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import { MaskLines } from '../../components/home-sections/HomeKit'
 import { EASE } from '../../components/home-sections/homeMotion'
+import PrenotaVisita from '../../components/prenota-visita/PrenotaVisita'
+import { leggiRichiesta } from '../../components/prenota-visita/richiestaSalvata'
+import { prenotataDi, whatsappConferma } from '../../components/prenota-visita/whatsappConferma'
+import RecensioniConferma from '../../components/thankyou/RecensioniConferma'
 import '../../styles/pages/osteopata-torino-conferma.css'
 
 // Conferma della landing Google (e di /offerta-yt): la spunta si disegna, poi i prossimi passi
 // in ordine — la chiamata della segreteria (il telefono "squilla") e la scorciatoia WhatsApp.
+// Come la conferma cervicalgia: se arriva dal form di /osteopata-torino c'è il calendario della prima visita
+// (WhatsApp diventa l'aiuto secondario) e in fondo le recensioni. Da /offerta-yt, o aprendo il link a mano, no.
 
 const OsteopataTorinoConferma = () => {
+  const [richiesta] = useState(() => {
+    const r = leggiRichiesta()
+    return r?.pageContext === 'osteopata-torino' ? r : null
+  })
+  const conCalendario = !!(richiesta?.id && richiesta?.token)
+  const [prenotata, setPrenotata] = useState(() => prenotataDi(richiesta))
+  const wa = whatsappConferma({ dolore: null, conCalendario, prenotata })
+
   // Google Ads conversion tracking
   useEffect(() => {
     // Track conversion when user reaches confirmation page
@@ -80,7 +94,9 @@ const OsteopataTorinoConferma = () => {
   }, [])
 
   const handleWhatsAppClick = () => {
-    const message = `Ciao! Ho appena compilato il form per prenotare il trattamento osteopatico con l'offerta. Vorrei saltare la lista d'attesa e prenotare subito. Grazie!`
+    const message =
+      wa?.messaggio ??
+      `Ciao! Ho appena compilato il form per prenotare il trattamento osteopatico con l'offerta. Vorrei saltare la lista d'attesa e prenotare subito. Grazie!`
     const whatsappUrl = `https://wa.me/393518198457?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
@@ -163,6 +179,8 @@ const OsteopataTorinoConferma = () => {
             <MaskLines immediate delay={0.3} lines={[{ text: 'Richiesta effettuata' }, { text: 'correttamente!', className: 'mx-gradient' }]} />
           </h1>
 
+          {conCalendario && <PrenotaVisita richiesta={richiesta} onPrenotata={setPrenotata} />}
+
           {/* I prossimi passi */}
           <ol className="mx-otc-steps">
             <motion.li
@@ -177,11 +195,30 @@ const OsteopataTorinoConferma = () => {
                 <Phone size={22} />
               </span>
               <div className="mx-otc-step__body">
-                <h2 className="mx-h mx-h--md">Verrai chiamato dalla nostra segreteria</h2>
-                <p className="mx-body">
-                  Ti contatteremo al numero <span className="mx-otc-num">3518198457</span> per prenotare
-                  il giorno e l'orario che preferisci.
-                </p>
+                {prenotata ? (
+                  <>
+                    <h2 className="mx-h mx-h--md">Ti aspettiamo in studio</h2>
+                    <p className="mx-body">
+                      La tua prima visita è prenotata. Salva il nostro numero <span className="mx-otc-num">3518198457</span>: se hai bisogno, ci trovi lì.
+                    </p>
+                  </>
+                ) : conCalendario ? (
+                  <>
+                    <h2 className="mx-h mx-h--md">Se preferisci, ti chiamiamo noi</h2>
+                    <p className="mx-body">
+                      Se non scegli giorno e ora qui sopra, ti contattiamo dal numero <span className="mx-otc-num">3518198457</span> per
+                      fissare la visita insieme.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="mx-h mx-h--md">Verrai chiamato dalla nostra segreteria</h2>
+                    <p className="mx-body">
+                      Ti contatteremo al numero <span className="mx-otc-num">3518198457</span> per prenotare
+                      il giorno e l'orario che preferisci.
+                    </p>
+                  </>
+                )}
                 <button type="button" onClick={handleSaveNumber} className="mx-otc-save">
                   <Download size={18} strokeWidth={2.4} />
                   Salva il numero
@@ -199,14 +236,26 @@ const OsteopataTorinoConferma = () => {
                 <WhatsAppIcon size={22} />
               </span>
               <div className="mx-otc-step__body">
-                <h3 className="mx-h mx-h--md">Vuoi saltare la lista d'attesa?</h3>
+                {/* Con il calendario WhatsApp è l'aiuto secondario, non un'alternativa alla prenotazione */}
+                <h3 className="mx-h mx-h--md">
+                  {prenotata ? 'Hai un imprevisto?' : conCalendario ? 'Nessun orario ti va bene?' : "Vuoi saltare la lista d'attesa?"}
+                </h3>
                 <p className="mx-body">
-                  Se vuoi prenotare subito senza aspettare la chiamata, scrivici su WhatsApp!
+                  {prenotata
+                    ? 'Scrivici su WhatsApp e ti aiutiamo.'
+                    : conCalendario
+                      ? 'Scrivici su WhatsApp e troviamo insieme un orario comodo.'
+                      : 'Se vuoi prenotare subito senza aspettare la chiamata, scrivici su WhatsApp!'}
                 </p>
-                <motion.button type="button" whileTap={{ scale: 0.97 }} onClick={handleWhatsAppClick} className="mx-btn mx-btn--primary mx-otc-wa">
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleWhatsAppClick}
+                  className={`mx-btn ${wa ? 'mx-btn--ghost' : 'mx-btn--primary'} mx-otc-wa`}
+                >
                   <span>
-                    <span className="mx-otc-wa__main">Salta la lista d'attesa</span>
-                    <small>Scrivici su WhatsApp</small>
+                    <span className="mx-otc-wa__main">{wa ? 'Scrivici su WhatsApp' : "Salta la lista d'attesa"}</span>
+                    {!wa && <small>Scrivici su WhatsApp</small>}
                   </span>
                   <span className="mx-btn__icon"><WhatsAppIcon size={20} /></span>
                 </motion.button>
@@ -225,12 +274,22 @@ const OsteopataTorinoConferma = () => {
               Informazioni utili
             </h4>
             <ul>
-              <li><Clock3 size={16} />La nostra segreteria ti chiamerà entro 24 ore</li>
+              {!prenotata && (
+                <li>
+                  <Clock3 size={16} />
+                  {conCalendario ? 'Se non prenoti qui, la segreteria ti chiama entro 24 ore' : 'La nostra segreteria ti chiamerà entro 24 ore'}
+                </li>
+              )}
               <li><CalendarDays size={16} />Puoi prenotare per qualsiasi giorno della settimana</li>
               <li><BadgePercent size={16} />L'offerta è valida solo per {offerMonth}</li>
             </ul>
           </motion.aside>
         </div>
+      </section>
+
+      {/* Recensioni dal gestionale, a caso con le parole dei dolori evidenziate (la landing non è su un dolore solo) */}
+      <section className="mx-section mx-section--deep mx-otc-reviews">
+        <RecensioniConferma dolore={null} />
       </section>
     </PageShell>
   )

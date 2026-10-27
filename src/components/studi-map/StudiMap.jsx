@@ -26,6 +26,9 @@ function creaPin(studio) {
  * Mappa degli studi Mobilitas, chiara e orientata a nord come Google Maps.
  * MapLibre si carica solo quando la mappa sta per entrare nello schermo, per non pesare sulla landing.
  */
+// Quanto allontanare la mappa rispetto al taglio che inquadra esattamente gli studi
+const ZOOM_PIU_LONTANO = 0.7
+
 export default function StudiMap({ studi = STUDI, className = '' }) {
   const box = useRef(null)
   const [visibile, setVisibile] = useState(false)
@@ -69,6 +72,8 @@ export default function StudiMap({ studi = STUDI, className = '' }) {
           'CooperativeGesturesHandler.MobileHelpText': 'Usa due dita per muovere la mappa',
         },
       })
+      // Un filo più lontano del taglio esatto: si vedono meglio i quartieri intorno ai due studi
+      map.setZoom(map.getZoom() - ZOOM_PIU_LONTANO)
       map.touchZoomRotate.disableRotation()
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
       studi.forEach((s) => {

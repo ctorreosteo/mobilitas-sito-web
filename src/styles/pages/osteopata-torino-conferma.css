@@ -22,7 +22,8 @@
   background: radial-gradient(120% 70% at 50% 0%, var(--navy-2) 0%, var(--navy) 45%, var(--ink) 100%);
 }
 
-.mx-otc__wrap { max-width: 760px; display: grid; justify-items: center; }
+/* minmax(0, 1fr): la colonna resta larga quanto lo schermo anche con il calendario della prima visita */
+.mx-otc__wrap { max-width: 760px; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; }
 
 /* Spunta */
 .mx-otc-check {
@@ -199,3 +200,6 @@
 
 .mx-otc-info li:first-child { border-top: 0; }
 .mx-otc-info li svg { flex-shrink: 0; color: var(--sky); }
+
+/* Recensioni sotto i prossimi passi */
+.mx-otc-reviews { padding-top: 24px; }

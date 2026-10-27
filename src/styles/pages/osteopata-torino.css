@@ -9,60 +9,12 @@
   }
 
   :is(.mx-home, .mx-page) .mx-ot-hero__lead { font-size: clamp(1rem, 1.4vw, 1.2rem) !important; }
-  :is(.mx-home, .mx-page) .mx-ot-reviews__sub { margin-top: 22px; }
+
   :is(.mx-home, .mx-page) .mx-ot-problems__lead { margin-top: 24px; max-width: 760px; }
   :is(.mx-home, .mx-page) .mx-ot-where__lead { margin-top: 24px; max-width: 560px; }
   :is(.mx-home, .mx-page) .mx-ot-faq__lead { margin-top: 22px; max-width: 460px; }
 
   :is(.mx-home, .mx-page) .mx-ot-faq__q h3.mx-h { font-size: clamp(1rem, 1.3vw, 1.2rem) !important; line-height: 1.3; }
-}
-
-/* ---------- Bottoni a due righe ---------- */
-
-.mx-ot-cta { gap: 14px; }
-
-.mx-ot-cta__txt {
-  display: grid;
-  line-height: 1.12;
-}
-
-.mx-ot-cta__line {
-  font-size: 1rem;
-  font-weight: 900;
-  letter-spacing: -0.005em;
-}
-
-.mx-ot-cta__txt small {
-  margin: 4px 0 0;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  opacity: 0.75;
-}
-
-.mx-ot-cta--wa .mx-btn__icon { background: #25d366; color: #fff; }
-.mx-ot-cta--wa:hover .mx-btn__icon { background: #25d366; color: #fff; }
-
-.mx-ot-ctarow {
-  display: grid;
-  gap: 10px;
-  justify-items: stretch;
-  margin-top: clamp(40px, 5vw, 64px);
-}
-
-.mx-ot-ctarow__or {
-  justify-self: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-@media (min-width: 768px) {
-  .mx-ot-ctarow { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
-  .mx-ot-ctarow .mx-btn { width: auto; min-width: 320px; }
 }
 
 /* ---------- Apertura ---------- */
@@ -369,14 +321,6 @@
   .mx-ot-price__month { font-size: 1.1rem; }
 }
 
-.mx-ot-ctarow--hero { margin-top: 14px; }
-
-@media (min-width: 1024px) {
-  .mx-ot-ctarow--hero { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; gap: 12px 16px; margin-top: 22px; }
-  .mx-ot-ctarow--hero .mx-btn { min-width: 0; }
-  .mx-ot-ctarow--hero .mx-ot-ctarow__or { display: none; }
-}
-
 /* Sotto la prima schermata */
 .mx-ot-hero__more {
   display: grid;
@@ -434,64 +378,6 @@
   background: var(--green);
   color: var(--navy);
 }
-
-/* ---------- Recensioni ---------- */
-
-.mx-ot-reviews__head { max-width: 980px; }
-
-.mx-ot-revs {
-  display: flex;
-  gap: 16px;
-  margin-top: clamp(40px, 5vw, 64px);
-  padding: 16px max(24px, calc((100vw - 1280px) / 2 + 56px)) 24px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 24px;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-
-.mx-ot-revs::-webkit-scrollbar { display: none; }
-.mx-ot-revs:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
-
-.mx-ot-revs__card {
-  flex: 0 0 auto;
-  width: 280px;
-  margin: 0;
-  padding: 8px;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.75);
-  scroll-snap-align: start;
-  transform: rotate(var(--tilt, 0deg));
-  transition: transform 0.5s var(--ease);
-  align-self: flex-start;
-}
-
-.mx-ot-revs__card:hover { transform: rotate(0deg) translateY(-4px); }
-
-.mx-ot-revs__card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  min-height: 120px;
-  border-radius: 13px;
-}
-
-@media (min-width: 768px) {
-  .mx-ot-revs__card { width: 360px; }
-}
-
-.mx-ot-reviews__hint {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.mx-ot-reviews__hint svg { color: var(--green); }
-.mx-ot-reviews__links { margin-top: 32px; }
 
 /* ---------- Mappa del corpo ---------- */
 
@@ -668,8 +554,17 @@
   border: 1px solid rgba(114, 250, 147, 0.25);
 }
 
+/* Desktop: testo e foto a sinistra, riquadri delle specializzazioni a destra */
 @media (min-width: 1000px) {
-  .mx-ot-spec { grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+  .mx-ot-spec {
+    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-areas: "intro list" "team list";
+    gap: 28px 56px;
+    align-items: center;
+  }
+  .mx-ot-spec__intro { grid-area: intro; }
+  .mx-ot-spec__list { grid-area: list; }
+  .mx-ot-team { grid-area: team; align-self: start; }
 }
 
 .mx-ot-spec__icon {
@@ -728,41 +623,20 @@
 .mx-ot-where__visual { grid-area: visual; }
 .mx-ot-where__map { grid-area: map; }
 .mx-ot-where__cta { grid-area: cta; }
-.mx-ot-where__cta .mx-ot-ctarow { margin-top: 0; }
 
+/* La mappa dei due studi (StudiMap) e i bottoni a tutta larghezza, sotto testo e illustrazione */
 @media (min-width: 1024px) {
   .mx-ot-where__grid {
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: "copy visual" "cta map";
+    grid-template-areas: "copy visual" "map map" "cta cta";
     column-gap: 64px;
     row-gap: 40px;
     align-items: center;
   }
-  .mx-ot-where__cta .mx-ot-ctarow { display: grid; justify-items: stretch; }
-  .mx-ot-where__cta .mx-btn { width: 100%; }
 }
 
-.mx-ot-where__facts { display: grid; gap: 10px; margin-top: 28px; }
-
-.mx-ot-fact {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-weight: 700;
-  font-size: 0.98rem;
-  line-height: 1.35;
-}
-
-.mx-ot-fact__icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(114, 250, 147, 0.12);
-  color: var(--green);
-}
+.mx-ot-where__cta .mx-ctas { margin-top: 0; }
+.mx-ot-hero__ctas { margin-top: 18px; }
 
 /* Mappa di Torino */
 .mx-ot-city {
@@ -807,30 +681,14 @@
 .mx-ot-city__label b { font-size: 0.82rem; font-weight: 900; }
 .mx-ot-city__label small { font-size: 0.68rem; font-weight: 600; color: var(--muted); }
 
-.mx-ot-city__label--a { left: 34%; top: 7%; }
-.mx-ot-city__label--b { left: 56%; top: 56%; }
+.mx-ot-city__label--a { left: 34%; top: 2%; }
+/* Sotto il pin di Via Lamarmora, lasciando libera la scritta Re Umberto */
+.mx-ot-city__label--b { left: 30%; top: 72%; }
 
 @media (min-width: 768px) {
   .mx-ot-city__label { padding: 10px 16px; }
   .mx-ot-city__label b { font-size: 1rem; }
   .mx-ot-city__label small { font-size: 0.78rem; }
-}
-
-.mx-ot-iframe {
-  padding: 8px;
-  border-radius: 26px;
-  background: rgba(244, 244, 244, 0.06);
-  border: 1px solid var(--line);
-}
-
-.mx-ot-iframe iframe {
-  display: block;
-  height: 300px;
-  border-radius: 20px;
-}
-
-@media (min-width: 1024px) {
-  .mx-ot-iframe iframe { height: 420px; }
 }
 
 /* ---------- FAQ ---------- */
@@ -889,48 +747,186 @@
   .mx-ot-faq__a .mx-body { padding-left: 18px; }
 }
 
-.mx-ot-faq__cta .mx-ot-ctarow { margin-top: 8px; }
 
-/* ---------- Dock su telefono ---------- */
+/* ---------- Collage foto ---------- */
 
-.mx-ot-dock { display: none; }
+/* Un trattamento per ogni zona: foto sovrapposte e ruotate (come quelle delle FAQ), in poco spazio.
+   Telefono = due file da tre; desktop = ventaglio in una fila. L'etichetta sta in alto a sinistra:
+   la foto successiva non la copre e non finisce sopra le persone. Al passaggio (o al tocco) la foto si raddrizza e va davanti.
+   rotate/scale e non transform: transform lo usa l'animazione di entrata (framer-motion). */
+.mx-ot-zone {
+  position: relative;
+  height: 300px;
+  margin: clamp(28px, 5vw, 48px) 0;
+}
 
-@media (max-width: 1023px) {
-  .mx-ot-dock {
-    display: block;
-    position: fixed;
-    z-index: 55;
-    left: 12px;
-    right: 84px; /* spazio per il bottone WhatsApp flottante */
-    bottom: calc(16px + env(safe-area-inset-bottom));
-  }
+/* .mx-ot-zone > : più forte della regola comune alle foto più sotto (position: relative) */
+.mx-ot-zone > .mx-ot-zone__photo {
+  position: absolute;
+  width: 42%;
+  height: 47%;
+  box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+  transition: rotate 0.5s var(--ease), scale 0.5s var(--ease);
+}
 
-  .mx-ot-dock__btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-    min-height: 56px;
-    padding: 8px 8px 8px 16px;
-    border: 0;
-    border-radius: 999px;
-    background: var(--green);
-    color: var(--navy);
-    font-family: var(--font-primary);
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(0, 15, 43, 0.5);
-  }
+.mx-ot-zone__photo:nth-child(1) { left: 0; top: 1%; rotate: -4deg; z-index: 1; }
+.mx-ot-zone__photo:nth-child(2) { left: 28%; top: 3%; rotate: 3deg; z-index: 2; }
+.mx-ot-zone__photo:nth-child(3) { right: 0; top: 0; rotate: -2deg; z-index: 3; }
+.mx-ot-zone__photo:nth-child(4) { left: 1%; bottom: 1%; rotate: 3deg; z-index: 4; }
+.mx-ot-zone__photo:nth-child(5) { left: 29%; bottom: 3%; rotate: -3deg; z-index: 5; }
+.mx-ot-zone__photo:nth-child(6) { right: 1%; bottom: 0; rotate: 4deg; z-index: 6; }
 
-  .mx-ot-dock__txt { display: grid; line-height: 1.1; min-width: 0; }
-  .mx-ot-dock__txt b { font-size: 0.72rem; font-weight: 900; }
-  .mx-ot-dock__txt small { font-size: 0.7rem; font-weight: 800; opacity: 0.75; }
 
-  .mx-ot-dock .mx-ot-timer {
-    gap: 1px;
-    padding: 6px 8px;
-    border-radius: 999px;
-    background: rgba(0, 37, 82, 0.12);
-  }
+.mx-ot-zone__photo.is-on {
+  z-index: 10;
+  rotate: 0deg;
+  scale: 1.08;
+  border-color: var(--green);
+}
+
+@media (min-width: 768px) {
+  .mx-ot-zone { height: 280px; }
+  .mx-ot-zone > .mx-ot-zone__photo { top: auto; bottom: auto; right: auto; width: 23%; height: 78%; }
+  .mx-ot-zone__photo:nth-child(1) { left: 0; top: 4%; }
+  .mx-ot-zone__photo:nth-child(2) { left: 15.4%; top: 14%; }
+  .mx-ot-zone__photo:nth-child(3) { left: 30.8%; top: 2%; }
+  .mx-ot-zone__photo:nth-child(4) { left: 46.2%; top: 16%; }
+  .mx-ot-zone__photo:nth-child(5) { left: 61.6%; top: 4%; }
+  .mx-ot-zone__photo:nth-child(6) { left: 77%; top: 14%; }
+}
+
+.mx-ot-zone__photo,
+.mx-ot-team__photo,
+.mx-ot-faq__photo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(114, 250, 147, 0.22);
+}
+
+.mx-ot-zone__photo img,
+.mx-ot-team__photo img,
+.mx-ot-faq__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease);
+}
+
+.mx-ot-team__photo:hover img { transform: scale(1.06); }
+
+/* Nomi delle zone sotto il collage: portano davanti la foto (passaggio del mouse, tocco o tastiera) */
+.mx-ot-zone__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: -12px 0 clamp(32px, 5vw, 48px);
+  padding: 0;
+  list-style: none;
+}
+
+.mx-ot-zone__legend button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: rgba(244, 244, 244, 0.05);
+  color: var(--cream);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.mx-ot-zone__legend button::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.mx-ot-zone__legend button.is-on { background: var(--green); border-color: var(--green); color: var(--navy); }
+.mx-ot-zone__legend button.is-on::before { background: var(--navy); }
+
+/* Osteopati delle specializzazioni: telefono = una larga sopra e due sotto, desktop = tre in fila */
+.mx-ot-team {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 8px;
+}
+
+.mx-ot-team__item { margin: 0; }
+.mx-ot-team__item:first-child { grid-column: 1 / -1; }
+.mx-ot-team__photo { height: 120px; }
+/* La foto larga (Pediatria) non più larga di circa il doppio dell'altezza: il taglio verticale tiene dentro
+   la testa dell'osteopata, il bambino e la mamma */
+.mx-ot-team__item:first-child .mx-ot-team__photo { height: auto; aspect-ratio: 16 / 9; }
+
+/* La specialità sotto la foto, non sopra le persone */
+.mx-ot-team__item figcaption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.mx-ot-team__item figcaption::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+@media (min-width: 768px) and (max-width: 999px) {
+  .mx-ot-team { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .mx-ot-team__item:first-child { grid-column: auto; }
+  .mx-ot-team__photo,
+  .mx-ot-team__item:first-child .mx-ot-team__photo { height: 200px; aspect-ratio: auto; }
+}
+
+@media (min-width: 1000px) {
+  .mx-ot-team__photo { height: 130px; }
+}
+
+
+/* FAQ: due foto sovrapposte e leggermente ruotate */
+.mx-ot-faq__photos {
+  position: relative;
+  height: 230px;
+  margin-top: 28px;
+}
+
+@media (min-width: 1000px) {
+  .mx-ot-faq__photos { height: 300px; margin-top: 36px; }
+}
+
+.mx-ot-faq__photo {
+  position: absolute;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7);
+}
+
+.mx-ot-faq__photo:first-child { left: 6px; top: 0; width: 64%; height: 78%; transform: rotate(-3deg); }
+.mx-ot-faq__photo:last-child { right: 8px; bottom: 0; width: 58%; height: 72%; transform: rotate(3deg); border-color: rgba(114, 250, 147, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-ot-zone__photo,
+  .mx-ot-zone__photo img,
+  .mx-ot-team__photo img { transition: none; }
 }

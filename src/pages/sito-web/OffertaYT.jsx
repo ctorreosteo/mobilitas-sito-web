@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
 import LeadFormSheet from '../../components/landing/LeadFormSheet'
+import { dimenticaRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 import { Kicker, MaskLines, Reveal } from '../../components/home-sections/HomeKit'
 import { EASE } from '../../components/home-sections/homeMotion'
 import '../../styles/pages/offerta-yt.css'
@@ -345,6 +346,8 @@ const OffertaYT = () => {
     }
 
     // Redirect to confirmation page
+    // (senza la richiesta di una landing: la conferma resta generica, niente calendario di un form precedente)
+    dimenticaRichiesta()
     try {
       navigate('/osteopata-torino-conferma')
     } catch (error) {

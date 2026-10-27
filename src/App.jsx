@@ -100,7 +100,7 @@ function App() {
         <Route path="/magazine" element={<Layout><Magazine /></Layout>} />
         <Route path="/mobilitas-fitness" element={<Layout><MobilitasFitness /></Layout>} />
         <Route path="/osteopata-torino" element={<Layout><OsteopataTorino /></Layout>} />
-        <Route path="/osteopata-torino-conferma" element={<Layout><OsteopataTorinoConferma /></Layout>} />
+        <Route path="/osteopata-torino-conferma" element={<Layout hideFooterCta><OsteopataTorinoConferma /></Layout>} />
         <Route path="/offerta-yt" element={<Layout><OffertaYT /></Layout>} />
         <Route path="/offerta-influencer" element={<Layout><OffertaInfluencer /></Layout>} />
         <Route path="/offerta-influencer-conferma" element={<Layout><OffertaInfluencerConferma /></Layout>} />

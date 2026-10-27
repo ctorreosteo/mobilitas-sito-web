@@ -25,13 +25,16 @@ export const STUDI = [
   {
     id: 'lamarmora35',
     nome: 'Via Lamarmora 35',
-    zona: 'Crocetta',
+    zona: 'Vicino alla metro Re Umberto',
     recensioniUrl: 'https://g.page/r/CZivuP4ENA5REBM',
     quartiere: 'Crocetta',
     lng: 7.6660428,
     lat: 45.0593749,
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mobilitas+Studio+Osteopatico+Crocetta+Via+Lamarmora+35+Torino',
     indicazioniUrl: 'https://www.google.com/maps/dir/?api=1&destination=Mobilitas+Studio+Osteopatico+Crocetta+Via+Lamarmora+35+Torino',
-    comeArrivare: [{ tipo: 'auto', testo: 'Parcheggi vicini e strisce blu' }],
+    comeArrivare: [
+      { tipo: 'metro', testo: 'Metro Re Umberto' },
+      { tipo: 'auto', testo: 'Parcheggi vicini e strisce blu' },
+    ],
   },
 ]

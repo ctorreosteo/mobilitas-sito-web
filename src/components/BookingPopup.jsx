@@ -65,6 +65,14 @@ const formatCurrentDate = () => {
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
+// Landing con una campagna e una pagina di conferma tutte loro (le altre usano i valori comuni)
+const CAMPAGNA_PER_CONTESTO = { 'osteopata-torino': 'Google | Osteopata Torino' }
+const CONFERMA_PER_CONTESTO = {
+  cervicalgia: '/cervicalgia/conferma',
+  // Stesso URL di sempre: c'è la conversione Google Ads
+  'osteopata-torino': '/osteopata-torino-conferma',
+}
+
 // Contesto "visita" = prima visita / landing cliniche (senza pacchetto camminata)
 const isLandingVisita = (pageContext) =>
   pageContext === 'cervicalgia' ||
@@ -84,6 +92,7 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'colon-irritabile' ||
   pageContext === 'emicrania' ||
   pageContext === 'sciatalgia' ||
+  pageContext === 'osteopata-torino' ||
   pageContext === 'yt-postura'
 
 const isVisitaContext = (packageType, pageContext) =>
@@ -203,6 +212,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       emicrania: 'Emicrania',
       sciatalgia: 'Sciatalgia',
       'yt-postura': 'Lista attesa percorso YouTube',
+      'osteopata-torino': 'Osteopata Torino',
     }
 
     const socialAdsContexts = new Set([
@@ -237,7 +247,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
           : 'GOOGLE_ADS',
       leadMagnetString,
       ...(isPainLanding && { leadMagnetRequestedString }),
-      campagna: isYtPostura ? 'YouTube | Percorso posturale' : '120239301462800644',
+      campagna: isYtPostura ? 'YouTube | Percorso posturale' : (CAMPAGNA_PER_CONTESTO[pageContext] ?? '120239301462800644'),
       ...(metaAdLandingContexts.has(pageContext) ? metaAdIdsFromUrl() : {}),
       ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
@@ -274,7 +284,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       setFormData(EMPTY_FORM)
       setError(null)
       onClose()
-      navigate(pageContext === 'cervicalgia' ? '/cervicalgia/conferma' : '/conferma-richiesta')
+      navigate(CONFERMA_PER_CONTESTO[pageContext] ?? '/conferma-richiesta')
     } catch (err) {
       console.error('API richieste:', err)
       setError(err.message || 'Si è verificato un errore. Riprova più tardi.')

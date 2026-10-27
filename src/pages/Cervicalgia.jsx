@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion'
 import {
-  Phone,
-  CalendarCheck,
   Sparkles,
   CheckCircle2,
   ArrowRight,
@@ -42,6 +40,7 @@ import { Kicker, MaskLines, Reveal, Snap } from '../components/home-sections/Hom
 import { EASE, useParallax } from '../components/home-sections/homeMotion'
 import CervDial from '../components/cervicalgia/CervDial'
 import RecensioniTag from '../components/recensioni-tag/RecensioniTag'
+import { VisitaCtas, VisitaDock } from '../components/landing/VisitaCtas'
 import { DOLORI } from '../data/dolori'
 import '../styles/pages/cervicalgia.css'
 
@@ -168,7 +167,7 @@ const FAQ_ITEMS = [
   {
     icon: MapPin,
     question: 'Dove vi trovate?',
-    answer: <>Abbiamo <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) e in <strong>Via Lamarmora 35</strong> (Crocetta). Ci arrivi comodo con i mezzi e in auto; a Via Peyron c'è anche la metro. Quando prenoti ti mandiamo le indicazioni precise.</>,
+    answer: <>Abbiamo <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) e in <strong>Via Lamarmora 35</strong> (Crocetta). Ci arrivi comodo in metro (fermate Bernini per Via Peyron, Re Umberto per Via Lamarmora) e in auto. Quando prenoti ti mandiamo le indicazioni precise.</>,
   },
   {
     icon: Clock,
@@ -193,30 +192,6 @@ const STREAM_IFRAME_SRC = STREAM_CUSTOMER_CODE
 // Foto dei trattamenti in versione web (public/trattamenti/web, larghe 900 e 1600 px)
 const webImg = (nome, w = 900) => `/trattamenti/web/${nome}-${w}.jpg`
 const srcSetOf = (nome) => `${webImg(nome, 900)} 900w, ${webImg(nome, 1600)} 1600w`
-
-// Coppia di CTA della campagna: aprono il popup di prenotazione
-// Verde e animato sempre la prenotazione della prima visita; il consulto è il bottone secondario, più piccolo
-const CervCtas = ({ onConsulto, onVisita, className = '' }) => (
-  <div className={`mx-ctas mx-cerv-ctas ${className}`}>
-    <button type="button" className="mx-btn mx-btn--primary mx-cerv-btn mx-cerv-btn--main" onClick={onVisita}>
-      <span className="mx-cerv-btn__label">
-        <small>
-          Sconto prima visita · <s>90€</s> 49€
-        </small>
-        Prenota la prima visita
-      </span>
-      <span className="mx-btn__icon">
-        <CalendarCheck size={20} strokeWidth={2.4} />
-      </span>
-    </button>
-    <button type="button" className="mx-btn mx-btn--ghost mx-cerv-btn mx-cerv-btn--sub" onClick={onConsulto}>
-      <span className="mx-cerv-btn__label">Consulto telefonico gratuito</span>
-      <span className="mx-btn__icon">
-        <Phone size={18} strokeWidth={2.4} />
-      </span>
-    </button>
-  </div>
-)
 
 // Scena firmata: la testa gira sempre di più mentre scorri
 const TurnScene = () => {
@@ -392,7 +367,7 @@ function Cervicalgia() {
     return () => io.disconnect()
   }, [])
 
-  const ctas = <CervCtas onConsulto={openConsulto} onVisita={openPrimaVisita} />
+  const ctas = <VisitaCtas onConsulto={openConsulto} onVisita={openPrimaVisita} />
 
   return (
     <PageShell className="mx-cerv">
@@ -932,43 +907,7 @@ function Cervicalgia() {
       </section>
 
       {/* Dock mobile: la prenotazione sempre a portata di pollice */}
-      <AnimatePresence>
-        {showDock && !showBooking && (
-          <motion.div
-            className="mx-cerv-dock"
-            initial={{ y: 120, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 120, opacity: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-          >
-            <button
-              type="button"
-              className="mx-cerv-dock__btn is-primary"
-              onClick={openPrimaVisita}
-              aria-label="Prenota la prima visita scontata a 49€ invece di 90€"
-            >
-              <span className="mx-cerv-dock__price" aria-hidden="true">
-                <s>90€</s>
-                <b>49€</b>
-              </span>
-              <span className="mx-cerv-dock__txt">
-                <small>Prima visita</small>
-                Prenota ora
-              </span>
-              <ArrowRight size={18} strokeWidth={2.6} className="mx-cerv-dock__arrow" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="mx-cerv-dock__btn is-ghost"
-              onClick={openConsulto}
-              aria-label="Prenota un consulto telefonico gratuito"
-            >
-              <Phone size={17} strokeWidth={2.4} />
-              <small>Gratis</small>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <VisitaDock visible={showDock && !showBooking} onVisita={openPrimaVisita} onConsulto={openConsulto} />
 
       <AnimatePresence>
         <BookingPopup
