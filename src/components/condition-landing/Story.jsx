@@ -104,7 +104,7 @@ export const MechanismSection = ({ page }) => {
         </div>
 
         <Reveal className="mx-photo-band mx-cl-band">
-          <ClImg src={page.images.band} alt="" sizes="(min-width: 1280px) 1170px, 100vw" />
+          <ClImg src={page.images.band} alt="" sizes="(min-width: 1280px) 1170px, 100vw" className={page.images.bandClassName} />
           <blockquote className="mx-photo-band__text mx-cl-band__quote">
             <p className="mx-h mx-cl-quote">
               {m.quote.main} <span className="mx-accent">{m.quote.accent}</span>

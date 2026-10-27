@@ -517,7 +517,7 @@ html[data-header="hidden"] .mx-spine--h { top: 0; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 68% center;
+  object-position: center;
 }
 
 .mx-arch__frame::after {

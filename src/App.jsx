@@ -60,7 +60,6 @@ import Cervicalgia from './pages/Cervicalgia'
 import Reflusso from './pages/Reflusso'
 import YtPostura from './pages/YtPostura'
 import YtPosturaV2 from './pages/YtPosturaV2'
-import OffertaPostura from './pages/OffertaPostura'
 import Vertigini from './pages/Vertigini'
 import Bruxismo from './pages/Bruxismo'
 import CicatriciCesareo from './pages/CicatriciCesareo'
@@ -114,8 +113,6 @@ function App() {
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
         <Route path="/yt-postura-v2" element={<Layout hideWhatsApp><YtPosturaV2 /></Layout>} />
-        <Route path="/offerta-postura-uomo" element={<Layout hideWhatsApp><OffertaPostura variant="uomo" /></Layout>} />
-        <Route path="/offerta-postura-donna" element={<Layout hideWhatsApp><OffertaPostura variant="donna" /></Layout>} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />

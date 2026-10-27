@@ -135,7 +135,9 @@ const Mentorship = () => {
             {/* Hero Image */}
             <div className={`mb-10 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <img 
-                src="/home/home2.png" 
+                src="/home/web/home2-1600.jpg"
+                srcSet="/home/web/home2-900.jpg 900w, /home/web/home2-1600.jpg 1600w"
+                sizes="(min-width: 900px) 896px, 100vw" 
                 alt="Tirocinio Mobilitas Academy" 
                 className="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl"
               />
@@ -411,7 +413,9 @@ const Mentorship = () => {
             {/* Hero Image */}
             <div className="mb-8">
               <img 
-                src="/home/home5.png" 
+                src="/home/web/home5-1600.jpg"
+                srcSet="/home/web/home5-900.jpg 900w, /home/web/home5-1600.jpg 1600w"
+                sizes="(min-width: 900px) 896px, 100vw" 
                 alt="Mentorship Mobilitas" 
                 className="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl"
               />

@@ -59,16 +59,22 @@ const BENEFITS = [
   <>Sentire finalmente il collo <em>leggero e libero</em>, senza quella <strong>tensione costante</strong> che ti fa sentire la testa pesante <em>tutto il giorno</em>.</>,
 ]
 
+// Foto delle card "dolore": nome del file in public/trattamenti/web e posizione del ritaglio
 const PAIN_IMAGES = [
-  '/cervicalgia/cerv1.JPG',
-  '/cervicalgia/cerv2.JPG',
-  '/cervicalgia/cerv3.JPG',
-  '/cervicalgia/cerv4.JPG',
-  '/cervicalgia/cerv5.JPG',
-  '/cervicalgia/cerv7.JPG',
-  '/cervicalgia/cerv6.JPG',
-  '/cervicalgia/cerv9.JPG',
+  { nome: 'collo_presa-cervicale-supino_18_orizzontale', pos: '18% 50%' },
+  { nome: 'collo_allungamento-cervicale-supino_02_orizzontale', pos: '50% 50%' },
+  { nome: 'collo_cervicale-e-spalle-supino_02_orizzontale', pos: '0% 50%' },
+  { nome: 'collo_presa-cervicale-supino_08_orizzontale', pos: '50% 50%' },
+  { nome: 'collo_presa-cervicale-supino_25_orizzontale', pos: '12% 50%' },
+  { nome: 'atm_presa-mandibolare-esterna_01_orizzontale', pos: '50% 50%' },
+  { nome: 'collo_presa-cervicale-supino_30_orizzontale', pos: '20% 50%' },
+  { nome: 'atm_mandibola-con-guanto_02_orizzontale', pos: '50% 50%' },
 ]
+
+const FOTO_HERO = 'collo_presa-cervicale-supino_26_orizzontale'
+const FOTO_BENEFICI = 'collo_presa-cervicale-supino_19_orizzontale'
+const FOTO_AGITATE = 'collo_cervicale-e-spalle-supino_04_orizzontale'
+const FOTO_FAQ = 'collo_presa-cervicale-supino_14_orizzontale'
 
 const PAIN_POINTS = [
   { title: 'La giornata inizia già con il collo bloccato', body: <>Ti svegli rigido, con <strong>fitte dalla cervicale</strong>. Inizi la giornata con la sensazione che qualcosa non funzioni.</> },
@@ -147,9 +153,9 @@ const STREAM_IFRAME_SRC = STREAM_CUSTOMER_CODE
   ? `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${STREAM_VIDEO_ID}/iframe?autoplay=true&muted=true&controls=false&letterboxColor=%23002552&loop=true`
   : ''
 
-// Foto ottimizzate (public/cervicalgia/web): stessa immagine, peso ridotto
-const webImg = (src, w = 900) => src.replace('/cervicalgia/', '/cervicalgia/web/').replace('.JPG', `-${w}.jpg`)
-const srcSetOf = (src) => `${webImg(src, 900)} 900w, ${webImg(src, 1600)} 1600w`
+// Foto dei trattamenti in versione web (public/trattamenti/web, larghe 900 e 1600 px)
+const webImg = (nome, w = 900) => `/trattamenti/web/${nome}-${w}.jpg`
+const srcSetOf = (nome) => `${webImg(nome, 900)} 900w, ${webImg(nome, 1600)} 1600w`
 
 // Coppia di CTA della campagna: aprono il popup di prenotazione
 const CervCtas = ({ onConsulto, onVisita, className = '' }) => (
@@ -223,7 +229,7 @@ function Cervicalgia() {
   useEffect(() => {
     const prevTitle = document.title
     const pageUrl = `${window.location.origin}/cervicalgia`
-    const ogImage = `${window.location.origin}/cervicalgia/cerv10.JPG`
+    const ogImage = `${window.location.origin}/trattamenti/og/${FOTO_HERO}.jpg`
 
     document.title = 'Cervicalgia e Dolore Cervicale: Cura a Torino | Mobilitas Osteopata'
 
@@ -405,8 +411,9 @@ function Cervicalgia() {
                 />
               ) : (
                 <img
-                  src={webImg('/cervicalgia/cerv11.JPG', 1600)}
-                  srcSet={srcSetOf('/cervicalgia/cerv11.JPG')}
+                  src={webImg(FOTO_HERO, 1600)}
+                  style={{ objectPosition: '50% 60%' }}
+                  srcSet={srcSetOf(FOTO_HERO)}
                   sizes="(min-width: 1024px) 620px, 92vw"
                   alt="Trattamento osteopatico per dolore cervicale - Mobilitas Torino"
                   decoding="async"
@@ -488,8 +495,9 @@ function Cervicalgia() {
             <motion.div style={{ y: benY, height: '100%' }}>
               <img
                 className="mx-parallax-img"
-                src={webImg('/cervicalgia/cerv13.JPG', 1600)}
-                srcSet={srcSetOf('/cervicalgia/cerv13.JPG')}
+                src={webImg(FOTO_BENEFICI, 1600)}
+                style={{ objectPosition: '22% 50%' }}
+                srcSet={srcSetOf(FOTO_BENEFICI)}
                 sizes="(min-width: 1000px) 520px, 92vw"
                 alt="Trattamento osteopatico per il benessere del collo e della postura"
                 loading="lazy"
@@ -515,7 +523,13 @@ function Cervicalgia() {
             {PAIN_POINTS.map((pain, i) => (
               <li key={pain.title} className="mx-cerv-painc">
                 <div className="mx-cerv-painc__img">
-                  <img src={webImg(PAIN_IMAGES[i])} alt="" loading="lazy" decoding="async" />
+                  <img
+                    src={webImg(PAIN_IMAGES[i].nome)}
+                    style={{ objectPosition: PAIN_IMAGES[i].pos }}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <span className="mx-cerv-painc__n">{String(i + 1).padStart(2, '0')}</span>
                 </div>
                 <h3 className="mx-h mx-h--sm">{pain.title}</h3>
@@ -553,8 +567,9 @@ function Cervicalgia() {
               <motion.div style={{ y: agY, height: '100%' }}>
                 <img
                   className="mx-parallax-img"
-                  src={webImg('/cervicalgia/cerv16.JPG', 1600)}
-                  srcSet={srcSetOf('/cervicalgia/cerv16.JPG')}
+                  src={webImg(FOTO_AGITATE, 1600)}
+                  style={{ objectPosition: '0% 50%' }}
+                  srcSet={srcSetOf(FOTO_AGITATE)}
                   sizes="(min-width: 1000px) 520px, 92vw"
                   alt="Dolore cervicale che peggiora nel tempo - Mobilitas Torino"
                   loading="lazy"
@@ -725,8 +740,9 @@ function Cervicalgia() {
             </p>
             <div className="mx-cerv-photo mx-cerv-faq__photo">
               <img
-                src={webImg('/cervicalgia/cerv15.JPG', 1600)}
-                srcSet={srcSetOf('/cervicalgia/cerv15.JPG')}
+                src={webImg(FOTO_FAQ, 1600)}
+                style={{ objectPosition: '40% 55%' }}
+                srcSet={srcSetOf(FOTO_FAQ)}
                 sizes="(min-width: 1000px) 460px, 92vw"
                 alt="Prima visita osteopatica - Mobilitas Torino"
                 loading="lazy"

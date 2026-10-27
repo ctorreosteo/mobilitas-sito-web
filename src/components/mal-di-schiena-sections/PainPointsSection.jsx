@@ -122,8 +122,8 @@ export default function PainPointsSection() {
 
           <figure className="mx-mds-spine__photo mx-mds-photo-desk" aria-hidden="true">
             <img
-              src="/maldischiena/web/maldischiena5-1600.jpg"
-              srcSet="/maldischiena/web/maldischiena5-900.jpg 900w, /maldischiena/web/maldischiena5-1600.jpg 1600w"
+              src="/trattamenti/web/schiena_lombare-supino_01_orizzontale-1600.jpg"
+              srcSet="/trattamenti/web/schiena_lombare-supino_01_orizzontale-900.jpg 900w, /trattamenti/web/schiena_lombare-supino_01_orizzontale-1600.jpg 1600w"
               sizes="(min-width: 1024px) 40vw, 100vw"
               alt=""
               loading="lazy"
@@ -135,8 +135,9 @@ export default function PainPointsSection() {
         <div className="mx-mds-how">
           <figure className="mx-mds-how__photo">
             <img
-              src="/maldischiena/web/maldischiena2-1600.jpg"
-              srcSet="/maldischiena/web/maldischiena2-900.jpg 900w, /maldischiena/web/maldischiena2-1600.jpg 1600w"
+              src="/trattamenti/web/schiena_lombare-prono_14_orizzontale-1600.jpg"
+              srcSet="/trattamenti/web/schiena_lombare-prono_14_orizzontale-900.jpg 900w, /trattamenti/web/schiena_lombare-prono_14_orizzontale-1600.jpg 1600w"
+              style={{ objectPosition: '45% 70%' }}
               sizes="(min-width: 1280px) 1180px, 100vw"
               alt="Osteopata Mobilitas durante un trattamento della zona lombare"
               loading="lazy"

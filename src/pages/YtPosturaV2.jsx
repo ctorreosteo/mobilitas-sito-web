@@ -170,7 +170,7 @@ function YtPosturaV2() {
     const prevTitle = document.title
     const origin = window.location.origin
     const pageUrl = `${origin}/yt-postura`
-    const ogImage = `${origin}/maldischiena/maldischiena1.JPG`
+    const ogImage = `${origin}/yt-postura-v2/hero-d-1280.jpg`
 
     const title =
       'Correttori, palestra, «tirati su». Niente ha funzionato | Mobilitas Torino'

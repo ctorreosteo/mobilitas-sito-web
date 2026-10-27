@@ -20,3 +20,6 @@ dist/
 
 # Firebase local cache
 .firebase/
+
+# Foto originali ad alta risoluzione (1,3 GB): restano in locale, il sito usa le versioni in public/trattamenti
+/Immagini - dolori/

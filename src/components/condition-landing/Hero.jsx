@@ -142,7 +142,7 @@ const Hero = ({ page, video, loading }) => {
               video={video}
               loading={loading}
               videoTitle={page.videoTitle}
-              fallback={hero.fallback || { src: page.images.hero, alt: '' }}
+              fallback={hero.fallback || { src: page.images.hero, alt: '', className: page.images.heroClassName }}
               fallbackWhileLoading={Boolean(hero.fallback)}
             />
           </motion.div>

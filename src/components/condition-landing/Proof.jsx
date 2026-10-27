@@ -339,7 +339,7 @@ export const FaqSection = ({ page }) => {
 
       <section className="mx-cl-final">
         <div className="mx-cl-final__bg" aria-hidden="true">
-          <ClImg src={page.images.final} alt="" sizes="100vw" />
+          <ClImg src={page.images.final} alt="" sizes="100vw" className={page.images.finalClassName} />
         </div>
         <div className="mx-wrap mx-cl-final__inner">
           <img className="mx-final__logo" src="/pittogramma.png" alt="" loading="lazy" />
