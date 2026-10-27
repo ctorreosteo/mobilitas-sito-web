@@ -1,0 +1,73 @@
+/* Collage "Ti aspettiamo in studio" prima della mappa dei due studi (StudioCollage.jsx).
+   Telefono: una foto larga e due sotto; desktop: una grande a sinistra e due impilate. */
+
+.mx-studio-collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 220px 130px;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+@media (min-width: 768px) {
+  .mx-studio-collage {
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-rows: 190px 190px;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+}
+
+.mx-studio-collage__photo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.mx-studio-collage__photo:first-child { grid-column: 1 / -1; }
+
+@media (min-width: 768px) {
+  .mx-studio-collage__photo:first-child { grid-column: 1; grid-row: 1 / 3; }
+}
+
+.mx-studio-collage__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease);
+}
+
+.mx-studio-collage__photo:hover img { transform: scale(1.05); }
+
+.mx-studio-collage__photo:first-child::after {
+  content: '';
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(to top, rgba(0, 15, 43, 0.85), transparent);
+}
+
+.mx-studio-collage__photo figcaption {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  z-index: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(244, 244, 244, 0.86);
+}
+
+.mx-studio-collage__photo figcaption span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-studio-collage__photo img { transition: none; }
+}

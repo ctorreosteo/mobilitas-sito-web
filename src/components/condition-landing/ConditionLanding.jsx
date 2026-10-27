@@ -3,6 +3,7 @@ import { CalendarCheck, Phone } from 'lucide-react'
 import PageShell from '../site/PageShell'
 import BookingPopup from '../BookingPopup'
 import { CtaContext } from './ctaContext'
+import { VisitaDock } from '../landing/VisitaCtas'
 import { withDefaults } from './defaults'
 import { useHeroVideo } from './heroVideo'
 import useConditionSeo from './useConditionSeo'
@@ -11,8 +12,9 @@ import { MechanismSection, PainSection } from './Story'
 import { EntrySection, FaqSection, LocationsSection, ReviewsSection, VisitSection } from './Proof'
 import '../../styles/pages/condition-landing.css'
 
-// Barra fissa in basso su telefono: compare quando le CTA dell'apertura escono dallo schermo
-const Dock = ({ labels, onVisit, onConsulto, hidden }) => {
+// Barra fissa in basso su telefono: compare quando le CTA dell'apertura escono dallo schermo.
+// Con i testi standard è quella comune delle landing di prima visita (VisitaDock), altrimenti questa.
+const Dock = ({ labels, custom, onVisit, onConsulto, hidden }) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
@@ -24,6 +26,10 @@ const Dock = ({ labels, onVisit, onConsulto, hidden }) => {
     io.observe(target)
     return () => io.disconnect()
   }, [])
+
+  if (!custom) {
+    return <VisitaDock visible={show && !hidden} onVisita={onVisit} onConsulto={onConsulto} />
+  }
 
   return (
     <div className={`mx-cl-dock ${show && !hidden ? 'is-on' : ''}`} aria-hidden={!show || hidden}>
@@ -40,7 +46,7 @@ const Dock = ({ labels, onVisit, onConsulto, hidden }) => {
 }
 
 // Template delle landing di patologia. `page` = config della pagina (contenuti, immagini, SEO):
-// vedi per esempio src/pages/Sciatalgia.jsx e, per la variante con lista d'attesa, src/pages/YtPostura.jsx.
+// vedi per esempio src/pages/landing-prima-visita/Sciatalgia.jsx e, per la variante con lista d'attesa, src/pages/YtPostura.jsx.
 const ConditionLanding = ({ page: rawPage }) => {
   const page = useMemo(() => withDefaults(rawPage), [rawPage])
   useConditionSeo(page.seo)
@@ -51,6 +57,8 @@ const ConditionLanding = ({ page: rawPage }) => {
   const cta = useMemo(
     () => ({
       labels: page.cta,
+      // Testi dei bottoni propri della pagina (es. lista d'attesa): niente bottoni comuni
+      custom: !!rawPage.cta,
       openConsulto: () => {
         setBookingCtaType('consulto')
         setShowBooking(true)
@@ -60,7 +68,7 @@ const ConditionLanding = ({ page: rawPage }) => {
         setShowBooking(true)
       },
     }),
-    [page.cta]
+    [page.cta, rawPage.cta]
   )
 
   return (
@@ -75,7 +83,7 @@ const ConditionLanding = ({ page: rawPage }) => {
           <LocationsSection page={page} />
           <FaqSection page={page} />
           <div className="mx-cl-dock-space" aria-hidden="true" />
-          <Dock labels={page.cta} onVisit={cta.openPrimaVisita} onConsulto={cta.openConsulto} hidden={showBooking} />
+          <Dock labels={page.cta} custom={cta.custom} onVisit={cta.openPrimaVisita} onConsulto={cta.openConsulto} hidden={showBooking} />
         </PageShell>
       </CtaContext.Provider>
       <BookingPopup

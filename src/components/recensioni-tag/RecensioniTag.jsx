@@ -313,7 +313,7 @@ export default function RecensioniTag({
           {caricamento
             ? Array.from({ length: 4 }, (_, i) => <li key={i} className="mx-rt__card is-skeleton" aria-hidden="true" />)
             : recensioni.map((r, i) => (
-                <Card key={`${r.autore}-${r.data}`} r={r} i={i} evidenzia={parole} onApri={() => setAperta(r)} />
+                <Card key={`${r.autore}-${r.data}-${i}`} r={r} i={i} evidenzia={parole} onApri={() => setAperta(r)} />
               ))}
         </ul>
       </div>

@@ -1,0 +1,127 @@
+/* Parti delle landing della prima visita (PrimaVisitaLanding.jsx) che la cervicalgia non ha.
+   Tutto il resto viene da cervicalgia.css (classi mx-cerv-*). Prefisso: .mx-pvl */
+
+/* Testo sotto le recensioni e introduzioni delle sezioni */
+:is(.mx-home, .mx-page) .mx-pvl-closing { max-width: 760px; margin: 32px auto 0; text-align: center; }
+:is(.mx-home, .mx-page) .mx-pvl-intro { max-width: 760px; margin-top: 18px; }
+.mx-pvl-closing strong,
+.mx-pvl-intro strong { color: var(--green); }
+
+/* Risultati: una sola frase per riga (niente "prima" barrato), con le parole forti in verde */
+.mx-cerv-ben__list.mx-pvl-ben__list li { grid-template-columns: 34px minmax(0, 1fr); align-items: baseline; }
+.mx-pvl-ben__list .mx-cerv-ben__n { grid-row: auto; }
+
+.mx-pvl-ben__txt {
+  font-size: clamp(1.02rem, 1.6vw, 1.22rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--cream);
+}
+
+.mx-pvl-ben__txt strong { color: var(--green); font-weight: 800; }
+
+/* Perché succede: i passaggi del meccanismo */
+.mx-pvl-steps {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mx-pvl-steps li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(244, 244, 244, 0.05);
+  border: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.mx-pvl-steps li b {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.mx-pvl-steps__n {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(114, 250, 147, 0.14);
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+/* Il trattamento: titolo sopra le schede */
+.mx-pvl-head { margin-bottom: 36px; }
+
+/* Come funziona la prima visita: un solo pannello, centrato */
+.mx-pvl-visit__panel { max-width: 860px; margin: 36px auto 0; }
+
+/* FAQ: chiusura della pagina sotto le domande */
+:is(.mx-home, .mx-page) .mx-pvl-faq__closing { margin-top: 24px; }
+.mx-pvl-faq__closing strong { color: var(--green); }
+
+/* Chi ti tratta: testo e collage dello studio (su desktop affiancati) */
+.mx-pvl-team__grid { display: grid; gap: 28px; }
+
+@media (min-width: 1000px) {
+  .mx-pvl-team__grid { grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+}
+
+.mx-pvl-team__icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: var(--green);
+  color: var(--navy);
+}
+
+.mx-pvl-team .mx-studio-collage { margin-bottom: 0; }
+
+/* Collage doppi (FotoDoppia): FAQ, perché succede, come funziona */
+.mx-pvl-faq__photos { margin-top: 28px; }
+
+@media (min-width: 1000px) {
+  .mx-pvl-faq__photos { margin-top: 36px; }
+}
+
+/* Come funziona: su telefono le foto sopra il pannello, su desktop affiancate */
+.mx-pvl-visit__grid { display: grid; gap: 28px; margin-top: 36px; }
+.mx-pvl-visit__grid .mx-pvl-visit__panel { margin: 0; }
+
+@media (min-width: 1000px) {
+  .mx-pvl-visit__grid { grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: start; }
+  /* Le foto restano visibili mentre si scorrono i passi */
+  .mx-pvl-visit__photos { position: sticky; top: 120px; }
+}
+
+/* Dove siamo: testo a sinistra e mappa illustrata a destra, poi la mappa dei due studi */
+.mx-pvl-where__head { display: grid; gap: 28px; margin-bottom: 40px; }
+
+@media (min-width: 1000px) {
+  .mx-pvl-where__head { grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+}
+
+/* "Ti riconosci?": scheda senza foto (finite le serie nuove): l'icona del sintomo al posto della foto */
+.mx-pvl-painc__icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(80% 80% at 50% 40%, rgba(255, 104, 105, 0.16), rgba(0, 15, 43, 0.4));
+  color: #ff8a8b;
+}

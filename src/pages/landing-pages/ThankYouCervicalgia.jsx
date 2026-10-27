@@ -5,7 +5,7 @@ import PageShell from '../../components/site/PageShell'
 import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import { EASE } from '../../components/home-sections/homeMotion'
 import CervDial from '../../components/cervicalgia/CervDial'
-import RecensioniConferma from '../../components/thankyou/RecensioniConferma'
+import RecensioniDolore from '../../components/recensioni-tag/RecensioniDolore'
 import PrenotaVisita from '../../components/prenota-visita/PrenotaVisita'
 import { leggiRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 import { doloreDi } from '../../data/dolori'
@@ -189,7 +189,7 @@ export default function ThankYouCervicalgia() {
 
       {/* Recensioni dal gestionale: sul dolore cervicale se la richiesta viene dalla landing, a caso altrimenti */}
       <section className="mx-section mx-section--deep mx-cerv-ty__reviews">
-        <RecensioniConferma dolore={dolore} />
+        <RecensioniDolore dolore={dolore} />
       </section>
     </PageShell>
   )

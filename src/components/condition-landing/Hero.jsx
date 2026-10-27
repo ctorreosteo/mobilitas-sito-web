@@ -14,7 +14,7 @@ const fade = (delay, y = 18) => ({
 
 // Video VSL dal gestionale: autoplay muto in loop, si comporta come un'immagine.
 // Mentre carica: riquadro blu; senza video: foto della pagina.
-const HeroMedia = ({ video, loading, videoTitle, fallback, fallbackWhileLoading }) => {
+export const HeroMedia = ({ video, loading, videoTitle, fallback, fallbackWhileLoading }) => {
   const [cover, setCover] = useState(true)
 
   useEffect(() => {

@@ -1,0 +1,124 @@
+/* Collage di foto delle landing (FotoVentaglio.jsx, FotoDoppia.jsx), nati su osteopata Torino.
+   Foto sovrapposte e ruotate: tante immagini in poco spazio, soprattutto su telefono. */
+
+.mx-fv__photo,
+.mx-fd__photo {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(114, 250, 147, 0.22);
+}
+
+.mx-fv__photo img,
+.mx-fd__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Ventaglio: sei foto ----------
+   Telefono = due file da tre; desktop = una fila. Al passaggio (o al tocco) la foto si raddrizza e va davanti.
+   rotate/scale e non transform: transform lo usa l'animazione di entrata (framer-motion). */
+.mx-fv {
+  position: relative;
+  height: 300px;
+  margin: clamp(28px, 5vw, 48px) 0;
+}
+
+.mx-fv > .mx-fv__photo {
+  position: absolute;
+  width: 42%;
+  height: 47%;
+  box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+  transition: rotate 0.5s var(--ease), scale 0.5s var(--ease);
+}
+
+.mx-fv__photo:nth-child(1) { left: 0; top: 1%; rotate: -4deg; z-index: 1; }
+.mx-fv__photo:nth-child(2) { left: 28%; top: 3%; rotate: 3deg; z-index: 2; }
+.mx-fv__photo:nth-child(3) { right: 0; top: 0; rotate: -2deg; z-index: 3; }
+.mx-fv__photo:nth-child(4) { left: 1%; bottom: 1%; rotate: 3deg; z-index: 4; }
+.mx-fv__photo:nth-child(5) { left: 29%; bottom: 3%; rotate: -3deg; z-index: 5; }
+.mx-fv__photo:nth-child(6) { right: 1%; bottom: 0; rotate: 4deg; z-index: 6; }
+
+.mx-fv > .mx-fv__photo.is-on {
+  z-index: 10;
+  rotate: 0deg;
+  scale: 1.08;
+  border-color: var(--green);
+}
+
+@media (min-width: 768px) {
+  .mx-fv { height: 280px; }
+  .mx-fv > .mx-fv__photo { top: auto; bottom: auto; right: auto; width: 23%; height: 78%; }
+  .mx-fv__photo:nth-child(1) { left: 0; top: 4%; }
+  .mx-fv__photo:nth-child(2) { left: 15.4%; top: 14%; }
+  .mx-fv__photo:nth-child(3) { left: 30.8%; top: 2%; }
+  .mx-fv__photo:nth-child(4) { left: 46.2%; top: 16%; }
+  .mx-fv__photo:nth-child(5) { left: 61.6%; top: 4%; }
+  .mx-fv__photo:nth-child(6) { left: 77%; top: 14%; }
+}
+
+/* Nomi sotto il ventaglio (facoltativi): portano davanti la foto */
+.mx-fv__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: -12px 0 clamp(32px, 5vw, 48px);
+  padding: 0;
+  list-style: none;
+}
+
+.mx-fv__legend button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: rgba(244, 244, 244, 0.05);
+  color: var(--cream);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.mx-fv__legend button::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.mx-fv__legend button.is-on { background: var(--green); border-color: var(--green); color: var(--navy); }
+.mx-fv__legend button.is-on::before { background: var(--navy); }
+
+/* ---------- Doppia: due foto sovrapposte e ruotate ---------- */
+.mx-fd {
+  position: relative;
+  height: 230px;
+}
+
+@media (min-width: 1000px) {
+  .mx-fd { height: 300px; }
+}
+
+.mx-fd > .mx-fd__photo {
+  position: absolute;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7);
+}
+
+.mx-fd > .mx-fd__photo:first-child { left: 6px; top: 0; width: 64%; height: 78%; transform: rotate(-3deg); }
+.mx-fd > .mx-fd__photo:last-child { right: 8px; bottom: 0; width: 58%; height: 72%; transform: rotate(3deg); border-color: rgba(114, 250, 147, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-fv > .mx-fv__photo { transition: none; }
+}

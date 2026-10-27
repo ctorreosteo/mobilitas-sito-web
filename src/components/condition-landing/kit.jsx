@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { CalendarCheck, Check, Phone } from 'lucide-react'
 import { MaskLines } from '../home-sections/HomeKit'
 import { CtaContext } from './ctaContext'
+import { VisitaCtas } from '../landing/VisitaCtas'
 
 // Titolo a due righe: { main, accent } (accent opzionale)
 export const Title = ({ as: Tag = 'h2', title, className = 'mx-cl-h2', accentClass = 'mx-accent', immediate = false, delay = 0 }) => (
@@ -25,9 +26,14 @@ export const CtaLabel = ({ label }) =>
     </>
   )
 
-// Le due azioni di prenotazione (aprono il BookingPopup): prima visita / lista in verde, consulto in secondo piano
+// Le due azioni di prenotazione (aprono il BookingPopup): prima visita / lista in verde, consulto in secondo piano.
+// Con i testi standard sono i bottoni comuni delle landing di prima visita (come cervicalgia e osteopata Torino);
+// con testi propri (es. la lista d'attesa di /yt-postura) restano questi.
 export const BookCtas = ({ className = '' }) => {
   const cta = useContext(CtaContext)
+  if (!cta.custom) {
+    return <VisitaCtas onVisita={cta.openPrimaVisita} onConsulto={cta.openConsulto} className={className} />
+  }
   return (
     <div className={`mx-ctas mx-cl-ctas ${className}`}>
       <button type="button" className="mx-btn mx-btn--primary mx-cl-btn" onClick={cta.openPrimaVisita}>

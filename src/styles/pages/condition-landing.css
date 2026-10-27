@@ -706,121 +706,6 @@
 .mx-cl-after__note { margin: 0 0 24px; color: var(--muted); font-size: 0.95rem; }
 
 /* ======================================================================
-   03 Recensioni
-   ====================================================================== */
-
-.mx-cl-reviews__track {
-  display: flex;
-  align-items: stretch;
-  gap: 18px;
-  margin-top: clamp(40px, 5vw, 64px);
-  padding: 18px max(24px, calc((100vw - 1280px) / 2 + 56px)) 26px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-
-.mx-cl-reviews__track::-webkit-scrollbar { display: none; }
-
-.mx-cl-reviews__slide {
-  flex: 0 0 auto;
-  width: 280px;
-  scroll-snap-align: center;
-}
-
-@media (min-width: 768px) {
-  .mx-cl-reviews__slide { width: 330px; }
-}
-
-.mx-cl-reviews__slide .mx-review { width: 100%; }
-
-.mx-cl-reviews__all {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  height: 100%;
-  min-height: 220px;
-  padding: 26px 22px;
-  border-radius: 20px;
-  border: 1px solid rgba(114, 250, 147, 0.4);
-  background: linear-gradient(160deg, rgba(114, 250, 147, 0.16), rgba(114, 250, 147, 0.03));
-  text-align: center;
-}
-
-.mx-cl-reviews__all p { margin: 0 0 6px; font-weight: 900; font-size: 1.15rem; line-height: 1.25; }
-
-.mx-cl-reviews__all a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 0 18px;
-  border-radius: 999px;
-  background: var(--green);
-  color: var(--navy);
-  font-weight: 800;
-  font-size: 0.85rem;
-  text-decoration: none;
-}
-
-.mx-cl-reviews__nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  margin-top: 12px;
-}
-
-.mx-cl-round {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1px solid rgba(244, 244, 244, 0.25);
-  background: rgba(244, 244, 244, 0.06);
-  color: var(--cream);
-  cursor: pointer;
-  transition: transform 0.3s var(--ease), opacity 0.3s;
-}
-
-.mx-cl-round:hover { transform: translateY(-2px); }
-.mx-cl-round:disabled { opacity: 0.3; pointer-events: none; }
-.mx-cl-round.is-green { background: var(--green); border-color: var(--green); color: var(--navy); }
-
-.mx-cl-reviews__meter { display: grid; justify-items: center; gap: 10px; min-width: 110px; }
-
-.mx-cl-reviews__bar {
-  position: relative;
-  width: 110px;
-  height: 3px;
-  border-radius: 3px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.mx-cl-reviews__bar i {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--green);
-  transition: width 0.3s var(--ease);
-}
-
-.mx-cl-reviews__meter p {
-  margin: 0;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.mx-cl-reviews__meter b { color: var(--green); }
-
-/* ======================================================================
    04 Tappe
    ====================================================================== */
 
@@ -949,79 +834,6 @@
 .mx-cl-door__btn { margin-top: auto; width: 100%; }
 
 .mx-cl-after-entry { margin-top: clamp(56px, 7vw, 96px); }
-
-/* ======================================================================
-   05 Sedi
-   ====================================================================== */
-
-.mx-cl-maps {
-  display: grid;
-  gap: 18px;
-  margin-top: clamp(40px, 5vw, 64px);
-}
-
-@media (min-width: 900px) {
-  .mx-cl-maps { grid-template-columns: 1fr 1fr; gap: 22px; }
-}
-
-.mx-cl-map {
-  overflow: hidden;
-  border-radius: 26px;
-  border: 1px solid var(--line);
-  background: rgba(244, 244, 244, 0.03);
-}
-
-.mx-cl-map iframe { display: block; filter: saturate(0.9); }
-
-.mx-cl-map__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--line);
-}
-
-.mx-cl-map__bar span { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.92rem; }
-.mx-cl-map__bar span svg { color: var(--green); flex-shrink: 0; }
-.mx-cl-map__bar small { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
-
-.mx-cl-where__info {
-  display: grid;
-  gap: 18px;
-  margin-top: 28px;
-  align-items: center;
-}
-
-@media (min-width: 900px) {
-  .mx-cl-where__info { grid-template-columns: 1fr auto; gap: 40px; }
-}
-
-.mx-cl-where__metro { max-width: 620px; }
-
-.mx-cl-where__park {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 22px 16px 16px;
-  border-radius: 22px;
-  border: 1px solid var(--line);
-  background: rgba(244, 244, 244, 0.04);
-}
-
-.mx-cl-where__park > span {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  border-radius: 14px;
-  background: rgba(114, 250, 147, 0.12);
-  color: var(--green);
-}
-
-.mx-cl-where__park-t { margin: 0; font-weight: 800; font-size: 0.98rem; }
-.mx-cl-where__park-n { margin: 2px 0 0; font-size: 0.86rem; color: var(--muted); }
 
 /* ======================================================================
    06 FAQ + chiusura
@@ -1201,7 +1013,7 @@
   .mx-cl-hero .mx-btn--primary { animation: none; }
   .mx-cl-band { aspect-ratio: 4 / 5; border-radius: 26px; }
   .mx-cl-emblem__label { font-size: 0.64rem; padding: 5px 10px; letter-spacing: 0.1em; }
-  .mx-cl-reviews__slide { width: 262px; }
+
   .mx-cl .mx-snap > .mx-cl-pain__card,
   .mx-cl .mx-snap > .mx-cl-card { flex-basis: 84%; }
 }

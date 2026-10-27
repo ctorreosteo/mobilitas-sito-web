@@ -4,7 +4,7 @@ import PrenotaVisita from '../../components/prenota-visita/PrenotaVisita'
 import { leggiRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 import { doloreDi } from '../../data/dolori'
 import { prenotataDi, whatsappConferma } from '../../components/prenota-visita/whatsappConferma'
-import RecensioniConferma from '../../components/thankyou/RecensioniConferma'
+import RecensioniDolore from '../../components/recensioni-tag/RecensioniDolore'
 
 // Conferma comune alle landing dei dolori: l'URL è sempre /conferma-richiesta.
 // Il dolore arriva dal form appena inviato (sessionStorage, vedi richiestaSalvata.js): se c'è, il testo
@@ -51,7 +51,7 @@ export default function ThankYouRichiesta() {
       onWhatsApp={() => {
         window.open(`https://wa.me/393518198457?text=${encodeURIComponent(messaggioWhatsApp)}`, '_blank')
       }}
-      recensioni={<RecensioniConferma dolore={dolore} />}
+      recensioni={<RecensioniDolore dolore={dolore} />}
     >
       {conCalendario && <PrenotaVisita richiesta={richiesta} dolore={dolore} onPrenotata={setPrenotata} />}
     </ThankYouScreen>

@@ -440,8 +440,6 @@ const PAGE = {
     kicker: 'Dove siamo',
     intro:
       'San Donato e Crocetta. Quando ti richiamiamo, scegli la sede che ti viene meglio. Metro, bus o macchina: il posto in lista non dipende da quale delle due ti è più vicina.',
-    metro: 'In metro. San Donato: Bernini o Principi d’Acaja. Crocetta: la fermata Crocetta.',
-    parkingNote: 'Strisce blu e parcheggi intorno',
   },
   faq: {
     kicker: 'Prima di scegliere',

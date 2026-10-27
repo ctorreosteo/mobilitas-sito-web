@@ -1,7 +1,8 @@
-import RecensioniTag from '../recensioni-tag/RecensioniTag'
+import RecensioniTag from './RecensioniTag'
 import { PAROLE_GENERICHE, TAG_RECENSIONI_GENERICHE } from '../../data/dolori'
 
-// Recensioni delle pagine di conferma. dolore: risultato di doloreDi (data/dolori.js).
+// Recensioni sul dolore della landing (landing di prima visita e pagine di conferma).
+// dolore: risultato di doloreDi (data/dolori.js).
 // Con il dolore: recensioni di quel problema, con le sue parole evidenziate; se sono meno di tre, o il dolore
 // non ha recensioni, recensioni a caso. Senza dolore (non sappiamo da dove arriva): recensioni a caso.
 // Le parole sono sempre evidenziate, come sulla landing: nelle recensioni a caso quelle generiche dei dolori.
@@ -16,7 +17,7 @@ const GENERICHE = {
   sottotitolo: 'Recensioni Google a 5 stelle di pazienti dei nostri studi di Torino.',
 }
 
-export default function RecensioniConferma({ dolore }) {
+export default function RecensioniDolore({ dolore }) {
   return (
     <div className="mx-wrap">
       {dolore ? (

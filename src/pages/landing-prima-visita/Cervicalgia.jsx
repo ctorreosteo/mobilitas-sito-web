@@ -22,27 +22,23 @@ import {
   Search,
   Gauge,
   Target,
-  Scale,
-  Shirt,
-  Banknote,
-  MapPin,
-  Clock,
-  UserCheck,
   Plus,
   Check,
   X,
 } from 'lucide-react'
-import BookingPopup from '../components/BookingPopup'
-import StudiMap from '../components/studi-map/StudiMap'
-import WhatsAppFab from '../components/whatsapp/WhatsAppFab'
-import PageShell from '../components/site/PageShell'
-import { Kicker, MaskLines, Reveal, Snap } from '../components/home-sections/HomeKit'
-import { EASE, useParallax } from '../components/home-sections/homeMotion'
-import CervDial from '../components/cervicalgia/CervDial'
-import RecensioniTag from '../components/recensioni-tag/RecensioniTag'
-import { VisitaCtas, VisitaDock } from '../components/landing/VisitaCtas'
-import { DOLORI } from '../data/dolori'
-import '../styles/pages/cervicalgia.css'
+import BookingPopup from '../../components/BookingPopup'
+import StudiMap from '../../components/studi-map/StudiMap'
+import WhatsAppFab from '../../components/whatsapp/WhatsAppFab'
+import PageShell from '../../components/site/PageShell'
+import { Kicker, MaskLines, Reveal, Snap } from '../../components/home-sections/HomeKit'
+import { EASE, useParallax } from '../../components/home-sections/homeMotion'
+import CervDial from '../../components/cervicalgia/CervDial'
+import RecensioniTag from '../../components/recensioni-tag/RecensioniTag'
+import { VisitaCtas, VisitaDock } from '../../components/landing/VisitaCtas'
+import StudioCollage from '../../components/landing/StudioCollage'
+import { DOLORI } from '../../data/dolori'
+import { FAQ_PRIMA_VISITA as FAQ_ITEMS } from '../../data/faqPrimaVisita'
+import '../../styles/pages/cervicalgia.css'
 
 // Concetto: "Il raggio di rotazione". Il dolore cervicale si misura in quanto
 // riesci a girare la testa: la pagina mostra la testa vista dall'alto con il
@@ -98,13 +94,6 @@ const FOTO_CAMBIAMENTI = [
   },
 ]
 
-// Collage "Ti aspettiamo in studio" prima della mappa: le foto dove si vede lo studio con il logo
-const FOTO_STUDIO = [
-  { nome: 'collo_presa-cervicale-supino_22_orizzontale', pos: '50% 45%', alt: 'Trattamento del collo nello studio Mobilitas' },
-  { nome: 'schiena_dorsale-alta-prono_04_orizzontale', pos: '40% 50%', alt: 'Osteopata Mobilitas tratta la parte alta della schiena' },
-  { nome: 'spalla_scapola-decubito-laterale_01_orizzontale', pos: '45% 55%', alt: 'Trattamento di spalla e scapola nello studio Mobilitas' },
-]
-
 // Mosaico della Strada B: valutazione, trattamento, mani sul collo (la Strada A resta senza foto, per contrasto)
 const FOTO_STRADA_B = [
   { nome: 'spalla_valutazione-in-piedi_01_orizzontale', pos: '42% 35%', etichetta: 'Valutazione', alt: "L'osteopata valuta postura e spalle del paziente in piedi" },
@@ -148,38 +137,6 @@ const NOI_ITEMS = [
   { icon: Target, title: 'Un risultato che dura', body: <>Non vogliamo solo far passare il dolore per qualche giorno. Vogliamo che il tuo corpo <strong>funzioni meglio</strong>.</> },
 ]
 
-const FAQ_ITEMS = [
-  {
-    icon: Scale,
-    question: 'Che differenza c\'è tra osteopata e fisioterapista?',
-    answer: <>Il fisioterapista si occupa soprattutto di <strong>riabilitazione</strong>, per esempio dopo un trauma, e usa spesso esercizi e macchinari. L'osteopata lavora solo con le mani, su <strong>tutto il corpo</strong>. Cerca la <strong>causa</strong> del problema e ti aiuta a non farlo tornare, anche sistemando postura e abitudini di tutti i giorni. Non guarda solo dove fa male, ma perché fa male, per risolvere il problema alla fonte.</>,
-  },
-  {
-    icon: Shirt,
-    question: 'Come mi devo vestire?',
-    answer: <>Vieni con <strong>vestiti comodi</strong>, tipo quelli da palestra, facili da togliere se serve. L'importante è che tu stia a tuo agio.</>,
-  },
-  {
-    icon: Banknote,
-    question: 'Quanto costano le sedute?',
-    answer: <>La prima visita è scontata: <strong>49€ invece di 90€</strong>. Il prezzo delle sedute dopo dipende dal percorso che ti serve. Abbiamo <strong>pacchetti per risparmiare</strong>: te li spieghiamo in studio.</>,
-  },
-  {
-    icon: MapPin,
-    question: 'Dove vi trovate?',
-    answer: <>Abbiamo <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) e in <strong>Via Lamarmora 35</strong> (Crocetta). Ci arrivi comodo in metro (fermate Bernini per Via Peyron, Re Umberto per Via Lamarmora) e in auto. Quando prenoti ti mandiamo le indicazioni precise.</>,
-  },
-  {
-    icon: Clock,
-    question: 'Quanto dura una visita?',
-    answer: <>La prima visita dura circa <strong>un'ora</strong>: parliamo, ti visitiamo e facciamo il primo trattamento. Le sedute dopo durano circa <strong>40-55 minuti</strong>, in base al problema.</>,
-  },
-  {
-    icon: UserCheck,
-    question: 'Con chi farò la visita?',
-    answer: <>Durante la telefonata scegliamo per te l'<strong>osteopata giusto</strong>, quello più <strong>esperto</strong> nel tuo problema. Tutti i nostri osteopati sono preparati e lavorano con lo <strong>stesso metodo</strong>.</>,
-  },
-]
 
 // Cloudflare Stream: video ID dalla dashboard; customer code in .env come VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE
 // loop=true: quando il video finisce riparte da capo in automatico (loop infinito)
@@ -886,19 +843,7 @@ function Cervicalgia() {
               Abbiamo due studi: uno a San Donato e uno in Crocetta. Scegli quello più comodo per te e tocca “Indicazioni” per arrivarci.
             </p>
           </div>
-          <Reveal className="mx-cerv-studio">
-            {FOTO_STUDIO.map((f, i) => (
-              <figure key={f.nome} className="mx-cerv-studio__photo">
-                <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
-                {i === 0 && (
-                  <figcaption>
-                    <span>Ti aspettiamo in studio</span>
-                    Due studi a Torino: San Donato e Crocetta
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </Reveal>
+          <StudioCollage />
           <Reveal className="mx-cerv-where__map" delay={0.1}>
             <StudiMap />
           </Reveal>

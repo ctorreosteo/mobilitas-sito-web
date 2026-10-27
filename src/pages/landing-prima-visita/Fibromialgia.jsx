@@ -10,11 +10,11 @@ import {
   Activity,
   RefreshCw,
 } from 'lucide-react'
-import ConditionLanding from '../components/condition-landing/ConditionLanding'
-import { prefetchHeroVideo } from '../components/condition-landing/heroVideo'
+import PrimaVisitaLanding from '../../components/landing/PrimaVisitaLanding'
+import { prefetchHeroVideo } from '../../components/condition-landing/heroVideo'
 
-// Landing "Fibromialgia": solo contenuti e dati. Struttura, grafica e logica (video, popup di
-// prenotazione, recensioni, SEO) stanno in components/condition-landing.
+// Landing "Fibromialgia": solo contenuti e dati. Struttura, grafica e logica (stile cervicalgia: video,
+// popup di prenotazione, recensioni, SEO) stanno in components/landing/PrimaVisitaLanding.
 
 // Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
 // Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
@@ -460,5 +460,5 @@ const PAGE = {
 }
 
 export default function Fibromialgia() {
-  return <ConditionLanding page={PAGE} />
+  return <PrimaVisitaLanding page={PAGE} />
 }

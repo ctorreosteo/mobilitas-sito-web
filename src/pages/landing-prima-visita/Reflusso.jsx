@@ -6,11 +6,11 @@ import {
   Coffee,
   Mic,
 } from 'lucide-react'
-import ConditionLanding from '../components/condition-landing/ConditionLanding'
-import { prefetchHeroVideo } from '../components/condition-landing/heroVideo'
+import PrimaVisitaLanding from '../../components/landing/PrimaVisitaLanding'
+import { prefetchHeroVideo } from '../../components/condition-landing/heroVideo'
 
-// Landing "Reflusso": solo contenuti e dati. Struttura, grafica e logica (video, popup di
-// prenotazione, recensioni, SEO) stanno in components/condition-landing.
+// Landing "Reflusso": solo contenuti e dati. Struttura, grafica e logica (stile cervicalgia: video,
+// popup di prenotazione, recensioni, SEO) stanno in components/landing/PrimaVisitaLanding.
 
 // Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
 // Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
@@ -23,7 +23,7 @@ const HERO_BENEFITS = [
   </>,
   <>
     Riduci <strong>bruciore notturno</strong>, risvegli, {' '}
-    <strong>fastidio</strong> in gola al mattino e raceudine
+    <strong>fastidio</strong> in gola al mattino e raucedine
   </>,
   <>
     Torna a vivere i <strong>pasti</strong> con più serenità e meno{' '}
@@ -315,7 +315,7 @@ const PAGE = {
         <strong>Il cibo conta</strong>.{' '}
         <strong>I farmaci contano</strong>. Ma non sono
         l’unico livello del problema: la{' '}
-        <strong>componente meccanica</strong> puo mantenere
+        <strong>componente meccanica</strong> può mantenere
         attivi i sintomi anche quando sei attentissimo.
       </>
     ),
@@ -326,10 +326,10 @@ const PAGE = {
     },
     narrative: (
       <>
-        Tra stomaco ed esofago c’e una valvola. A sostenerla c’e anche il{' '}
+        Tra stomaco ed esofago c’è una valvola. A sostenerla c’è anche il{' '}
         <strong>diaframma</strong>. Se questo sistema
-        perde coordinazione, la risalita puo diventare piu probabile: e qui che un lavoro
-        manuale mirato puo affiancare il percorso medico.
+        perde coordinazione, la risalita può diventare più probabile: è qui che un lavoro
+        manuale mirato può affiancare il percorso medico.
       </>
     ),
     steps: MECHANISM_STEPS,
@@ -452,5 +452,5 @@ const PAGE = {
 }
 
 export default function Reflusso() {
-  return <ConditionLanding page={PAGE} />
+  return <PrimaVisitaLanding page={PAGE} />
 }

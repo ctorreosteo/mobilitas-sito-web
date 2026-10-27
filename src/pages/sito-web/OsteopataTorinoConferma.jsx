@@ -8,7 +8,7 @@ import { EASE } from '../../components/home-sections/homeMotion'
 import PrenotaVisita from '../../components/prenota-visita/PrenotaVisita'
 import { leggiRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 import { prenotataDi, whatsappConferma } from '../../components/prenota-visita/whatsappConferma'
-import RecensioniConferma from '../../components/thankyou/RecensioniConferma'
+import RecensioniDolore from '../../components/recensioni-tag/RecensioniDolore'
 import '../../styles/pages/osteopata-torino-conferma.css'
 
 // Conferma della landing Google (e di /offerta-yt): la spunta si disegna, poi i prossimi passi
@@ -289,7 +289,7 @@ const OsteopataTorinoConferma = () => {
 
       {/* Recensioni dal gestionale, a caso con le parole dei dolori evidenziate (la landing non è su un dolore solo) */}
       <section className="mx-section mx-section--deep mx-otc-reviews">
-        <RecensioniConferma dolore={null} />
+        <RecensioniDolore dolore={null} />
       </section>
     </PageShell>
   )
