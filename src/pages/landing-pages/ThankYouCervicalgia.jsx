@@ -1,12 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, useMotionValue, animate } from 'framer-motion'
 import { Check, Phone, Mail } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
 import WhatsAppIcon from '../../components/whatsapp/WhatsAppIcon'
 import { EASE } from '../../components/home-sections/homeMotion'
-import { Reveal } from '../../components/home-sections/HomeKit'
 import CervDial from '../../components/cervicalgia/CervDial'
-import CervReviews from '../../components/cervicalgia/CervReviews'
+import RecensioniConferma from '../../components/thankyou/RecensioniConferma'
+import PrenotaVisita from '../../components/prenota-visita/PrenotaVisita'
+import { leggiRichiesta } from '../../components/prenota-visita/richiestaSalvata'
+import { doloreDi } from '../../data/dolori'
+import { prenotataDi, whatsappConferma } from '../../components/prenota-visita/whatsappConferma'
 import '../../styles/pages/cervicalgia.css'
 
 // Conferma della campagna cervicalgia: il "raggio di rotazione" della landing
@@ -16,6 +19,19 @@ const BURST = Array.from({ length: 12 }, (_, i) => -84 + i * (168 / 11))
 
 export default function ThankYouCervicalgia() {
   const seal = useMotionValue(0)
+  // Richiesta appena inviata dal form (senza, ad es. aprendo il link a mano, niente calendario).
+  // Il dolore si nomina solo se la richiesta viene davvero dalla landing: altrimenti testo generico.
+  const [richiesta] = useState(leggiRichiesta)
+  const dolore = doloreDi(richiesta?.pageContext)
+  const conCalendario = !!(richiesta?.id && richiesta?.token)
+  const [prenotata, setPrenotata] = useState(() => prenotataDi(richiesta))
+  // Con il calendario WhatsApp è l'aiuto secondario ("nessun orario va bene?"), non un'alternativa alla prenotazione
+  const wa = whatsappConferma({ dolore, conCalendario, prenotata })
+  const messaggioWhatsApp =
+    wa?.messaggio ??
+    (dolore
+      ? `Ciao, ho appena inviato la richiesta ${dolore.per}. Quando mi richiamate?`
+      : 'Ciao, ho appena inviato la richiesta per la prima visita / consulto. Quando mi richiamate?')
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.fbq) {
@@ -89,6 +105,8 @@ export default function ThankYouCervicalgia() {
             <span className="mx-accent">Richiesta ricevuta!</span>
           </motion.h1>
 
+          {conCalendario && <PrenotaVisita richiesta={richiesta} dolore={dolore} onPrenotata={setPrenotata} />}
+
           <ol className="mx-cerv-ty__steps">
             <motion.li
               className="mx-cerv-ty__step is-done"
@@ -100,7 +118,20 @@ export default function ThankYouCervicalgia() {
                 <Check size={22} strokeWidth={3} />
               </span>
               <p className="mx-lead mx-cerv-ty__lead mx-cerv-ty__body">
-                La tua <strong>richiesta</strong> è stata <strong className="is-green">registrata</strong>. Ti contatteremo al <strong>numero</strong> che ci hai indicato.
+                La tua <strong>richiesta</strong>{dolore ? ` ${dolore.per}` : ''} è stata <strong className="is-green">registrata</strong>.{' '}
+                {prenotata ? (
+                  <>
+                    La tua <strong>prima visita</strong> è prenotata: ti aspettiamo in studio.
+                  </>
+                ) : conCalendario ? (
+                  <>
+                    Scegli <strong>qui sopra</strong> giorno e ora: è il modo più veloce. Se non lo fai, ti chiamiamo noi al <strong>numero</strong> che ci hai indicato.
+                  </>
+                ) : (
+                  <>
+                    Ti contatteremo al <strong>numero</strong> che ci hai indicato.
+                  </>
+                )}
               </p>
             </motion.li>
 
@@ -139,14 +170,14 @@ export default function ThankYouCervicalgia() {
                 <WhatsAppIcon size={22} />
               </span>
               <motion.a
-                href="https://wa.me/393518198457?text=Ciao%2C%20ho%20appena%20inviato%20la%20richiesta%20per%20la%20prima%20visita%20%2F%20consulto%20cervicale.%20Quando%20mi%20richiamate%3F"
+                href={`https://wa.me/393518198457?text=${encodeURIComponent(messaggioWhatsApp)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-cerv-ty__wa"
+                className={`mx-cerv-ty__wa ${wa ? 'is-secondario' : ''}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Scrivici su WhatsApp per saltare la lista d'attesa
+                {wa?.etichetta ?? "Scrivici su WhatsApp per saltare la lista d'attesa"}
                 <span className="mx-cerv-ty__wa-icon">
                   <WhatsAppIcon size={22} />
                 </span>
@@ -156,13 +187,9 @@ export default function ThankYouCervicalgia() {
         </div>
       </section>
 
-      {/* Carosello recensioni */}
+      {/* Recensioni dal gestionale: sul dolore cervicale se la richiesta viene dalla landing, a caso altrimenti */}
       <section className="mx-section mx-section--deep mx-cerv-ty__reviews">
-        <div className="mx-wrap">
-          <Reveal>
-            <CervReviews align="center" />
-          </Reveal>
-        </div>
+        <RecensioniConferma dolore={dolore} />
       </section>
     </PageShell>
   )

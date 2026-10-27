@@ -1,0 +1,350 @@
+/* Carosello recensioni Google per tag dolore (RecensioniTag.jsx). Pensato per sfondi blu. */
+
+.mx-rt { --rt-card-h: 340px; --wrap-pad: 24px; position: relative; }
+
+/* Stesso padding orizzontale di .mx-wrap (mx.css): il nastro esce fino ai bordi della pagina */
+@media (min-width: 1024px) {
+  .mx-rt { --wrap-pad: 56px; }
+}
+
+/* ——— Intestazione: badge Google, titolo, frecce ——— */
+.mx-rt__head { display: grid; gap: 28px; align-items: end; }
+.mx-rt__titles { max-width: 760px; }
+
+@media (min-width: 1000px) {
+  .mx-rt__head { grid-template-columns: 1fr auto; gap: 48px; }
+}
+
+/* ——— Tabellone: totale recensioni Google delle due sedi ——— */
+.mx-rt__score {
+  position: relative;
+  overflow: hidden;
+  min-width: min(100%, 340px);
+  padding: 22px 26px 18px;
+  border-radius: 28px;
+  border: 1px solid rgba(114, 250, 147, 0.35);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(114, 250, 147, 0.16), transparent 60%),
+    rgba(244, 244, 244, 0.04);
+  box-shadow: 0 30px 70px -35px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.mx-rt__score-top { display: flex; align-items: center; gap: 10px; }
+.mx-rt__score-g { width: 26px; height: 26px; padding: 4px; border-radius: 50%; background: #fff; box-sizing: content-box; }
+.mx-rt__score-top b { color: #fff; font-size: 1.15rem; font-weight: 800; }
+
+:is(.mx-home, .mx-page) .mx-rt__score-n {
+  margin: 10px 0 0;
+  font-size: clamp(3.4rem, 6vw, 4.6rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(100deg, var(--green) 10%, var(--sky) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:is(.mx-home, .mx-page) .mx-rt__score-l { margin: 6px 0 0; color: var(--cream); font-size: 0.92rem; font-weight: 700; }
+
+.mx-rt__score-sedi { margin: 14px 0 0; padding: 12px 0 0; list-style: none; border-top: 1px solid var(--line); }
+
+.mx-rt__score-sedi li {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 3px 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.mx-rt__score-sedi small { color: rgba(244, 244, 244, 0.45); font-size: 0.78rem; }
+.mx-rt__score-sedi b { color: var(--cream); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.mx-rt__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 8px 16px 8px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: #5f6368;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.7), 0 0 0 5px rgba(255, 255, 255, 0.07);
+}
+
+.mx-rt__badge-g { width: 22px; height: 22px; }
+
+:is(.mx-home, .mx-page) .mx-rt__title { font-size: clamp(1.6rem, 3.2vw, 2.6rem); line-height: 1.05; letter-spacing: -0.03em; }
+:is(.mx-home, .mx-page) .mx-rt__sub { margin-top: 8px; color: var(--muted); font-size: 1rem; }
+
+/* Garanzia: recensioni vere di pazienti veri */
+:is(.mx-home, .mx-page) .mx-rt__real {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 10px 18px 10px 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: linear-gradient(100deg, rgba(114, 250, 147, 0.12), rgba(114, 250, 147, 0.02));
+  color: var(--cream);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.mx-rt__real-ic {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--green);
+  color: var(--navy);
+  box-shadow: 0 0 22px rgba(114, 250, 147, 0.45);
+}
+
+.mx-rt__real b { color: var(--green); font-weight: 800; }
+.mx-rt__real small { display: block; margin-top: 2px; color: var(--muted); font-size: 0.8rem; }
+
+.mx-rt__arrows { display: none; gap: 10px; flex-shrink: 0; }
+
+/* Barra di avanzamento al centro, frecce a destra */
+.mx-rt__foot { display: flex; align-items: center; justify-content: center; gap: 24px; }
+
+@media (min-width: 900px) {
+  .mx-rt__foot { justify-content: space-between; }
+  .mx-rt__foot::before { content: ''; width: 114px; }
+}
+
+.mx-rt__links { margin-top: 36px; }
+
+@media (min-width: 900px) {
+  .mx-rt__arrows { display: flex; }
+}
+
+.mx-rt__arrows button {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 244, 244, 0.2);
+  background: rgba(244, 244, 244, 0.05);
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.mx-rt__arrows button:hover { background: var(--green); border-color: var(--green); color: var(--navy); transform: scale(1.06); }
+
+/* ——— Nastro ——— */
+.mx-rt__viewport {
+  position: relative;
+  margin: 32px calc(-1 * var(--wrap-pad)) 0;
+  /* Sfuma i bordi: le card entrano ed escono dal nulla */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.mx-rt__track {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 14px var(--wrap-pad) 34px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--wrap-pad);
+  scrollbar-width: none;
+}
+
+.mx-rt__track::-webkit-scrollbar { display: none; }
+
+/* ——— Card stile Google, tutte alte uguali ——— */
+.mx-rt__card {
+  position: relative;
+  flex: 0 0 min(84vw, 360px);
+  height: var(--rt-card-h);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 22px 18px;
+  border-radius: 24px;
+  background: #fff;
+  color: #3c4043;
+  scroll-snap-align: start;
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.85);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s;
+}
+
+/* Filo di luce verde in alto, che si accende al passaggio */
+.mx-rt__card::before {
+  content: '';
+  position: absolute;
+  inset: 0 24px auto;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, var(--green), var(--sky));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.mx-rt__card:hover { transform: translateY(-6px); box-shadow: 0 34px 60px -26px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(114, 250, 147, 0.5); }
+.mx-rt__card:hover::before { opacity: 1; }
+
+.mx-rt__card.is-skeleton {
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.06) 30%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.06) 70%) 0 0 / 300% 100%;
+  box-shadow: none;
+  animation: mx-rt-shimmer 1.4s linear infinite;
+}
+
+@keyframes mx-rt-shimmer { to { background-position: -150% 0; } }
+
+.mx-rt__who { display: flex; align-items: center; gap: 12px; }
+
+.mx-rt__avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.mx-rt__meta { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.mx-rt__meta b { color: #202124; font-size: 0.95rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mx-rt__meta span { display: inline-flex; align-items: center; gap: 3px; color: #70757a; font-size: 0.78rem; white-space: nowrap; }
+
+.mx-rt__g { width: 22px; height: 22px; margin-left: auto; flex-shrink: 0; }
+
+.mx-rt__stars { display: inline-flex; gap: 1px; }
+.mx-rt__stars svg { width: 18px; height: 18px; fill: #dadce0; }
+.mx-rt__stars svg.is-on { fill: #fbbc04; }
+
+:is(.mx-home, .mx-page) .mx-rt__text {
+  /* Altezza fissa di 7 righe: con flex: 1 si intravedeva l'ottava sotto i puntini */
+  max-height: calc(7 * 1.55em);
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  color: #3c4043;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+/* Le parole del dolore evidenziate a pennarello */
+.mx-rt mark {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: linear-gradient(transparent 55%, rgba(114, 250, 147, 0.75) 55%);
+  color: inherit;
+  font-weight: 700;
+}
+
+.mx-rt__more {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #1a73e8;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mx-rt__more:hover { text-decoration: underline; }
+
+/* ——— Barra di avanzamento ——— */
+.mx-rt__bar {
+  position: relative;
+  overflow: hidden;
+  width: 160px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(244, 244, 244, 0.12);
+}
+
+.mx-rt__bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 25%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--green), var(--sky));
+  transition: transform 0.2s;
+}
+
+/* ——— Recensione completa ——— */
+.mx-rt.mx-rt__modal {
+  position: fixed;
+  /* Sopra la barra di navigazione del sito */
+  z-index: 1000;
+  font-family: var(--font-primary);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 10, 30, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.mx-rt__sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 620px);
+  max-height: min(86vh, 760px);
+  overflow-y: auto;
+  padding: 28px;
+  border-radius: 28px;
+  background: #fff;
+  color: #3c4043;
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.9);
+}
+
+.mx-rt__sheet .mx-rt__g { margin-right: 44px; }
+
+.mx-rt__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f3f4;
+  color: #3c4043;
+  cursor: pointer;
+}
+
+.mx-rt__quote { color: rgba(114, 250, 147, 0.9); margin-bottom: -18px; }
+
+.mx-rt__full {
+  margin: 0;
+  color: #202124;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-rt__card, .mx-rt__card.is-skeleton { transition: none; animation: none; }
+}

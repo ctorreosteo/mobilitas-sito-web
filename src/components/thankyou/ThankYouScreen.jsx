@@ -5,7 +5,7 @@ import { EASE } from '../home-sections/homeMotion'
 import '../../styles/mx.css'
 import '../../styles/pages/thankyou.css'
 
-// Schermata di conferma condivisa da /conferma e /conferma-richiesta.
+// Schermata di conferma condivisa da /conferma e /conferma-richiesta: ci arriva chi ha compilato un form, non chi ha pagato.
 // Il tracciamento (fbq Lead) resta nelle singole pagine.
 
 const fade = (delay, y = 24) => ({
@@ -66,18 +66,16 @@ const Burst = () => (
   </div>
 )
 
-const ThankYouScreen = ({ subtitle, registered, confirmItem, timeItem, onWhatsApp }) => (
+// children: blocco facoltativo sotto il messaggio iniziale (es. il calendario della prima visita).
+// Con il calendario WhatsApp diventa il bottone secondario: l'azione principale è prenotare.
+// waEtichetta: testo del bottone WhatsApp (vedi prenota-visita/whatsappConferma.js).
+// recensioni: sezione a tutta larghezza in fondo alla pagina.
+const ThankYouScreen = ({ subtitle, registered, confirmItem, timeItem, onWhatsApp, waEtichetta, children, recensioni }) => (
   <MotionConfig reducedMotion="user">
     <div className="mx-page mx-ty">
       <div className="mx-ty__glow" aria-hidden="true" />
-      <main className="mx-ty__wrap">
-        <motion.img
-          className="mx-ty__logo"
-          src="/logo_verde.png"
-          alt="Mobilitas"
-          {...fade(0, 8)}
-        />
-
+      {/* Header e footer arrivano dal Layout del sito (App.jsx): qui niente logo e niente <main> */}
+      <div className="mx-ty__wrap">
         {/* Success */}
         <Burst />
 
@@ -93,10 +91,12 @@ const ThankYouScreen = ({ subtitle, registered, confirmItem, timeItem, onWhatsAp
           {registered}
         </motion.p>
 
+        {children}
+
         {/* WhatsApp Button */}
         <motion.div className="mx-ty__cta" {...fade(0.6)}>
-          <button type="button" className="mx-btn mx-btn--primary mx-ty__wa" onClick={onWhatsApp}>
-            <span>Scrivici su Whatsapp per velocizzare</span>
+          <button type="button" className={`mx-btn ${children ? 'mx-btn--ghost' : 'mx-btn--primary'} mx-ty__wa`} onClick={onWhatsApp}>
+            <span>{waEtichetta ?? 'Scrivici su Whatsapp per velocizzare'}</span>
             <span className="mx-btn__icon">
               <WhatsAppIcon size={22} />
             </span>
@@ -141,10 +141,11 @@ const ThankYouScreen = ({ subtitle, registered, confirmItem, timeItem, onWhatsAp
         {/* Additional Info */}
         <motion.div className="mx-ty-tip" {...fade(0.9)}>
           <p>
-            💡 <strong>Consiglio:</strong> Tieni a portata di mano questo numero di riferimento e controlla la tua email per eventuali comunicazioni aggiuntive.
+            💡 <strong>Consiglio:</strong> tieni il telefono a portata di mano, ti chiamiamo noi. E salva in rubrica il nostro numero +39 351 819 8457: così puoi scriverci su WhatsApp quando vuoi.
           </p>
         </motion.div>
-      </main>
+      </div>
+      {recensioni && <section className="mx-ty__reviews">{recensioni}</section>}
     </div>
   </MotionConfig>
 )

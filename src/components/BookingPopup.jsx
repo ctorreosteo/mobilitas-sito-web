@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Dialog, { DialogHeader } from './ui/Dialog'
 import { parseCellulare } from '../utils/phone'
+import { dimenticaRichiesta, salvaRichiesta } from './prenota-visita/richiestaSalvata'
 
 // Utility functions for data cleaning
 const cleanName = (name) => {
@@ -147,7 +148,9 @@ const ORARI = [
   { value: 'qualsiasi', label: 'Qualsiasi orario' },
 ]
 
-const EMPTY_FORM = { nome: '', cognome: '', cellulare: '', orarioChiamata: '' }
+const EMPTY_FORM = { nome: '', cognome: '', cellulare: '', orarioChiamata: '', privacy: false }
+
+const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/67925714'
 
 export default function BookingPopup({ isOpen, onClose, packageType, pageContext, ctaType }) {
   const navigate = useNavigate()
@@ -159,8 +162,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
   const copy = getPopupCopy(packageType, pageContext, ctaType)
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
   }
 
   const handleSubmit = async (e) => {
@@ -253,6 +256,20 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
         throw new Error(json.error || json.message || `Errore ${response.status}`)
       }
 
+      // Per la pagina di conferma (stesso URL per tutti): da quale dolore arriva, per il testo,
+      // e id + token per il calendario della prima visita. Solo dalle landing dei dolori, non da pacchetti e lista d'attesa.
+      if (isPainLanding) {
+        salvaRichiesta({
+          pageContext,
+          id: json.data?.id ?? null,
+          token: json.data?.tokenPrenotazione ?? null,
+          tipo: ctaType === 'consulto' ? 'consulto' : 'primaVisita',
+          nome: body.nome,
+        })
+      } else {
+        dimenticaRichiesta()
+      }
+
       setIsSubmitting(false)
       setFormData(EMPTY_FORM)
       setError(null)
@@ -278,7 +295,11 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     formData.nome.trim() &&
     formData.cognome.trim() &&
     formData.cellulare.trim() &&
-    formData.orarioChiamata
+    formData.orarioChiamata &&
+    formData.privacy
+  // Tutto compilato tranne il consenso: la checkbox si illumina per far capire cosa manca
+  const mancaSoloPrivacy =
+    formData.nome.trim() && formData.cognome.trim() && formData.cellulare.trim() && formData.orarioChiamata && !formData.privacy
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose} closeDisabled={isSubmitting} title={copy.title}>
@@ -351,6 +372,28 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
         </div>
 
         {error && <p className="mx-dlg-error" role="alert">{error}</p>}
+
+        {/* Consenso privacy obbligatorio: piccolo, subito prima dell'invio */}
+        <label
+          className={`mx-dlg-check mx-dlg-check--sm${mancaSoloPrivacy ? ' is-needed' : ''}`}
+          htmlFor={`${uid}-privacy`}
+        >
+          <input
+            type="checkbox"
+            id={`${uid}-privacy`}
+            name="privacy"
+            checked={formData.privacy}
+            onChange={handleInputChange}
+            required
+          />
+          <span>
+            Ho letto la{' '}
+            <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
+              privacy policy
+            </a>{' '}
+            e acconsento al trattamento dei miei dati. *
+          </span>
+        </label>
 
         <button type="submit" className="mx-dlg-submit" disabled={!canSubmit}>
           {isSubmitting ? (

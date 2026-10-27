@@ -13,7 +13,8 @@ const GoogleG = () => (
 
 // Due bottoni, uno per studio, che aprono la scheda Google con le recensioni.
 // variant: 'dark' (sfondi blu) | 'light' (sfondi chiari)
-const GoogleReviewsLinks = ({ align = 'start', variant = 'dark', className = '' }) => (
+// totali: facoltativo, { 'Via Peyron 54': 1234, ... } dal gestionale; mostra il numero di recensioni della sede
+const GoogleReviewsLinks = ({ align = 'start', variant = 'dark', className = '', totali }) => (
   <div className={`mx-grl mx-grl--${align} mx-grl--${variant} ${className}`}>
     {STUDI.map((studio) => (
       <a
@@ -22,14 +23,18 @@ const GoogleReviewsLinks = ({ align = 'start', variant = 'dark', className = '' 
         href={studio.recensioniUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Leggi le recensioni Google dello studio di ${studio.nome}`}
+        aria-label={`Leggi le recensioni Google dello studio di ${studio.nome} (${studio.quartiere})`}
       >
         <span className="mx-grl__icon">
           <GoogleG />
         </span>
         <span className="mx-grl__text">
-          <small>Recensioni Google</small>
-          {studio.nome}
+          <small>
+            {totali?.[studio.nome] ? `${totali[studio.nome].toLocaleString('it-IT', { useGrouping: 'always' })} recensioni Google` : 'Recensioni Google'}
+          </small>
+          <span>
+            {studio.nome} <span className="mx-grl__zona">({studio.quartiere})</span>
+          </span>
         </span>
         <ArrowUpRight className="mx-grl__arrow" size={18} strokeWidth={2.4} />
       </a>

@@ -109,7 +109,7 @@ function App() {
         <Route path="/privacy-policy-applicazione" element={<Layout><PrivacyPolicyApplicazione /></Layout>} />
         <Route path="/supporto-app" element={<Layout><SupportoApp /></Layout>} />
         <Route path="/cervicalgia" element={<Layout hideWhatsApp><Cervicalgia /></Layout>} />
-        <Route path="/cervicalgia/conferma" element={<Layout><ThankYouCervicalgia /></Layout>} />
+        <Route path="/cervicalgia/conferma" element={<Layout hideFooterCta><ThankYouCervicalgia /></Layout>} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
         <Route path="/yt-postura-v2" element={<Layout hideWhatsApp><YtPosturaV2 /></Layout>} />
@@ -150,8 +150,8 @@ function App() {
         <Route path="/emicrania" element={<Layout hideWhatsApp><Emicrania /></Layout>} />
         <Route path="/mal-di-schiena" element={<MalDiSchienaLanding />} />
         <Route path="/gravidanza" element={<Gravidanza />} />
-        <Route path="/conferma" element={<ThankYou />} />
-        <Route path="/conferma-richiesta" element={<ThankYouRichiesta />} />
+        <Route path="/conferma" element={<Layout hideFooterCta><ThankYou /></Layout>} />
+        <Route path="/conferma-richiesta" element={<Layout hideFooterCta><ThankYouRichiesta /></Layout>} />
         <Route path="/lm-gpadel-infortuni" element={<LmGPadelInfortuni />} />
         <Route path="/lm-gpadel-infortuni-grazie" element={<GpadelInfortuniThankYou />} />
         <Route path="/lm-gpadel-sconto39-generico" element={<LmGpadelSconto39 />} />

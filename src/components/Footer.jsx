@@ -45,7 +45,7 @@ const reveal = (delay = 0) => ({
   transition: { duration: 0.9, ease: EASE, delay },
 })
 
-export default function Footer() {
+export default function Footer({ hideCta = false }) {
   const year = new Date().getFullYear()
 
   const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -60,27 +60,30 @@ export default function Footer() {
       </div>
 
       <div className="mx-footer__wrap">
-        <motion.div className="mx-footer__cta" {...reveal()}>
-          <p className="mx-footer__kicker">Il primo passo</p>
-          <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-footer__big">
-            <span className="mx-footer__big-text" data-text="Prenota un consulto gratuito">
-              Prenota un consulto gratuito
-            </span>
-            <span className="mx-footer__big-icon">
-              <ArrowUpRight strokeWidth={2.4} />
-            </span>
-          </a>
-          <div className="mx-footer__direct">
-            <a href={PHONE_HREF}>
-              <Phone size={18} />
-              +39 351 819 8457
+        {/* Invito al consulto: nascosto nelle pagine di conferma (vedi Layout) */}
+        {!hideCta && (
+          <motion.div className="mx-footer__cta" {...reveal()}>
+            <p className="mx-footer__kicker">Il primo passo</p>
+            <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-footer__big">
+              <span className="mx-footer__big-text" data-text="Prenota un consulto gratuito">
+                Prenota un consulto gratuito
+              </span>
+              <span className="mx-footer__big-icon">
+                <ArrowUpRight strokeWidth={2.4} />
+              </span>
             </a>
-            <a href={`mailto:${EMAIL}`}>
-              <Mail size={18} />
-              {EMAIL}
-            </a>
-          </div>
-        </motion.div>
+            <div className="mx-footer__direct">
+              <a href={PHONE_HREF}>
+                <Phone size={18} />
+                +39 351 819 8457
+              </a>
+              <a href={`mailto:${EMAIL}`}>
+                <Mail size={18} />
+                {EMAIL}
+              </a>
+            </div>
+          </motion.div>
+        )}
 
         <div className="mx-footer__cols">
           <motion.div className="mx-footer__col" {...reveal(0.05)}>

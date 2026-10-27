@@ -4,6 +4,8 @@
 // componente condiviso, come autorizzato dal titolare il 21/10/2026.
 // Se cambia la logica del popup condiviso per "yt-postura", va aggiornata anche qui.
 
+import { dimenticaRichiesta } from '../../components/prenota-visita/richiestaSalvata'
+
 // BookingPopup.jsx:20
 export const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
@@ -89,5 +91,7 @@ export async function inviaRichiesta(body) {
   if (!json.success) {
     throw new Error(json.error || json.message || `Errore ${response.status}`)
   }
+  // Lista d'attesa, non un dolore: la conferma resta generica anche se prima era stato inviato un altro form
+  dimenticaRichiesta()
   return json
 }

@@ -106,7 +106,10 @@ const LeadFormSheet = ({
               required
             />
             <span>
-              Accetto la <a href="#" className="mx-lsh__link">privacy policy</a> e autorizzo il trattamento dei miei dati personali
+              Accetto la{' '}
+              <a href="https://www.iubenda.com/privacy-policy/67925714" target="_blank" rel="noopener noreferrer" className="mx-lsh__link">
+                privacy policy
+              </a> e autorizzo il trattamento dei miei dati personali
             </span>
           </label>
           {err('privacy')}

@@ -40,11 +40,6 @@
   .mx-ty__wrap { padding: 44px 32px 96px; }
 }
 
-.mx-ty__logo {
-  display: block;
-  width: 132px;
-  height: auto;
-}
 
 /* ---------- Spunta + coriandoli ---------- */
 
@@ -268,4 +263,16 @@
   font-weight: 500;
   line-height: 1.55;
   color: var(--cream);
+}
+
+/* ---------- Recensioni (a tutta larghezza, sotto i prossimi passi) ---------- */
+
+.mx-ty__reviews {
+  position: relative;
+  z-index: 2;
+  padding: 8px 0 72px;
+}
+
+@media (min-width: 768px) {
+  .mx-ty__reviews { padding-bottom: 110px; }
 }

@@ -272,6 +272,21 @@
 
 .mx-dlg-check input { width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0; accent-color: var(--green); }
 
+/* Variante piccola, per il consenso privacy subito sopra il pulsante di invio */
+.mx-dlg-check--sm { gap: 9px; font-size: 0.74rem; line-height: 1.4; cursor: pointer; }
+.mx-dlg-check--sm input { width: 16px; height: 16px; margin-top: 0; cursor: pointer; }
+.mx-dlg-check--sm.is-needed { color: var(--cream); }
+.mx-dlg-check--sm.is-needed input { border-radius: 4px; animation: mx-dlg-check-glow 1.6s ease-in-out infinite; }
+
+@keyframes mx-dlg-check-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(114, 250, 147, 0.7); }
+  50% { box-shadow: 0 0 0 6px rgba(114, 250, 147, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-dlg-check--sm.is-needed input { animation: none; outline: 2px solid var(--green); }
+}
+
 .mx-dlg-error {
   margin: 0;
   padding: 12px 14px;

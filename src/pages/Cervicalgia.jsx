@@ -31,18 +31,18 @@ import {
   Clock,
   UserCheck,
   Plus,
-  TrainFront,
-  Car,
   Check,
   X,
 } from 'lucide-react'
 import BookingPopup from '../components/BookingPopup'
+import StudiMap from '../components/studi-map/StudiMap'
 import WhatsAppFab from '../components/whatsapp/WhatsAppFab'
 import PageShell from '../components/site/PageShell'
 import { Kicker, MaskLines, Reveal, Snap } from '../components/home-sections/HomeKit'
 import { EASE, useParallax } from '../components/home-sections/homeMotion'
 import CervDial from '../components/cervicalgia/CervDial'
-import CervReviews from '../components/cervicalgia/CervReviews'
+import RecensioniTag from '../components/recensioni-tag/RecensioniTag'
+import { DOLORI } from '../data/dolori'
 import '../styles/pages/cervicalgia.css'
 
 // Concetto: "Il raggio di rotazione". Il dolore cervicale si misura in quanto
@@ -50,13 +50,17 @@ import '../styles/pages/cervicalgia.css'
 // ventaglio del movimento possibile, che scorrendo passa da stretto e rosso
 // (collo bloccato) ad ampio e verde (collo libero).
 
+// Benefici come "prima → dopo": il problema barrato, il risultato in grande.
+// Recensioni del carosello: tag dolore del gestionale e parole evidenziate (le stesse della pagina di conferma)
+const { tags: TAG_RECENSIONI, parole: PAROLE_DOLORE } = DOLORI.cervicalgia
+
 const BENEFITS = [
-  <>Svegliarti al <em>mattino</em> senza quella <strong>rigidità</strong> al collo che ti fa iniziare la giornata già <em>stanco e irritato</em>.</>,
-  <>Girare la testa <em>liberamente</em> mentre guidi, lavori o ti alleni, senza <strong>fitte</strong> improvvise o <em>blocchi</em> dolorosi.</>,
-  <>Liberarti dal <strong>mal di testa</strong> che parte dal collo e ti rovina <em>concentrazione</em>, lavoro e serate.</>,
-  <>Tornare a lavorare al computer o usare il telefono per ore senza sentire il collo che si <strong>indurisce</strong> e si <em>infiamma</em>.</>,
-  <>Dormire tutta la notte senza svegliarti per il dolore al collo o trovare una <strong>posizione</strong> che <em>non faccia male</em>.</>,
-  <>Sentire finalmente il collo <em>leggero e libero</em>, senza quella <strong>tensione costante</strong> che ti fa sentire la testa pesante <em>tutto il giorno</em>.</>,
+  { prima: 'Collo bloccato al mattino', dopo: 'Ti svegli sciolto' },
+  { prima: 'Fitte quando giri la testa', dopo: 'La testa gira libera' },
+  { prima: 'Mal di testa che parte dal collo', dopo: 'Testa leggera' },
+  { prima: 'Collo duro al computer', dopo: 'Lavori tranquillo' },
+  { prima: 'Notti a cercare la posizione', dopo: 'Dormi tutta la notte' },
+  { prima: 'Testa pesante tutto il giorno', dopo: 'Collo libero' },
 ]
 
 // Foto delle card "dolore": nome del file in public/trattamenti/web e posizione del ritaglio
@@ -75,73 +79,106 @@ const FOTO_HERO = 'collo_presa-cervicale-supino_26_orizzontale'
 const FOTO_BENEFICI = 'collo_presa-cervicale-supino_19_orizzontale'
 const FOTO_AGITATE = 'collo_cervicale-e-spalle-supino_04_orizzontale'
 const FOTO_FAQ = 'collo_presa-cervicale-supino_14_orizzontale'
+// Foto dentro il carosello dei cambiamenti: dopo la scheda indicata da "dopo" (su desktop occupano due colonne)
+const FOTO_CAMBIAMENTI = [
+  {
+    dopo: 2,
+    nome: 'collo_presa-cervicale-supino_17_orizzontale',
+    pos: '30% 50%',
+    etichetta: 'Trattamento osteopatico',
+    testo: 'Solo con le mani, senza macchinari',
+    alt: 'Osteopata Mobilitas tratta il collo del paziente con le mani',
+  },
+  {
+    dopo: 6,
+    nome: 'spalla_scapola-decubito-laterale_05_orizzontale',
+    pos: '50% 60%',
+    etichetta: 'Su misura',
+    testo: 'Ogni seduta è pensata per te',
+    alt: 'Trattamento osteopatico di spalla e scapola su paziente sdraiata sul fianco',
+  },
+]
+
+// Collage "Ti aspettiamo in studio" prima della mappa: le foto dove si vede lo studio con il logo
+const FOTO_STUDIO = [
+  { nome: 'collo_presa-cervicale-supino_22_orizzontale', pos: '50% 45%', alt: 'Trattamento del collo nello studio Mobilitas' },
+  { nome: 'schiena_dorsale-alta-prono_04_orizzontale', pos: '40% 50%', alt: 'Osteopata Mobilitas tratta la parte alta della schiena' },
+  { nome: 'spalla_scapola-decubito-laterale_01_orizzontale', pos: '45% 55%', alt: 'Trattamento di spalla e scapola nello studio Mobilitas' },
+]
+
+// Mosaico della Strada B: valutazione, trattamento, mani sul collo (la Strada A resta senza foto, per contrasto)
+const FOTO_STRADA_B = [
+  { nome: 'spalla_valutazione-in-piedi_01_orizzontale', pos: '42% 35%', etichetta: 'Valutazione', alt: "L'osteopata valuta postura e spalle del paziente in piedi" },
+  { nome: 'collo_presa-cervicale-supino_09_orizzontale', pos: '40% 50%', etichetta: 'Trattamento', alt: 'Trattamento osteopatico del collo con le mani' },
+  { nome: 'collo_presa-cervicale-supino_31_orizzontale', pos: '30% 50%', etichetta: 'Con le mani', alt: 'Osteopata Mobilitas tratta la cervicale del paziente sdraiato' },
+]
 
 const PAIN_POINTS = [
-  { title: 'La giornata inizia già con il collo bloccato', body: <>Ti svegli rigido, con <strong>fitte dalla cervicale</strong>. Inizi la giornata con la sensazione che qualcosa non funzioni.</> },
-  { title: 'Il mal di testa che parte dal collo', body: <>Pressione dietro la nuca che sale verso tempie e occhi. Il sollievo è solo <em>temporaneo</em>.</> },
-  { title: 'Guidare diventa un incubo', body: <>Controllare l'angolo morto o <strong>girare la testa</strong> diventa limitato e doloroso. Finisci per muovere tutto il busto.</> },
-  { title: 'Lavorare al computer ti distrugge il collo', body: <>Dopo poche ore collo indurito, spalle alte. A fine giornata la <strong>rigidità</strong> resta per ore.</> },
-  { title: 'Il dolore che scende verso spalle e braccia', body: <>Tensione continua, <strong>formicolii</strong> o debolezza. Anche i movimenti semplici diventano meno fluidi.</> },
-  { title: 'Dormire bene diventa difficile', body: <>Nessuna posizione comoda; ti svegli per il dolore o al mattino sei più <strong>rigido</strong> di quando sei andato a letto.</> },
-  { title: 'La testa sembra pesare il doppio', body: <>Tenerla dritta è faticoso; <strong>pressione costante</strong> su collo e spalle, muscoli che non si rilassano.</> },
-  { title: 'La paura che il dolore peggiori', body: <>Il fastidio diventa più frequente. Il dolore rovina <strong>movimenti e serenità</strong>.</> },
+  { title: 'Ti svegli già con il collo bloccato', body: <>Apri gli occhi e il collo è rigido, con <strong>fitte alla cervicale</strong>. La giornata parte già storta.</> },
+  { title: 'Il mal di testa che parte dal collo', body: <>Senti una pressione dietro la nuca che sale fino alle tempie e agli occhi. Passa per un po', poi <em>torna</em>.</> },
+  { title: 'Guidare diventa un incubo', body: <>Per guardare l'angolo morto devi <strong>girare la testa</strong>, ma fa male e non ci arrivi. Così giri tutto il busto.</> },
+  { title: 'Lavorare al computer ti distrugge il collo', body: <>Dopo poche ore il collo è duro e le spalle salgono verso le orecchie. A fine giornata la <strong>rigidità</strong> non se ne va.</> },
+  { title: 'Il dolore che scende su spalle e braccia', body: <>Senti il collo sempre teso, <strong>formicolii</strong> o il braccio debole. Anche i gesti semplici diventano faticosi.</> },
+  { title: 'Non riesci più a dormire bene', body: <>Non trovi una posizione comoda. Ti svegli per il dolore, oppure la mattina sei più <strong>rigido</strong> di quando sei andato a letto.</> },
+  { title: 'La testa sembra pesare il doppio', body: <>Tenerla dritta è una fatica. Senti <strong>un peso continuo</strong> su collo e spalle e i muscoli non si sciolgono mai.</> },
+  { title: 'La paura che il dolore peggiori', body: <>Il dolore arriva sempre più spesso. Ti toglie la voglia di <strong>muoverti</strong> e la tranquillità.</> },
 ]
 
 const TREATMENT_BENEFITS = [
-  { icon: Wind, title: 'Leggerezza immediata', body: <>Sensazione di collo e spalle <strong>libere</strong>: la testa torna a poggiare su una struttura stabile, senza quella tensione costante che la faceva pesante tutto il giorno.</> },
-  { icon: Move, title: 'Muovere il collo con naturalezza', body: <>Girare la testa mentre guidi, guardare di lato diventa un gesto <strong>semplice e fluido</strong>, senza fitte che costringevano a muovere tutto il busto.</> },
-  { icon: Brain, title: 'Meno mal di testa da cervicale', body: <>Quando le tensioni del collo si riducono, diminuiscono anche le <strong>pressioni</strong> dietro la nuca, alle tempie o dietro gli occhi.</> },
-  { icon: Moon, title: 'Sonno di qualità', body: <>Dormire senza dolore al collo permette al corpo di <strong>riposare davvero</strong>. Ci si sveglia più riposati e senza quella rigidità mattutina.</> },
-  { icon: Monitor, title: 'Computer e telefono più tollerabili', body: <>Il collo sostiene la testa senza andare subito in <strong>affaticamento</strong>; si riduce quella tensione crescente nel corso della giornata.</> },
-  { icon: Lightbulb, title: 'Migliore concentrazione', body: <>Quando il dolore cervicale diminuisce, la mente smette di essere disturbata dalla <strong>tensione fisica</strong> costante.</> },
-  { icon: Layers, title: 'Spalle e scapole più rilassate', body: <>Quando la cervicale torna a funzionare meglio, anche tutta la <strong>parte alta della schiena</strong> tende a rilassarsi.</> },
-  { icon: Activity, title: 'Libertà nei movimenti quotidiani', body: <>Lavorare, guidare, allenarsi senza dover continuamente pensare al <strong>dolore</strong>.</> },
-  { icon: ShieldCheck, title: 'Controllo del proprio corpo', body: <>Tornare a vivere senza la paura che il collo possa <strong>bloccarsi</strong> o far male da un momento all'altro.</> },
+  { icon: Wind, title: 'Subito più leggero', body: <>Collo e spalle si <strong>sciolgono</strong>. La testa smette di pesare come un macigno e non senti più quella tensione tutto il giorno.</> },
+  { icon: Move, title: 'Giri la testa senza pensarci', body: <>In macchina o quando qualcuno ti chiama, girarti torna un gesto <strong>semplice</strong>. Senza fitte e senza girare tutto il busto.</> },
+  { icon: Brain, title: 'Meno mal di testa da cervicale', body: <>Quando il collo si scioglie, cala anche la <strong>pressione</strong> dietro la nuca, sulle tempie e dietro gli occhi.</> },
+  { icon: Moon, title: 'Finalmente dormi bene', body: <>Senza dolore al collo il corpo <strong>riposa davvero</strong>. Ti svegli riposato e senza il collo bloccato.</> },
+  { icon: Monitor, title: 'Computer e telefono senza fatica', body: <>Il collo regge la testa senza <strong>stancarsi</strong> subito. La tensione non sale più ora dopo ora.</> },
+  { icon: Lightbulb, title: 'Testa più lucida', body: <>Quando il collo fa meno male, smetti di pensare sempre al <strong>dolore</strong>. E ti concentri meglio.</> },
+  { icon: Layers, title: 'Spalle e scapole più rilassate', body: <>Quando la cervicale sta meglio, si rilassa anche tutta la <strong>parte alta della schiena</strong>.</> },
+  { icon: Activity, title: 'Libero di muoverti ogni giorno', body: <>Lavori, guidi e fai sport senza pensare sempre al <strong>dolore</strong>.</> },
+  { icon: ShieldCheck, title: 'Basta paura del torcicollo', body: <>Torni a vivere senza la paura che il collo si <strong>blocchi</strong> o faccia male all'improvviso.</> },
 ]
 
 const LORO_ITEMS = [
-  { icon: Pill, title: 'Antidolorifici', body: <>Il dolore si attenua per qualche ora o giorno, ma <strong>rigidità e tensioni</strong> restano. Quando l'effetto finisce, il problema torna.</> },
-  { icon: Laptop, title: 'Esercizi trovati online', body: <>Spesso troppo generici o non adatti alla causa. Possono aumentare l'<strong>irritazione</strong> della zona.</> },
-  { icon: Hand, title: 'Massaggi o trattamenti non mirati', body: <>Rilassamento momentaneo, ma non modificano le <strong>disfunzioni</strong> alla base del problema.</> },
+  { icon: Pill, title: 'Antidolorifici', body: <>Il dolore cala per qualche ora o qualche giorno, ma <strong>collo duro e tensioni</strong> restano. Quando l'effetto finisce, il dolore torna.</> },
+  { icon: Laptop, title: 'Esercizi presi da internet', body: <>Sono uguali per tutti e spesso non c'entrano con il tuo problema. Possono anche <strong>peggiorare</strong> il dolore.</> },
+  { icon: Hand, title: 'Massaggi generici', body: <>Ti rilassano sul momento, ma non sistemano <strong>quello che causa</strong> il dolore.</> },
 ]
 
 const NOI_ITEMS = [
-  { icon: Search, title: 'Analisi del corpo nel suo insieme', body: <>Non lavoriamo solo dove senti dolore: capiamo quali <strong>strutture</strong> creano la tensione sulla cervicale.</> },
-  { icon: Hand, title: 'Trattamento manuale mirato', body: <>Lavoriamo su articolazioni, muscoli e tessuti che limitano il movimento, <strong>liberando le rigidità</strong>.</> },
-  { icon: Gauge, title: 'Equilibrio e mobilità progressiva', body: <>Il corpo ritrova un <strong>equilibrio naturale</strong>; la tensione si riduce e la mobilità del collo migliora.</> },
-  { icon: Target, title: 'Risultato duraturo', body: <>L'obiettivo non è far passare il dolore per qualche giorno, ma far <strong>funzionare meglio</strong> il corpo.</> },
+  { icon: Search, title: 'Guardiamo tutto il corpo', body: <>Non lavoriamo solo dove ti fa male. Cerchiamo <strong>cosa tira</strong> e mette sotto sforzo la cervicale.</> },
+  { icon: Hand, title: 'Lavoriamo con le mani, dove serve', body: <>Trattiamo articolazioni, muscoli e tessuti che bloccano il movimento e <strong>sciogliamo le rigidità</strong>.</> },
+  { icon: Gauge, title: 'Meglio a ogni seduta', body: <>Il corpo ritrova il suo <strong>equilibrio</strong>. La tensione cala e il collo si muove sempre meglio.</> },
+  { icon: Target, title: 'Un risultato che dura', body: <>Non vogliamo solo far passare il dolore per qualche giorno. Vogliamo che il tuo corpo <strong>funzioni meglio</strong>.</> },
 ]
 
 const FAQ_ITEMS = [
   {
     icon: Scale,
-    question: 'Qual è la differenza tra osteopata e fisioterapista?',
-    answer: <>Il fisioterapista lavora principalmente in ambito <strong>riabilitazione</strong>, magari dopo eventi traumatici, e spesso con esercizi e macchinari. L'osteopata lavora solamente in maniera manuale su tutto il <strong>sistema corpo</strong>, andando alla <strong>radice</strong> dei problemi e aiutandoti anche a prevenirli lavorando sulla tua postura e le tue abitudini quotidiane. L'approccio è più globale: non solo dove fa male, ma perché fa male e si risolvere il tutto alla fonte.</>,
+    question: 'Che differenza c\'è tra osteopata e fisioterapista?',
+    answer: <>Il fisioterapista si occupa soprattutto di <strong>riabilitazione</strong>, per esempio dopo un trauma, e usa spesso esercizi e macchinari. L'osteopata lavora solo con le mani, su <strong>tutto il corpo</strong>. Cerca la <strong>causa</strong> del problema e ti aiuta a non farlo tornare, anche sistemando postura e abitudini di tutti i giorni. Non guarda solo dove fa male, ma perché fa male, per risolvere il problema alla fonte.</>,
   },
   {
     icon: Shirt,
     question: 'Come mi devo vestire?',
-    answer: <>Puoi venire in <strong>abiti normali e comodi</strong> (stile abbigliamento sportivo da palestra), che si possano eventualmente togliere facilmente. L'importante è che tu ti senta a tuo agio.</>,
+    answer: <>Vieni con <strong>vestiti comodi</strong>, tipo quelli da palestra, facili da togliere se serve. L'importante è che tu stia a tuo agio.</>,
   },
   {
     icon: Banknote,
     question: 'Quanto costano le sedute?',
-    answer: <>La prima visita ha uno sconto dedicato: <strong>da 90€ a 49€</strong>. Per le sedute successive il costo dipende dall'eventuale percorso; abbiamo <strong>formule per risparmiare</strong> e ne parliamo direttamente in struttura.</>,
+    answer: <>La prima visita è scontata: <strong>49€ invece di 90€</strong>. Il prezzo delle sedute dopo dipende dal percorso che ti serve. Abbiamo <strong>pacchetti per risparmiare</strong>: te li spieghiamo in studio.</>,
   },
   {
     icon: MapPin,
-    question: 'Dove si trova lo studio?',
-    answer: <>Ci troviamo in <strong>Via Peyron 54 a Torino</strong>. Siamo raggiungibili con mezzi pubblici (anche metropolitana) e in auto. Ti inviamo le indicazioni precise quando prenoti l'appuntamento.</>,
+    question: 'Dove vi trovate?',
+    answer: <>Abbiamo <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) e in <strong>Via Lamarmora 35</strong> (Crocetta). Ci arrivi comodo con i mezzi e in auto; a Via Peyron c'è anche la metro. Quando prenoti ti mandiamo le indicazioni precise.</>,
   },
   {
     icon: Clock,
     question: 'Quanto dura una visita?',
-    answer: <>La prima visita dura circa <strong>60 minuti</strong> (colloquio, valutazione e primo trattamento). I trattamenti successivi circa <strong>40-55 minuti</strong>, a seconda del problema e delle tecniche utilizzate.</>,
+    answer: <>La prima visita dura circa <strong>un'ora</strong>: parliamo, ti visitiamo e facciamo il primo trattamento. Le sedute dopo durano circa <strong>40-55 minuti</strong>, in base al problema.</>,
   },
   {
     icon: UserCheck,
     question: 'Con chi farò la visita?',
-    answer: <>Durante la chiamata ti assegneremo l'<strong>osteopata più adeguato</strong> al tuo caso, il più <strong>specializzato</strong> per il tuo problema. Tutti i nostri osteopati sono qualificati e lavorano con lo <strong>stesso metodo</strong>.</>,
+    answer: <>Durante la telefonata scegliamo per te l'<strong>osteopata giusto</strong>, quello più <strong>esperto</strong> nel tuo problema. Tutti i nostri osteopati sono preparati e lavorano con lo <strong>stesso metodo</strong>.</>,
   },
 ]
 
@@ -158,18 +195,24 @@ const webImg = (nome, w = 900) => `/trattamenti/web/${nome}-${w}.jpg`
 const srcSetOf = (nome) => `${webImg(nome, 900)} 900w, ${webImg(nome, 1600)} 1600w`
 
 // Coppia di CTA della campagna: aprono il popup di prenotazione
+// Verde e animato sempre la prenotazione della prima visita; il consulto è il bottone secondario, più piccolo
 const CervCtas = ({ onConsulto, onVisita, className = '' }) => (
   <div className={`mx-ctas mx-cerv-ctas ${className}`}>
-    <button type="button" className="mx-btn mx-btn--primary mx-cerv-btn" onClick={onConsulto}>
-      <span className="mx-cerv-btn__label">Prenota un consulto telefonico gratuito</span>
-      <span className="mx-btn__icon">
-        <Phone size={20} strokeWidth={2.4} />
+    <button type="button" className="mx-btn mx-btn--primary mx-cerv-btn mx-cerv-btn--main" onClick={onVisita}>
+      <span className="mx-cerv-btn__label">
+        <small>
+          Sconto prima visita · <s>90€</s> 49€
+        </small>
+        Prenota la prima visita
       </span>
-    </button>
-    <button type="button" className="mx-btn mx-btn--ghost mx-cerv-btn" onClick={onVisita}>
-      <span className="mx-cerv-btn__label">Prenota prima visita con sconto</span>
       <span className="mx-btn__icon">
         <CalendarCheck size={20} strokeWidth={2.4} />
+      </span>
+    </button>
+    <button type="button" className="mx-btn mx-btn--ghost mx-cerv-btn mx-cerv-btn--sub" onClick={onConsulto}>
+      <span className="mx-cerv-btn__label">Consulto telefonico gratuito</span>
+      <span className="mx-btn__icon">
+        <Phone size={18} strokeWidth={2.4} />
       </span>
     </button>
   </div>
@@ -192,9 +235,9 @@ const TurnScene = () => {
           <div className="mx-cerv-turn__copy">
             <Kicker>Trattamento osteopatico</Kicker>
             <h2 className="mx-h mx-cerv-turn__title" id="mx-cerv-turn-title">
-              Quando il dolore cervicale viene trattato nel <strong className="mx-accent">modo giusto</strong>
+              Quando la cervicale viene trattata nel <strong className="mx-accent">modo giusto</strong>
             </h2>
-            <p className="mx-lead mx-cerv-turn__lead">Questi sono i cambiamenti che puoi aspettarti.</p>
+            <p className="mx-lead mx-cerv-turn__lead">Ecco cosa cambia, giorno dopo giorno.</p>
           </div>
           <div className="mx-cerv-turn__stage">
             <CervDial progress={progress} className="mx-cerv-turn__dial" />
@@ -205,7 +248,7 @@ const TurnScene = () => {
               </motion.span>
               <motion.span className="mx-cerv-turn__state is-after" style={{ opacity: after }}>
                 <Check size={16} strokeWidth={3} />
-                Muovere il collo con naturalezza
+                Giri la testa senza pensarci
               </motion.span>
             </div>
           </div>
@@ -390,7 +433,7 @@ function Cervicalgia() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
             >
-              <span className="mx-accent">Risolvere</span> il tuo dolore cervicale in maniera completamente{' '}
+              <span className="mx-accent">Risolvere</span> il tuo dolore cervicale in modo{' '}
               <span className="mx-accent">naturale</span> e in <span className="mx-accent">poche sedute</span>.
             </motion.span>
           </h1>
@@ -456,9 +499,9 @@ function Cervicalgia() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: EASE, delay: 0.45 }}
           >
-            <em>Nessun farmaco. Nessun intervento.</em>
+            <em>Niente farmaci. Niente operazioni.</em>
             <br />
-            Un gran trattamento <strong>osteopatico</strong> specifico per te con <strong>risultati concreti</strong>.
+            Solo un trattamento <strong>osteopatico</strong> fatto su misura per te, con <strong>risultati</strong> che senti davvero.
           </motion.p>
         </div>
       </header>
@@ -466,44 +509,78 @@ function Cervicalgia() {
       {/* ——— Recensioni ——— */}
       <section className="mx-section mx-section--deep mx-cerv-proof">
         <div className="mx-wrap">
-          <Reveal>
-            <CervReviews />
-          </Reveal>
+          {/* Prova: recensioni Google dal gestionale, filtrate per tag cervicalgia */}
+          <RecensioniTag
+            tags={TAG_RECENSIONI}
+            evidenzia={PAROLE_DOLORE}
+            titolo={
+              <>
+                Chi aveva il <span className="mx-accent">dolore cervicale</span>, oggi scrive così
+              </>
+            }
+            sottotitolo="Recensioni Google a 5 stelle di persone venute da noi per la cervicale, nei nostri studi di Torino."
+          />
         </div>
       </section>
 
       {/* ——— Benefici ——— */}
       <section className="mx-section mx-section--glow mx-cerv-benefits">
-        <div className="mx-wrap mx-cerv-benefits__grid">
-          <div className="mx-cerv-benefits__copy">
+        <div className="mx-wrap">
+          <div className="mx-cerv-ben__head">
+            <Kicker>Cosa cambia dopo il trattamento</Kicker>
             <h2 className="mx-h mx-h--lg">
-              I <span className="mx-accent">benefici</span> del trattamento osteopatico per il{' '}
-              <span className="mx-accent">dolore cervicale</span>
+              <MaskLines lines={[{ text: 'Dal collo bloccato' }, { text: 'al collo libero.', className: 'mx-gradient' }]} />
             </h2>
-            <ul className="mx-cerv-checks">
-              {BENEFITS.map((text, i) => (
-                <Reveal as="li" key={i} delay={i * 0.05} y={24}>
-                  <span className="mx-cerv-checks__tick" aria-hidden="true">
-                    <CheckCircle2 size={18} strokeWidth={2.4} />
-                  </span>
-                  <span className="mx-cerv-checks__text">{text}</span>
-                </Reveal>
-              ))}
-            </ul>
           </div>
-          <Reveal className="mx-cerv-photo mx-cerv-benefits__photo" ref={benRef}>
-            <motion.div style={{ y: benY, height: '100%' }}>
-              <img
-                className="mx-parallax-img"
-                src={webImg(FOTO_BENEFICI, 1600)}
-                style={{ objectPosition: '22% 50%' }}
-                srcSet={srcSetOf(FOTO_BENEFICI)}
-                sizes="(min-width: 1000px) 520px, 92vw"
-                alt="Trattamento osteopatico per il benessere del collo e della postura"
-                loading="lazy"
-                decoding="async"
-              />
-            </motion.div>
+          <Reveal className="mx-cerv-ben">
+            <div className="mx-cerv-ben__photo" ref={benRef}>
+              <motion.div style={{ y: benY, height: '100%' }}>
+                <img
+                  src={webImg(FOTO_BENEFICI, 1600)}
+                  style={{ objectPosition: '22% 50%' }}
+                  srcSet={srcSetOf(FOTO_BENEFICI)}
+                  sizes="(min-width: 1000px) 440px, 92vw"
+                  alt="Trattamento osteopatico per il dolore cervicale"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.div>
+              <span className="mx-cerv-ben__tag">
+                <span>Prima</span>
+                <ArrowRight size={14} aria-hidden="true" />
+                <b>Dopo</b>
+              </span>
+            </div>
+            <ol className="mx-cerv-ben__list">
+              {BENEFITS.map((b, i) => (
+                <motion.li
+                  key={b.dopo}
+                  initial="off"
+                  whileInView="on"
+                  viewport={{ once: true, margin: '-12% 0px' }}
+                  transition={{ staggerChildren: 0.18, delayChildren: i * 0.08 }}
+                >
+                  <span className="mx-cerv-ben__n" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="mx-cerv-ben__prima">
+                    <motion.s
+                      variants={{ off: { backgroundSize: '0% 2px' }, on: { backgroundSize: '100% 2px' } }}
+                      transition={{ duration: 0.45, ease: EASE }}
+                    >
+                      {b.prima}
+                    </motion.s>
+                  </span>
+                  <motion.span
+                    className="mx-cerv-ben__dopo"
+                    variants={{ off: { opacity: 0, x: -14 }, on: { opacity: 1, x: 0 } }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                  >
+                    {b.dopo}
+                  </motion.span>
+                </motion.li>
+              ))}
+            </ol>
           </Reveal>
         </div>
         <div className="mx-wrap">{ctas}</div>
@@ -516,7 +593,7 @@ function Cervicalgia() {
           <h2 className="mx-h mx-h--lg mx-cerv-pain__title">
             Il dolore cervicale non è solo un fastidio.
             <br />
-            <span className="mx-cerv-pain__hit">È qualcosa che può rovinare le tue giornate!</span>
+            <span className="mx-cerv-pain__hit">Può rovinarti le giornate!</span>
           </h2>
 
           <Snap as="ol" className="mx-cerv-pains">
@@ -545,21 +622,21 @@ function Cervicalgia() {
                 <span aria-hidden="true">
                   <AlertTriangle size={16} strokeWidth={2.4} />
                 </span>
-                Se lo ignori
+                Se fai finta di niente
               </p>
               <h3 className="mx-h mx-h--md mx-cerv-agitate__title">
-                Il dolore raramente resta uguale.
+                Il dolore quasi mai resta com'è.
                 <br />
                 <span className="mx-cerv-escalate">
-                  Diventa più <strong>frequente</strong>, più intenso, più limitante.
+                  Torna più <strong>spesso</strong>, fa più male, ti blocca di più.
                 </span>
               </h3>
               <div className="mx-cerv-agitate__text">
                 <p className="mx-body">
-                  Quello che oggi è un fastidio dopo una giornata al computer può trasformarsi in <strong>rigidità costante</strong>. Il collo si irrigidisce, i muscoli restano in tensione e i movimenti diventano sempre più limitati. Con il tempo il dolore può irradiarsi verso spalle, scapole e braccia.
+                  Oggi è un fastidio che arriva dopo una giornata al computer. Domani può diventare un <strong>collo sempre rigido</strong>. I muscoli restano tesi e ti muovi sempre meno. Col tempo il dolore può scendere verso spalle, scapole e braccia.
                 </p>
                 <p className="mx-body">
-                  Molte persone si adattano al dolore senza accorgersene. Questo crea ulteriori compensi e il problema tende a <strong>cronicizzarsi</strong>. Quando il dolore diventa cronico, recuperare richiede molto più tempo. <span className="mx-accent mx-cerv-semi">Intervenire presto</span> significa evitare che un problema gestibile condizioni ogni giorno la tua vita.
+                  Molte persone si abituano al dolore senza accorgersene. Il corpo inizia a muoversi storto per non sentirlo e il problema <strong>diventa cronico</strong>. A quel punto, per stare meglio serve molto più tempo. <span className="mx-accent mx-cerv-semi">Agire subito</span> vuol dire fermare un problema piccolo, prima che ti condizioni la vita ogni giorno.
                 </p>
               </div>
             </Reveal>
@@ -605,6 +682,19 @@ function Cervicalgia() {
                   </div>
                 </li>
               )
+            }).flatMap((card, i) => {
+              const foto = FOTO_CAMBIAMENTI.find((f) => f.dopo === i)
+              if (!foto) return [card]
+              return [
+                card,
+                <li key={foto.nome} className="mx-cerv-bento__photo">
+                  <img src={webImg(foto.nome)} style={{ objectPosition: foto.pos }} alt={foto.alt} loading="lazy" decoding="async" />
+                  <div className="mx-cerv-bento__photo-txt">
+                    <span>{foto.etichetta}</span>
+                    <p>{foto.testo}</p>
+                  </div>
+                </li>,
+              ]
             })}
           </Snap>
           {ctas}
@@ -622,7 +712,7 @@ function Cervicalgia() {
           </h2>
           <Reveal>
             <p className="mx-lead mx-cerv-roads__intro">
-              Le persone che soffrono di dolore cervicale hanno due strade: La via tradizionale obbligat al corpo a convivere con il <strong>sintomo</strong>... Noi invece sistemiamo le <strong>cause</strong> che alimentano la tensione sulla cervicale.
+              Chi soffre di cervicale ha davanti due strade. La prima è quella di sempre: spegni il <strong>dolore</strong> per un po' e impari a conviverci. La seconda è la nostra: sistemiamo le <strong>cause</strong> che tengono in tensione il collo.
             </p>
           </Reveal>
 
@@ -646,13 +736,13 @@ function Cervicalgia() {
                 </span>
                 <div>
                   <p className="mx-cerv-road__tag">Strada A</p>
-                  <h3 className="mx-h mx-h--md">Spegnere il sintomo</h3>
+                  <h3 className="mx-h mx-h--md">Spegnere il dolore</h3>
                 </div>
               </div>
               <p className="mx-cerv-road__flow">
                 sollievo breve
                 <ArrowRight size={14} />
-                ritorno
+                il dolore torna
               </p>
               <ul className="mx-list">
                 {LORO_ITEMS.map((item, i) => {
@@ -676,7 +766,7 @@ function Cervicalgia() {
                 <div>
                   <p className="mx-cerv-road__foot-t">Il limite</p>
                   <p className="mx-cerv-road__foot-d">
-                    Ti dà respiro, ma spesso non cambia ciò che genera la rigidità: la cervicale resta <strong>“sotto carico”</strong> e il problema tende a ripresentarsi.
+                    Ti fa respirare per un po', ma non tocca quello che rende il collo rigido. La cervicale resta <strong>“sotto sforzo”</strong> e il dolore torna.
                   </p>
                 </div>
               </div>
@@ -693,10 +783,25 @@ function Cervicalgia() {
                 </div>
               </div>
               <p className="mx-cerv-road__flow">
-                progressivo
+                meglio a ogni seduta
                 <ArrowRight size={14} />
-                stabile
+                risultato che dura
               </p>
+              <div className="mx-cerv-road__photos">
+                {FOTO_STRADA_B.map((f, i) => (
+                  <motion.figure
+                    key={f.nome}
+                    className="mx-cerv-road__photo"
+                    initial={{ opacity: 0, scale: 0.94 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: '-10% 0px' }}
+                    transition={{ duration: 0.7, ease: EASE, delay: i * 0.12 }}
+                  >
+                    <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
+                    <figcaption>{f.etichetta}</figcaption>
+                  </motion.figure>
+                ))}
+              </div>
               <ul className="mx-list">
                 {NOI_ITEMS.map((item, i) => {
                   const Icon = item.icon
@@ -719,7 +824,7 @@ function Cervicalgia() {
                 <div>
                   <p className="mx-cerv-road__foot-t">Il vantaggio</p>
                   <p className="mx-cerv-road__foot-d">
-                    Non inseguiamo il dolore: rimettiamo in equilibrio le strutture che lo alimentano, così il collo torna a <strong>muoversi</strong> e a reggere la giornata senza “andare in allarme”.
+                    Non rincorriamo il dolore: sistemiamo quello che lo provoca. Così il collo torna a <strong>muoversi</strong> e regge tutta la giornata senza “andare in tilt”.
                   </p>
                 </div>
               </div>
@@ -736,7 +841,7 @@ function Cervicalgia() {
             <Kicker>Domande frequenti</Kicker>
             <h2 className="mx-h mx-h--lg">Tutto quello che ti serve sapere, prima di prenotare</h2>
             <p className="mx-lead mx-cerv-faq__lead">
-              Risposte chiare su costi, durata, dove siamo e come funziona la prima visita. Zero giri di parole.
+              Quanto costa, quanto dura, dove siamo e come funziona la prima visita. Risposte semplici, senza giri di parole.
             </p>
             <div className="mx-cerv-photo mx-cerv-faq__photo">
               <img
@@ -782,11 +887,11 @@ function Cervicalgia() {
               })}
             </ul>
             <p className="mx-cerv-faq__more">
-              Altre domande?{' '}
+              Hai altre domande?{' '}
               <button type="button" onClick={openConsulto}>
-                Durante la consulenza telefonica gratuita
+                Nel consulto telefonico gratuito
               </button>{' '}
-              ti rispondiamo a tutto.
+              ti rispondiamo su tutto.
             </p>
           </div>
         </div>
@@ -794,53 +899,33 @@ function Cervicalgia() {
 
       {/* ——— Dove siamo ——— */}
       <section className="mx-section mx-section--glow mx-cerv-where">
-        <div className="mx-wrap mx-cerv-where__grid">
-          <div className="mx-cerv-where__copy">
-            <Kicker>Dove siamo</Kicker>
-            <h2 className="mx-h mx-h--lg">
-              <MaskLines lines={[{ text: 'Vieni a trovarci' }, { text: 'nel cuore di Torino', className: 'mx-gradient' }]} />
-            </h2>
-            <p className="mx-lead mx-cerv-where__lead">
-              Lo studio si trova in una posizione strategica, comodo con mezzi pubblici e parcheggio nelle vicinanze.
-            </p>
-            <div className="mx-cerv-where__rows">
-              <a
-                className="mx-cerv-where__row is-link"
-                href="https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.08023495897442,7.65514387704107,17z"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="mx-cerv-where__ic">
-                  <MapPin size={20} />
-                </span>
-                <span className="mx-cerv-where__txt">Via Peyron 54, Torino</span>
-                <ArrowRight size={18} className="mx-cerv-where__go" />
-              </a>
-              <div className="mx-cerv-where__row">
-                <span className="mx-cerv-where__ic">
-                  <TrainFront size={20} />
-                </span>
-                <span className="mx-cerv-where__txt">Metro: Bernini o Principi d'Acaja</span>
-              </div>
-              <div className="mx-cerv-where__row">
-                <span className="mx-cerv-where__ic">
-                  <Car size={20} />
-                </span>
-                <span className="mx-cerv-where__txt">2 parcheggi vicini + strisce blu</span>
-              </div>
+        <div className="mx-wrap">
+          <div className="mx-cerv-where__head">
+            <div>
+              <Kicker>Dove siamo</Kicker>
+              <h2 className="mx-h mx-h--lg">
+                <MaskLines lines={[{ text: 'Vieni a trovarci' }, { text: 'nel cuore di Torino', className: 'mx-gradient' }]} />
+              </h2>
             </div>
+            <p className="mx-lead mx-cerv-where__lead">
+              Abbiamo due studi: uno a San Donato e uno in Crocetta. Scegli quello più comodo per te e tocca “Indicazioni” per arrivarci.
+            </p>
           </div>
+          <Reveal className="mx-cerv-studio">
+            {FOTO_STUDIO.map((f, i) => (
+              <figure key={f.nome} className="mx-cerv-studio__photo">
+                <img src={webImg(f.nome)} style={{ objectPosition: f.pos }} alt={f.alt} loading="lazy" decoding="async" />
+                {i === 0 && (
+                  <figcaption>
+                    <span>Ti aspettiamo in studio</span>
+                    Due studi a Torino: San Donato e Crocetta
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </Reveal>
           <Reveal className="mx-cerv-where__map" delay={0.1}>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2817.274078923546!2d7.65514387704107!3d45.08023495897442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfe2e29f381fdc93%3A0x97eee174cab07ada!2sMobilitas%20-%20Studio%20Osteopatico%20-%20Osteopata%20Torino!5e0!3m2!1sit!2sit!4v1760785981478!5m2!1sit!2sit"
-              title="Mobilitas - Studio Osteopatico, Via Peyron 54 Torino"
-              width="100%"
-              height="400"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            <StudiMap />
           </Reveal>
         </div>
         <div className="mx-wrap">{ctas}</div>
@@ -856,18 +941,30 @@ function Cervicalgia() {
             exit={{ y: 120, opacity: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
           >
-            <button type="button" className="mx-cerv-dock__btn is-primary" onClick={openConsulto}>
-              <Phone size={18} strokeWidth={2.4} />
-              <span>Prenota un consulto telefonico gratuito</span>
+            <button
+              type="button"
+              className="mx-cerv-dock__btn is-primary"
+              onClick={openPrimaVisita}
+              aria-label="Prenota la prima visita scontata a 49€ invece di 90€"
+            >
+              <span className="mx-cerv-dock__price" aria-hidden="true">
+                <s>90€</s>
+                <b>49€</b>
+              </span>
+              <span className="mx-cerv-dock__txt">
+                <small>Prima visita</small>
+                Prenota ora
+              </span>
+              <ArrowRight size={18} strokeWidth={2.6} className="mx-cerv-dock__arrow" aria-hidden="true" />
             </button>
             <button
               type="button"
               className="mx-cerv-dock__btn is-ghost"
-              onClick={openPrimaVisita}
-              aria-label="Prenota prima visita con sconto"
+              onClick={openConsulto}
+              aria-label="Prenota un consulto telefonico gratuito"
             >
-              <s>90€</s>
-              <b>49€</b>
+              <Phone size={17} strokeWidth={2.4} />
+              <small>Gratis</small>
             </button>
           </motion.div>
         )}
@@ -883,7 +980,7 @@ function Cervicalgia() {
       </AnimatePresence>
       <WhatsAppFab
         message="Ciao, vorrei avere maggiori informazioni sul trattamento osteopatico per la cervicalgia"
-        bubbleText="Hai qualche dubbio o domanda prima di venire da noi? Scrivici un messaggio e saremo lieti di chiarire tutto quanto!"
+        bubbleText="Hai un dubbio prima di venire da noi? Scrivici qui e ti spieghiamo tutto."
         bubbleId="cervicalgia"
       />
     </PageShell>

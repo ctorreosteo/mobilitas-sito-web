@@ -64,6 +64,13 @@
   color: #72fa93;
 }
 
+.mx-grl__zona {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgba(244, 244, 244, 0.62);
+}
+
 .mx-grl__arrow {
   flex-shrink: 0;
   margin-left: 4px;
@@ -91,6 +98,7 @@
 
 .mx-grl--light .mx-grl__btn:hover { background: #fff; border-color: #002552; }
 .mx-grl--light .mx-grl__icon { background: #f4f4f4; }
+.mx-grl--light .mx-grl__zona { color: rgba(0, 37, 82, 0.6); }
 .mx-grl--light .mx-grl__text small,
 .mx-grl--light .mx-grl__arrow { color: rgba(0, 37, 82, 0.7); }
 .mx-grl--light .mx-grl__btn:focus-visible { outline-color: #002552; }
