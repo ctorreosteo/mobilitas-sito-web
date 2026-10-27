@@ -108,6 +108,66 @@ export const DOLORI = {
     tags: ['TAG_DOLORE_SCIATALGIA', 'TAG_DOLORE_ERNIA_DEL_DISCO', 'TAG_DOLORE_LOMBALGIA'],
     parole: /\b(sciatic\w*|sciatalgi\w*|gamba|schiena|lombar\w*|ernia|nervo)(?![\wàèéìòù])/i,
   },
+  acufeni: {
+    ilTuo: 'il tuo acufene',
+    per: "per l'acufene",
+    tags: ['TAG_DOLORE_ACUFENI'],
+    parole: /\b(acufen\w*|fischi\w*|ronzi\w*|orecchi\w*|udito)(?![\wàèéìòù])/i,
+  },
+  'dolori-mandibolari': {
+    ilTuo: 'il tuo dolore alla mandibola',
+    per: 'per il dolore alla mandibola',
+    tags: ['TAG_DOLORE_ATM', 'TAG_DOLORE_BRUXISMO'],
+    parole: /\b(mandibol\w*|mascell\w*|atm|masticar\w*|bocca|denti|click)(?![\wàèéìòù])/i,
+  },
+  'sinusite-cronica': {
+    ilTuo: 'la tua sinusite',
+    per: 'per la sinusite',
+    tags: ['TAG_DOLORE_SINUSITE_CRONICA', 'TAG_DOLORE_SINUSITE'],
+    parole: /\b(sinusit\w*|seni paranasali|naso|respir\w*|muco)(?![\wàèéìòù])/i,
+  },
+  epitrocleite: {
+    ilTuo: 'la tua epitrocleite',
+    per: "per l'epitrocleite",
+    tags: ['TAG_DOLORE_EPICONDILITE', 'TAG_DOLORE_TENDINITE'],
+    parole: /\b(epitrocle\w*|epicondil\w*|gomito|avambracci\w*|braccio|golf\w*|padel)(?![\wàèéìòù])/i,
+  },
+  tendinite: {
+    ilTuo: 'la tua tendinite',
+    per: 'per la tendinite',
+    tags: ['TAG_DOLORE_TENDINITE', 'TAG_DOLORE_TENDINITE_CALCIFICA', 'TAG_DOLORE_TENDINITE_D_ACHILLE', 'TAG_DOLORE_SPALLA_DOLOROSA'],
+    parole: /\b(tendin\w*|achille|spall[ae]|ginocchi[oa]|polso|gomito|tallone)(?![\wàèéìòù])/i,
+  },
+  pubalgia: {
+    ilTuo: 'la tua pubalgia',
+    per: 'per la pubalgia',
+    tags: ['TAG_DOLORE_PUBALGIA', 'TAG_DOLORE_CALCIO', 'TAG_DOLORE_RUNNING'],
+    parole: /\b(pubalgi\w*|pube|inguin\w*|adduttor\w*|bacino|anca|calcio|corsa)(?![\wàèéìòù])/i,
+  },
+  'fascite-plantare': {
+    ilTuo: 'la tua fascite plantare',
+    per: 'per la fascite plantare',
+    tags: ['TAG_DOLORE_FASCITE_PLANTARE', 'TAG_DOLORE_RUNNING'],
+    parole: /\b(fascit\w*|tallone|piede|piedi|pianta|caviglia|sperone|corsa)(?![\wàèéìòù])/i,
+  },
+  scoliosi: {
+    ilTuo: 'la tua scoliosi',
+    per: 'per la scoliosi',
+    tags: ['TAG_DOLORE_SCOLIOSI', 'TAG_DOLORE_POSTURA', 'TAG_DOLORE_DORSALGIA'],
+    parole: /\b(scolios\w*|postura|schiena|colonna|dorsal\w*|spall[ae])(?![\wàèéìòù])/i,
+  },
+  'ernia-del-disco': {
+    ilTuo: 'la tua ernia del disco',
+    per: "per l'ernia del disco",
+    tags: ['TAG_DOLORE_ERNIA_DEL_DISCO', 'TAG_DOLORE_SCIATALGIA', 'TAG_DOLORE_LOMBALGIA'],
+    parole: /\b(erni[ae]|disco|discal\w*|protrusion\w*|schiena|lombar\w*|sciatic\w*|gamba)(?![\wàèéìòù])/i,
+  },
+  lombalgia: {
+    ilTuo: 'la tua lombalgia',
+    per: 'per la lombalgia',
+    tags: ['TAG_DOLORE_LOMBALGIA', 'TAG_DOLORE_MAL_DI_SCHIENA', 'TAG_DOLORE_DOLORE_SACROILIACO'],
+    parole: /\b(lombalgi\w*|lombar\w*|schiena|colpo della strega|bloccat[oa]|bacino)(?![\wàèéìòù])/i,
+  },
 }
 
 // Recensioni "a caso" quando non sappiamo da dove arriva la persona: i dolori con più recensioni, mescolate

@@ -116,6 +116,16 @@ const ZONE = {
   'tunnel-carpale': ['spalla', 'collo'],
   epicondilite: ['spalla', 'collo'],
   fibromialgia: ['collo', 'schiena', 'pancia', 'spalla'],
+  acufeni: ['collo', 'atm'],
+  'dolori-mandibolari': ['atm', 'collo'],
+  'sinusite-cronica': ['collo', 'atm', 'pancia'],
+  epitrocleite: ['spalla', 'collo'],
+  tendinite: ['spalla', 'gamba', 'anca'],
+  pubalgia: ['anca', 'pancia', 'gamba'],
+  'fascite-plantare': ['gamba', 'anca', 'schiena'],
+  scoliosi: ['schiena', 'collo', 'spalla'],
+  'ernia-del-disco': ['schiena', 'anca', 'gamba'],
+  lombalgia: ['schiena', 'anca', 'pancia'],
 }
 
 // Una foto per serie prima di ripetere la serie: gli scatti consecutivi (es. anca_flessa-supino_05, _06, _07)

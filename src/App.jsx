@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 
@@ -17,7 +17,6 @@ import Newsletter from './pages/sito-web/Newsletter'
 import Magazine from './pages/sito-web/Magazine'
 import MobilitasFitness from './pages/sito-web/MobilitasFitness'
 import OsteopataTorino from './pages/landing-prima-visita/OsteopataTorino'
-import OsteopataTorinoConferma from './pages/sito-web/OsteopataTorinoConferma'
 import OffertaYT from './pages/sito-web/OffertaYT'
 import OffertaInfluencer from './pages/sito-web/OffertaInfluencer'
 import OffertaInfluencerConferma from './pages/sito-web/OffertaInfluencerConferma'
@@ -50,7 +49,6 @@ import MalDiSchiena from './pages/landing-prima-visita/MalDiSchiena'
 import Gravidanza from './pages/landing-pages/Gravidanza'
 import ThankYou from './pages/landing-pages/ThankYou'
 import ThankYouRichiesta from './pages/landing-pages/ThankYouRichiesta'
-import ThankYouCervicalgia from './pages/landing-pages/ThankYouCervicalgia'
 import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
 import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
@@ -73,6 +71,16 @@ import GonfioreAddominale from './pages/landing-prima-visita/GonfioreAddominale'
 import Epicondilite from './pages/landing-prima-visita/Epicondilite'
 import ColonIrritabile from './pages/landing-prima-visita/ColonIrritabile'
 import Sciatalgia from './pages/landing-prima-visita/Sciatalgia'
+import Acufeni from './pages/landing-prima-visita/Acufeni'
+import DoloriMandibolari from './pages/landing-prima-visita/DoloriMandibolari'
+import SinusiteCronica from './pages/landing-prima-visita/SinusiteCronica'
+import Epitrocleite from './pages/landing-prima-visita/Epitrocleite'
+import Tendinite from './pages/landing-prima-visita/Tendinite'
+import Pubalgia from './pages/landing-prima-visita/Pubalgia'
+import FascitePlantare from './pages/landing-prima-visita/FascitePlantare'
+import Scoliosi from './pages/landing-prima-visita/Scoliosi'
+import ErniaDelDisco from './pages/landing-prima-visita/ErniaDelDisco'
+import Lombalgia from './pages/landing-prima-visita/Lombalgia'
 
 // 404 Page
 import NotFound from './pages/NotFound'
@@ -100,7 +108,8 @@ function App() {
         <Route path="/magazine" element={<Layout><Magazine /></Layout>} />
         <Route path="/mobilitas-fitness" element={<Layout><MobilitasFitness /></Layout>} />
         <Route path="/osteopata-torino" element={<Layout><OsteopataTorino /></Layout>} />
-        <Route path="/osteopata-torino-conferma" element={<Layout hideFooterCta><OsteopataTorinoConferma /></Layout>} />
+        {/* Vecchie conferme: ora c'è una pagina sola (la conversione Google Ads parte da lì) */}
+        <Route path="/osteopata-torino-conferma" element={<Navigate to="/conferma-richiesta" replace />} />
         <Route path="/offerta-yt" element={<Layout><OffertaYT /></Layout>} />
         <Route path="/offerta-influencer" element={<Layout><OffertaInfluencer /></Layout>} />
         <Route path="/offerta-influencer-conferma" element={<Layout><OffertaInfluencerConferma /></Layout>} />
@@ -109,7 +118,8 @@ function App() {
         <Route path="/privacy-policy-applicazione" element={<Layout><PrivacyPolicyApplicazione /></Layout>} />
         <Route path="/supporto-app" element={<Layout><SupportoApp /></Layout>} />
         <Route path="/cervicalgia" element={<Layout hideWhatsApp><Cervicalgia /></Layout>} />
-        <Route path="/cervicalgia/conferma" element={<Layout hideFooterCta><ThankYouCervicalgia /></Layout>} />
+        {/* Vecchie conferme: ora c'è una pagina sola (la conversione Google Ads parte da lì) */}
+        <Route path="/cervicalgia/conferma" element={<Navigate to="/conferma-richiesta" replace />} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
         <Route path="/yt-postura-v2" element={<Layout hideWhatsApp><YtPosturaV2 /></Layout>} />
@@ -127,6 +137,16 @@ function App() {
         <Route path="/epicondilite" element={<Layout hideWhatsApp><Epicondilite /></Layout>} />
         <Route path="/colon-irritabile" element={<Layout hideWhatsApp><ColonIrritabile /></Layout>} />
         <Route path="/sciatalgia" element={<Layout hideWhatsApp><Sciatalgia /></Layout>} />
+        <Route path="/acufeni" element={<Layout hideWhatsApp><Acufeni /></Layout>} />
+        <Route path="/dolori-mandibolari" element={<Layout hideWhatsApp><DoloriMandibolari /></Layout>} />
+        <Route path="/sinusite-cronica" element={<Layout hideWhatsApp><SinusiteCronica /></Layout>} />
+        <Route path="/epitrocleite" element={<Layout hideWhatsApp><Epitrocleite /></Layout>} />
+        <Route path="/tendinite" element={<Layout hideWhatsApp><Tendinite /></Layout>} />
+        <Route path="/pubalgia" element={<Layout hideWhatsApp><Pubalgia /></Layout>} />
+        <Route path="/fascite-plantare" element={<Layout hideWhatsApp><FascitePlantare /></Layout>} />
+        <Route path="/scoliosi" element={<Layout hideWhatsApp><Scoliosi /></Layout>} />
+        <Route path="/ernia-del-disco" element={<Layout hideWhatsApp><ErniaDelDisco /></Layout>} />
+        <Route path="/lombalgia" element={<Layout hideWhatsApp><Lombalgia /></Layout>} />
         
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />

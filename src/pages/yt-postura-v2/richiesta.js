@@ -51,7 +51,7 @@ export const FASCE_ORARIE = [
 //   isLandingVisita('yt-postura') = true  → con ctaType 'consulto' il lead magnet è CT_GRATUITA,
 //   altrimenti LISTA_ATTESA_YT_POSTURA; isPainLanding = false (nessun leadMagnetRequestedString);
 //   fonte YOUTUBE, campagna «YouTube | Percorso posturale», tag «Lista attesa percorso YouTube»;
-//   nessun ID Meta (yt-postura non è nell'elenco metaAdLandingContexts).
+//   fonte sempre YOUTUBE, anche con ID degli annunci nell'URL (che si inviano se presenti).
 //
 // Modifiche del 22/10/2026, su parametri confermati dal titolare, solo per la telefonata gratuita («consulto»,
 // l'unica modalità usata dalla pagina):

@@ -18,40 +18,37 @@ const cleanName = (name) => {
 const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
 
-/** ID Meta numerico dalla query string. Toglie le graffe {{id}} se presenti. */
-function readMetaAdId(params, key) {
-  const raw = params.get(key)?.trim()
-  if (!raw) return null
-  const id = raw.replace(/^\{\{/, '').replace(/\}\}$/, '').trim()
-  return /^\d+$/.test(id) ? id : null
+/** ID numerico dalla query string (il primo dei parametri presente). Toglie le graffe {{id}} / {id} se presenti. */
+function readAdId(params, ...keys) {
+  for (const key of keys) {
+    const raw = params.get(key)?.trim()
+    if (!raw) continue
+    const id = raw.replace(/^\{\{?/, '').replace(/\}?\}$/, '').trim()
+    if (/^\d+$/.test(id)) return id
+  }
+  return null
 }
 
-const metaAdLandingContexts = new Set([
-  'emicrania',
-  'stitichezza',
-  'tunnel-carpale',
-  'cicatrici-seno',
-  'vertigini',
-  'menopausa',
-  'ciclo-doloroso',
-  'cicatrici-cesareo',
-  'bruxismo',
-  'epicondilite',
-  'colon-irritabile',
-  'maldischiena',
-  'reflusso',
-])
+// Campo del gestionale → parametri dell'URL della landing. Si mandano solo quelli presenti.
+// Meta: campaign_id={{campaign.id}}&adset_id={{adset.id}}&ad_id={{ad.id}} nei parametri URL dell'inserzione.
+// Google: campaignid={campaignid}&adgroupid={adgroupid}&creative={creative} nel suffisso dell'URL finale
+// (gad_campaignid lo aggiunge Google da solo con il tagging automatico).
+const AD_ID_PARAMS = {
+  metaAdCampaignId: ['campaign_id'],
+  metaAdsetCampaignId: ['adset_id'],
+  metaAdId: ['ad_id'],
+  googleAdCampaignId: ['campaignid', 'gad_campaignid'],
+  googleAdsetCampaignId: ['adgroupid'],
+  googleAdId: ['creative'],
+}
 
-function metaAdIdsFromUrl() {
+function adIdsFromUrl() {
   const params = new URLSearchParams(window.location.search)
-  const metaAdCampaignId = readMetaAdId(params, 'campaign_id')
-  const metaAdsetCampaignId = readMetaAdId(params, 'adset_id')
-  const metaAdId = readMetaAdId(params, 'ad_id')
-  return {
-    ...(metaAdCampaignId && { metaAdCampaignId }),
-    ...(metaAdsetCampaignId && { metaAdsetCampaignId }),
-    ...(metaAdId && { metaAdId }),
-  }
+  return Object.fromEntries(
+    Object.entries(AD_ID_PARAMS)
+      .map(([campo, keys]) => [campo, readAdId(params, ...keys)])
+      .filter(([, id]) => id)
+  )
 }
 
 const formatCurrentDate = () => {
@@ -63,14 +60,6 @@ const formatCurrentDate = () => {
   const minutes = String(now.getMinutes()).padStart(2, '0')
   
   return `${day}/${month}/${year} ${hours}:${minutes}`
-}
-
-// Landing con una campagna e una pagina di conferma tutte loro (le altre usano i valori comuni)
-const CAMPAGNA_PER_CONTESTO = { 'osteopata-torino': 'Google | Osteopata Torino' }
-const CONFERMA_PER_CONTESTO = {
-  cervicalgia: '/cervicalgia/conferma',
-  // Stesso URL di sempre: c'è la conversione Google Ads
-  'osteopata-torino': '/osteopata-torino-conferma',
 }
 
 // Contesto "visita" = prima visita / landing cliniche (senza pacchetto camminata)
@@ -92,6 +81,16 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'colon-irritabile' ||
   pageContext === 'emicrania' ||
   pageContext === 'sciatalgia' ||
+  pageContext === 'acufeni' ||
+  pageContext === 'dolori-mandibolari' ||
+  pageContext === 'sinusite-cronica' ||
+  pageContext === 'epitrocleite' ||
+  pageContext === 'tendinite' ||
+  pageContext === 'pubalgia' ||
+  pageContext === 'fascite-plantare' ||
+  pageContext === 'scoliosi' ||
+  pageContext === 'ernia-del-disco' ||
+  pageContext === 'lombalgia' ||
   pageContext === 'osteopata-torino' ||
   pageContext === 'yt-postura'
 
@@ -193,46 +192,53 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     const isPainLanding = isLandingVisita(pageContext) && !isYtPostura
     const leadMagnetRequestedString = ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
 
-    const tagByContext = {
-      cervicalgia: 'Cervicalgia',
-      reflusso: 'Reflusso',
-      vertigini: 'Vertigini',
-      bruxismo: 'Bruxismo',
-      'cicatrici-cesareo': 'Cicatrici cesareo',
-      'cicatrici-seno': 'Cicatrici seno',
-      'ciclo-doloroso': 'Ciclo doloroso',
-      fibromialgia: 'Fibromialgia',
-      menopausa: 'Menopausa',
-      maldischiena: 'Mal di schiena',
-      stitichezza: 'Stitichezza',
-      'gonfiore-addominale': 'Gonfiore addominale',
-      'tunnel-carpale': 'Tunnel carpale',
-      epicondilite: 'Epicondilite',
-      'colon-irritabile': 'Colon irritabile',
-      emicrania: 'Emicrania',
-      sciatalgia: 'Sciatalgia',
+    // Tag dolore della richiesta: chiavi del gestionale (TAG_DOLORE_…), non il nome in italiano.
+    // Epitrocleite non ha una chiave sua: è una tendinopatia del gomito
+    const tagsByContext = {
+      cervicalgia: ['TAG_DOLORE_CERVICALGIA'],
+      reflusso: ['TAG_DOLORE_REFLUSSO'],
+      vertigini: ['TAG_DOLORE_VERTIGINI'],
+      bruxismo: ['TAG_DOLORE_BRUXISMO'],
+      'cicatrici-cesareo': ['TAG_DOLORE_CICATRICI_CESAREO'],
+      'cicatrici-seno': ['TAG_DOLORE_CICATRICI_SENO'],
+      'ciclo-doloroso': ['TAG_DOLORE_CICLO_DOLOROSO'],
+      fibromialgia: ['TAG_DOLORE_FIBROMIALGIA'],
+      menopausa: ['TAG_DOLORE_MENOPAUSA'],
+      maldischiena: ['TAG_DOLORE_MAL_DI_SCHIENA'],
+      stitichezza: ['TAG_DOLORE_STITICHEZZA'],
+      'gonfiore-addominale': ['TAG_DOLORE_GONFIORE_ADDOMINALE'],
+      'tunnel-carpale': ['TAG_DOLORE_TUNNEL_CARPALE'],
+      epicondilite: ['TAG_DOLORE_EPICONDILITE'],
+      'colon-irritabile': ['TAG_DOLORE_COLON_IRRITABILE'],
+      emicrania: ['TAG_DOLORE_EMICRANIA'],
+      sciatalgia: ['TAG_DOLORE_SCIATALGIA'],
+      acufeni: ['TAG_DOLORE_ACUFENI'],
+      'dolori-mandibolari': ['TAG_DOLORE_ATM'],
+      'sinusite-cronica': ['TAG_DOLORE_SINUSITE_CRONICA'],
+      epitrocleite: ['TAG_DOLORE_TENDINITE'],
+      tendinite: ['TAG_DOLORE_TENDINITE'],
+      pubalgia: ['TAG_DOLORE_PUBALGIA'],
+      'fascite-plantare': ['TAG_DOLORE_FASCITE_PLANTARE'],
+      scoliosi: ['TAG_DOLORE_SCOLIOSI'],
+      'ernia-del-disco': ['TAG_DOLORE_ERNIA_DEL_DISCO'],
+      lombalgia: ['TAG_DOLORE_LOMBALGIA'],
+    }
+    // Senza una chiave dolore: restano sul vecchio campo tag (testo libero)
+    const tagLegacyByContext = {
       'yt-postura': 'Lista attesa percorso YouTube',
       'osteopata-torino': 'Osteopata Torino',
     }
 
-    const socialAdsContexts = new Set([
-      'bruxismo',
-      'menopausa',
-      'ciclo-doloroso',
-      'cicatrici-cesareo',
-      'cicatrici-seno',
-      'fibromialgia',
-      'reflusso',
-      'vertigini',
-      'maldischiena',
-      'stitichezza',
-      'gonfiore-addominale',
-      'tunnel-carpale',
-      'epicondilite',
-      'colon-irritabile',
-      'emicrania',
-      'sciatalgia',
-    ])
+    // Fonte dagli ID degli annunci nell'URL: Meta → SOCIAL_ADS, Google → GOOGLE_ADS, nessuno dei due → niente fonte.
+    // La campagna non si invia: la identificano gli ID degli annunci
+    const adIds = adIdsFromUrl()
+    const fonteString = isYtPostura
+      ? 'YOUTUBE'
+      : Object.keys(adIds).some((k) => k.startsWith('metaAd'))
+        ? 'SOCIAL_ADS'
+        : Object.keys(adIds).some((k) => k.startsWith('googleAd'))
+          ? 'GOOGLE_ADS'
+          : undefined
 
     const body = {
       nome: cleanName(formData.nome),
@@ -240,16 +246,12 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       prefissoCellulare,
       cellulare,
       statusRichiesta: 'LEAD',
-      fonteString: isYtPostura
-        ? 'YOUTUBE'
-        : socialAdsContexts.has(pageContext)
-          ? 'SOCIAL_ADS'
-          : 'GOOGLE_ADS',
+      ...(fonteString && { fonteString }),
       leadMagnetString,
       ...(isPainLanding && { leadMagnetRequestedString }),
-      campagna: isYtPostura ? 'YouTube | Percorso posturale' : (CAMPAGNA_PER_CONTESTO[pageContext] ?? '120239301462800644'),
-      ...(metaAdLandingContexts.has(pageContext) ? metaAdIdsFromUrl() : {}),
-      ...(tagByContext[pageContext] && { tag: tagByContext[pageContext] }),
+      ...adIds,
+      ...(tagsByContext[pageContext] && { tags: tagsByContext[pageContext] }),
+      ...(tagLegacyByContext[pageContext] && { tag: tagLegacyByContext[pageContext] }),
       note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
     }
 
@@ -284,7 +286,7 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
       setFormData(EMPTY_FORM)
       setError(null)
       onClose()
-      navigate(CONFERMA_PER_CONTESTO[pageContext] ?? '/conferma-richiesta')
+      navigate('/conferma-richiesta')
     } catch (err) {
       console.error('API richieste:', err)
       setError(err.message || 'Si è verificato un errore. Riprova più tardi.')

@@ -40,11 +40,13 @@ function preloadHeroPoster(url) {
   document.head.appendChild(link)
 }
 
+// heroVideoPromise null = la landing non ha ancora un video: niente fetch, l'apertura mostra subito la foto
 export function useHeroVideo(heroVideoPromise) {
   const [video, setVideo] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(Boolean(heroVideoPromise))
 
   useEffect(() => {
+    if (!heroVideoPromise) return undefined
     ensureCloudflarePreconnect()
     let cancelled = false
     heroVideoPromise.then((data) => {

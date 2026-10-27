@@ -6,14 +6,23 @@ import { doloreDi } from '../../data/dolori'
 import { prenotataDi, whatsappConferma } from '../../components/prenota-visita/whatsappConferma'
 import RecensioniDolore from '../../components/recensioni-tag/RecensioniDolore'
 
-// Conferma comune alle landing dei dolori: l'URL è sempre /conferma-richiesta.
+// Conversioni Google Ads delle campagne (prima avevano ciascuna una pagina di conferma sua):
+// partono da qui in base alla landing del form appena inviato
+const CONVERSIONI_GOOGLE_ADS = {
+  cervicalgia: { send_to: 'AW-16532564533/0OVwCJWk4oscELXUq8s9' },
+  'osteopata-torino': { send_to: 'AW-16532564533/wZVSCMffzrAbELXUq8s9', value: 49.0, currency: 'EUR' },
+  'offerta-yt': { send_to: 'AW-16532564533/wZVSCMffzrAbELXUq8s9', value: 49.0, currency: 'EUR' },
+}
+
+// Pagina di conferma unica di tutte le landing: l'URL è sempre /conferma-richiesta
+// (/conferma, /cervicalgia/conferma e /osteopata-torino-conferma portano qui).
 // Il dolore arriva dal form appena inviato (sessionStorage, vedi richiestaSalvata.js): se c'è, il testo
 // parla di quel problema e compare il calendario della prima visita; se non c'è (pagina aperta in altro
 // modo, lista d'attesa YouTube...) resta il testo generico. Lo stesso vale per le recensioni in fondo.
 export default function ThankYouRichiesta() {
   const [richiesta] = useState(leggiRichiesta)
   const dolore = doloreDi(richiesta?.pageContext)
-  const conCalendario = !!(dolore && richiesta?.id && richiesta?.token)
+  const conCalendario = !!(richiesta?.id && richiesta?.token)
   const [prenotata, setPrenotata] = useState(() => prenotataDi(richiesta))
   const wa = whatsappConferma({ dolore, conCalendario, prenotata })
 
@@ -21,7 +30,11 @@ export default function ThankYouRichiesta() {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('track', 'Lead')
     }
-  }, [])
+    const conversione = CONVERSIONI_GOOGLE_ADS[richiesta?.pageContext]
+    if (conversione && typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', conversione)
+    }
+  }, [richiesta])
 
   const messaggioWhatsApp =
     wa?.messaggio ??
