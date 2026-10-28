@@ -36,7 +36,7 @@ const Contatti = () => {
       link.setAttribute('href', href)
     }
 
-    const description = 'Contatta lo Studio Osteopatico Mobilitas a Torino. Prenota la tua visita osteopatica: telefono, email, indirizzo Via Peyron 54. Orari di apertura e come raggiungerci.'
+    const description = 'Contatta lo Studio Osteopatico Mobilitas a Torino. Prenota la tua visita osteopatica: telefono, email, indirizzi Via Peyron 54 e Via Lamarmora 35. Orari di apertura e come raggiungerci.'
     const pageUrl = `${window.location.origin}/contatti`
 
     // Standard SEO
@@ -76,10 +76,10 @@ const Contatti = () => {
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-blue-dark mb-4 font-montserrat">
-                La Nostra Sede
+                Le Nostre Sedi
               </h2>
               <p className="text-blue-dark/80 mb-4 font-montserrat">
-                Vieni a trovarci nella nostra struttura moderna e accogliente.
+                Vieni a trovarci in uno dei nostri due studi a Torino: Via Peyron 54 (San Donato) e Via Lamarmora 35 (Crocetta).
               </p>
             </div>
           </div>

@@ -14,6 +14,7 @@ export default function FooterSection() {
             </p>
             <ul className="mx-xmas-foot__list">
               <li><MapPin size={18} /><span>Via Peyron 54, Torino (comodo con la metro)</span></li>
+              <li><MapPin size={18} /><span>Via Lamarmora 35, Torino (vicino alla metro Re Umberto)</span></li>
               <li><Phone size={18} /><a href="tel:+393518198457">+39 3518198457</a></li>
               <li><Mail size={18} /><a href="mailto:studio@studiomobilitas.it">studio@studiomobilitas.it</a></li>
               <li><Clock size={18} /><span>Lun-Ven: 8:00-21:00 | Sab: 9:00-18:00</span></li>

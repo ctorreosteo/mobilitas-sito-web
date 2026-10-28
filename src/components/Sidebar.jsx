@@ -272,6 +272,10 @@ const MenuContent = ({ onClose, anchor }) => {
                   Via Peyron 54, Torino · comodo con la metro
                 </p>
                 <p>
+                  <MapPin size={15} />
+                  Via Lamarmora 35, Torino · vicino alla metro Re Umberto
+                </p>
+                <p>
                   <Clock size={15} />
                   Lun-Ven 8:00-21:00 · Sab 9:00-18:00
                 </p>

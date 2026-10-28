@@ -299,7 +299,7 @@ export default function OfferSection() {
             <p>
               ⚡ Offerta limitata fino al 23 dicembre 🎅
               <br />
-              <span>Ritira in studio in Via Peyron 54</span>
+              <span>Ritira in studio in Via Peyron 54 o in Via Lamarmora 35</span>
             </p>
           </div>
         </div>

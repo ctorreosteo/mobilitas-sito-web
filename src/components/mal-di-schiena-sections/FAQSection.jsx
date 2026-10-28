@@ -22,7 +22,7 @@ const faqs = [
   {
     icon: MapPin,
     q: "Dove siete?",
-    a: "Il nostro studio si trova in Via Peyron 54 a Torino, in una posizione strategica e facilmente raggiungibile. Siamo comodamente collegati con la metropolitana, fermate Bernini o Principi d'Acaja, e disponiamo di parcheggio nelle vicinanze per chi preferisce arrivare in auto."
+    a: "Abbiamo due studi a Torino: in Via Peyron 54 (San Donato) e in Via Lamarmora 35 (Crocetta), entrambi facilmente raggiungibili. Via Peyron è comoda con la metropolitana, fermate Bernini o Principi d'Acaja; Via Lamarmora è vicina alla fermata Re Umberto. Vicino a entrambi trovi parcheggio per chi preferisce arrivare in auto."
   },
   {
     icon: Calendar,

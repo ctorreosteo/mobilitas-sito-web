@@ -16,6 +16,7 @@ export default function FooterSection() {
 
           <ul className="mx-mds-foot__list">
             <li><MapPin size={18} /><span>Via Peyron 54, Torino (comodo con la metro)</span></li>
+            <li><MapPin size={18} /><span>Via Lamarmora 35, Torino (vicino alla metro Re Umberto)</span></li>
             <li><Phone size={18} /><span>+39 3518198457</span></li>
           </ul>
 

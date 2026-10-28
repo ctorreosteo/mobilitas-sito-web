@@ -455,7 +455,7 @@ const faqSections = [
     questions: [
       { 
         question: "Dove vi trovate esattamente?",
-        answer: "Ci troviamo in Via Peyron 54 a Torino. Siamo facilmente raggiungibili con i mezzi pubblici (anche la metropolitana) e in auto. Ti inviamo sempre le indicazioni precise quando prenoti l'appuntamento. Se hai difficoltà a trovarci, chiamaci e ti guidiamo al telefono."
+        answer: "Abbiamo due studi a Torino: in Via Peyron 54 (San Donato) e in Via Lamarmora 35 (Crocetta). Siamo facilmente raggiungibili con i mezzi pubblici (anche la metropolitana) e in auto. Ti inviamo sempre le indicazioni precise quando prenoti l'appuntamento. Se hai difficoltà a trovarci, chiamaci e ti guidiamo al telefono."
       },
       { 
         question: "C'è parcheggio vicino allo studio?",
