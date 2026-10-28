@@ -113,7 +113,7 @@ const BENEFITS = [
     imageClassName: 'object-[30%_50%]',
     alt: 'Osteopata che tratta collo e spalle di un paziente supino',
     title: 'Antinfiammatori e FANS',
-    body: 'Abbassano il dolore, e nelle prime fasi possono aiutare. FANS orali (ibuprofene, ketoprofene, diclofenac) e gel sono il primo tentativo quasi sempre, ma nelle tendiniti che durano da mesi il problema è soprattutto di tolleranza al carico, più che di infiammazione.',
+    body: 'Abbassano il dolore, e nelle prime fasi possono aiutare. FANS orali e gel sono il primo tentativo quasi sempre, ma nelle tendiniti che durano da mesi il problema è soprattutto di tolleranza al carico, più che di infiammazione.',
   },
   {
     image: '/trattamenti/gamba_ginocchio-supino_01_orizzontale',
@@ -134,7 +134,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
     title: 'Infiltrazioni',
-    body: 'Il cortisone può dare un sollievo reale per qualche settimana, ma non è ripetibile a piacere e su alcuni tendini, come l’Achille e il rotuleo, si usa con molta cautela. Acido ialuronico e PRP mirano al tessuto, senza cambiare il gesto che lo sovraccarica.',
+    body: 'Il cortisone può dare un sollievo reale per qualche settimana, ma non è ripetibile a piacere e su alcuni tendini, come l’Achille e il rotuleo, si usa con molta cautela. Altre infiltrazioni e PRP mirano al tessuto, senza cambiare il gesto che lo sovraccarica.',
   },
   {
     image: '/trattamenti/spalla_valutazione-in-piedi_01_orizzontale',

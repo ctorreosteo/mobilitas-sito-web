@@ -112,7 +112,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che lavora sulla zona lombare di una paziente supina',
     title: 'Antinfiammatori e antidolorifici',
-    body: 'Abbassano il dolore per qualche ora, ma agiscono sul sintomo: quando finisce l’effetto, la tensione che lo produce è ancora lì. FANS orali e topici, paracetamolo e miorilassanti sono i più usati — utili, non risolutivi sulla causa.',
+    body: 'Abbassano il dolore per qualche ora, ma agiscono sul sintomo: quando finisce l’effetto, la tensione che lo produce è ancora lì. FANS orali e topici, analgesici e miorilassanti sono i più usati — utili, non risolutivi sulla causa.',
   },
   {
     image: '/trattamenti/schiena_lombare-prono_14_orizzontale',

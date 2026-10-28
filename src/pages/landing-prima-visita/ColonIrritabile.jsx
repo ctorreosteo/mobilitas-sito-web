@@ -130,7 +130,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta l’addome basso di una paziente',
     title: 'Farmaci sintomatici',
-    body: 'Antispastici (otilonio, mebeverina, trimebutina, pinaverio), simeticone, loperamide o macrogol, antidepressivi a basso dosaggio: gestiscono l’episodio, non il funzionamento.',
+    body: 'Antispastici, antigonfiore, antidiarroici o lassativi, antidepressivi a basso dosaggio: gestiscono l’episodio, non il funzionamento.',
   },
   {
     image: '/trattamenti/pancia_addome-supino_11_orizzontale',
@@ -260,14 +260,14 @@ const FAQ_ITEMS = [
     id: 'farmaci',
     question: (
       <>
-        Prendo già <strong>antispastici</strong> o loperamide: ha senso fare anche un percorso da
+        Prendo già <strong>antispastici</strong> o antidiarroici: ha senso fare anche un percorso da
         voi?
       </>
     ),
     answer: (
       <>
         Spesso sì, se i sintomi persistono nonostante farmaci e attenzione alimentare. Antispastici,
-        loperamide e macrogol gestiscono l’episodio — non il funzionamento. Noi valutiamo se esiste
+        antidiarroici e lassativi gestiscono l’episodio — non il funzionamento. Noi valutiamo se esiste
         una componente funzionale su cui intervenire. Qualsiasi modifica terapeutica resta sempre in
         capo al medico prescrittore.
       </>
@@ -476,7 +476,7 @@ const PAGE = {
         text: "Segno che la variabile non è solo il cibo: è il sistema che lo gestisce. L'osteopatia completa con la parte che la dieta non affronta.",
       },
       {
-        name: 'Prendo già antispastici o loperamide: ha senso fare anche un percorso osteopatico?',
+        name: 'Prendo già antispastici o antidiarroici: ha senso fare anche un percorso osteopatico?',
         text: "Spesso sì, se i sintomi persistono nonostante farmaci e attenzione alimentare. I farmaci gestiscono l'episodio — non il funzionamento. Qualsiasi modifica terapeutica resta in capo al medico prescrittore.",
       },
       {

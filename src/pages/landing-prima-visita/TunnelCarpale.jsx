@@ -119,7 +119,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento di scapola e spalla di una paziente sdraiata su un fianco',
     title: 'Antinfiammatori e FANS',
-    body: 'Riducono il fastidio, senza modificare ciò che comprime o irrita il nervo. Ibuprofene, ketoprofene e naprossene sono molto usati, con efficacia limitata perché il problema è compressivo.',
+    body: 'Riducono il fastidio, senza modificare ciò che comprime o irrita il nervo. I FANS sono molto usati, con efficacia limitata perché il problema è compressivo.',
   },
   {
     image: '/trattamenti/spalla_valutazione-in-piedi_01_orizzontale',
@@ -140,7 +140,7 @@ const BENEFITS = [
     imageClassName: 'object-[12%_50%]',
     alt: 'Trattamento osteopatico del collo di una paziente supina',
     title: 'Infiltrazione di cortisone e integratori',
-    body: 'Sollievo reale ma temporaneo, con indicazioni precise. Vitamine del gruppo B e acido alfa-lipoico sono molto prescritti, con benefici modesti.',
+    body: 'Sollievo reale ma temporaneo, con indicazioni precise. Gli integratori per il nervo sono molto prescritti, con benefici modesti.',
   },
   {
     image: '/trattamenti/spalla_scapola-decubito-laterale_01_orizzontale',
