@@ -124,7 +124,7 @@ const BENEFITS = [
     image: '/trattamenti/anca_decubito-laterale_02_orizzontale',
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
-    title: 'Cortisone',
+    title: 'Cortisonici',
     body: 'Spesso dà un sollievo reale e importante, però temporaneo: quando finisce, la causa meccanica è ancora lì. I cortisonici sono cicli brevi molto usati nel dolore radicolare intenso, su prescrizione.',
   },
   {
@@ -176,7 +176,7 @@ const AFTER_IMAGES_BENEFITS = [
     i quaranta minuti seduto che oggi sono un problema logistico
   </>,
   <>
-    Ridurre il ricorso ad <strong>antinfiammatori e cortisone</strong>: se la
+    Ridurre il ricorso ad <strong>antinfiammatori e cortisonici</strong>: se la
     causa viene affrontata, il tampone serve sempre meno
   </>,
   <>
@@ -255,12 +255,12 @@ const FAQ_ITEMS = [
     id: 'cortisone',
     question: (
       <>
-        Il <strong>cortisone</strong> mi ha aiutato, poi è tornato: perché?
+        I <strong>cortisonici</strong> mi hanno aiutato, poi il dolore è tornato: perché?
       </>
     ),
     answer: (
       <>
-        Il cortisone spegne l’infiammazione, non toglie ciò che la provoca: è proprio su quello che
+        I cortisonici spengono l’infiammazione, non toglie ciò che la provoca: è proprio su quello che
         lavoriamo. Farmaci per il dolore neuropatico e miorilassanti possono
         aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata.
         Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.
@@ -406,7 +406,7 @@ const PAGE = {
         <strong>
           Prenota un consulto o la prima visita
         </strong>{' '}
-        e iniziamo a lavorare sul percorso del tuo nervo — oltre al tampone di pastiglie e cortisone.
+        e iniziamo a lavorare sul percorso del tuo nervo — oltre al tampone di pastiglie e cortisonici.
       </>
     ),
   },
@@ -466,8 +466,8 @@ const PAGE = {
         text: 'L’operazione ha indicazioni precise che decide il medico. Moltissime sciatalgie migliorano per altre strade: vale la pena esplorarle prima. Le stesse immagini si trovano in tantissime persone senza alcun dolore — l’immagine da sola non dice come stai.',
       },
       {
-        name: 'Il cortisone mi ha aiutato, poi è tornato: perché?',
-        text: 'Il cortisone spegne l’infiammazione, non toglie ciò che la provoca: è proprio su quello che lavoriamo. Farmaci per il dolore neuropatico e miorilassanti possono aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata. Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.',
+        name: 'I cortisonici mi hanno aiutato, poi il dolore è tornato: perché?',
+        text: 'I cortisonici spengono l’infiammazione, non toglie ciò che la provoca: è proprio su quello che lavoriamo. Farmaci per il dolore neuropatico e miorilassanti possono aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata. Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.',
       },
       {
         name: 'Funzionerà nel mio caso?',

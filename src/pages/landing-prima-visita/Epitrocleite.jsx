@@ -133,7 +133,7 @@ const BENEFITS = [
     imageClassName: 'object-[20%_50%]',
     alt: 'Trattamento osteopatico della cervicale di un paziente supino',
     title: 'Infiltrazioni',
-    body: 'Cortisone o PRP possono dare un sollievo concreto, che il medico valuta caso per caso, anche per la vicinanza del nervo ulnare. Agiscono sul tendine, non sul gesto che lo sovraccarica.',
+    body: 'Infiltrazioni di cortisonici o PRP possono dare un sollievo concreto, che il medico valuta caso per caso, anche per la vicinanza del nervo ulnare. Agiscono sul tendine, non sul gesto che lo sovraccarica.',
   },
   {
     image: '/trattamenti/collo_cervicale-e-spalle-supino_02_orizzontale',

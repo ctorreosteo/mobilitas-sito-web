@@ -286,7 +286,7 @@ const FAQ_ITEMS = [
         in caso di dolore dopo una caduta o un trauma (soprattutto con osteoporosi o oltre i 50
         anni), febbre, calo di peso senza motivo, storia di tumore, dolore notturno continuo che non
         cambia con la posizione, formicolio o perdita di forza alle gambe, oppure uso prolungato di
-        cortisone. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
+        cortisonici. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.
       </>
     ),
   },
@@ -470,7 +470,7 @@ const PAGE = {
       },
       {
         name: 'Quando è necessario prima un controllo medico urgente?',
-        text: 'Vai subito in pronto soccorso se perdi il controllo di urina o feci o senti addormentata la zona tra le gambe (a sella). Serve una valutazione medica tempestiva anche in caso di dolore dopo una caduta o un trauma (soprattutto con osteoporosi o oltre i 50 anni), febbre, calo di peso senza motivo, storia di tumore, dolore notturno continuo che non cambia con la posizione, formicolio o perdita di forza alle gambe, oppure uso prolungato di cortisone. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
+        text: 'Vai subito in pronto soccorso se perdi il controllo di urina o feci o senti addormentata la zona tra le gambe (a sella). Serve una valutazione medica tempestiva anche in caso di dolore dopo una caduta o un trauma (soprattutto con osteoporosi o oltre i 50 anni), febbre, calo di peso senza motivo, storia di tumore, dolore notturno continuo che non cambia con la posizione, formicolio o perdita di forza alle gambe, oppure uso prolungato di cortisonici. Noi interveniamo solo quando il quadro è appropriato a un supporto osteopatico.',
       },
     ],
   },

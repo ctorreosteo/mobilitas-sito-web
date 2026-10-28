@@ -134,7 +134,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
     title: 'Infiltrazioni',
-    body: 'Il cortisone può dare un sollievo reale per qualche settimana, ma non è ripetibile a piacere e su alcuni tendini, come l’Achille e il rotuleo, si usa con molta cautela. Altre infiltrazioni e PRP mirano al tessuto, senza cambiare il gesto che lo sovraccarica.',
+    body: 'L’infiltrazione di cortisonici può dare un sollievo reale per qualche settimana, ma non è ripetibile a piacere e su alcuni tendini, come l’Achille e il rotuleo, si usa con molta cautela. Altre infiltrazioni e PRP mirano al tessuto, senza cambiare il gesto che lo sovraccarica.',
   },
   {
     image: '/trattamenti/spalla_valutazione-in-piedi_01_orizzontale',

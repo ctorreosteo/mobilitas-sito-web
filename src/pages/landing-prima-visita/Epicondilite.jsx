@@ -137,7 +137,7 @@ const BENEFITS = [
     image: '/trattamenti/collo_presa-cervicale-supino_26_orizzontale',
     imageClassName: 'object-[12%_50%]',
     alt: 'Trattamento osteopatico del collo di una paziente supina',
-    title: 'Infiltrazione di cortisone',
+    title: 'Infiltrazione di cortisonici',
     body: 'Sollievo reale per qualche settimana, e poi il ritorno al punto di partenza. Non ripetibile. PRP e terapie rigenerative mirano al tessuto, senza modificare il gesto che lo sovraccarica.',
   },
   {

@@ -111,7 +111,7 @@ const BENEFITS = [
     image: '/trattamenti/anca_flessa-supino_13_orizzontale',
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento di anca e bacino di una paziente con la gamba flessa',
-    title: 'Antinfiammatori e cortisone',
+    title: 'Antinfiammatori e cortisonici',
     body: 'Nella fase acuta aiutano davvero a calmare dolore e infiammazione del nervo, su indicazione del medico. Però non ti dicono come tornare a muoverti, e quando finisce il ciclo resta la paura del prossimo movimento.',
   },
   {

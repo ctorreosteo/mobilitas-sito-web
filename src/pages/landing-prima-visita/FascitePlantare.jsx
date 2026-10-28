@@ -132,7 +132,7 @@ const BENEFITS = [
     image: '/trattamenti/anca_decubito-laterale_06_orizzontale',
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
-    title: 'Infiltrazione di cortisone',
+    title: 'Infiltrazione di cortisonici',
     body: 'Spesso un sollievo netto per qualche settimana, poi il ritorno al punto di partenza. Non è ripetibile all’infinito e la decisione spetta al medico, che ne valuta benefici e rischi per la fascia e il cuscinetto del tallone.',
   },
   {

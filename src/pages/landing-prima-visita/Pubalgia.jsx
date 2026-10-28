@@ -140,7 +140,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento osteopatico della zona lombare di un paziente a pancia in giù',
     title: 'Infiltrazioni e valutazione chirurgica',
-    body: 'Il cortisone può dare un sollievo reale per qualche settimana, non ripetibile a piacere. La chirurgia della cosiddetta “ernia dello sportivo” resta un’opzione per casi selezionati, dopo mesi di percorso conservativo.',
+    body: 'L’infiltrazione di cortisonici può dare un sollievo reale per qualche settimana, non ripetibile a piacere. La chirurgia della cosiddetta “ernia dello sportivo” resta un’opzione per casi selezionati, dopo mesi di percorso conservativo.',
   },
 ]
 

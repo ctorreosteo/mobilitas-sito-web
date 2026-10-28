@@ -139,7 +139,7 @@ const BENEFITS = [
     image: '/trattamenti/collo_presa-cervicale-supino_25_orizzontale',
     imageClassName: 'object-[12%_50%]',
     alt: 'Trattamento osteopatico del collo di una paziente supina',
-    title: 'Infiltrazione di cortisone e integratori',
+    title: 'Infiltrazioni di cortisonici e integratori',
     body: 'Sollievo reale ma temporaneo, con indicazioni precise. Gli integratori per il nervo sono molto prescritti, con benefici modesti.',
   },
   {
