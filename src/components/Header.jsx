@@ -9,7 +9,7 @@ import './Header.css'
 const PHONE_HREF = 'tel:+393518198457'
 const BOOKING_HREF =
   'https://wa.me/393518198457?text=' +
-  encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
+  encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
 
 // In cima: barra piena. Scorrendo: capsula di vetro sospesa, sempre visibile su desktop;
 // su schermi stretti si nasconde quando scendi e torna quando risali.

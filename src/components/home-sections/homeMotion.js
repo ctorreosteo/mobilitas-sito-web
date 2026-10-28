@@ -4,7 +4,7 @@ import { useScroll, useSpring, useTransform } from 'framer-motion'
 export const EASE = [0.16, 1, 0.3, 1]
 
 const WHATSAPP_NUMBER = '393518198457'
-export const MSG_CONSULTO = 'Ciao, vorrei effettuare una breve consulenza conoscitiva per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie'
+export const MSG_CONSULTO = 'Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie'
 export const MSG_VISITA = 'Ciao, vorrei effettuare una prima visita con sconto. Quando ci sarebbe posto? Grazie'
 
 export const openWhatsApp = (text) => {

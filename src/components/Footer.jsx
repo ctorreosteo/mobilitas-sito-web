@@ -10,7 +10,7 @@ const EMAIL = 'studio@studiomobilitas.it'
 const MAPS_HREF = 'https://www.google.com/maps/search/?api=1&query=Via+Peyron+54+Torino'
 const BOOKING_HREF =
   'https://wa.me/393518198457?text=' +
-  encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
+  encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
 
 const TikTokIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
