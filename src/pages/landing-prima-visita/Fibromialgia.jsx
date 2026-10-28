@@ -112,7 +112,7 @@ const BENEFITS = [
     imageClassName: 'object-[0%_50%]',
     alt: 'Osteopata che tratta collo e spalle di una paziente supina',
     title: 'Antidolorifici comuni: spesso poco efficaci',
-    body: 'Presi per anni su un dolore che risponde poco. FANS e paracetamolo sono tra i meno efficaci proprio su questo tipo di dolore.',
+    body: 'Presi per anni su un dolore che risponde poco. FANS e analgesici da banco sono tra i meno efficaci proprio su questo tipo di dolore.',
   },
   {
     image: '/trattamenti/anca_decubito-laterale_01_orizzontale',
@@ -133,7 +133,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento di piede e caviglia di una paziente',
     title: 'Farmaci specifici e massaggi standard',
-    body: 'Pregabalin, duloxetina, amitriptilina gestiscono una parte dei casi. I massaggi normali a volte fanno male: la pressione va calibrata su di te.',
+    body: 'I farmaci specifici prescritti dal medico gestiscono una parte dei casi. I massaggi normali a volte fanno male: la pressione va calibrata su di te.',
   },
   {
     image: '/trattamenti/collo_presa-cervicale-supino_19_orizzontale',

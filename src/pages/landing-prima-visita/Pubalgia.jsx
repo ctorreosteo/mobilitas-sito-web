@@ -112,7 +112,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta l’addome basso di una paziente supina',
     title: 'Antinfiammatori e FANS',
-    body: 'Abbassano il dolore, e permettono di finire la stagione. FANS orali (ibuprofene, ketoprofene, diclofenac) e gel sono il primo tentativo quasi sempre, ma non cambiano il modo in cui il carico arriva sul pube.',
+    body: 'Abbassano il dolore, e permettono di finire la stagione. FANS orali e gel sono il primo tentativo quasi sempre, ma non cambiano il modo in cui il carico arriva sul pube.',
   },
   {
     image: '/trattamenti/gamba_ginocchio-anca-flessione_01_orizzontale',

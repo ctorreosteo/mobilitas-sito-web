@@ -132,7 +132,7 @@ const BENEFITS = [
     image: '/trattamenti/anca_decubito-laterale_06_orizzontale',
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
-    title: 'Integratori, melatonina e alimentazione',
+    title: 'Integratori per il sonno e alimentazione',
     body: 'Contributo variabile e spesso parziale. Se il corpo è in tensione, il sonno resta spezzato e il quadro non cambia da solo.',
   },
   {

@@ -111,7 +111,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento di anca e bacino di una paziente con la gamba flessa',
     title: 'Antinfiammatori',
-    body: 'Riducono il dolore nella fase acuta, ma non modificano ciò che sta irritando il nervo. FANS orali (ketoprofene, diclofenac, naprossene) sono spesso la prima linea, a dosaggi pieni nella fase acuta.',
+    body: 'Riducono il dolore nella fase acuta, ma non modificano ciò che sta irritando il nervo. I FANS orali sono spesso la prima linea, a dosaggi pieni nella fase acuta.',
   },
   {
     image: '/trattamenti/gamba_gamba-tesa-sollevata_01_orizzontale',
@@ -125,7 +125,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Osteopata che tratta anca e bacino di una paziente sdraiata su un fianco',
     title: 'Cortisone',
-    body: 'Spesso dà un sollievo reale e importante, però temporaneo: quando finisce, la causa meccanica è ancora lì. Cortisonici (prednisone, betametasone, desametasone) sono cicli brevi molto usati nel dolore radicolare intenso, su prescrizione.',
+    body: 'Spesso dà un sollievo reale e importante, però temporaneo: quando finisce, la causa meccanica è ancora lì. I cortisonici sono cicli brevi molto usati nel dolore radicolare intenso, su prescrizione.',
   },
   {
     image: '/trattamenti/gamba_ginocchio-anca-flessione_01_orizzontale',
@@ -261,7 +261,7 @@ const FAQ_ITEMS = [
     answer: (
       <>
         Il cortisone spegne l’infiammazione, non toglie ciò che la provoca: è proprio su quello che
-        lavoriamo. Gabapentinoidi (pregabalin, gabapentin) e miorilassanti (tiocolchicoside) possono
+        lavoriamo. Farmaci per il dolore neuropatico e miorilassanti possono
         aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata.
         Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.
       </>
@@ -467,7 +467,7 @@ const PAGE = {
       },
       {
         name: 'Il cortisone mi ha aiutato, poi è tornato: perché?',
-        text: 'Il cortisone spegne l’infiammazione, non toglie ciò che la provoca: è proprio su quello che lavoriamo. Gabapentinoidi e miorilassanti possono aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata. Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.',
+        text: 'Il cortisone spegne l’infiammazione, non toglie ciò che la provoca: è proprio su quello che lavoriamo. Farmaci per il dolore neuropatico e miorilassanti possono aiutare nella fase acuta, ma restano un tampone se la causa meccanica non viene affrontata. Qualsiasi modifica terapeutica resta sempre in capo al medico prescrittore.',
       },
       {
         name: 'Funzionerà nel mio caso?',

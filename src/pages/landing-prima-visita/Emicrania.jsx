@@ -116,7 +116,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento della mandibola (ATM) di una paziente',
     title: 'Farmaci specifici prescritti dallo specialista',
-    body: 'Sumatriptan, rizatriptan, zolmitriptan e almotriptan agiscono sull’attacco quando è già partito. FANS ad alto dosaggio e antiemetici completano il quadro — ma non riducono il motivo per cui parte.',
+    body: 'I triptani agiscono sull’attacco quando è già partito. FANS ad alto dosaggio e antiemetici completano il quadro — ma non riducono il motivo per cui parte.',
   },
   {
     image: '/trattamenti/collo_presa-cervicale-supino_02_orizzontale',
@@ -144,7 +144,7 @@ const BENEFITS = [
     imageClassName: 'object-[50%_50%]',
     alt: 'Trattamento osteopatico del collo di un paziente supino',
     title: 'Terapie di profilassi',
-    body: 'Propranololo, topiramato, amitriptilina e flunarizina riducono la frequenza in una parte dei casi. Regolarizzare sonno e ritmi aiuta, ma con tensione cronica gli attacchi arrivano lo stesso. Integratori, fisioterapia cervicale e nuove terapie iniettive toccano pezzi del quadro — raramente la catena intera.',
+    body: 'I farmaci di profilassi riducono la frequenza in una parte dei casi. Regolarizzare sonno e ritmi aiuta, ma con tensione cronica gli attacchi arrivano lo stesso. Integratori, fisioterapia cervicale e nuove terapie iniettive toccano pezzi del quadro — raramente la catena intera.',
   },
 ]
 

@@ -117,7 +117,7 @@ const BENEFITS = [
     imageClassName: 'object-[0%_50%]',
     alt: 'Osteopata che tratta collo e spalle di una paziente supina',
     title: 'Antinfiammatori e FANS',
-    body: 'Abbassano il dolore, senza toccare il sovraccarico. FANS orali (ibuprofene, ketoprofene, diclofenac) e topici (gel, cerotti) sono il primo tentativo nella quasi totalità dei casi.',
+    body: 'Abbassano il dolore, senza toccare il sovraccarico. FANS orali e topici (gel, cerotti) sono il primo tentativo nella quasi totalità dei casi.',
   },
   {
     image: '/trattamenti/spalla_scapola-decubito-laterale_01_orizzontale',
