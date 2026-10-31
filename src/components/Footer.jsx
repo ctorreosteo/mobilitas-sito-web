@@ -8,6 +8,7 @@ const EASE = [0.16, 1, 0.3, 1]
 const PHONE_HREF = 'tel:+393518198457'
 const EMAIL = 'studio@studiomobilitas.it'
 const MAPS_HREF = 'https://www.google.com/maps/search/?api=1&query=Via+Peyron+54+Torino'
+const MAPS_HREF_LAMARMORA = 'https://www.google.com/maps/search/?api=1&query=Mobilitas+Studio+Osteopatico+Crocetta+Via+Lamarmora+35+Torino'
 const BOOKING_HREF =
   'https://wa.me/393518198457?text=' +
   encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
@@ -87,7 +88,7 @@ export default function Footer({ hideCta = false }) {
 
         <div className="mx-footer__cols">
           <motion.div className="mx-footer__col" {...reveal(0.05)}>
-            <p className="mx-footer__title">Lo studio</p>
+            <p className="mx-footer__title">I nostri studi</p>
             <p className="mx-footer__text">
               Trattamenti osteopatici specializzati e percorsi personalizzati per ogni persona.
             </p>
@@ -96,6 +97,13 @@ export default function Footer({ hideCta = false }) {
               <span>
                 Via Peyron 54, Torino
                 <small>Comodo con la metro · Apri in Maps</small>
+              </span>
+            </a>
+            <a href={MAPS_HREF_LAMARMORA} target="_blank" rel="noopener noreferrer" className="mx-footer__info mx-footer__info--link">
+              <MapPin size={17} />
+              <span>
+                Via Lamarmora 35, Torino
+                <small>Vicino alla metro Re Umberto · Apri in Maps</small>
               </span>
             </a>
             <p className="mx-footer__info">

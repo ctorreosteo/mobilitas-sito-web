@@ -565,14 +565,15 @@ const OffertaYT = () => {
             </h2>
             <Reveal>
               <p className="mx-lead mx-oyt-where__lead">
-                Il nostro studio si trova in una posizione strategica nel centro di Torino,
-                facilmente raggiungibile con i mezzi pubblici e con parcheggio nelle vicinanze.
+                I nostri due studi si trovano in posizioni strategiche a Torino,
+                facilmente raggiungibili con i mezzi pubblici e con parcheggio nelle vicinanze.
               </p>
             </Reveal>
             <Reveal className="mx-oyt-where__facts">
-              <span><MapPin size={18} />Via Peyron 54, Torino</span>
-              <span><TrainFront size={18} />Metro: comodissimo da Bernini o Principi d'Acaja</span>
-              <span><CarFront size={18} />2 parcheggi nelle vicinanze + strisce blu</span>
+              <span><MapPin size={18} />Via Peyron 54, Torino (San Donato)</span>
+              <span><MapPin size={18} />Via Lamarmora 35, Torino (Crocetta)</span>
+              <span><TrainFront size={18} />Metro: Bernini o Principi d'Acaja per Via Peyron, Re Umberto per Via Lamarmora</span>
+              <span><CarFront size={18} />Parcheggi vicino a entrambi gli studi + strisce blu</span>
             </Reveal>
             <Reveal className="mx-oyt-where__cta">
               <BookButton lines={['PRENOTA LA TUA PRIMA', 'VISITA CON OFFERTA']} onClick={openForm} />

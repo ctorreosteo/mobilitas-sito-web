@@ -7,7 +7,7 @@ const faqs = [
   {
     icon: MapPin,
     q: "Dove posso ritirare il cofanetto?",
-    a: "Puoi ritirare il cofanetto direttamente nel nostro studio in Via Peyron 54, Torino, fino al 23 dicembre. Siamo aperti dal lunedì al venerdì dalle 8:00 alle 21:00 e il sabato dalle 9:00 alle 18:00. Siamo comodamente raggiungibili con la metropolitana (fermate Bernini o Principi d'Acaja) e disponiamo di parcheggio nelle vicinanze."
+    a: "Puoi ritirare il cofanetto direttamente in uno dei nostri due studi a Torino, in Via Peyron 54 o in Via Lamarmora 35, fino al 23 dicembre. Siamo aperti dal lunedì al venerdì dalle 8:00 alle 21:00 e il sabato dalle 9:00 alle 18:00. Siamo comodamente raggiungibili con la metropolitana (fermate Bernini o Principi d'Acaja per Via Peyron, Re Umberto per Via Lamarmora) e vicino a entrambi gli studi trovi parcheggio."
   },
   {
     icon: Users,
