@@ -14,7 +14,7 @@ const BOOKING_HREF =
   encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
 
 // Evento che il bottone grande del footer manda quando la pagina vuole aprire il proprio modulo di consulto
-// al posto di WhatsApp (Layout footerCtaEvent). Oggi lo usa /yt-postura-v2.
+// al posto di WhatsApp (Layout footerCtaEvent). Oggi lo usa /yt-postura.
 export const APRI_CONSULTO = 'mobilitas:apri-consulto'
 
 const TikTokIcon = (props) => (

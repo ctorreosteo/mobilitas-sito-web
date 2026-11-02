@@ -66,8 +66,8 @@ Senza dati in `sessionStorage` (storage bloccato, pagina aperta direttamente) la
 
 | Form | Destinazione | Dopo l'invio |
 |------|--------------|--------------|
-| `BookingPopup`: landing prima visita, `/yt-postura`, `/first-walk` | Gestionale | `/conferma-richiesta` |
-| `yt-postura-v2/richiesta.js` | Gestionale | `/conferma-richiesta` |
+| `BookingPopup`: landing prima visita, `/first-walk` | Gestionale | `/conferma-richiesta` |
+| `yt-postura/richiesta.js` (va sempre al gestionale pubblicato, anche in locale; `?gestionale=locale` per quello locale) | Gestionale | `/conferma-richiesta` |
 | `GpadelInfortuniPopup` | Gestionale | `/lm-gpadel-infortuni-grazie` |
 | `OffertaInfluencer` | Gestionale | `/offerta-influencer-conferma` |
 | `OffertaYT` | Zapier | `/conferma-richiesta` |

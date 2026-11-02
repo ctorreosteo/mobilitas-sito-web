@@ -1,538 +1,1057 @@
-import { Repeat, Clock, Archive, Dumbbell, Camera, ScanSearch } from 'lucide-react'
-import ConditionLanding from '../components/condition-landing/ConditionLanding'
-import { prefetchHeroVideo } from '../components/condition-landing/heroVideo'
-import { RECENSIONI_TOTALI } from '../data/studi'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { MotionConfig, motion, useInView } from 'framer-motion'
+import {
+  HERO_BENEFITS,
+  PAIN_POINTS,
+  MECHANISM_STEPS,
+  AFTER_IMAGES_BENEFITS,
+  ENTRY_DOORS,
+  AFTER_ENTRY,
+  FAQ_ITEMS,
+  FAQ_SCELTE,
+  CAPITOLI_TITOLI,
+} from './yt-postura/contenuti'
+import Prenotazione from './yt-postura/Prenotazione'
+import { APRI_CONSULTO } from '../components/Footer'
+import { TavolaTesta, TavolaFilo, TavolaOsso, FiguraAllineata } from './yt-postura/Tavole'
+import { Scompensi, Visita, Obiettivo, Carosello, MappaTorino, BottoneMaps } from './yt-postura/Foto'
+import './yt-postura/landing.css'
+import './yt-postura/sito.css'
 
-// Landing /yt-postura (dal video YouTube di Nicolas): stesso template delle landing di
-// patologia, con la variante "lista d'attesa": percorso a 299€, CTA "Mettiti in lista" /
-// "Telefonata gratis", sezione "Due modi per entrare" al posto delle tappe della visita.
+// La configurazione ESLint del sito non vede gli usi nel JSX.
+const _MOTION = motion
+
+// Landing /yt-postura (dal video YouTube di Nicolas) — direzione «Il filo a piombo».
+// Unica versione dal 02/11/2026: ha sostituito la prima landing (template ConditionLanding); /yt-postura-v2 porta qui.
+// Integrazioni: video dal gestionale, due richieste (percorso e telefonata gratuita, yt-postura/richiesta.js), recensioni reali.
+
+// In dev: '' così la chiamata va a /api/... e il proxy Vite la inoltra al backend locale.
+// In prod: base completa del backend HQ (CORS pubblico abilitato per studiomobilitas.it).
+const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 
 // Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
-// Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
-const heroVideo = prefetchHeroVideo('YT_POSTURA_VSL')
+const HERO_VIDEO_CODICE = 'YT_POSTURA_VSL'
 
-const HERO_BENEFITS = [
-  <>
-    <strong>Visita posturale</strong>: guardiamo tutto il corpo, non il punto
-    che brucia. Fissiamo l’obiettivo. Il tuo.
-  </>,
-  <>
-    <strong>3 sedute osteopatiche</strong>: solo per quell’obiettivo. Alla
-    fine, la postura che vuoi. Il problema per cui sei arrivato, risolto.
-  </>,
-  <>
-    <strong>App su misura</strong>: i corsi scelti dai professionisti sul tuo
-    caso. Per tenere l’obiettivo. Tutto nel telefono.
-  </>,
+// Avvia subito il fetch (prima del mount) per ridurre il tempo a primo frame.
+const heroVideoPromise = fetch(`${API_BASE}/api/sito/video/codice/${HERO_VIDEO_CODICE}`, {
+  priority: 'high',
+})
+  .then((res) => {
+    if (res.status === 404) return null
+    return res.ok ? res.json() : null
+  })
+  .then((json) => (json?.data?.cloudflareUid ? json.data : null))
+  .catch(() => null)
+
+function ensureCloudflarePreconnect() {
+  const origins = ['https://iframe.videodelivery.net', 'https://videodelivery.net']
+  origins.forEach((href) => {
+    if (document.querySelector(`link[rel="preconnect"][href="${href}"]`)) return
+    const link = document.createElement('link')
+    link.rel = 'preconnect'
+    link.href = href
+    link.crossOrigin = 'anonymous'
+    document.head.appendChild(link)
+  })
+}
+
+function preloadHeroPoster(url) {
+  if (!url || document.querySelector(`link[rel="preload"][href="${url}"]`)) return
+  const link = document.createElement('link')
+  link.rel = 'preload'
+  link.as = 'image'
+  link.href = url
+  document.head.appendChild(link)
+}
+
+function useVideoYtPosturaVsl() {
+  const [video, setVideo] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    ensureCloudflarePreconnect()
+    let cancelled = false
+    heroVideoPromise.then((data) => {
+      if (cancelled) return
+      if (data?.anteprimaUrl) preloadHeroPoster(data.anteprimaUrl)
+      setVideo(data)
+      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { video, loading }
+}
+
+const FAQ_PRINCIPALI = FAQ_ITEMS.filter((f) => FAQ_SCELTE.includes(f.id)).sort((x, y) => FAQ_SCELTE.indexOf(x.id) - FAQ_SCELTE.indexOf(y.id))
+const RECENSIONI_TOTAL = 900
+const GOOGLE_RECENSIONI_URL =
+  'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z/data=!4m8!3m7!1s0xfe2e29f381fdc93:0x97eee174cab07ada!8m2!3d45.0802312!4d7.6577188!9m1!1b1!16s%2Fg%2F11kqfhtyvd?entry=ttu'
+const MAPPE = {
+  // Stesso formato di Crocetta: il vecchio link «/maps/place/…/@lat,lon» senza identificativo non apriva la scheda.
+  sanDonato:
+    'https://www.google.com/maps/search/?api=1&query=Mobilitas+Studio+Osteopatico+Via+Peyron+54+Torino',
+  crocetta:
+    'https://www.google.com/maps/search/?api=1&query=Mobilitas+Studio+Osteopatico+Crocetta+Via+Lamarmora+35+Torino',
+}
+
+// Blocco del prezzo in apertura: le tre rassicurazioni sotto il prezzo.
+const OFFERTA_PUNTI = ['Telefonata gratuita', 'Paghi dopo la prima visita', 'Anche in due rate']
+
+// Le quattro tacche del filo: livelli del corpo e capitoli della pagina.
+const CAPITOLI = [
+  { id: 'testa', label: 'Testa' },
+  { id: 'petto', label: 'Petto' },
+  { id: 'bacino', label: 'Bacino' },
+  { id: 'piedi', label: 'Piedi' },
 ]
 
-const PAIN_POINTS = [
-  {
-    icon: Camera,
-    title: 'In foto sembri più stanco di come ti senti',
-    body: 'Ti vedi di lato, in una vetrina o in una foto, e non ti riconosci. Schiena chiusa, testa davanti alle spalle. Sembri più vecchio di come ti senti. Non è la luce. È come stai tutto il giorno, anche quando non ci pensi.',
-  },
-  {
-    icon: Clock,
-    title: 'La sera brucia sempre nello stesso punto',
-    body: 'Verso sera, in mezzo alla schiena, torna quel bruciore. Quei muscoli non sono il problema: tengono su una schiena che non si apre più. Il massaggio ti fa stare bene due giorni. Poi sei da capo.',
-  },
-  {
-    icon: Repeat,
-    title: 'Ti raddrizzi, e non resta',
-    body: 'Apri le spalle, tiri indietro la testa. Un minuto, e ricadi. Per il corpo quella è la posizione comoda: è quella che ha imparato. Voler stare dritto non basta, se una parte della schiena non si muove più.',
-  },
-  {
-    icon: Archive,
-    title: 'Hai già comprato un sacco di cose',
-    body: 'Correttore, cuscino, sedia, plantare. Finché li tieni addosso, ti reggono loro. Li togli, e torni come prima. Non hai sbagliato a provarci. Hai sistemato il pezzo di sopra. Il motivo stava sotto.',
-  },
-  {
-    icon: ScanSearch,
-    title: 'Ti hanno detto una parola, e poi basta',
-    body: 'Sul referto c’è «collo dritto», oppure «scoliosi», oppure «hai una gamba più corta». E lì si sono fermati. Quasi nessuno ti ha detto se è l’osso, che non si cambia, o il corpo che si è messo storto per stare in equilibrio. Sono due cose diverse. Cambia tutto.',
-  },
-  {
-    icon: Dumbbell,
-    title: 'Ti alleni, ma torni sempre uguale',
-    body: 'Palestra, ginnastica, nuoto, addominali. Diventi più forte, e va bene. Ma se sotto c’è una zona ferma, l’esercizio le gira intorno. Alleni il corpo così com’è. Non gli insegni a stare in un altro modo.',
-  },
-]
+const foto = (nome, w) => `/yt-postura/${nome}-${w}.jpg`
+const fotoSet = (nome, larghezze) => larghezze.map((w) => `${foto(nome, w)} ${w}w`).join(', ')
 
-const MECHANISM_STEPS = [
-  {
-    k: '01',
-    t: 'Prima cambia la postura. Poi arriva il dolore',
-    b: 'Prima del dolore, il petto non si apre, la testa non sta sopra le spalle, il bacino non è dritto. Quello che senti arriva dopo.',
-  },
-  {
-    k: '02',
-    t: 'Fa male in un punto. Il motivo è un altro',
-    b: 'Il bruciore in mezzo alla schiena è il muscolo che ti regge tutto il giorno. Il collo duro sorregge una schiena chiusa. Se fa male sempre dallo stesso lato, è da lì che carichi.',
-  },
-  {
-    k: '03',
-    t: 'Non ti manca la voglia. Ti manca il movimento',
-    b: 'Se schiena e costole non si aprono, stare dritto non ha un appoggio. Ci resti un attimo, poi ricadi. Quando quel movimento torna, resti dritto senza pensarci.',
-  },
-  {
-    k: '04',
-    t: 'L’osso resta. Quello che si muove, se aspetti, si blocca',
-    b: 'Se la curva è diventata osso, resta. Te lo diciamo subito. Schiena, costole, bacino, anche e piedi, quasi sempre, si muovono ancora. Si lavora lì. Più aspetti, più si irrigidiscono.',
-  },
-]
+// I titoli portano la misura su uno span interno: il foglio globale riduce h1/h2/h3 su mobile con !important.
+function Titolo({ as = 'h2', size = 'h2', id, children }) {
+  const Tag = as
+  const _TAG = Tag
+  return (
+    <Tag className={`ytp-${size}`} id={id}>
+      <span className={`ytp-${size}__t`}>{children}</span>
+    </Tag>
+  )
+}
 
-const BENEFITS = [
-  {
-    icon: Camera,
-    image: '/trattamenti/collo_cervicale-e-spalle-supino_02_orizzontale',
-    imageClassName: 'object-[0%_50%]',
-    alt: 'Osteopata che tratta collo e spalle di una paziente supina',
-    eyebrow: 'La foto di lato',
-    title: 'In foto torni a sembrare te',
-    body: 'Testa sopra le spalle, petto aperto. Quell’aria stanca di lato si vede meno. Spesso non sono gli anni. È come stai tutto il giorno.',
-  },
-  {
-    icon: Clock,
-    image: '/trattamenti/schiena_dorsale-alta-prono_04_orizzontale',
-    imageClassName: 'object-[50%_50%]',
-    alt: 'Osteopata che tratta la parte alta della schiena di un paziente',
-    eyebrow: 'Il bruciore della sera',
-    title: 'La sera, quel punto molla',
-    body: 'Quel bruciore è il muscolo che ti regge fino a sera. Se la schiena torna a sostenersi da sola, il muscolo può smettere. Il fastidio che conoscevi a memoria si fa vedere meno.',
-  },
-  {
-    icon: Repeat,
-    image: '/trattamenti/schiena_lombare-supino_01_orizzontale',
-    imageClassName: 'object-[50%_50%]',
-    alt: 'Osteopata che lavora sulla zona lombare di una paziente supina',
-    eyebrow: 'Ti tiri su, e ricadi',
-    title: 'Stai dritto senza tenerti su',
-    body: 'Oggi ci resti un minuto, poi ricadi. Quando schiena e costole si riaprono, stare dritto ha un appoggio. Non lo tieni con la volontà. Ci arrivi da solo, e ci resti più a lungo.',
-  },
-  {
-    icon: Archive,
-    image: '/trattamenti/spalla_scapola-decubito-laterale_06_orizzontale',
-    imageClassName: 'object-[50%_50%]',
-    alt: 'Trattamento di scapola e spalla di una paziente sdraiata su un fianco',
-    eyebrow: 'Correttore, cuscino, sedia',
-    title: 'Li togli, e non ricadi',
-    body: 'Finché li usi, ti tengono loro. Li togli, e torni come prima. Se la schiena si riapre e il bacino torna dritto, ti tiene il corpo. Non un pezzo comprato.',
-  },
-  {
-    icon: ScanSearch,
-    image: '/trattamenti/collo_presa-cervicale-supino_19_orizzontale',
-    imageClassName: 'object-[18%_50%]',
-    alt: 'Trattamento osteopatico del collo di una paziente supina',
-    eyebrow: 'La parola sul referto',
-    title: 'Capisci se è osso o posizione',
-    body: 'Curva dell’osso, o corpo inclinato. Scoliosi vera, o schiena messa storta. Gamba corta, o bacino girato. Si lavora solo sulla seconda di ogni coppia. Alla prima visita te lo diciamo, con i tuoi esami in mano.',
-  },
-  {
-    icon: Dumbbell,
-    image: '/trattamenti/spalla_valutazione-in-piedi_01_orizzontale',
-    imageClassName: 'object-[50%_50%]',
-    alt: 'Valutazione della spalla in piedi di un paziente',
-    eyebrow: 'Ti alleni, e torni uguale',
-    title: 'Quello che alleni, resta',
-    body: 'Palestra, nuoto, ginnastica: continua. La forza serve. Su una schiena che si apre e su un bacino dritto, quello che alleni resta. Su una zona ferma, lo perdi appena smetti.',
-  },
-]
+function Tacca({ id, label, acceso }) {
+  return (
+    <div className={`ytp-ch${acceso ? ' is-on' : ''}`} id={id}>
+      <span className="ytp-ch__tick" aria-hidden="true" />
+      <span className="ytp-ch__dot" aria-hidden="true" />
+      <p className="ytp-ch__word">{label}</p>
+    </div>
+  )
+}
 
-const AFTER_IMAGES_BENEFITS = [
-  <>
-    <strong>Prima visita</strong>: ti diciamo cosa si muove ancora, e cosa è osso
-  </>,
-  <>
-    <strong>3 sedute</strong>: solo su quella parte. Niente programma uguale per tutti
-  </>,
-  <>
-    <strong>App</strong>: pochi esercizi, così a casa non torni dov’eri
-  </>,
-  <>
-    <strong>299€</strong> invece di 600€. Oggi non paghi niente
-  </>,
-]
+const molla = { type: 'spring', stiffness: 170, damping: 14 } // una caduta breve, senza rimbalzi vistosi
 
-const ENTRY_DOORS = [
-  {
-    id: 'lista',
-    kicker: 'Tiene il posto',
-    title: 'Mettiti in lista',
-    lead: 'Per chi si è già riconosciuto. Il percorso sta per partire. Il posto del mese va a chi lascia nome e numero prima.',
-    points: [
-      'Oggi non paghi. Lasci nome e numero, e basta.',
-      'Ti richiamiamo noi. Ti confermiamo 299€ invece di 600€.',
-      'Se il mese è pieno, il posto è di chi è arrivato prima.',
-    ],
-  },
-  {
-    id: 'consulto',
-    kicker: 'Se ti resta un dubbio',
-    title: 'Fatti dire se è il tuo caso',
-    lead: 'Una telefonata gratis. Non per convincerti. Per dirti se ha senso farlo così, nel tuo caso.',
-    points: [
-      'Ti richiamiamo noi. Non è una visita, e non è un video.',
-      'Se non ha senso, te lo diciamo. Non ti vendiamo niente.',
-      'Se invece sì, da quella telefonata entri in lista.',
-    ],
-  },
-]
+// Tema colori: scuro (predefinito, prova del 23/10/2026) o chiaro con ?tema=chiaro. Stessa pagina, stessi contenuti.
+const leggiTema = () =>
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('tema') === 'chiaro' ? 'chiaro' : 'scuro'
 
-const AFTER_ENTRY = [
-  {
-    k: '01',
-    t: 'Lasci nome e numero',
-    b: 'Lista o telefonata: è lo stesso gesto. Oggi non parte nessun pagamento.',
-  },
-  {
-    k: '02',
-    t: 'Ti richiamiamo noi',
-    b: 'Sede, prezzo, e se questo mese c’è ancora posto. Non aspetti una mail.',
-  },
-  {
-    k: '03',
-    t: 'In studio, prima la verità',
-    b: 'Ti guardiamo in piedi. Se è osso, te lo diciamo. Se si muove, partono le 3 sedute e l’app.',
-  },
-]
+function YtPostura() {
+  const [tema] = useState(leggiTema)
+  const scuro = tema === 'scuro'
+  const { video } = useVideoYtPosturaVsl()
+  const [showBooking, setShowBooking] = useState(false)
+  const [bookingCtaType, setBookingCtaType] = useState('percorso')
+  const [videoCover, setVideoCover] = useState(true)
+  const [spuntati, setSpuntati] = useState(() => new Set())
+  const [raggiunto, setRaggiunto] = useState(-1)
+  const [barra, setBarra] = useState(false)
 
-const FAQ_ITEMS = [
-  {
-    id: 'lista-attesa',
-    question: (
-      <>
-        Quale dei due <strong>bottoni</strong> è il mio?
-      </>
-    ),
-    answer: (
-      <>
-        Se hai già capito che è il tuo caso, premi il verde: entri in lista. Il percorso sta per
-        partire. Ogni mese i posti sono pochi, e li prende chi si iscrive prima. Se ti resta un
-        dubbio, premi l’altro: è una telefonata gratis. Ti richiamiamo e ti diciamo se ha senso
-        farlo così. In nessuno dei due casi paghi oggi.
-      </>
-    ),
-  },
-  {
-    id: 'raddrizzare',
-    question: (
-      <>
-        Mi <strong>raddrizzate</strong>?
-      </>
-    ),
-    answer: (
-      <>
-        No. E non fidarti di chi te lo promette prima di averti visto. Una parte della curva può
-        essere diventata osso: quella non si cambia con le mani. Si lavora su quello che si muove
-        ancora: schiena, costole, bacino. Quanto migliori, lo vedi strada facendo. Non il giorno in
-        cui lasci il numero.
-      </>
-    ),
-  },
-  {
-    id: 'referto',
-    question: (
-      <>
-        Nel referto c’è <em>scoliosi</em>, o mi hanno detto che ho una gamba corta.
-      </>
-    ),
-    answer: (
-      <>
-        Sono le due frasi che chiudono il discorso troppo presto. La scoliosi vera è dell’osso: la
-        curva resta anche quando ti pieghi in avanti, e si vede sulla lastra. Molte volte, invece,
-        il corpo si è solo inclinato per stare in equilibrio. Ti chini, e la storta si riduce. Di
-        solito parte dal bacino, da un’anca, o da come appoggi il piede. Anche «ho una gamba più
-        corta», quasi sempre, non è vero: le gambe sono uguali, è il bacino che si è girato. La
-        gamba davvero più corta si misura con una lastra, e sono pochi casi. La visita serve a
-        questo, con i tuoi esami in mano.
-      </>
-    ),
-  },
-  {
-    id: 'gia-provato',
-    question: (
-      <>
-        Faccio già <em>palestra</em>, posturale o fisioterapia.
-      </>
-    ),
-    answer: (
-      <>
-        Continua. Diventare più forte serve, e il sollievo che senti è vero. Il punto è un altro.
-        Se una zona è ferma, l’esercizio le gira intorno. Il massaggio scioglie il muscolo che sta
-        lavorando al posto suo, e non tocca il motivo per cui si affatica. Qui si comincia
-        rimettendo in movimento quella zona. Poi l’app ti aiuta a tenere quello che si è mosso, nei
-        giorni in cui non sei in studio.
-      </>
-    ),
-  },
-  {
-    id: 'estetica',
-    question: (
-      <>
-        Non ho dolore. Mi dà fastidio solo <strong>come mi vedo</strong>.
-      </>
-    ),
-    answer: (
-      <>
-        È il momento migliore per venire: c’è ancora spazio per lavorare. Una schiena chiusa, una
-        testa in avanti, un bacino inclinato. Oggi sono lo specchio. Domani sono la schiena dura, il
-        fiato corto, il dolore. Non è solo una questione di foto. È lo stesso problema, visto prima
-        che faccia male.
-      </>
-    ),
-  },
-  {
-    id: 'cosa-include',
-    question: (
-      <>
-        Cosa c’è nei <strong>299€</strong>?
-      </>
-    ),
-    answer: (
-      <>
-        Una prima visita, per capire il tuo caso. Poi 3 sedute con l’osteopata, su quello che abbiamo
-        trovato: non un programma uguale per tutti. E l’app, con un piano semplice da fare a casa.
-        Il prezzo pieno è 600€. Il percorso è 299€. Oggi non paghi: o entri in lista, o chiedi la
-        telefonata. Il prezzo te lo confermiamo quando ti richiamiamo.
-      </>
-    ),
-  },
-  {
-    id: 'app',
-    question: <>L’app è un altro video da guardare?</>,
-    answer: (
-      <>
-        No. Dopo la visita trovi pochi esercizi e delle video lezioni scelte sulla tua situazione.
-        Non due movimenti presi da internet. Li fai a casa, o in pausa, quando puoi. L’app non
-        sostituisce le 3 sedute. Serve nelle ore in cui nessuno ti mette le mani addosso, perché il
-        corpo non torni da solo dov’era.
-      </>
-    ),
-  },
-  {
-    id: 'red-flags',
-    question: (
-      <>
-        Quando devo andare prima dal <strong>medico</strong>?
-      </>
-    ),
-    answer: (
-      <>
-        Vai prima dal medico se non controlli più la pipì o le feci. Se un braccio o una gamba
-        diventa più debole di giorno in giorno. Se il dolore di notte cresce e stai perdendo peso.
-        Se hai la febbre insieme al dolore. Se in poche settimane un lato del corpo è diventato
-        molto più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi
-        bene, non parli bene o non hai forza. In questi casi, prima il medico. Poi, se serve, si
-        vede il resto.
-      </>
-    ),
-  },
-]
+  const offertaRef = useRef(null)
+  const inchiostroRef = useRef(null) // il filo che si traccia con la lettura
+  const chiusuraRef = useRef(null)
+  const drittoRef = useRef(null)
+  const drittoIn = useInView(drittoRef, { once: true, amount: 1 })
 
-const PAGE = {
-  slug: 'yt-postura',
-  heroVideo,
-  videoTitle: 'Percorso posturale - Mobilitas Torino',
-  images: {
-    hero: '/trattamenti/collo_presa-cervicale-supino_26_orizzontale',
-    heroClassName: 'object-[50%_60%]',
-    band: '/trattamenti/schiena_lombare-prono_14_orizzontale',
-    bandClassName: 'object-[45%_88%]',
-    final: '/trattamenti/anca_decubito-laterale_06_orizzontale',
-    finalClassName: 'object-[45%_60%]',
-  },
-  cta: {
-    visit: { short: 'Mettiti in lista', long: 'Mettiti in lista' },
-    consulto: { short: 'Telefonata gratis', long: 'Telefonata gratis' },
-  },
-  hero: {
-    kicker: 'Dal video di Nicolas',
-    bigTitle: true,
-    title: { main: 'Perché torni storto', accent: 'appena smetti di pensarci?' },
-    lead: (
-      <>
-        Lo fai ogni giorno. Ti tiri su, apri le spalle, sistemi la testa. Per un attimo ci sei.
-        Poi riprendi il telefono, il lavoro o la macchina, e torni storto. Non sei pigro. Ti
-        manca il movimento, non la voglia.
-      </>
-    ),
-    // Senza video (o mentre carica) resta visibile questa foto, come prima
-    fallback: {
-      src: '/trattamenti/collo_presa-cervicale-supino_26_orizzontale',
-      alt: 'Trattamento osteopatico del collo di una paziente supina',
-      className: 'object-[50%_60%]',
-    },
-    intro: { main: 'Nel video abbiamo studiato il problema.', accent: 'Adesso vediamo come risolverlo.' },
-    benefits: HERO_BENEFITS,
-    price: {
-      old: '600€',
-      value: '299€',
-      note: 'percorso completo',
-      tag: 'Oggi non paghi',
-      tagTone: 'positive',
-    },
-    notes: [
-      'Il verde ti mette in lista: nome e numero, e il posto è tuo. Oggi non paghi.',
-      'L’altro è una consulenza gratis. Parli con i responsabili dello studio: ti dicono se il percorso fa per te, e se la tua situazione si può risolvere qui.',
-    ],
-  },
-  pain: {
-    kicker: 'Ti ci ritrovi?',
-    title: { main: 'Ecco perché rimani storto.', accent: null },
-    intro:
-      'Quando ti fa male un punto, la cosa naturale è curare solo quello. Quasi sempre, però, il problema non è lì: c’è un’altra parte del corpo che è ferma e non si muove più, e il punto che senti si stanca perché deve lavorare anche per quella. Se una di queste storie è la tua, continua.',
-    items: PAIN_POINTS,
-  },
-  mechanism: {
-    kicker: 'In parole povere',
-    title: { main: 'Fa male in un punto.', accent: 'Il resto del corpo compensa.' },
-    intro:
-      'Se curi solo il punto che brucia, stai meglio un po’ e poi torna. Massaggio, pastiglia, correttore: calmano il fastidio. Non tolgono il motivo per cui, ogni giorno, si riforma.',
-    emblem: {
-      variant: 'chain',
-      labels: [{ text: 'Testa' }, { text: 'Petto', accent: true }, { text: 'Bacino' }, { text: 'Piedi' }],
-      caption: 'Fa male sopra. Il motivo sta sotto.',
-    },
-    narrative: [
-      'La testa sta dritta solo se la schiena sotto è aperta. Se resti curvo per ore, il petto si chiude e le spalle cadono in avanti. La testa le segue. Il collo si irrigidisce per tenerla su.',
-      'Più in basso è la stessa storia. Bacino inclinato in avanti: la pancia sporge, anche se non è grassa. Un fianco più alto: quasi mai è una gamba corta. È il bacino che si è girato. Il ginocchio che cade in dentro lo spostano l’anca e il piede. E se ti sei messo storto per un dolore, puoi restare così anche quando il dolore è passato.',
-    ],
-    steps: MECHANISM_STEPS,
-    quote: {
-      main: 'Chi ti promette di raddrizzarti prima di averti visto, ti sta prendendo in giro.',
-      accent: 'Noi ti diciamo dove si può intervenire. E dove non serve.',
-    },
-    sub: {
-      kicker: 'Cosa può tornare',
-      title: { main: 'Non devi più tenerti su.', accent: 'Resta dritto da solo.' },
-      intro:
-        'Non è uguale per tutti, e non deve esserlo. Se una parte è diventata osso, resta: te lo diciamo alla prima visita. Se schiena, costole, bacino o piedi si muovono ancora, il lavoro è lì. Queste cose possono tornare. Non il giorno in cui lasci il numero. Strada facendo.',
-    },
-    cards: BENEFITS,
-    checklist: AFTER_IMAGES_BENEFITS,
-    checklistBox: {
-      title: 'Se la visita dice sì, il percorso è questo.',
-      note: 'Oggi non paghi. Il prezzo te lo confermiamo quando ti richiamiamo.',
-    },
-  },
-  reviews: {
-    title: { main: `Più di ${RECENSIONI_TOTALI} persone`, accent: 'hanno già smesso di provare a caso.' },
-    intro:
-      'Siamo lo studio di osteopatia più recensito d’Italia. Non sono storie di chi ha provato una cosa sola. Sono di gente già passata dal massaggio, dalla palestra e dalle pastiglie.',
-    closing:
-      'Se è il tuo caso, entra in lista. Se ti resta un dubbio, chiedi la telefonata. In tutti e due i casi lasci nome e numero. Oggi non paghi.',
-  },
-  entry: {
-    kicker: 'Come si entra',
-    title: { main: 'Due modi per entrare.', accent: 'Uno solo ti tiene il posto.' },
-    intro:
-      'Il verde è la lista. Ogni mese i posti sono pochi: li prende chi lascia nome e numero prima. L’altro è una telefonata gratis, se ti resta un dubbio. Ti diciamo noi se questo percorso ha senso. Oggi non paghi, né con la lista né con la telefonata.',
-    doors: ENTRY_DOORS.map((door) =>
-      door.id === 'lista' ? { ...door, priceOld: '600€', price: '299€' } : { ...door, price: 'Gratis' }
-    ),
-    afterTitle: 'Appena lasci il numero, succede questo.',
-    after: AFTER_ENTRY,
-    closing:
-      'Se ti sei riconosciuto, il passo è uno. Lasci nome e numero. Il posto di questo mese lo prende chi entra prima.',
-  },
-  locations: {
-    kicker: 'Dove siamo',
-    intro:
-      'San Donato e Crocetta. Quando ti richiamiamo, scegli la sede che ti viene meglio. Metro, bus o macchina: il posto in lista non dipende da quale delle due ti è più vicina.',
-  },
-  faq: {
-    kicker: 'Prima di scegliere',
-    title: { main: 'Le domande che ti fermano.', accent: 'Con una risposta secca.' },
-    intro:
-      'Aprine una. Se dopo ti resta un dubbio, è per questo che c’è la telefonata. Se ti sono chiare, il verde è il passo giusto.',
-    items: FAQ_ITEMS,
-    closing:
-      'Un dubbio: chiedi la telefonata. Hai già deciso: mettiti in lista. Ti richiamiamo il prima possibile. Oggi non paghi. I posti di questo mese li prende chi entra prima.',
-  },
-  seo: {
-    dataPage: 'yt-postura',
-    path: '/yt-postura',
-    ogImage: '/trattamenti/og/collo_cervicale-e-spalle-supino_02_orizzontale.jpg',
-    title: 'Perché torni storto appena smetti di pensarci? | Mobilitas Torino',
-    description:
-      'Ti tiri su e dopo un minuto sei di nuovo giù. Non è pigrizia: una parte del corpo non si muove più, e il resto si sposta per tenerla su. Lista d’attesa a 299€ invece di 600€, oppure una telefonata gratis. Oggi non paghi.',
-    keywords: [
-      'percorso posturale torino',
-      'osteopata postura torino',
-      'valutazione posturale torino',
-      'trattamento osteopatico postura',
-      'postura collo schiena torino',
-      'testa avanti osteopata',
-      'mal di schiena postura torino',
-      'app esercizi posturali',
-      'osteopata san donato torino',
-      'osteopata crocetta torino',
-      'studio osteopatico mobilitas',
-    ],
-    ogImageAlt: 'Percorso posturale – Studio Mobilitas Torino',
-    twitterTitle: 'Perché torni storto appena smetti di pensarci? | Mobilitas',
-    twitterImageAlt: 'Percorso posturale – Mobilitas Torino',
-    condition: {
-      name: 'Disturbi posturali',
-      alternateName: [
-        'Testa in avanti',
-        'Ipercifosi',
-        'Spalle chiuse',
-        'Iperlordosi',
-        'Atteggiamento scoliotico',
-        'Dolore posturale',
+  const videoSrc = video
+    ? `https://iframe.videodelivery.net/${video.cloudflareUid}?autoplay=true&muted=true&loop=true&controls=false&preload=auto&letterboxColor=%23002552&poster=${encodeURIComponent(video.anteprimaUrl ?? '')}`
+    : ''
+
+  useEffect(() => {
+    if (!video) return
+    setVideoCover(true)
+    const timer = window.setTimeout(() => setVideoCover(false), 500)
+    return () => window.clearTimeout(timer)
+  }, [video])
+
+  // SEO: canonical su /yt-postura.
+  // SEO locale – metadata + JSON-LD ottimizzati per Google (Torino / San Donato / Crocetta)
+  useEffect(() => {
+    const prevTitle = document.title
+    const origin = window.location.origin
+    const pageUrl = `${origin}/yt-postura`
+    const ogImage = `${origin}/yt-postura/hero-d-1280.jpg`
+
+    const title =
+      'Correttori, palestra, «tirati su». Niente ha funzionato | Mobilitas Torino'
+    document.title = title
+
+    const ensureMetaByName = (name, content) => {
+      let tag = document.querySelector(`meta[name="${name}"]`)
+      if (!tag) {
+        tag = document.createElement('meta')
+        tag.setAttribute('name', name)
+        document.head.appendChild(tag)
+      }
+      tag.setAttribute('content', content)
+    }
+
+    const ensureMetaByProperty = (property, content) => {
+      let tag = document.querySelector(`meta[property="${property}"]`)
+      if (!tag) {
+        tag = document.createElement('meta')
+        tag.setAttribute('property', property)
+        document.head.appendChild(tag)
+      }
+      tag.setAttribute('content', content)
+    }
+
+    const ensureCanonical = (href) => {
+      let link = document.querySelector('link[rel="canonical"]')
+      if (!link) {
+        link = document.createElement('link')
+        link.setAttribute('rel', 'canonical')
+        document.head.appendChild(link)
+      }
+      link.setAttribute('href', href)
+    }
+
+    const description =
+      'Ti raddrizzi e appena smetti di pensarci la postura crolla? Percorso posturale Mobilitas a Torino: prima visita posturale, 3 sedute di osteopatia e 12 mesi di app, 299€ tutto incluso, da pagare dopo la prima visita. Richiedilo: ti chiamiamo per verificare che sia adatto a te.'
+
+    // Standard SEO
+    ensureMetaByName('description', description)
+    // Indicizzata come la prima versione della landing (stessi valori di useConditionSeo).
+    const prevRobots = document.querySelector('meta[name="robots"]')?.getAttribute('content') ?? null
+    ensureMetaByName('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')
+    ensureMetaByName(
+      'keywords',
+      [
+        'percorso posturale torino',
+        'osteopata postura torino',
+        'valutazione posturale torino',
+        'trattamento osteopatico postura',
+        'postura collo schiena torino',
+        'testa avanti osteopata',
+        'mal di schiena postura torino',
+        'app esercizi posturali',
+        'osteopata san donato torino',
+        'osteopata crocetta torino',
+        'studio osteopatico mobilitas',
+      ].join(', ')
+    )
+    ensureMetaByName('author', 'Mobilitas – Studio Osteopatico Torino')
+    ensureMetaByName('geo.region', 'IT-TO')
+    ensureMetaByName('geo.placename', 'Torino, San Donato, Crocetta')
+    // Coordinate sede principale (San Donato); Crocetta è nel JSON-LD department
+    ensureMetaByName('geo.position', '45.0802312;7.6577188')
+    ensureMetaByName('ICBM', '45.0802312, 7.6577188')
+
+    // Open Graph (Facebook, LinkedIn, WhatsApp)
+    ensureMetaByProperty('og:title', title)
+    ensureMetaByProperty('og:description', description)
+    ensureMetaByProperty('og:type', 'website')
+    ensureMetaByProperty('og:url', pageUrl)
+    ensureMetaByProperty('og:image', ogImage)
+    ensureMetaByProperty('og:image:alt', 'Percorso posturale – Studio Mobilitas Torino')
+    ensureMetaByProperty('og:image:width', '1200')
+    ensureMetaByProperty('og:image:height', '630')
+    ensureMetaByProperty('og:site_name', 'Mobilitas – Studio Osteopatico Torino')
+    ensureMetaByProperty('og:locale', 'it_IT')
+
+    // Twitter Card
+    ensureMetaByName('twitter:card', 'summary_large_image')
+    ensureMetaByName('twitter:title', 'Correttori, palestra, «tirati su». Niente ha funzionato | Mobilitas')
+    ensureMetaByName('twitter:description', description)
+    ensureMetaByName('twitter:image', ogImage)
+    ensureMetaByName('twitter:image:alt', 'Percorso posturale – Mobilitas Torino')
+
+    ensureCanonical(pageUrl)
+
+    const businessShared = {
+      '@type': 'MedicalBusiness',
+      name: 'Mobilitas – Studio Osteopatico',
+      url: origin,
+      telephone: '+393518198457',
+      email: 'studio@studiomobilitas.it',
+      image: `${origin}/logo_blu.png`,
+      priceRange: '€€',
+      medicalSpecialty: 'Osteopathic',
+      areaServed: [
+        { '@type': 'City', name: 'Torino' },
+        { '@type': 'AdministrativeArea', name: 'Piemonte' },
       ],
-      anatomy: 'Colonna vertebrale, bacino e cingolo scapolare',
-    },
-    therapy: {
-      name: 'Percorso posturale',
-      description:
-        'Una prima visita per capire cosa si muove ancora, 3 sedute dall’osteopata su quella parte, e un’app con un piano semplice. 299 euro invece di 600. Oggi non si paga: lista d’attesa oppure telefonata gratuita.',
-      offer: {
-        price: '299',
-        availability: 'https://schema.org/PreOrder',
-        name: 'Percorso posturale: visita, 3 trattamenti e app',
+      sameAs: [
+        'https://www.facebook.com/studiomobilitas',
+        'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z',
+      ],
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5.0',
+        reviewCount: String(RECENSIONI_TOTAL),
+        bestRating: '5',
+        worstRating: '1',
       },
-    },
-    breadcrumbName: 'Percorso posturale',
-    faq: [
-      {
-        name: 'Quale dei due bottoni è il mio?',
-        text: 'Se hai già capito che è il tuo caso, premi il verde: entri in lista. Il percorso sta per partire. Ogni mese i posti sono pochi, e li prende chi si iscrive prima. Se ti resta un dubbio, l’altro bottone è una telefonata gratis. Ti richiamiamo e ti diciamo se ha senso farlo così. In nessuno dei due casi paghi oggi.',
-      },
-      {
-        name: 'Mi raddrizzate?',
-        text: 'No. Una parte della curva può essere diventata osso: quella non si cambia con le mani. Si lavora su quello che si muove ancora: schiena, costole, bacino. Quanto migliori, lo vedi strada facendo. Non il giorno in cui lasci il numero.',
-      },
-      {
-        name: 'Nel referto c’è scoliosi, o mi hanno detto che ho una gamba corta.',
-        text: 'La scoliosi vera è dell’osso: la curva resta anche quando ti pieghi in avanti, e si vede sulla lastra. Molte volte il corpo si è solo inclinato per stare in equilibrio. Anche «ho una gamba più corta», quasi sempre, non è vero: le gambe sono uguali, è il bacino che si è girato. La visita serve a dirti quale dei due è il tuo caso.',
-      },
-      {
-        name: 'Faccio già palestra, posturale o fisioterapia.',
-        text: 'Continua. Diventare più forte serve. Se una zona è ferma, l’esercizio le gira intorno. Qui si comincia rimettendo in movimento quella zona. Poi l’app ti aiuta a tenere quello che si è mosso, nei giorni in cui non sei in studio.',
-      },
-      {
-        name: 'Non ho dolore. Mi dà fastidio solo come mi vedo.',
-        text: 'È il momento migliore per venire: c’è ancora spazio per lavorare. Una schiena chiusa, una testa in avanti, un bacino inclinato. Oggi sono lo specchio. Domani sono la schiena dura, il fiato corto, il dolore.',
-      },
-      {
-        name: 'Cosa c’è nei 299€?',
-        text: 'Una prima visita, per capire il tuo caso. Poi 3 sedute con l’osteopata, su quello che abbiamo trovato. E l’app, con un piano semplice da fare a casa. Il prezzo pieno è 600€. Il percorso è 299€. Oggi non paghi. Il prezzo te lo confermiamo quando ti richiamiamo.',
-      },
-      {
-        name: 'L’app è un altro video da guardare?',
-        text: 'No. Dopo la visita trovi pochi esercizi e delle video lezioni scelte sulla tua situazione. Li fai a casa, o in pausa, quando puoi. L’app non sostituisce le 3 sedute. Serve perché, nelle ore in cui nessuno ti mette le mani addosso, il corpo non torni da solo dov’era.',
-      },
-      {
-        name: 'Quando devo andare prima dal medico?',
-        text: 'Vai prima dal medico se non controlli più la pipì o le feci. Se un braccio o una gamba diventa più debole di giorno in giorno. Se il dolore di notte cresce e stai perdendo peso. Se hai la febbre insieme al dolore. Se in poche settimane un lato del corpo è diventato molto più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi bene, non parli bene o non hai forza. In questi casi, prima il medico.',
-      },
-    ],
-  },
+    }
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'MedicalWebPage',
+          '@id': `${pageUrl}#webpage`,
+          url: pageUrl,
+          name: title,
+          description,
+          inLanguage: 'it-IT',
+          isPartOf: { '@id': `${origin}/#website` },
+          about: { '@id': `${pageUrl}#condition` },
+          mainEntity: { '@id': `${pageUrl}#service` },
+          primaryImageOfPage: {
+            '@type': 'ImageObject',
+            url: ogImage,
+          },
+          speakable: {
+            '@type': 'SpeakableSpecification',
+            cssSelector: ['h1', 'meta[name="description"]'],
+          },
+        },
+        {
+          '@type': 'MedicalCondition',
+          '@id': `${pageUrl}#condition`,
+          name: 'Disturbi posturali',
+          alternateName: [
+            'Testa in avanti',
+            'Ipercifosi',
+            'Spalle chiuse',
+            'Iperlordosi',
+            'Atteggiamento scoliotico',
+            'Dolore posturale',
+          ],
+          associatedAnatomy: {
+            '@type': 'AnatomicalStructure',
+            name: 'Colonna vertebrale, bacino e cingolo scapolare',
+          },
+        },
+        {
+          '@type': 'MedicalTherapy',
+          '@id': `${pageUrl}#service`,
+          name: 'Percorso posturale',
+          description:
+            'Prima visita posturale con un professionista esperto in postura, 3 sedute di osteopatia di circa un’ora con lo stesso osteopata e 12 mesi di app. 299 euro tutto incluso. Si richiede con una telefonata gratuita e senza impegno.',
+          url: pageUrl,
+          provider: { '@id': `${origin}/#organization` },
+          offers: {
+            '@type': 'Offer',
+            price: '299',
+            priceCurrency: 'EUR',
+            availability: 'https://schema.org/InStock',
+            url: pageUrl,
+            name: 'Percorso posturale: prima visita, 3 sedute di osteopatia e 12 mesi di app',
+          },
+        },
+        {
+          ...businessShared,
+          '@id': `${origin}/#organization`,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Via Peyron 54',
+            addressLocality: 'Torino',
+            addressRegion: 'Piemonte',
+            postalCode: '10143',
+            addressCountry: 'IT',
+          },
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: 45.0802312,
+            longitude: 7.6577188,
+          },
+          hasMap:
+            'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z',
+          department: [
+            {
+              '@type': 'MedicalBusiness',
+              '@id': `${origin}/#sede-san-donato`,
+              name: 'Mobilitas – San Donato',
+              telephone: '+393518198457',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Via Peyron 54',
+                addressLocality: 'Torino',
+                addressRegion: 'Piemonte',
+                postalCode: '10143',
+                addressCountry: 'IT',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 45.0802312,
+                longitude: 7.6577188,
+              },
+            },
+            {
+              '@type': 'MedicalBusiness',
+              '@id': `${origin}/#sede-crocetta`,
+              name: 'Mobilitas – Crocetta',
+              telephone: '+393518198457',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Via Lamarmora 35',
+                addressLocality: 'Torino',
+                addressRegion: 'Piemonte',
+                postalCode: '10128',
+                addressCountry: 'IT',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 45.0593749,
+                longitude: 7.6660428,
+              },
+            },
+          ],
+        },
+        {
+          '@type': 'BreadcrumbList',
+          '@id': `${pageUrl}#breadcrumb`,
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: origin,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Percorso posturale',
+              item: pageUrl,
+            },
+          ],
+        },
+        {
+          '@type': 'FAQPage',
+          '@id': `${pageUrl}#faq`,
+          // Stesse domande e risposte della pagina (contenuti.jsx), così non si disallineano.
+          mainEntity: FAQ_PRINCIPALI.map((item) => ({
+            '@type': 'Question',
+            name: item.nome,
+            acceptedAnswer: { '@type': 'Answer', text: item.testo },
+          })),
+        },
+      ],
+    }
+
+    let scriptLd = document.querySelector('script[type="application/ld+json"][data-page="yt-postura"]')
+    if (!scriptLd) {
+      scriptLd = document.createElement('script')
+      scriptLd.setAttribute('type', 'application/ld+json')
+      scriptLd.setAttribute('data-page', 'yt-postura')
+      document.head.appendChild(scriptLd)
+    }
+    scriptLd.textContent = JSON.stringify(jsonLd)
+
+    return () => {
+      document.title = prevTitle
+      if (prevRobots === null) document.querySelector('meta[name="robots"]')?.remove()
+      else ensureMetaByName('robots', prevRobots)
+      const toRemove = document.querySelector('script[type="application/ld+json"][data-page="yt-postura"]')
+      if (toRemove) toRemove.remove()
+    }
+  }, [])
+
+  // Un solo ascoltatore di scorrimento: tacche raggiunte, filo che si traccia, barra mobile.
+  useEffect(() => {
+    let frame = 0
+    const misura = () => {
+      frame = 0
+      const centro = window.innerHeight / 2
+      let ultimo = -1
+      CAPITOLI.forEach((c, i) => {
+        const el = document.getElementById(c.id)
+        if (el && el.getBoundingClientRect().top < centro) ultimo = i
+      })
+      setRaggiunto(ultimo)
+      // Il filo si traccia fino a metà schermo: scala sul solo transform, senza nuovi render.
+      const radice = inchiostroRef.current?.parentElement?.parentElement
+      if (radice && inchiostroRef.current) {
+        const r = radice.getBoundingClientRect()
+        const p = Math.min(1, Math.max(0, (centro - r.top) / Math.max(1, r.height)))
+        inchiostroRef.current.style.transform = `scaleY(${p})`
+      }
+      const chiusura = chiusuraRef.current?.getBoundingClientRect()
+      const offerta = offertaRef.current?.getBoundingClientRect()
+      setBarra(Boolean(offerta && offerta.bottom < 0 && chiusura && chiusura.top > window.innerHeight))
+    }
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(misura)
+    }
+    misura()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  // Due richieste diverse: «Inizia il percorso» → percorso (lista d'attesa del percorso);
+  // «Richiedi la telefonata» → telefonata gratuita (CT_GRATUITA). Vedi yt-postura/richiesta.js.
+  const richiedi = useCallback(() => {
+    setBookingCtaType('percorso')
+    setShowBooking(true)
+  }, [])
+  const richiediTelefonata = useCallback(() => {
+    setBookingCtaType('consulto')
+    setShowBooking(true)
+  }, [])
+  // «Prenota un consulto gratuito» nel footer: stessa richiesta della telefonata gratuita, niente WhatsApp.
+  useEffect(() => {
+    window.addEventListener(APRI_CONSULTO, richiediTelefonata)
+    return () => window.removeEventListener(APRI_CONSULTO, richiediTelefonata)
+  }, [richiediTelefonata])
+
+  // Link secondari: portano a una sezione della pagina (niente movimento con «riduci movimento»).
+  const vaiA = useCallback((id) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const riduci = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const y = el.getBoundingClientRect().top + window.scrollY - 96
+    window.scrollTo({ top: y, behavior: riduci ? 'auto' : 'smooth' })
+  }, [])
+
+  const spunta = (i) =>
+    setSpuntati((prima) => {
+      const dopo = new Set(prima)
+      if (dopo.has(i)) dopo.delete(i)
+      else dopo.add(i)
+      return dopo
+    })
+  const n = spuntati.size
+
+  const CTA = 'Inizia il percorso'
+  const Azioni = ({ scuro = false, link }) => (
+    <div className="ytp-actions">
+      <button type="button" className={`ytp-cta ${scuro ? 'ytp-cta--green' : 'ytp-cta--ink'}`} onClick={richiedi}>
+        {CTA}
+      </button>
+      <button type="button" className="ytp-link" onClick={() => vaiA(link.verso)}>
+        {link.testo}
+      </button>
+    </div>
+  )
+  const LINK_OFFERTA = { testo: 'Cosa comprende', verso: 'ytp-h-offerta' }
+
+  return (
+    <>
+      <MotionConfig reducedMotion="user">
+        <div className={`ytp${scuro ? ' ytp--scuro' : ''}`}>
+          <span className="ytp-axis" aria-hidden="true">
+            <span className="ytp-axis__ink" ref={inchiostroRef} />
+          </span>
+
+          {/* ——— 1. APERTURA ——— */}
+          <section className="ytp-hero" aria-labelledby="ytp-h1">
+            <div className="ytp-hero__top">
+              <figure className="ytp-hero__photo">
+                <picture>
+                  <source media="(min-width: 64rem)" srcSet={fotoSet('hero-d', [640, 960, 1280])} sizes="45vw" />
+                  <img
+                    src={foto('hero-m', 480)}
+                    srcSet={fotoSet('hero-m', [480, 720])}
+                    sizes="100vw"
+                    width="480"
+                    height="800"
+                    alt="Valutazione posturale in piedi: l’osteopata osserva l’allineamento di una paziente"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
+              </figure>
+              <div className="ytp-hero__copy">
+                <Titolo as="h1" size="h1" id="ytp-h1">
+                  <span className="ytp-h1__lista">
+                    Correttori, palestra, «tirati{'\u00a0'}su».
+                  </span>
+                  <strong className="ytp-h1__no">
+                    Niente ha{' '}
+                    <motion.span
+                      className="ytp-lean"
+                      initial={{ rotate: 0 }}
+                      animate={{ rotate: -4 }}
+                      transition={{ ...molla, delay: 0.7 }}
+                    >
+                      funzionato.
+                    </motion.span>
+                  </strong>
+                  <span className="ytp-h1__sub">Non è così che si corregge la postura.</span>
+                </Titolo>
+              </div>
+            </div>
+
+            <div className="ytp-offer ytp-dark" ref={offertaRef}>
+              <div className="ytp-offer__dock">
+                <p className="ytp-offer__price">
+                  <span className="ytp-offer__now">299€</span>
+                  <span className="ytp-offer__what">
+                    <strong>Tutto incluso</strong>
+                    <span>Prima visita, 3 sedute e 12 mesi di app</span>
+                  </span>
+                </p>
+                <button type="button" className="ytp-cta ytp-cta--green" onClick={richiedi}>
+                  {CTA}
+                </button>
+              </div>
+              <ul className="ytp-offer__plus">
+                {OFFERTA_PUNTI.map((punto) => (
+                  <li key={punto}>
+                    <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                      <circle cx="9" cy="9" r="8.25" stroke="currentColor" strokeWidth="1.5" />
+                      <path d="M5.5 9.2l2.3 2.3 4.7-4.9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {punto}
+                  </li>
+                ))}
+              </ul>
+              <button type="button" className="ytp-link" onClick={() => vaiA(LINK_OFFERTA.verso)}>
+                {LINK_OFFERTA.testo}
+              </button>
+            </div>
+
+            <div className="ytp-hero__more">
+              <p className="ytp-lead">
+                Ti vedi allo specchio, apri le spalle, tiri su la testa: per un attimo va meglio. Poi la giornata
+                riprende e, senza accorgertene, sei di nuovo giù. Non è pigrizia: è un’abitudine del corpo. Il
+                percorso posturale Mobilitas lavora proprio lì.
+              </p>
+            </div>
+          </section>
+
+          {/* ——— 2. IL VIDEO ——— */}
+          <section className="ytp-section ytp-video" aria-label="Il video di Nicolas">
+            <div className="ytp-wrap ytp-grid">
+              <figure className="ytp-video__fig">
+              <div className="ytp-video__frame">
+                {video ? (
+                  <>
+                    {video.anteprimaUrl ? (
+                      <img src={video.anteprimaUrl} alt="" decoding="async" loading="lazy" />
+                    ) : null}
+                    <iframe
+                      src={videoSrc}
+                      title={video.titolo || 'Percorso posturale - Mobilitas Torino'}
+                      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                      allowFullScreen
+                      loading="lazy"
+                      style={{ pointerEvents: 'none', backgroundColor: '#002552' }}
+                    />
+                    <div
+                      className="ytp-video__cover"
+                      style={{ opacity: videoCover ? 1 : 0 }}
+                      aria-hidden="true"
+                    />
+                    <div className="ytp-video__block" aria-hidden="true" />
+                  </>
+                ) : (
+                  // Riserva se il video non arriva dal gestionale: stessa foto dell'originale (maldischiena1), ritagliata e alleggerita.
+                  <img
+                    src={foto('video-riserva', 960)}
+                    srcSet={fotoSet('video-riserva', [960, 1440])}
+                    sizes="(min-width: 64rem) 50vw, 90vw"
+                    alt="Trattamento posturale in studio a Torino"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              </figure>
+              <div className="ytp-video__aside">
+                <div className="ytp-video__say">
+                  <Titolo>Il percorso, in 3 passi.</Titolo>
+                </div>
+                <ul className="ytp-steps3">
+                  {HERO_BENEFITS.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* ——— 3. TESTA: riconoscimento ——— */}
+          <section className="ytp-section" aria-labelledby="ytp-h-testa">
+            <div className="ytp-wrap">
+              <Tacca id="testa" label={CAPITOLI_TITOLI.testa} acceso={raggiunto >= 0} />
+              <Scompensi />
+              <div className="ytp-grid">
+                <div className="ytp-intro ytp-sticky">
+                  <Titolo id="ytp-h-testa">
+                    Quante di queste ti <strong>succedono?</strong>
+                  </Titolo>
+                  <p className="ytp-lead">
+                    Tocca quelle in cui ti riconosci. Poi ti spieghiamo perché tornano, anche quando ci fai
+                    attenzione.
+                  </p>
+                </div>
+
+                <div className="ytp-test" role="group" aria-labelledby="ytp-test-label">
+                  <p className="ytp-sr" id="ytp-test-label">
+                    Ti ci ritrovi?
+                  </p>
+                  <ul className="ytp-test__list">
+                    {PAIN_POINTS.map((p, i) => (
+                      <li className="ytp-test__row" key={p.title}>
+                        <label>
+                          <input type="checkbox" checked={spuntati.has(i)} onChange={() => spunta(i)} />
+                          <span className="ytp-test__box" aria-hidden="true">
+                            <svg viewBox="0 0 16 16" fill="none">
+                              <path
+                                d="M3 8.5l3.2 3L13 4.5"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <span>
+                            <span className="ytp-test__title">{p.title}</span>
+                            {/* La spiegazione si apre solo sotto le frasi spuntate: si legge solo ciò che ti riguarda. */}
+                            <span className="ytp-test__more">
+                              <span>
+                                <span className="ytp-test__body">{p.body}</span>
+                              </span>
+                            </span>
+                          </span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="ytp-test__count ytp-dark">
+                    <ol className="ytp-meter" aria-hidden="true">
+                      {PAIN_POINTS.map((p, i) => (
+                        <li key={p.title} className={i < n ? 'is-on' : ''} />
+                      ))}
+                    </ol>
+                    <p aria-live="polite">
+                      {n === 0 ? (
+                        'Tocca le frasi in cui ti riconosci.'
+                      ) : (
+                        <>
+                          Ne hai segnate <span className="ytp-test__n">{n}</span> su 6. Qui sotto capisci perché
+                          tornano, e come ci lavora il percorso.
+                        </>
+                      )}
+                    </p>
+                    <button type="button" className="ytp-cta ytp-cta--green ytp-cta--block" onClick={richiedi}>
+                      {CTA}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <TavolaTesta />
+            </div>
+          </section>
+
+          {/* ——— 4. PETTO: il meccanismo (capitolo su blu notte) ——— */}
+          <section className="ytp-section ytp-band ytp-dark ytp-petto" data-scuro aria-labelledby="ytp-h-petto">
+            <span className="ytp-band__axis" aria-hidden="true" />
+            <div className="ytp-wrap">
+              <Tacca id="petto" label={CAPITOLI_TITOLI.petto} acceso={raggiunto >= 1} />
+              <div className="ytp-grid">
+                <div className="ytp-intro">
+                  <Titolo id="ytp-h-petto">
+                    Perché la forza di volontà <strong>non basta.</strong>
+                  </Titolo>
+                  <p className="ytp-lead">
+                    La postura non è una posizione che scegli. È un’abitudine che il corpo ha costruito negli anni:
+                    le ore alla scrivania, il telefono, la guida, la stanchezza e, a volte, un vecchio dolore.
+                  </p>
+                </div>
+              </div>
+
+              <TavolaFilo />
+
+              {/* In breve: quattro frasi, niente muro di testo. */}
+              <ol className="ytp-claims ytp-claims--brevi">
+                {MECHANISM_STEPS.map((s) => (
+                  <li key={s.k}>
+                    <Titolo as="h3" size="h3">
+                      {s.t}
+                    </Titolo>
+                  </li>
+                ))}
+              </ol>
+
+              <p className="ytp-quote">
+                <strong>
+                  Chi ti promette di raddrizzarti in poche sedute ti sta vendendo un miracolo.
+                  <span className="ytp-quote__si">Noi ti diciamo la verità.</span>
+                </strong>
+              </p>
+            </div>
+          </section>
+
+          {/* ——— 5. BACINO: cosa può tornare ——— */}
+          <section className="ytp-section" aria-labelledby="ytp-h-bacino">
+            <div className="ytp-wrap">
+              <Tacca id="bacino" label={CAPITOLI_TITOLI.bacino} acceso={raggiunto >= 2} />
+              <div className="ytp-grid">
+                <div className="ytp-intro">
+                  <Titolo id="ytp-h-bacino">
+                    L’obiettivo: una schiena{' '}
+                    <strong>
+                      <motion.span
+                        ref={drittoRef}
+                        className="ytp-lean"
+                        initial={{ rotate: -4 }}
+                        animate={{ rotate: drittoIn ? 0 : -4 }}
+                        transition={{ type: 'spring', stiffness: 140, damping: 15, delay: 0.15 }}
+                      >
+                        dritta
+                      </motion.span>
+                    </strong>
+                    ,{' '}
+                    senza doverci pensare.
+                  </Titolo>
+                  <p className="ytp-lead">
+                    Immagina di arrivare a sera con la schiena meno stanca e di piacerti di più nelle foto, senza
+                    doverti correggere di continuo. È questo il nostro obiettivo. Ognuno parte da un punto diverso
+                    e alcune cose non si possono cambiare: per questo ti parliamo di obiettivi, non di promesse.
+                  </p>
+                </div>
+              </div>
+
+              <TavolaOsso />
+
+              <Obiettivo />
+
+
+            </div>
+          </section>
+
+          {/* ——— 6. OFFERTA ——— */}
+          <section className="ytp-section ytp-band ytp-dark ytp-deal" data-scuro aria-labelledby="ytp-h-offerta">
+            <span className="ytp-band__axis" aria-hidden="true" />
+            <div className="ytp-wrap ytp-grid">
+              <div className="ytp-deal__left">
+                <Titolo id="ytp-h-offerta">Tutto il percorso, con un solo prezzo.</Titolo>
+                <p className="ytp-lead">
+                  Non paghi una seduta alla volta sperando che sia l’ultima. Hai 4 appuntamenti in studio, circa 3
+                  ore di trattamento osteopatico e un anno di esercizi guidati.
+                </p>
+                <p className="ytp-deal__big">
+                  <span className="ytp-deal__now">299€</span>
+                </p>
+              </div>
+              <div className="ytp-deal__right">
+                <ul className="ytp-deal__list">
+                  {AFTER_IMAGES_BENEFITS.map((b, i) => (
+                    <li key={i}>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Azioni scuro link={{ testo: 'Come si inizia', verso: 'ytp-h-piedi' }} />
+              </div>
+            </div>
+          </section>
+
+          {/* ——— 7. RECENSIONI ——— */}
+          <section className="ytp-section" aria-labelledby="ytp-h-recensioni">
+            <div className="ytp-wrap">
+              <div className="ytp-grid">
+                <div className="ytp-rev__head">
+                  <Titolo id="ytp-h-recensioni">
+                    Più di <strong>900 recensioni</strong> su Google.
+                  </Titolo>
+                </div>
+              </div>
+              <Carosello />
+              <a
+                className="ytp-link ytp-reviews__more"
+                href={GOOGLE_RECENSIONI_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Leggi tutte le recensioni su Google Maps
+              </a>
+              <div className="ytp-grid">
+                <div className="ytp-rev__close">
+                  <p className="ytp-lead">
+                    Se ti ritrovi in quello che hai letto e il percorso ti convince, il passo è uno: richiedilo. Ti chiamiamo noi.
+                    La telefonata è gratuita e senza impegno.
+                  </p>
+                  <Azioni link={LINK_OFFERTA} />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ——— 8. PIEDI: come si entra ——— */}
+          <section className="ytp-section" aria-labelledby="ytp-h-piedi">
+            <div className="ytp-wrap">
+              <Tacca id="piedi" label={CAPITOLI_TITOLI.piedi} acceso={raggiunto >= 3} />
+              <div className="ytp-grid">
+                <div className="ytp-intro">
+                  <Titolo id="ytp-h-piedi">
+                    Per iniziare il percorso, ti basta una <strong>telefonata.</strong>
+                  </Titolo>
+                  <p className="ytp-lead">
+                    La richiedi da questa pagina, ed è gratuita e senza impegno. Ti chiamiamo noi per verificare che
+                    il percorso sia adatto a te e definire con te i prossimi passi.
+                  </p>
+                </div>
+              </div>
+
+              <div className="ytp-doors">
+                {ENTRY_DOORS.map((door) => {
+                  const lista = door.id === 'lista'
+                  return (
+                    <article
+                      key={door.id}
+                      className={`ytp-door ${lista ? 'ytp-door--list ytp-dark' : 'ytp-door--line'}`}
+                      {...(lista ? { 'data-scuro': '' } : {})}
+                    >
+                      <div className="ytp-door__top">
+                        {lista ? (
+                          <span className="ytp-door__price">
+                            <b>299€</b>
+                          </span>
+                        ) : (
+                          <span className="ytp-door__free">Gratis</span>
+                        )}
+                      </div>
+                      <Titolo as="h3" size="h3">
+                        {door.title}
+                      </Titolo>
+                      <p className="ytp-lead ytp-door__lead">{door.lead}</p>
+                      <ul>
+                        {door.points.map((point) => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
+                      <button
+                        type="button"
+                        className={`ytp-cta ytp-cta--block ${lista ? 'ytp-cta--green' : 'ytp-cta--line'}`}
+                        onClick={lista ? richiedi : richiediTelefonata}
+                      >
+                        {lista ? CTA : 'Richiedi la telefonata'}
+                      </button>
+                    </article>
+                  )
+                })}
+              </div>
+
+              <div className="ytp-after">
+                <Titolo as="h3" size="h3">
+                  Dopo la richiesta, succede questo.
+                </Titolo>
+                <ol className="ytp-after__list">
+                  {AFTER_ENTRY.map((step) => (
+                    <li key={step.k}>
+                      <span className="ytp-after__n">{step.k}</span>
+                      <Titolo as="h4" size="h3">
+                        {step.t}
+                      </Titolo>
+                      <p>{step.b}</p>
+                    </li>
+                  ))}
+                </ol>
+                <p className="ytp-lead ytp-after__close">
+                  Se dalla telefonata emerge che il percorso non fa per te, te lo diciamo subito. Preferiamo dirti
+                  di no che farti venire per niente.
+                </p>
+                <Azioni link={{ testo: 'Leggi le domande', verso: 'ytp-h-faq' }} />
+              </div>
+
+              <Visita />
+
+              <div className="ytp-places">
+                <Titolo>
+                  Due studi a <strong>Torino</strong>
+                </Titolo>
+                <p className="ytp-lead" style={{ marginTop: '1.25rem' }}>
+                  San Donato e Crocetta. La sede la scegli tu, quando ti chiamiamo. Siamo aperti dal lunedì al
+                  venerdì dalle 8 alle 21 e il sabato dalle 9 alle 18.
+                </p>
+                <MappaTorino sedi={MAPPE} scuro={scuro} />
+                <div className="ytp-places__list">
+                  <div className="ytp-place">
+                    <p className="ytp-place__name">Via Peyron 54</p>
+                    <p className="ytp-place__area">San Donato</p>
+                    <BottoneMaps href={MAPPE.sanDonato} />
+                  </div>
+                  <div className="ytp-place">
+                    <p className="ytp-place__name">Via Lamarmora 35</p>
+                    <p className="ytp-place__area">Crocetta</p>
+                    <BottoneMaps href={MAPPE.crocetta} />
+                  </div>
+                </div>
+                <div className="ytp-places__notes">
+                  <p>In metro. San Donato: Bernini o Principi d’Acaja. Crocetta: la fermata Crocetta.</p>
+                  <p>Parcheggio vicino a entrambe le sedi. Strisce blu e parcheggi intorno.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ——— 9. DOMANDE ——— */}
+          <section className="ytp-section" aria-labelledby="ytp-h-faq">
+            <div className="ytp-wrap ytp-grid">
+              <div className="ytp-faq__head ytp-sticky">
+                <Titolo id="ytp-h-faq">
+                  Le domande che ti fermano. Con una <strong>risposta secca.</strong>
+                </Titolo>
+                <p className="ytp-lead" style={{ marginTop: '1.25rem' }}>
+                  Aprine una. Se dopo ti resta un dubbio, lo chiarisci al telefono: è gratuito e senza impegno.
+                </p>
+              </div>
+              <div className="ytp-faq">
+                {FAQ_PRINCIPALI.map((item) => (
+                  <details key={item.id} name="ytp-faq">
+                    <summary>
+                      <span>{item.question}</span>
+                      <span className="ytp-faq__icon" aria-hidden="true" />
+                    </summary>
+                    <p className="ytp-faq__a">{item.testo}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ——— CHIUSURA ——— */}
+          <section className="ytp-close ytp-band ytp-dark" data-scuro ref={chiusuraRef} aria-label="Prenota">
+            {/* Chiusura: il filo della pagina scende sulla figura allineata (orecchio, spalla, anca, caviglia). */}
+            <span className="ytp-close__filo" aria-hidden="true" />
+            <div className="ytp-close__fig ytp-tav">
+              <FiguraAllineata className="ytp-close__svg" />
+            </div>
+            <div className="ytp-wrap ytp-grid">
+              <div className="ytp-close__inner">
+                <p className="ytp-close__text">
+                  Hai già provato a raddrizzarti con la forza. Ora puoi capire perché non dura, e lavorarci con un
+                  percorso chiaro: 299€ tutto incluso, che paghi solo dopo la prima visita e solo se il percorso è
+                  adatto a te.
+                </p>
+                <Azioni scuro link={LINK_OFFERTA} />
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </MotionConfig>
+
+      {/* Barra mobile: fuori dalla radice della landing, come il popup. */}
+      <div className={`ytp-bar${barra ? ' is-on' : ''}`} aria-hidden={!barra}>
+        <p className="ytp-bar__label">
+          <b>299€</b>
+          <span>percorso completo</span>
+        </p>
+        <button type="button" className="ytp-cta ytp-cta--green" onClick={richiedi} tabIndex={barra ? 0 : -1}>
+          Inizia il percorso
+        </button>
+      </div>
+
+      {/* Modulo di richiesta della landing: percorso o telefonata gratuita (yt-postura/richiesta.js). */}
+      <MotionConfig reducedMotion="user">
+        <Prenotazione isOpen={showBooking} onClose={() => setShowBooking(false)} ctaType={bookingCtaType} />
+      </MotionConfig>
+    </>
+  )
 }
 
-export default function YtPostura() {
-  return <ConditionLanding page={PAGE} />
-}
+export default YtPostura

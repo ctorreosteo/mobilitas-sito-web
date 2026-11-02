@@ -91,8 +91,7 @@ const isLandingVisita = (pageContext) =>
   pageContext === 'scoliosi' ||
   pageContext === 'ernia-del-disco' ||
   pageContext === 'lombalgia' ||
-  pageContext === 'osteopata-torino' ||
-  pageContext === 'yt-postura'
+  pageContext === 'osteopata-torino'
 
 const isVisitaContext = (packageType, pageContext) =>
   !packageType || isLandingVisita(pageContext)
@@ -104,27 +103,13 @@ function getPopupCopy(packageType, pageContext, ctaType) {
   const isPrimaVisita = isLanding && (ctaType === 'primaVisita' || !ctaType)
   const isVisita = isVisitaContext(packageType, pageContext) && !isConsulto
 
-  const isYtPostura = pageContext === 'yt-postura'
-
   if (isConsulto) {
     return {
-      title: isYtPostura ? 'Hai ancora un dubbio?' : 'Richiedi consulto telefonico gratuito',
+      title: 'Richiedi consulto telefonico gratuito',
       subtitle: 'Consulenza gratuita',
-      subtext: isYtPostura
-        ? 'La segreteria ti richiama e ti spiega visita, 3 sedute e app. Senza impegno.'
-        : 'La nostra segreteria ti chiamerà per un breve colloquio gratuito e darti tutte le informazioni.',
-      cta: isYtPostura ? 'Chiamatemi' : 'Richiedi consulto gratuito',
-      pacchettoLabel: isYtPostura ? 'Info percorso posturale YouTube' : 'Consulto gratuito',
-    }
-  }
-
-  if (isPrimaVisita && isYtPostura) {
-    return {
-      title: 'Mettiti in lista',
-      subtitle: 'Lista d’attesa',
-      subtext: 'Non paghi ora. Lasci nome e numero. La segreteria ti richiama il prima possibile. I posti vanno a chi si iscrive prima.',
-      cta: 'Mettiti in lista',
-      pacchettoLabel: 'Lista d’attesa percorso posturale',
+      subtext: 'La nostra segreteria ti chiamerà per un breve colloquio gratuito e darti tutte le informazioni.',
+      cta: 'Richiedi consulto gratuito',
+      pacchettoLabel: 'Consulto gratuito',
     }
   }
 
@@ -182,14 +167,8 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     const orarioText = ORARI.find((o) => o.value === formData.orarioChiamata)?.label || formData.orarioChiamata
 
     const { prefissoCellulare, cellulare } = parseCellulare(formData.cellulare)
-    const isYtPostura = pageContext === 'yt-postura'
-    const leadMagnetString =
-      isLandingVisita(pageContext) && ctaType === 'consulto'
-        ? 'CT_GRATUITA'
-        : isYtPostura
-          ? 'LISTA_ATTESA_YT_POSTURA'
-          : 'COUPON49'
-    const isPainLanding = isLandingVisita(pageContext) && !isYtPostura
+    const leadMagnetString = isLandingVisita(pageContext) && ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
+    const isPainLanding = isLandingVisita(pageContext)
     const leadMagnetRequestedString = ctaType === 'consulto' ? 'CT_GRATUITA' : 'COUPON49'
 
     // Tag dolore della richiesta: chiavi del gestionale (TAG_DOLORE_…), non il nome in italiano.
@@ -225,20 +204,17 @@ export default function BookingPopup({ isOpen, onClose, packageType, pageContext
     }
     // Senza una chiave dolore: restano sul vecchio campo tag (testo libero)
     const tagLegacyByContext = {
-      'yt-postura': 'Lista attesa percorso YouTube',
       'osteopata-torino': 'Osteopata Torino',
     }
 
     // Fonte dagli ID degli annunci nell'URL: Meta → SOCIAL_ADS, Google → GOOGLE_ADS, nessuno dei due → niente fonte.
     // La campagna non si invia: la identificano gli ID degli annunci
     const adIds = adIdsFromUrl()
-    const fonteString = isYtPostura
-      ? 'YOUTUBE'
-      : Object.keys(adIds).some((k) => k.startsWith('metaAd'))
-        ? 'SOCIAL_ADS'
-        : Object.keys(adIds).some((k) => k.startsWith('googleAd'))
-          ? 'GOOGLE_ADS'
-          : undefined
+    const fonteString = Object.keys(adIds).some((k) => k.startsWith('metaAd'))
+      ? 'SOCIAL_ADS'
+      : Object.keys(adIds).some((k) => k.startsWith('googleAd'))
+        ? 'GOOGLE_ADS'
+        : undefined
 
     const body = {
       nome: cleanName(formData.nome),

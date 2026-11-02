@@ -28,12 +28,12 @@ src/
     sito-web/         Pagine del sito (con posizioni/ e partnership/)
     landing-prima-visita/  Landing di campagna della prima visita a 49€
     landing-pages/    Altre landing e pagine di conferma
-    yt-postura-v2/    Parti della landing /yt-postura-v2
+    yt-postura/       Parti della landing /yt-postura
   components/
     Layout, Header, Footer, Sidebar   Guscio del sito
     BookingPopup.jsx  Form di richiesta condiviso
     landing/          Template PrimaVisitaLanding e CTA
-    condition-landing/  Template ConditionLanding, video, SEO
+    condition-landing/  Foto, video, riquadro media e SEO per PrimaVisitaLanding
     prenota-visita/   Calendario nella pagina di conferma
     recensioni-tag/   Recensioni dal gestionale filtrate per dolore
     studi-map/        Mappa dei due studi
@@ -96,7 +96,7 @@ Rilevati il 31/10/2026 leggendo il codice.
 - **Bundle unico** da oltre 500 kB, senza code splitting.
 - **Niente `robots.txt` né `sitemap.xml`.**
 - **`API_BASE` duplicato** in nove file, con due fallback diversi (`hq.studiomobilitas.it` e l'URL Cloud Run).
-- **`yt-postura-v2/richiesta.js`** è una copia della logica di `BookingPopup` per il contesto `yt-postura`: le modifiche vanno riportate a mano.
+- **`yt-postura/richiesta.js`** ha valori propri (fonte CONTENT, tag TAG_DOLORE_POSTURA, due tipi di richiesta): non segue più `BookingPopup`.
 - **Il `Lead` di Meta riparte** a ogni apertura di `/conferma-richiesta`, ricarica compresa.
 - **Variabili inutili.** `VITE_HQ_USERNAME` e `VITE_HQ_PASSWORD` sono nel `.env` locale ma il codice non le usa: si possono eliminare.
 

@@ -4,8 +4,8 @@ import { AnimatePresence, motion, useDragControls, useReducedMotion } from 'fram
 import { useNavigate } from 'react-router-dom'
 import { FASCE_ORARIE, PAGINA_CONFERMA, costruisciRichiesta, inviaRichiesta } from './richiesta'
 
-// Modulo di prenotazione della landing /yt-postura-v2 (foglio dal basso su mobile, scheda centrata su desktop).
-// Invia la stessa richiesta del popup condiviso per "yt-postura" (vedi richiesta.js). Il popup condiviso non viene toccato.
+// Modulo di prenotazione della landing /yt-postura (foglio dal basso su mobile, scheda centrata su desktop).
+// Invia la richiesta costruita in richiesta.js (percorso o telefonata gratuita).
 // Versione compatta e scura (23/10/2026): tutto il modulo sta in uno schermo di telefono, senza scorrere.
 
 const _MOTION = motion

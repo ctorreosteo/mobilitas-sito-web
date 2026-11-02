@@ -42,7 +42,7 @@ Su mobile `index.css` forza la dimensione dei titoli con `!important`: per super
 ## Convenzioni CSS
 
 - Il CSS di una pagina sta in `src/styles/pages/<pagina>.css` ed è importato dalla pagina o dal suo template.
-- Le classi hanno il prefisso `mx-`, con uno specifico per ambito: `mx-cl-` per `ConditionLanding`, `mx-cerv-` per lo stile cervicalgia, `mx-pv__` per il calendario.
+- Le classi hanno il prefisso `mx-`, con uno specifico per ambito: `mx-cl-` per le landing di prima visita (nato con `ConditionLanding`), `mx-cerv-` per lo stile cervicalgia, `mx-pv__` per il calendario.
 - Le utility standard di Tailwind funzionano. Quelle basate sui colori del brand no: `tailwind.config.js` non è caricato, quindi esistono solo le classi di `index.css`. Forme come `text-blue-dark/80` o `from-blue-dark` non generano CSS: in quei casi serve CSS proprio.
 
 ## Movimento

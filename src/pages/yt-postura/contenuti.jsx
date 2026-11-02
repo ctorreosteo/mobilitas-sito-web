@@ -1,4 +1,4 @@
-// Testi della landing /yt-postura-v2.
+// Testi della landing /yt-postura.
 // Copy riscritto il 22/10/2026 con l'agente Copywriting Marketing, su dati confermati dal titolare:
 // - percorso 299€ tutto incluso: prima visita posturale con un professionista esperto in postura, 3 sedute
 //   osteopatiche di circa un'ora con lo stesso osteopata, distribuite in alcune settimane, 12 mesi di app;
@@ -7,7 +7,6 @@
 //   in un'unica soluzione o in due rate (condizioni e importo delle rate non in pagina). Nessun'altra garanzia.
 // Esclusi su indicazione del titolare: prezzo barrato, posti limitati, importo e scadenze delle rate.
 // Altre fonti: Nicolas Ricciardi osteopata (sito-web/LaNostraStoria.jsx), direttore (titolare); orari (Footer.jsx).
-// La landing originale /yt-postura (YtPostura.jsx) non cambia.
 
 // Sezione video: i 3 passi del percorso.
 export const HERO_BENEFITS = [
@@ -315,7 +314,7 @@ export const FAQ_ITEMS = [
         Quando devo andare prima dal <strong>medico</strong>?
       </>
     ),
-    // Invariata rispetto all'originale (YtPostura.jsx): segnali d'allarme.
+    // Segnali d'allarme (dalla prima versione della landing).
     testo:
       'Vai prima dal medico se non controlli più la pipì o le feci. Se un braccio o una gamba diventa più debole di giorno in giorno. Se il dolore di notte cresce e stai perdendo peso. Se hai la febbre insieme al dolore. Se in poche settimane un lato del corpo è diventato molto più storto. Se il mal di testa arriva all’improvviso, fortissimo, e insieme non vedi bene, non parli bene o non hai forza. In questi casi, prima il medico. Poi, se serve, si vede il resto.',
   },

@@ -1,4 +1,4 @@
-/* Landing /yt-postura-v2 — direzione «Il filo a piombo».
+/* Landing /yt-postura — direzione «Il filo a piombo».
    Tutte le regole valgono solo dentro .ytp (radice della landing): Header, Footer e popup restano quelli del sito.
    Il foglio globale (src/index.css) riduce su mobile h1/h2/h3 con !important in un layer: qui i titoli portano la
    misura su uno <span class="…__t"> interno, che quella regola non tocca. Nessun file condiviso viene modificato. */

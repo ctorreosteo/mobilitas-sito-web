@@ -5,7 +5,7 @@ import { profilo, busto, linea, ruota, somma, lerp, FILO_X } from './anatomia'
 import { CX, dorsoInPiedi, dorsoPiegato, bacinoGambe } from './osso'
 import './tavole.css'
 
-// Tavole interattive della landing /yt-postura-v2: figure anatomiche calcolate in SVG (anatomia.js),
+// Tavole interattive della landing /yt-postura: figure anatomiche calcolate in SVG (anatomia.js),
 // corpo in trasparenza con lo scheletro, inchiostro blu su panna o panna su blu notte.
 
 /* ——— Disegno ——— */

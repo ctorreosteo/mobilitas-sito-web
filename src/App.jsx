@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Layout from './components/Layout'
 import { APRI_CONSULTO } from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
@@ -60,7 +60,6 @@ import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata
 import Cervicalgia from './pages/landing-prima-visita/Cervicalgia'
 import Reflusso from './pages/landing-prima-visita/Reflusso'
 import YtPostura from './pages/YtPostura'
-import YtPosturaV2 from './pages/YtPosturaV2'
 import Vertigini from './pages/landing-prima-visita/Vertigini'
 import Bruxismo from './pages/landing-prima-visita/Bruxismo'
 import CicatriciCesareo from './pages/landing-prima-visita/CicatriciCesareo'
@@ -90,6 +89,13 @@ import NotFound from './pages/NotFound'
 
 // Login Page
 import Login from './pages/Login'
+
+
+// Redirect che tiene i parametri del link (utm, ID degli annunci) e l'eventuale #sezione
+const VaiA = ({ to }) => {
+  const { search, hash } = useLocation()
+  return <Navigate to={{ pathname: to, search, hash }} replace />
+}
 
 function App() {
   return (
@@ -124,8 +130,9 @@ function App() {
         {/* Vecchie conferme: ora c'è una pagina sola (la conversione Google Ads parte da lì) */}
         <Route path="/cervicalgia/conferma" element={<Navigate to="/conferma-richiesta" replace />} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
-        <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
-        <Route path="/yt-postura-v2" element={<Layout hideWhatsApp footerCtaEvent={APRI_CONSULTO}><YtPosturaV2 /></Layout>} />
+        <Route path="/yt-postura" element={<Layout hideWhatsApp footerCtaEvent={APRI_CONSULTO}><YtPostura /></Layout>} />
+        {/* Vecchio indirizzo della landing (fino al 02/11/2026): porta su /yt-postura tenendo i parametri del link */}
+        <Route path="/yt-postura-v2" element={<VaiA to="/yt-postura" />} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />

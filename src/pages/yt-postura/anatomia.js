@@ -1,4 +1,4 @@
-// Anatomia delle tavole di /yt-postura-v2: funzioni pure che calcolano le forme (pelle e ossa) in SVG.
+// Anatomia delle tavole di /yt-postura: funzioni pure che calcolano le forme (pelle e ossa) in SVG.
 // Unità: statura 560 (pavimento y=580, vertice y=20); 1 cm ≈ 3,2 unità.
 // Proporzioni da tabelle antropometriche dell'adulto (altezze dei punti di repere in frazione di statura):
 // trago 0,93 · mento 0,87 · C7 e acromion 0,82 · cresta iliaca 0,59 · grande trocantere 0,52 ·

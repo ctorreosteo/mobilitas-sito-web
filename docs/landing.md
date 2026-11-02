@@ -23,7 +23,7 @@ Il testo della sezione `seo.faq` finisce nel JSON-LD: vanno controllati anche qu
 | Fatte a mano | `Cervicalgia`, `OsteopataTorino` | Nel file della pagina |
 | Solo contenuti | Tutte le altre 26 | `components/landing/PrimaVisitaLanding.jsx` |
 
-`ConditionLanding` è il template più vecchio e oggi lo usa solo `/yt-postura`. Condivide con `PrimaVisitaLanding` il formato del config e i pezzi in `components/condition-landing/`.
+`/yt-postura` è fatta a mano (`pages/YtPostura.jsx` e `pages/yt-postura/`). Il vecchio template `ConditionLanding` è stato tolto il 02/11/2026: di `components/condition-landing/` restano solo i pezzi che usa `PrimaVisitaLanding` (foto, video, riquadro media dell'apertura, SEO).
 
 Una pagina "solo contenuti" è un oggetto `PAGE` passato al template:
 
@@ -64,11 +64,11 @@ Lo `slug` è la chiave che collega tutto: `pageContext` del popup, `dolori.js`, 
 
 | Dato | Valore | Dove |
 |------|--------|------|
-| Prezzo e durata | 49€, visita di 1h | `condition-landing/defaults.jsx` |
+| Prezzo e durata | 49€, visita di 1h | `landing/VisitaCtas.jsx`, `PrimaVisitaLanding.jsx` |
 | Prezzo pieno | 90€ | `prenota-visita/PrenotaVisita.jsx` |
-| Posti al mese | 40 | `defaults.jsx`, `POSTI_MESE` in `PrimaVisitaLanding.jsx` |
+| Posti al mese | 40 | `POSTI_MESE` in `PrimaVisitaLanding.jsx` |
 | Totale recensioni | 1000 | `RECENSIONI_TOTALI` in `data/studi.js` |
-| Studi | Via Peyron 54, Via Lamarmora 35 | `data/studi.js`, `defaults.jsx`, `useConditionSeo.js` |
+| Studi | Via Peyron 54, Via Lamarmora 35 | `data/studi.js`, `useConditionSeo.js` |
 
 Se cambia il prezzo, cercalo in tutto `src/`: compare anche nei testi delle singole pagine e nei dati SEO.
 

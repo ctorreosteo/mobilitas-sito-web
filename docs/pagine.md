@@ -52,8 +52,8 @@ Tutte con `Layout hideWhatsApp`, tranne `/osteopata-torino`. Dettagli in [landin
 
 | Route | File | Layout | Note |
 |-------|------|--------|------|
-| `/yt-postura` | `YtPostura` | Sì | Lista d'attesa YouTube, template `ConditionLanding` |
-| `/yt-postura-v2` | `YtPosturaV2` | Sì | Nuova versione, richiesta in `yt-postura-v2/richiesta.js` |
+| `/yt-postura` | `YtPostura` | Sì | Percorso posturale dal video YouTube, richieste in `yt-postura/richiesta.js` (percorso o telefonata gratuita) |
+| `/yt-postura-v2` | — | — | Vecchio indirizzo: porta su `/yt-postura` tenendo i parametri del link |
 | `/iter-selezione-osteopata` | `landing-pages/IterSelezioneOsteopata` | Sì | Video dal gestionale |
 | `/offerta-yt` | `sito-web/OffertaYT` | Sì | Form su Zapier |
 | `/offerta-influencer` | `sito-web/OffertaInfluencer` | Sì | |

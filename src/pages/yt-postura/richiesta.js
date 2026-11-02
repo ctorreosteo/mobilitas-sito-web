@@ -1,7 +1,6 @@
-// Richiesta al gestionale per la landing /yt-postura-v2.
-// Nata come copia della richiesta del popup condiviso (src/components/BookingPopup.jsx, pageContext "yt-postura"):
-// pulizia di nome e numero e indirizzo sono gli stessi. Dal 02/11/2026 i valori (fonte, tag, lead magnet, nota)
-// sono propri di questa landing: vedi costruisciRichiesta. Il popup condiviso non è stato toccato.
+// Richiesta al gestionale per la landing /yt-postura.
+// Nata come copia della richiesta del popup condiviso (src/components/BookingPopup.jsx): pulizia di nome e numero
+// come lì. Dal 02/11/2026 i valori (fonte, tag, lead magnet, nota) sono propri di questa landing: vedi costruisciRichiesta.
 
 import { dimenticaRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 
@@ -66,10 +65,10 @@ export const FASCE_ORARIE = [
 // Il gestionale riduce la nota a una riga (spazi e a capo diventano uno spazio): le parti si separano con « · ».
 export const TIPI_RICHIESTA = {
   percorso: {
-    nota: 'Percorso posturale 299€ · Vuole iniziare subito il percorso (lista d’attesa) · Landing YouTube /yt-postura-v2',
+    nota: 'Percorso posturale 299€ · Vuole iniziare subito il percorso (lista d’attesa) · Landing YouTube /yt-postura',
   },
   consulto: {
-    nota: 'Percorso posturale 299€ · Chiede la telefonata gratuita prima di iniziare · Landing YouTube /yt-postura-v2',
+    nota: 'Percorso posturale 299€ · Chiede la telefonata gratuita prima di iniziare · Landing YouTube /yt-postura',
     leadMagnetString: 'CT_GRATUITA',
     leadMagnetRequestedString: 'CT_GRATUITA',
   },

@@ -1,4 +1,4 @@
-// Anatomia della tavola «Osso o posizione?» (/yt-postura-v2): vista da dietro, proporzioni dell'adulto.
+// Anatomia della tavola «Osso o posizione?» (/yt-postura): vista da dietro, proporzioni dell'adulto.
 // Unità: 1 cm ≈ 3,3. Vertice del capo y≈10, terra y≈597. Asse del corpo x=CX. Il lato destro del disegno è il
 // lato destro della persona (la guardiamo da dietro).
 // Livelli: C7 ≈ 115, T12 ≈ 218, L5 ≈ 272, base del sacro 279, creste iliache 260 (L4), teste del femore 301,

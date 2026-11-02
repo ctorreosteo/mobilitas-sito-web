@@ -4,9 +4,9 @@ import { SCOMPENSI, VISITA, OBIETTIVO, MAPPA, RECENSIONI_CAROSELLO } from './con
 import './foto.css'
 
 // Foto reali dello studio usate come grafica: scompensi su foto allineate, prima visita annotata, obiettivo.
-// Ritagli in public/yt-postura-v2/ (fonti nel brief dell'incarico).
+// Ritagli in public/yt-postura/ (fonti nel brief dell'incarico).
 
-const src = (nome, w) => `/yt-postura-v2/${nome}-${w}.jpg`
+const src = (nome, w) => `/yt-postura/${nome}-${w}.jpg`
 const set = (nome, larghezze) => larghezze.map((w) => `${src(nome, w)} ${w}w`).join(', ')
 
 // Ritagli «scompenso-*»: stessa scala per tutti (sommità del capo al 5%, malleolo al 93% dell'altezza),
@@ -134,7 +134,7 @@ export function MappaTorino({ sedi, scuro = false }) {
   return (
     <figure className="ytp-mappa">
       <div className="ytp-mappa__quadro">
-        <img src={scuro ? '/yt-postura-v2/mappa-sedi-scura.svg' : '/yt-postura-v2/mappa-sedi.svg'} alt="" width="700" height="1008" loading="lazy" decoding="async" />
+        <img src={scuro ? '/yt-postura/mappa-sedi-scura.svg' : '/yt-postura/mappa-sedi.svg'} alt="" width="700" height="1008" loading="lazy" decoding="async" />
         <svg viewBox={`0 0 ${MAP.W} ${MAP.H}`} role="img" aria-label={`Mappa di Torino con le due sedi: ${A.nome}, ${A.via}, e ${B.nome}, ${B.via}, a circa ${km} km in linea d’aria`}>
           <path d={`M${pa[0]},${pa[1]}L${pb[0]},${pb[1]}`} className="ytp-mappa__tratto" />
           <g transform={`translate(${mid[0]}, ${mid[1]})`}>
