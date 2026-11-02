@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import {
   ArrowDown,
@@ -323,6 +323,14 @@ const LavoraConNoi = () => {
     const t = setTimeout(() => setHeroPlay(true), 700)
     return () => clearTimeout(t)
   }, [])
+
+  // Arrivando da una scheda posizione (/lavora-con-noi#posizioni) si va dritti al tabellone
+  const { hash } = useLocation()
+  useEffect(() => {
+    if (hash !== '#posizioni') return
+    const t = setTimeout(scrollToBoard, 150)
+    return () => clearTimeout(t)
+  }, [hash])
 
   return (
     <PageShell className="mx-jobs">

@@ -1,62 +1,60 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { ArrowLeft, ArrowUpRight, Check, Mail, MapPin, Plus, Briefcase, Sparkles } from 'lucide-react'
+import PageShell from '../../../components/site/PageShell'
+import FinalCta from '../../../components/site/FinalCta'
+import { Kicker, MaskLines, Reveal, ScrollWords, Snap } from '../../../components/home-sections/HomeKit'
+import { EASE, trackSpotlight } from '../../../components/home-sections/homeMotion'
+import '../../../styles/pages/posizione.css'
 
-// Scheda di una posizione lavorativa: stesso aspetto delle altre pagine in /posizioni,
-// ma i contenuti arrivano come dati, così ogni nuova posizione è solo un file di testo.
+// Scheda di una posizione lavorativa con il linguaggio visivo del sito (mx).
+// I contenuti arrivano come dati: ogni posizione è un file con soli testi.
+//
+// titoloRighe: righe del titolo come MaskLines ({ text, className })
+// manifesto:   frase grande che si accende scorrendo (stringhe o { text, accent: true })
+// requisiti, graditi, attivita, documenti: voci [titolo, dettaglio]
+// iter: fasi [titolo, testo]
 
-const ICONS = {
-  descrizione:
-    'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-  requisiti:
-    'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z',
-  graditi: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-  attivita:
-    'M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
-  carriera: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
-  iter:
-    'M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
-  candidati: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8',
-}
+const EMAIL = 'colloqui@studiomobilitas.it'
 
-const Icon = ({ path, bg, color }) => (
-  <div className={`w-12 h-12 ${bg} rounded-full flex items-center justify-center mr-4`}>
-    <svg className={`w-6 h-6 ${color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={path} />
-    </svg>
-  </div>
-)
+const webImage = (src, size) => src.replace(/^\/lavori\//, '/lavori/web/').replace(/\.\w+$/, `-${size}.jpg`)
 
-const Card = ({ icon, iconBg, iconColor, title, children, className = 'bg-cream border-gray-100' }) => (
-  <section className="mb-16">
-    <div className={`${className} rounded-2xl p-8 shadow-lg border`}>
-      <div className="flex items-center mb-6">
-        <Icon path={icon} bg={iconBg} color={iconColor} />
-        <h2 className="text-3xl font-bold text-blue-dark font-montserrat">{title}</h2>
+const ListPanel = ({ variant, icon: Icon, title, subtitle, items, delay = 0 }) => (
+  <Reveal className={`mx-panel ${variant}`} delay={delay}>
+    <div className="mx-panel__head">
+      <span className="mx-panel__badge">
+        <Icon size={24} strokeWidth={2.6} />
+      </span>
+      <div>
+        <h3 className="mx-h mx-h--md">{title}</h3>
+        {subtitle && <p className="mx-body mx-small">{subtitle}</p>}
       </div>
-      {children}
     </div>
-  </section>
-)
-
-// Ogni voce è [parte in grassetto, resto della frase]
-const Bullets = ({ items, dot }) => (
-  <div className="space-y-4">
-    {items.map(([bold, rest]) => (
-      <div key={bold} className="flex items-start space-x-3">
-        <div className={`w-2 h-2 ${dot} rounded-full mt-3 flex-shrink-0`}></div>
-        <p className="text-gray-700 font-montserrat leading-relaxed mt-0">
-          <strong className="text-blue-dark">{bold}</strong>
-          {rest ? ` ${rest}` : ''}
-        </p>
-      </div>
-    ))}
-  </div>
+    <ul className="mx-list">
+      {items.map(([t, d], i) => (
+        <li key={t}>
+          <span className="mx-list__n">{String(i + 1).padStart(2, '0')}</span>
+          <span className="mx-list__t">
+            {t}
+            {d && <span className="mx-list__d">{d}</span>}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </Reveal>
 )
 
 const SchedaPosizione = ({
   titolo,
+  titoloRighe,
   immagine,
+  posizioneImmagine = 'center',
   tipo,
   luogo,
+  stato = 'open',
+  lead,
+  manifesto,
   descrizione,
   requisiti,
   graditi,
@@ -64,151 +62,314 @@ const SchedaPosizione = ({
   carriera,
   iter,
   documenti,
-}) => (
-  <div className="min-h-screen bg-gray-50">
-    {/* Header */}
-    <div className="bg-cream pt-20 pb-8 border-b border-gray-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <div className="mb-6">
-            <img
-              src={immagine}
-              alt={titolo}
-              className="w-32 h-32 object-cover rounded-full mx-auto border-4 border-sky-100"
-            />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-dark font-montserrat mb-4">{titolo}</h1>
-          <div className="flex items-center justify-center space-x-4 text-gray-600 font-montserrat">
-            <span className="bg-sky-100 px-3 py-1 rounded-full text-sm">{tipo}</span>
-            <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">{luogo}</span>
-          </div>
+}) => {
+  const aperta = stato === 'open'
+  const oggetto = `Candidatura ${titolo} - Nome Cognome`
+  const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(oggetto)}`
+
+  return (
+    <PageShell className="mx-pos">
+      {/* HERO */}
+      <section className="mx-phero has-media mx-pos-hero">
+        <div className="mx-aurora" aria-hidden="true">
+          <span />
+          <span />
+          <span />
         </div>
-      </div>
-    </div>
+        <div className="mx-hero__grid-lines" aria-hidden="true" />
 
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <Card icon={ICONS.descrizione} iconBg="bg-sky-100" iconColor="text-sky-600" title="Descrizione della posizione lavorativa">
-        <div className="prose prose-lg max-w-none">
-          {descrizione.map((p, i) => (
-            <p key={i} className="text-gray-700 font-montserrat leading-relaxed mb-4 mt-0">
-              {p}
-            </p>
-          ))}
-        </div>
-      </Card>
-
-      <Card icon={ICONS.requisiti} iconBg="bg-red-100" iconColor="text-red-600" title="Requisiti obbligatori">
-        <Bullets items={requisiti} dot="bg-red-500" />
-      </Card>
-
-      {graditi?.length > 0 && (
-        <Card icon={ICONS.graditi} iconBg="bg-green-100" iconColor="text-green-600" title="Requisiti aggiuntivi graditi">
-          <Bullets items={graditi} dot="bg-green-500" />
-        </Card>
-      )}
-
-      <Card icon={ICONS.attivita} iconBg="bg-orange-100" iconColor="text-orange-600" title="Attività principali">
-        <Bullets items={attivita} dot="bg-orange-500" />
-      </Card>
-
-      <Card icon={ICONS.carriera} iconBg="bg-blue-100" iconColor="text-blue-600" title="Possibilità di carriera">
-        <div className="space-y-6">
-          <div className="bg-gradient-to-r from-sky-50 to-blue-50 p-6 rounded-xl border border-sky-200">
-            <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-3 mt-0">🚀 {carriera.titolo}</h3>
-            <p className="text-gray-700 font-montserrat leading-relaxed mt-0">{carriera.testo}</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-cream border border-gray-200 p-6 rounded-xl">
-              <h4 className="text-lg font-bold text-blue-dark font-montserrat mb-3 mt-0">📈 Percorsi di sviluppo</h4>
-              <ul className="space-y-2 text-gray-700 font-montserrat">
-                {carriera.percorsi.map((x) => (
-                  <li key={x}>{x}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-cream border border-gray-200 p-6 rounded-xl">
-              <h4 className="text-lg font-bold text-blue-dark font-montserrat mb-3 mt-0">💼 Competenze da sviluppare</h4>
-              <ul className="space-y-2 text-gray-700 font-montserrat">
-                {carriera.competenze.map((x) => (
-                  <li key={x}>{x}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-            <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-3 mt-0">
-              🎯 Opportunità gestionali e/o imprenditoriali
-            </h3>
-            <p className="text-gray-700 font-montserrat leading-relaxed mt-0">
-              Per i collaboratori più meritevoli, Mobilitas offre la possibilità di accedere a ruoli gestionali e
-              direzionali, entrare in società e/o sviluppare progetti imprenditoriali insieme, con accesso a know-how,
-              risorse umane qualificate e capitali per realizzare le idee.
-            </p>
-          </div>
-        </div>
-      </Card>
-
-      <Card icon={ICONS.iter} iconBg="bg-purple-100" iconColor="text-purple-600" title="Iter di selezione">
-        <div className="mb-6">
-          <p className="text-gray-700 font-montserrat leading-relaxed text-lg">
-            Il processo di selezione si articolerà in <strong className="text-blue-dark">{iter.length} fasi</strong>:
-          </p>
-        </div>
-        <div className="space-y-6">
-          {iter.map(([titoloFase, testo], i) => (
-            <div key={titoloFase} className="flex items-start space-x-4">
-              <div
-                className={`w-8 h-8 ${i === iter.length - 1 ? 'bg-green-600' : 'bg-sky-600'} text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 mt-1`}
-              >
-                {i + 1}
+        <div className="mx-wrap mx-phero__layout">
+          <div className="mx-phero__copy">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}>
+              <Kicker>Lavora con noi</Kicker>
+              <div className="mx-tags">
+                <span className={`mx-tag ${aperta ? '' : 'is-closed'}`}>
+                  <span className="mx-pos-live" aria-hidden="true" />
+                  {aperta ? 'Posizione aperta' : 'Posizione chiusa'}
+                </span>
+                <span className="mx-tag">
+                  <Briefcase size={15} aria-hidden="true" />
+                  {tipo}
+                </span>
+                <span className="mx-tag">
+                  <MapPin size={15} aria-hidden="true" />
+                  {luogo}
+                </span>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-blue-dark font-montserrat mb-2 mt-0">{titoloFase}</h3>
-                <p className="text-gray-700 font-montserrat leading-relaxed mt-0">{testo}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      <Card
-        icon={ICONS.candidati}
-        iconBg="bg-sky-600"
-        iconColor="text-white"
-        title="Come candidarti"
-        className="bg-gradient-to-br from-sky-50 to-blue-50 border-sky-200"
-      >
-        <div className="space-y-6">
-          <div className="bg-cream p-6 rounded-xl border border-sky-200">
-            <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-4 mt-0">📧 Modalità di invio</h3>
-            <div className="space-y-3">
-              <p className="text-gray-700 font-montserrat mt-0">
-                <strong>Email:</strong>
-                <a href="mailto:colloqui@studiomobilitas.it" className="text-sky-600 hover:text-sky-700 ml-2">
-                  colloqui@studiomobilitas.it
+            </motion.div>
+            <h1 className="mx-h mx-h--xl">
+              <MaskLines immediate delay={0.2} lines={titoloRighe} />
+            </h1>
+            <motion.p
+              className="mx-lead mx-phero__lead"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.55 }}
+            >
+              {lead}
+            </motion.p>
+            <motion.div
+              className="mx-phero__extra"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.7 }}
+            >
+              <div className="mx-ctas">
+                <a className="mx-btn mx-btn--primary" href="#candidati">
+                  <span>
+                    <small>{aperta ? 'Ci siamo' : 'Candidatura spontanea'}</small>
+                    Candidati ora
+                  </span>
+                  <span className="mx-btn__icon">
+                    <ArrowUpRight size={20} strokeWidth={2.4} />
+                  </span>
                 </a>
-              </p>
-              <p className="text-gray-700 font-montserrat mt-0">Inviaci il tuo CV e i documenti richiesti</p>
-              <p className="text-gray-700 font-montserrat mt-0">
-                <strong>Oggetto:</strong> Candidatura {titolo} - [Nome Cognome]
-              </p>
-            </div>
+                <Link className="mx-btn mx-btn--ghost" to="/lavora-con-noi#posizioni">
+                  <span>
+                    <small>Lavora con noi</small>
+                    Tutte le posizioni
+                  </span>
+                  <span className="mx-btn__icon">
+                    <ArrowLeft size={20} strokeWidth={2.4} />
+                  </span>
+                </Link>
+              </div>
+            </motion.div>
           </div>
-          <div className="bg-cream p-6 rounded-xl border border-sky-200">
-            <h3 className="text-xl font-bold text-blue-dark font-montserrat mb-4 mt-0">📋 Documenti richiesti</h3>
-            <ul className="space-y-2 text-gray-700 font-montserrat">
-              {documenti.map(([bold, rest]) => (
-                <li key={bold}>
-                  <strong>{bold}</strong>
-                  {rest ? ` ${rest}` : ''}
-                </li>
-              ))}
-            </ul>
+
+          <motion.div
+            className="mx-arch mx-phero__media"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.3, ease: EASE, delay: 0.35 }}
+          >
+            <div className="mx-arch__halo" aria-hidden="true" />
+            <div className="mx-arch__frame">
+              <img
+                src={webImage(immagine, 1200)}
+                srcSet={`${webImage(immagine, 700)} 700w, ${webImage(immagine, 1200)} 1200w`}
+                sizes="(min-width: 1024px) 420px, 84vw"
+                alt={titolo}
+                decoding="async"
+                style={{ objectPosition: posizioneImmagine }}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* LA POSIZIONE */}
+      <section className="mx-section mx-section--deep">
+        <div className="mx-wrap">
+          <Kicker n="01">La posizione</Kicker>
+          <ScrollWords className="mx-manifesto" parts={manifesto} />
+          <div className="mx-split mx-pos-desc">
+            {descrizione.map((col, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                {col.map((p) => (
+                  <p key={p} className="mx-body">
+                    {p}
+                  </p>
+                ))}
+              </Reveal>
+            ))}
           </div>
         </div>
-      </Card>
-    </div>
-  </div>
-)
+      </section>
+
+      {/* CHI CERCHIAMO */}
+      <section className="mx-section mx-section--glow">
+        <div className="mx-wrap">
+          <Kicker n="02">Chi cerchiamo</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines lines={[{ text: 'Il profilo' }, { text: 'giusto per noi.', className: 'mx-outline' }]} />
+          </h2>
+          <div className="mx-audience">
+            <ListPanel variant="mx-panel--yes" icon={Check} title="Requisiti obbligatori" subtitle="Da avere fin da subito" items={requisiti} />
+            {graditi?.length > 0 && (
+              <ListPanel
+                variant="mx-pos-panel--plus"
+                icon={Plus}
+                title="Requisiti graditi"
+                subtitle="Non indispensabili, ma fanno la differenza"
+                items={graditi}
+                delay={0.12}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ATTIVITÀ */}
+      <section className="mx-section mx-section--deep">
+        <div className="mx-wrap">
+          <Kicker n="03">Cosa farai</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines lines={[{ text: 'Le tue giornate' }, { text: 'in Mobilitas.', className: 'mx-gradient' }]} />
+          </h2>
+          <Snap className="mx-cards3 mx-pos-tasks">
+            {attivita.map(([t, d], i) => (
+              <Reveal key={t} delay={(i % 3) * 0.08} className="mx-card" onMouseMove={trackSpotlight}>
+                <span className="mx-pos-task__n" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mx-h mx-h--sm">{t}</h3>
+                {d && <p className="mx-body">{d}</p>}
+              </Reveal>
+            ))}
+          </Snap>
+        </div>
+      </section>
+
+      {/* CARRIERA */}
+      <section className="mx-section mx-section--glow">
+        <div className="mx-wrap">
+          <Kicker n="04">La tua crescita</Kicker>
+          <div className="mx-split" style={{ marginTop: 0, alignItems: 'end' }}>
+            <h2 className="mx-h mx-h--lg">
+              <MaskLines lines={[{ text: 'Una carriera' }, { text: 'senza soffitti.', className: 'mx-accent' }]} />
+            </h2>
+            <Reveal>
+              <p className="mx-lead">{carriera.testo}</p>
+            </Reveal>
+          </div>
+
+          <div className="mx-pos-career">
+            <Reveal className="mx-panel mx-panel--yes">
+              <div className="mx-panel__head">
+                <span className="mx-panel__badge">
+                  <ArrowUpRight size={24} strokeWidth={2.6} />
+                </span>
+                <div>
+                  <h3 className="mx-h mx-h--md">Percorsi di sviluppo</h3>
+                  <p className="mx-body mx-small">Dove puoi arrivare</p>
+                </div>
+              </div>
+              <ul className="mx-list mx-pos-ladder">
+                {carriera.percorsi.map((p, i) => (
+                  <li key={p}>
+                    <span className="mx-list__n">{i + 1}</span>
+                    <span className="mx-list__t">{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+
+            <Reveal className="mx-panel mx-pos-skills" delay={0.12}>
+              <div className="mx-panel__head">
+                <span className="mx-card__icon" style={{ margin: 0 }}>
+                  <Sparkles size={24} />
+                </span>
+                <div>
+                  <h3 className="mx-h mx-h--md">Competenze da sviluppare</h3>
+                  <p className="mx-body mx-small">Quello che impari con noi</p>
+                </div>
+              </div>
+              <div className="mx-tags">
+                {carriera.competenze.map((c) => (
+                  <span key={c} className="mx-tag">
+                    <Check size={15} aria-hidden="true" />
+                    {c}
+                  </span>
+                ))}
+              </div>
+              <div className="mx-pos-skills__foot">
+                <h4 className="mx-h mx-h--sm">Opportunità gestionali e imprenditoriali</h4>
+                <p className="mx-body">
+                  Per i collaboratori più meritevoli: ruoli gestionali e direzionali, ingresso in società e progetti
+                  imprenditoriali insieme, con know-how, risorse umane qualificate e capitali alle spalle.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ITER DI SELEZIONE */}
+      <section className="mx-section mx-section--deep">
+        <div className="mx-wrap">
+          <Kicker n="05">Iter di selezione</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines lines={[{ text: `${iter.length} passi` }, { text: 'e sei dei nostri.', className: 'mx-gradient' }]} />
+          </h2>
+          <div className="mx-journey">
+            <div className="mx-journey__track" aria-hidden="true">
+              <motion.i
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, margin: '0px 0px -20% 0px' }}
+                transition={{ duration: 1.8, ease: EASE }}
+              />
+            </div>
+            {iter.map(([t, testo], i) => (
+              <Reveal key={t} className="mx-step" delay={0.2 + i * 0.25}>
+                <span className="mx-step__dot">0{i + 1}</span>
+                <h4 className="mx-h mx-h--sm">{t}</h4>
+                <p className="mx-body">{testo}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COME CANDIDARTI */}
+      <section className="mx-section mx-section--glow" id="candidati">
+        <div className="mx-wrap">
+          <Kicker n="06">Come candidarti</Kicker>
+          <h2 className="mx-h mx-h--lg">
+            <MaskLines lines={[{ text: 'Scrivici.' }, { text: 'Ti rispondiamo noi.', className: 'mx-outline' }]} />
+          </h2>
+          <div className="mx-pos-apply">
+            <Reveal className="mx-panel mx-panel--yes">
+              <div className="mx-panel__head">
+                <span className="mx-panel__badge">
+                  <Mail size={24} strokeWidth={2.6} />
+                </span>
+                <div>
+                  <h3 className="mx-h mx-h--md">Invia la candidatura</h3>
+                  <p className="mx-body mx-small">CV e documenti via email</p>
+                </div>
+              </div>
+              <span className="mx-pos-label">Email</span>
+              <a className="mx-pos-mail" href={mailto}>
+                {EMAIL}
+              </a>
+              <span className="mx-pos-label">Oggetto</span>
+              <p className="mx-pos-subject">{oggetto}</p>
+            </Reveal>
+            <ListPanel variant="mx-pos-panel--plus" icon={Check} title="Documenti richiesti" subtitle="Da allegare all'email" items={documenti} delay={0.12} />
+          </div>
+        </div>
+      </section>
+
+      <FinalCta
+        kicker="Il futuro del lavoro"
+        titleLines={[{ text: 'Il futuro si' }, { text: 'costruisce' }, { text: 'insieme.', className: 'mx-gradient' }]}
+        text="Unisciti a un team che crede nel talento, nella crescita e nell'innovazione."
+      >
+        <div className="mx-ctas">
+          <a className="mx-btn mx-btn--primary" href={mailto}>
+            <span>
+              <small>{titolo}</small>
+              Invia la candidatura
+            </span>
+            <span className="mx-btn__icon">
+              <Mail size={20} strokeWidth={2.4} />
+            </span>
+          </a>
+          <Link to="/lavora-con-noi#posizioni" className="mx-btn mx-btn--ghost">
+            <span>
+              <small>Non fa per te?</small>
+              Altre posizioni
+            </span>
+            <span className="mx-btn__icon">
+              <ArrowUpRight size={20} strokeWidth={2.4} />
+            </span>
+          </Link>
+        </div>
+      </FinalCta>
+    </PageShell>
+  )
+}
 
 export default SchedaPosizione
