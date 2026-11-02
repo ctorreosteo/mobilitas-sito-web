@@ -10,20 +10,20 @@ import { FASCE_ORARIE, PAGINA_CONFERMA, costruisciRichiesta, inviaRichiesta } fr
 
 const _MOTION = motion
 
-// «consulto» è l'unica modalità usata dalla pagina (telefonata gratuita, CT_GRATUITA).
-// «primaVisita» (lista d'attesa) resta qui com'era, ma nessun pulsante la apre: la lista non è configurata.
+// Due richieste diverse (richiesta.js, TIPI_RICHIESTA): «percorso» (iniziare subito il percorso, lista d'attesa)
+// e «consulto» (telefonata gratuita prima di iniziare).
 const TESTI = {
-  consulto: {
+  percorso: {
     sopra: 'Percorso posturale · 299€',
     title: 'Inizia il percorso',
-    subtext: 'Ti chiamiamo noi, gratis. Non paghi niente in anticipo.',
-    cta: 'Richiedi la telefonata gratuita',
+    subtext: 'Ti chiamiamo noi per fissare la prima visita. Paghi solo dopo la prima visita.',
+    cta: 'Richiedi il percorso',
   },
-  primaVisita: {
-    sopra: 'Lista d’attesa',
-    title: 'Mettiti in lista',
-    subtext: 'Oggi non paghi. Ti richiamiamo noi il prima possibile.',
-    cta: 'Mettiti in lista',
+  consulto: {
+    sopra: 'Telefonata gratuita',
+    title: 'Richiedi la telefonata',
+    subtext: 'Ti chiamiamo noi, gratis e senza impegno, per capire se il percorso fa per te.',
+    cta: 'Richiedi la telefonata gratuita',
   },
 }
 
@@ -47,10 +47,10 @@ function controlla(form) {
 // Curve e tempi (skill di Emil Kowalski): entrata a curva «drawer», uscita più rapida.
 const CURVA = [0.32, 0.72, 0, 1]
 
-export default function Prenotazione({ isOpen, onClose, ctaType = 'primaVisita' }) {
+export default function Prenotazione({ isOpen, onClose, ctaType = 'percorso' }) {
   const navigate = useNavigate()
   const riduci = useReducedMotion()
-  const testi = TESTI[ctaType] ?? TESTI.primaVisita
+  const testi = TESTI[ctaType] ?? TESTI.percorso
   const id = useId()
   const [form, setForm] = useState(VUOTO)
   const [errori, setErrori] = useState({})

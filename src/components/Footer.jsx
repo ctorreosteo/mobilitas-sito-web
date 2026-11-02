@@ -13,6 +13,10 @@ const BOOKING_HREF =
   'https://wa.me/393518198457?text=' +
   encodeURIComponent('Ciao, vorrei effettuare una breve consulenza conoscitiva telefonica per comprendere se potete essermi di aiuto. Quando ci sarebbe posto? Grazie')
 
+// Evento che il bottone grande del footer manda quando la pagina vuole aprire il proprio modulo di consulto
+// al posto di WhatsApp (Layout footerCtaEvent). Oggi lo usa /yt-postura-v2.
+export const APRI_CONSULTO = 'mobilitas:apri-consulto'
+
 const TikTokIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
     <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-2.59-2.59 2.59 2.59 0 0 1 3.36-2.47V9.68a5.68 5.68 0 0 0-.77-.05A5.69 5.69 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.25-1.48z" />
@@ -46,7 +50,7 @@ const reveal = (delay = 0) => ({
   transition: { duration: 0.9, ease: EASE, delay },
 })
 
-export default function Footer({ hideCta = false }) {
+export default function Footer({ hideCta = false, ctaEvent }) {
   const year = new Date().getFullYear()
 
   const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -65,14 +69,30 @@ export default function Footer({ hideCta = false }) {
         {!hideCta && (
           <motion.div className="mx-footer__cta" {...reveal()}>
             <p className="mx-footer__kicker">Il primo passo</p>
-            <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-footer__big">
-              <span className="mx-footer__big-text" data-text="Prenota un consulto gratuito">
-                Prenota un consulto gratuito
-              </span>
-              <span className="mx-footer__big-icon">
-                <ArrowUpRight strokeWidth={2.4} />
-              </span>
-            </a>
+            {/* Con ctaEvent la pagina apre il suo modulo di consulto; altrimenti WhatsApp */}
+            {ctaEvent ? (
+              <button
+                type="button"
+                className="mx-footer__big mx-footer__big--btn"
+                onClick={() => window.dispatchEvent(new CustomEvent(ctaEvent))}
+              >
+                <span className="mx-footer__big-text" data-text="Prenota un consulto gratuito">
+                  Prenota un consulto gratuito
+                </span>
+                <span className="mx-footer__big-icon">
+                  <ArrowUpRight strokeWidth={2.4} />
+                </span>
+              </button>
+            ) : (
+              <a href={BOOKING_HREF} target="_blank" rel="noopener noreferrer" className="mx-footer__big">
+                <span className="mx-footer__big-text" data-text="Prenota un consulto gratuito">
+                  Prenota un consulto gratuito
+                </span>
+                <span className="mx-footer__big-icon">
+                  <ArrowUpRight strokeWidth={2.4} />
+                </span>
+              </a>
+            )}
             <div className="mx-footer__direct">
               <a href={PHONE_HREF}>
                 <Phone size={18} />

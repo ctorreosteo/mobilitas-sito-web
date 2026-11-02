@@ -12,9 +12,11 @@ import {
   CAPITOLI_TITOLI,
 } from './yt-postura-v2/contenuti'
 import Prenotazione from './yt-postura-v2/Prenotazione'
+import { APRI_CONSULTO } from '../components/Footer'
 import { TavolaTesta, TavolaFilo, TavolaOsso, FiguraAllineata } from './yt-postura-v2/Tavole'
-import { Scompensi, Visita, Obiettivo, Carosello, MappaTorino } from './yt-postura-v2/Foto'
+import { Scompensi, Visita, Obiettivo, Carosello, MappaTorino, BottoneMaps } from './yt-postura-v2/Foto'
 import './yt-postura-v2/landing.css'
+import './yt-postura-v2/sito.css'
 
 // Come in YtPostura.jsx: la configurazione ESLint del sito non vede gli usi nel JSX.
 const _MOTION = motion
@@ -141,7 +143,7 @@ function YtPosturaV2() {
   const scuro = tema === 'scuro'
   const { video } = useVideoYtPosturaVsl()
   const [showBooking, setShowBooking] = useState(false)
-  const [bookingCtaType, setBookingCtaType] = useState('consulto')
+  const [bookingCtaType, setBookingCtaType] = useState('percorso')
   const [videoCover, setVideoCover] = useState(true)
   const [spuntati, setSpuntati] = useState(() => new Set())
   const [raggiunto, setRaggiunto] = useState(-1)
@@ -484,12 +486,21 @@ function YtPosturaV2() {
     }
   }, [])
 
-  // Una sola richiesta: telefonata gratuita (modalità «consulto» del modulo → CT_GRATUITA).
-  // La lista d'attesa non è configurata: nessun pulsante la apre.
+  // Due richieste diverse: «Inizia il percorso» → percorso (lista d'attesa del percorso);
+  // «Richiedi la telefonata» → telefonata gratuita (CT_GRATUITA). Vedi yt-postura-v2/richiesta.js.
   const richiedi = useCallback(() => {
+    setBookingCtaType('percorso')
+    setShowBooking(true)
+  }, [])
+  const richiediTelefonata = useCallback(() => {
     setBookingCtaType('consulto')
     setShowBooking(true)
   }, [])
+  // «Prenota un consulto gratuito» nel footer: stessa richiesta della telefonata gratuita, niente WhatsApp.
+  useEffect(() => {
+    window.addEventListener(APRI_CONSULTO, richiediTelefonata)
+    return () => window.removeEventListener(APRI_CONSULTO, richiediTelefonata)
+  }, [richiediTelefonata])
 
   // Link secondari: portano a una sezione della pagina (niente movimento con «riduci movimento»).
   const vaiA = useCallback((id) => {
@@ -915,7 +926,7 @@ function YtPosturaV2() {
                       <button
                         type="button"
                         className={`ytp-cta ytp-cta--block ${lista ? 'ytp-cta--green' : 'ytp-cta--line'}`}
-                        onClick={richiedi}
+                        onClick={lista ? richiedi : richiediTelefonata}
                       >
                         {lista ? CTA : 'Richiedi la telefonata'}
                       </button>
@@ -961,16 +972,12 @@ function YtPosturaV2() {
                   <div className="ytp-place">
                     <p className="ytp-place__name">Via Peyron 54</p>
                     <p className="ytp-place__area">San Donato</p>
-                    <a className="ytp-link" href={MAPPE.sanDonato} target="_blank" rel="noopener noreferrer">
-                      Apri in Google Maps
-                    </a>
+                    <BottoneMaps href={MAPPE.sanDonato} />
                   </div>
                   <div className="ytp-place">
                     <p className="ytp-place__name">Via Lamarmora 35</p>
                     <p className="ytp-place__area">Crocetta</p>
-                    <a className="ytp-link" href={MAPPE.crocetta} target="_blank" rel="noopener noreferrer">
-                      Apri in Google Maps
-                    </a>
+                    <BottoneMaps href={MAPPE.crocetta} />
                   </div>
                 </div>
                 <div className="ytp-places__notes">

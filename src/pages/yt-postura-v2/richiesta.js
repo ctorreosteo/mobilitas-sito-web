@@ -1,13 +1,22 @@
 // Richiesta al gestionale per la landing /yt-postura-v2.
-// È la STESSA richiesta che il popup condiviso (src/components/BookingPopup.jsx) invia per pageContext "yt-postura":
-// stesso indirizzo, stessi campi, stessi valori. Copiata riga per riga (riferimenti accanto) per non toccare il
-// componente condiviso, come autorizzato dal titolare il 21/10/2026.
-// Se cambia la logica del popup condiviso per "yt-postura", va aggiornata anche qui.
+// Nata come copia della richiesta del popup condiviso (src/components/BookingPopup.jsx, pageContext "yt-postura"):
+// pulizia di nome e numero e indirizzo sono gli stessi. Dal 02/11/2026 i valori (fonte, tag, lead magnet, nota)
+// sono propri di questa landing: vedi costruisciRichiesta. Il popup condiviso non è stato toccato.
 
 import { dimenticaRichiesta } from '../../components/prenota-visita/richiestaSalvata'
 
-// BookingPopup.jsx:20
-export const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
+// Gestionale pubblicato (lo stesso indirizzo che usa il sito online: hq.studiomobilitas.it/api non è il gestionale,
+// risponde con la pagina web).
+const GESTIONALE_PUBBLICATO = 'https://mobilitas-backend-990845221858.europe-west8.run.app'
+
+// Dove vanno le richieste di questa landing, anche in locale (npm run dev): il gestionale pubblicato, così le prove
+// arrivano dove lavora lo studio (scelta del titolare, 02/11/2026). Attenzione: sono richieste vere.
+// Per mandarle al gestionale locale (localhost:8080, tramite il proxy di Vite) aprire la pagina con ?gestionale=locale.
+const gestionaleLocale = () =>
+  import.meta.env.DEV &&
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('gestionale') === 'locale'
+export const apiRichieste = () => (gestionaleLocale() ? '' : import.meta.env.VITE_API_BASE || GESTIONALE_PUBBLICATO)
 
 // BookingPopup.jsx:7-11
 export const cleanName = (name) => {
@@ -47,42 +56,48 @@ export const FASCE_ORARIE = [
   { value: 'qualsiasi', testo: 'Qualsiasi orario', nome: 'Qualsiasi orario', ore: '' },
 ]
 
-// Corpo della richiesta: BookingPopup.jsx:223-299 con pageContext = 'yt-postura'.
-//   isLandingVisita('yt-postura') = true  → con ctaType 'consulto' il lead magnet è CT_GRATUITA,
-//   altrimenti LISTA_ATTESA_YT_POSTURA; isPainLanding = false (nessun leadMagnetRequestedString);
-//   fonte YOUTUBE, campagna «YouTube | Percorso posturale», tag «Lista attesa percorso YouTube»;
-//   fonte sempre YOUTUBE, anche con ID degli annunci nell'URL (che si inviano se presenti).
-//
-// Modifiche del 22/10/2026, su parametri confermati dal titolare, solo per la telefonata gratuita («consulto»,
-// l'unica modalità usata dalla pagina):
-//   - campagna lasciata vuota (non inviata: la landing GPadel già non la invia, quindi il gestionale la accetta);
-//   - leadMagnetRequestedString 'CT_GRATUITA' (le landing sul dolore lo inviano già con lo stesso valore).
-// IN SOSPESO, da verificare sul gestionale prima di attivarli (nessuna pagina del sito li usa oggi):
-//   fonteString 'CONTENT' (oggi resta 'YOUTUBE') e tags ['TAG_DOLORE_POSTURA'] (il sito invia sempre «tag»,
-//   testo singolo; resta quello di yt-postura).
-export function costruisciRichiesta(form, ctaType) {
+// Corpo della richiesta. Due tipi, decisi dal titolare il 02/11/2026:
+//   - «percorso»: chi chiede subito di iniziare il percorso da 299€ (lista d'attesa del percorso);
+//   - «consulto»: chi chiede prima la telefonata gratuita.
+// Uguale per entrambi: fonte CONTENT, tag TAG_DOLORE_POSTURA, nota che dice sempre da dove arriva e cosa chiede.
+// Lead magnet: CT_GRATUITA solo per la telefonata; il percorso per ora non ne ha (scelta in sospeso del titolare).
+// Il gestionale cerca fonte e lead magnet per nome e ignora in silenzio i nomi che non esistono
+// (RichiestaController, findByNome): usare solo nomi presenti nel gestionale.
+// Il gestionale riduce la nota a una riga (spazi e a capo diventano uno spazio): le parti si separano con « · ».
+export const TIPI_RICHIESTA = {
+  percorso: {
+    nota: 'Percorso posturale 299€ · Vuole iniziare subito il percorso (lista d’attesa) · Landing YouTube /yt-postura-v2',
+  },
+  consulto: {
+    nota: 'Percorso posturale 299€ · Chiede la telefonata gratuita prima di iniziare · Landing YouTube /yt-postura-v2',
+    leadMagnetString: 'CT_GRATUITA',
+    leadMagnetRequestedString: 'CT_GRATUITA',
+  },
+}
+
+export function costruisciRichiesta(form, tipo) {
+  const t = TIPI_RICHIESTA[tipo] ?? TIPI_RICHIESTA.percorso
   const fascia = FASCE_ORARIE.find((f) => f.value === form.orarioChiamata)
   const orarioText = fascia ? fascia.testo : form.orarioChiamata
   const { prefissoCellulare, cellulare } = parseCellulare(form.cellulare)
-  const consulto = ctaType === 'consulto'
   return {
     nome: cleanName(form.nome),
     cognome: cleanName(form.cognome),
     prefissoCellulare,
     cellulare,
     statusRichiesta: 'LEAD',
-    fonteString: 'YOUTUBE',
-    leadMagnetString: consulto ? 'CT_GRATUITA' : 'LISTA_ATTESA_YT_POSTURA',
-    ...(consulto ? { leadMagnetRequestedString: 'CT_GRATUITA' } : { campagna: 'YouTube | Percorso posturale' }),
-    tag: 'Lista attesa percorso YouTube',
-    note: orarioText ? `Orario richiesta: ${orarioText}` : undefined,
+    fonteString: 'CONTENT',
+    ...(t.leadMagnetString && { leadMagnetString: t.leadMagnetString }),
+    ...(t.leadMagnetRequestedString && { leadMagnetRequestedString: t.leadMagnetRequestedString }),
+    tags: ['TAG_DOLORE_POSTURA'],
+    note: orarioText ? `${t.nota} · Orario richiesta: ${orarioText}` : t.nota,
   }
 }
 
 // Invio: BookingPopup.jsx:302-312. Pagina di conferma dopo il successo: BookingPopup.jsx:319.
 export const PAGINA_CONFERMA = '/conferma-richiesta'
 export async function inviaRichiesta(body) {
-  const response = await fetch(`${API_BASE}/api/richieste`, {
+  const response = await fetch(`${apiRichieste()}/api/richieste`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

@@ -1,0 +1,280 @@
+/* /yt-postura-v2 — allineamento al linguaggio visivo del sito (src/styles/mx.css).
+   Solo colori e finiture: testi, impaginazione e tavole restano quelli della landing.
+   - fasce alternate blu del marchio (con aloni azzurro e verde) e blu notte, come home e /cervicalgia
+   - grana pellicola su tutta la pagina
+   - parole forti dei titoli in sfumatura verde → azzurro
+   - bottoni, riquadri e foto con le forme del sito (pillole luminose, angoli 28 px, bordi sottili)
+   Vale solo con il tema scuro (predefinito). */
+
+.ytp.ytp--scuro {
+  --mx-navy: #002552;
+  --mx-ink: #000f2b;
+  --mx-sky: #38bdf8;
+  --mx-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --mx-line: rgb(244 244 244 / 0.12);
+  --fondo: var(--mx-navy);
+  background: var(--mx-navy);
+  isolation: isolate;
+}
+
+/* Grana pellicola, la stessa del sito */
+.ytp.ytp--scuro::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ——— Fasce ———
+   Passaggi morbidi: ogni fascia sfuma, in alto e in basso, verso il colore della fascia vicina. Tra chiara e
+   blu notte entrambe sfumano verso un blu di mezzo (--mx-seam), così non c'è un taglio netto; tra due fasce
+   chiare sfumano verso il blu del marchio, così gli aloni non si interrompono sul bordo. */
+.ytp.ytp--scuro { --mx-seam: #001a3e; --mx-fade: clamp(8rem, 6rem + 8vw, 16rem); }
+.ytp.ytp--scuro > section:not(.ytp-hero) {
+  --t: var(--mx-navy);
+  --b: var(--mx-navy);
+  --fades:
+    linear-gradient(180deg, var(--t) 0, rgb(0 37 82 / 0) var(--mx-fade)),
+    linear-gradient(0deg, var(--b) 0, rgb(0 37 82 / 0) var(--mx-fade));
+}
+/* Fasce chiare: blu del marchio con alone azzurro e alone verde (mx-section--glow), specchiati a fasce alterne. */
+.ytp.ytp--scuro > section:not(.ytp-hero) {
+  background:
+    var(--fades),
+    radial-gradient(60% 50% at 85% 10%, rgb(56 189 248 / 0.14), transparent 70%),
+    radial-gradient(50% 45% at 0% 90%, rgb(114 250 147 / 0.09), transparent 70%),
+    var(--mx-navy);
+}
+.ytp.ytp--scuro > section:not(.ytp-hero):nth-of-type(odd) {
+  background:
+    var(--fades),
+    radial-gradient(60% 50% at 15% 10%, rgb(56 189 248 / 0.12), transparent 70%),
+    radial-gradient(50% 45% at 100% 90%, rgb(114 250 147 / 0.08), transparent 70%),
+    var(--mx-navy);
+}
+/* Fasce blu notte (meccanismo, prezzo, chiusura): il fondo «deep» del sito. */
+.ytp.ytp--scuro > section.ytp-dark {
+  --blue: var(--mx-ink);
+  --t: var(--mx-seam);
+  --b: var(--mx-seam);
+  background:
+    var(--fades),
+    radial-gradient(55% 45% at 50% 15%, rgb(56 189 248 / 0.08), transparent 70%),
+    var(--mx-ink);
+}
+/* L'ultima fascia blu notte finisce sul piè di pagina: lì resta blu notte. */
+.ytp.ytp--scuro > section.ytp-close { --b: var(--mx-ink); }
+/* Fasce chiare accanto a una blu notte: il bordo in comune sfuma verso il blu di mezzo. */
+.ytp.ytp--scuro > section.ytp-dark + section:not(.ytp-dark) { --t: var(--mx-seam); }
+.ytp.ytp--scuro > section:not(.ytp-dark):has(+ section.ytp-dark) { --b: var(--mx-seam); }
+
+/* Apertura: blu del marchio con le luci dell'apertura della home. */
+.ytp.ytp--scuro .ytp-hero__top,
+.ytp.ytp--scuro .ytp .ytp-offer,
+.ytp.ytp--scuro .ytp-offer.ytp-dark { background: var(--mx-navy); }
+.ytp.ytp--scuro .ytp-hero__photo::after { background: linear-gradient(180deg, rgb(0 37 82 / 0) 80%, var(--mx-navy) 100%); }
+.ytp.ytp--scuro .ytp-hero__more {
+  background:
+    linear-gradient(0deg, var(--mx-navy) 0, rgb(0 37 82 / 0) 6rem),
+    radial-gradient(60% 50% at 100% 70%, rgb(56 189 248 / 0.12), transparent 70%),
+    var(--mx-navy);
+}
+@media (min-width: 64rem) {
+  .ytp.ytp--scuro .ytp-hero {
+    background:
+      linear-gradient(0deg, var(--mx-navy) 0, rgb(0 37 82 / 0) var(--mx-fade)),
+      radial-gradient(45% 55% at 8% 0%, rgb(14 165 233 / 0.22), transparent 70%),
+      radial-gradient(40% 45% at 30% 100%, rgb(114 250 147 / 0.10), transparent 70%),
+      var(--mx-navy);
+  }
+  .ytp.ytp--scuro .ytp-hero__top,
+  .ytp.ytp--scuro .ytp-hero__more { background: none; }
+  .ytp.ytp--scuro .ytp .ytp-offer,
+  .ytp.ytp--scuro .ytp-offer.ytp-dark { background: none; }
+  .ytp.ytp--scuro .ytp-hero__photo { box-shadow: none; }
+}
+
+/* Tavole: fondo e riempimenti accordati alle fasce nuove. */
+.ytp.ytp--scuro .ytp-tav { --bg: #0a2f5e; --fill: #183f6b; --fill-2: #24507f; }
+.ytp.ytp--scuro .ytp-dark .ytp-tav { --bg: #04183a; --fill: #0c2a52; --fill-2: #183a66; --pelle: #0b2a50; --osso: #173b66; --disco: #2c5384; --muscolo: #234873; }
+
+/* ——— Accento: le parole forti in sfumatura verde → azzurro (mx-gradient) ——— */
+.ytp.ytp--scuro .ytp-h1__t strong,
+.ytp.ytp--scuro .ytp-h2__t strong,
+.ytp.ytp--scuro .ytp-quote__si {
+  background: linear-gradient(100deg, var(--green) 10%, var(--mx-sky) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-weight: 900;
+}
+/* Le parole che si inclinano (ytp-lean) sono blocchi a sé: la sfumatura del genitore non le raggiunge,
+   quindi ne portano una propria. */
+.ytp.ytp--scuro :is(.ytp-h1__t, .ytp-h2__t) strong .ytp-lean {
+  background: linear-gradient(100deg, var(--green) 0%, var(--mx-sky) 140%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ytp.ytp--scuro .ytp-h1__t .ytp-h1__no .ytp-lean { background-image: linear-gradient(100deg, #5fe6b0 0%, var(--mx-sky) 100%); }
+/* Le righe a blocco: la sfumatura segue la lunghezza del testo, non della colonna. */
+.ytp.ytp--scuro .ytp-h1__t .ytp-h1__no,
+.ytp.ytp--scuro .ytp-quote__si { width: fit-content; }
+.ytp.ytp--scuro .ytp-obiettivo__chiusa { font-weight: 900; }
+
+/* Etichette piccole: maiuscolo spaziato in verde, come i «kicker» del sito. */
+.ytp.ytp--scuro .ytp-offer__what strong,
+.ytp-pop__sopra {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+/* ——— Bottoni: pillola verde luminosa con riempimento panna che sale (mx-btn--primary) ——— */
+.ytp.ytp--scuro .ytp-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: color 0.4s var(--mx-ease), transform 120ms var(--ease-out), box-shadow 0.4s var(--mx-ease);
+}
+.ytp.ytp--scuro .ytp-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #f4f4f4;
+  transform: translateY(101%);
+  transition: transform 0.5s var(--mx-ease);
+}
+.ytp.ytp--scuro .ytp-cta--green,
+.ytp.ytp--scuro .ytp-cta--ink {
+  background: var(--green);
+  color: #002552;
+  box-shadow: 0 0 0 0 rgb(114 250 147 / 0.5), 0 20px 60px -20px rgb(114 250 147 / 0.7);
+  animation: ytp-mx-pulse 2.8s infinite;
+}
+.ytp.ytp--scuro .ytp-cta--line {
+  background: rgb(244 244 244 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(244 244 244 / 0.28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ytp.ytp--scuro .ytp-cta:hover::before { transform: translateY(0); }
+  .ytp.ytp--scuro .ytp-cta--green:hover,
+  .ytp.ytp--scuro .ytp-cta--ink:hover { background: var(--green); }
+  .ytp.ytp--scuro .ytp-cta--line:hover { background: rgb(244 244 244 / 0.04); color: #002552; }
+}
+@keyframes ytp-mx-pulse {
+  0% { box-shadow: 0 0 0 0 rgb(114 250 147 / 0.45), 0 20px 60px -20px rgb(114 250 147 / 0.7); }
+  70% { box-shadow: 0 0 0 16px rgb(114 250 147 / 0), 0 20px 60px -20px rgb(114 250 147 / 0.7); }
+  100% { box-shadow: 0 0 0 0 rgb(114 250 147 / 0), 0 20px 60px -20px rgb(114 250 147 / 0.7); }
+}
+/* Bottone di invio del modulo: stessa luce. */
+.ytp-pop__invia { font-weight: 800; box-shadow: 0 20px 60px -20px rgb(114 250 147 / 0.7); }
+.ytp-bar .ytp-cta { box-shadow: 0 14px 34px -14px rgb(114 250 147 / 0.6); }
+.ytp-bar { background: rgb(0 15 43 / 0.82); border-top-color: var(--line, rgb(244 244 244 / 0.12)); }
+
+/* ——— Riquadri: le schede del sito (angoli 28 px, velatura chiara, bordo sottile che si accende di verde) ——— */
+.ytp.ytp--scuro .ytp-test__count.ytp-dark,
+.ytp.ytp--scuro .ytp-door--list.ytp-dark,
+.ytp.ytp--scuro .ytp-door--line {
+  border-radius: 28px;
+  transition: border-color 0.6s var(--mx-ease), box-shadow 0.6s var(--mx-ease);
+}
+.ytp.ytp--scuro .ytp-test__count.ytp-dark,
+.ytp.ytp--scuro .ytp-door--list.ytp-dark {
+  background:
+    radial-gradient(120% 90% at 100% 100%, rgb(114 250 147 / 0.12), transparent 60%),
+    rgb(244 244 244 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(114 250 147 / 0.28), 0 30px 70px -40px rgb(0 0 0 / 0.7);
+}
+.ytp.ytp--scuro .ytp-door--line {
+  background: rgb(244 244 244 / 0.035);
+  box-shadow: inset 0 0 0 1px var(--mx-line);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ytp.ytp--scuro .ytp-door--line:hover { box-shadow: inset 0 0 0 1px rgb(114 250 147 / 0.35); }
+}
+.ytp.ytp--scuro .ytp-test__row label { border-radius: 12px; }
+.ytp.ytp--scuro .ytp-test__box { border-radius: 6px; }
+.ytp.ytp--scuro .ytp-test__row input:checked + .ytp-test__box { background: var(--green); border-color: var(--green); }
+.ytp.ytp--scuro .ytp-test__box svg { color: #002552; }
+.ytp.ytp--scuro .ytp-test__row input:focus-visible + .ytp-test__box { outline-color: var(--green); }
+
+/* ——— Foto: angoli arrotondati e bordo sottile, come le foto delle pagine del sito ——— */
+.ytp.ytp--scuro .ytp-video__frame {
+  border-radius: 28px;
+  background: var(--mx-ink);
+  box-shadow: 0 0 0 1px var(--mx-line), 0 40px 80px -40px rgb(0 0 0 / 0.7);
+}
+.ytp.ytp--scuro .ytp-video__frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgb(244 244 244 / 0.1);
+}
+.ytp.ytp--scuro .ytp-sc__foto { border-radius: 14px; }
+.ytp.ytp--scuro .ytp-visita__foto { border-radius: 16px; }
+.ytp.ytp--scuro .ytp-car__lista > li { border-radius: 20px; border-color: var(--mx-line); }
+.ytp.ytp--scuro .ytp-mappa__quadro { border-radius: 28px; }
+.ytp.ytp--scuro .ytp-reviews li { border-radius: 20px; overflow: hidden; border-color: var(--mx-line); }
+
+/* ——— Punti sull'asse: si accendono di verde ——— */
+.ytp.ytp--scuro .ytp-ch.is-on .ytp-ch__dot,
+.ytp.ytp--scuro .ytp-dark .ytp-ch.is-on .ytp-ch__dot {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 0 0 6px rgb(114 250 147 / 0.14);
+}
+.ytp.ytp--scuro .ytp-steps3 li:first-child::before { background: var(--green); border-color: var(--green); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ytp.ytp--scuro .ytp-cta { animation: none; }
+}
+
+/* ——— Bottone «Apri in Google Maps»: pillola bianca con il segnaposto di Google Maps ——— */
+.ytp-maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.875rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem 0.5rem 0.875rem;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #002552;
+  font-family: var(--font);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 14px 34px -18px rgb(0 0 0 / 0.65);
+  transition: background-color 0.3s var(--mx-ease, ease), transform 0.3s var(--mx-ease, ease), box-shadow 0.3s var(--mx-ease, ease);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.ytp-maps__logo { flex: none; width: auto; height: 1.375rem; }
+.ytp-maps__freccia { flex: none; width: 1rem; height: 1rem; opacity: 0.55; transition: transform 0.3s var(--mx-ease, ease), opacity 0.3s ease; }
+.ytp-maps:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .ytp-maps:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 18px 40px -16px rgb(56 189 248 / 0.45); }
+  .ytp-maps:hover .ytp-maps__freccia { opacity: 1; transform: translate(2px, -2px); }
+}
+.ytp .ytp-maps:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }

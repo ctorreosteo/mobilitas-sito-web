@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
+import { APRI_CONSULTO } from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 
 // Main website pages
@@ -31,6 +32,8 @@ import VideoMaker from './pages/sito-web/posizioni/VideoMaker'
 import Nutrizionista from './pages/sito-web/posizioni/Nutrizionista'
 import SocialMediaManager from './pages/sito-web/posizioni/SocialMediaManager'
 import Influencer from './pages/sito-web/posizioni/Influencer'
+import OsteopataTirocinante from './pages/sito-web/posizioni/OsteopataTirocinante'
+import OsteopataJunior from './pages/sito-web/posizioni/OsteopataJunior'
 
 // Partnership pages
 import GPADEL from './pages/sito-web/partnership/GPADEL'
@@ -122,7 +125,7 @@ function App() {
         <Route path="/cervicalgia/conferma" element={<Navigate to="/conferma-richiesta" replace />} />
         <Route path="/reflusso" element={<Layout hideWhatsApp><Reflusso /></Layout>} />
         <Route path="/yt-postura" element={<Layout hideWhatsApp><YtPostura /></Layout>} />
-        <Route path="/yt-postura-v2" element={<Layout hideWhatsApp><YtPosturaV2 /></Layout>} />
+        <Route path="/yt-postura-v2" element={<Layout hideWhatsApp footerCtaEvent={APRI_CONSULTO}><YtPosturaV2 /></Layout>} />
         <Route path="/vertigini" element={<Layout hideWhatsApp><Vertigini /></Layout>} />
         <Route path="/bruxismo" element={<Layout hideWhatsApp><Bruxismo /></Layout>} />
         <Route path="/cicatrici-cesareo" element={<Layout hideWhatsApp><CicatriciCesareo /></Layout>} />
@@ -149,6 +152,8 @@ function App() {
         <Route path="/lombalgia" element={<Layout hideWhatsApp><Lombalgia /></Layout>} />
         
         {/* Job position routes with layout */}
+        <Route path="/lavora-con-noi/osteopata_tirocinante" element={<Layout><OsteopataTirocinante /></Layout>} />
+        <Route path="/lavora-con-noi/osteopata_junior" element={<Layout><OsteopataJunior /></Layout>} />
         <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
         <Route path="/lavora-con-noi/video-maker" element={<Layout><VideoMaker /></Layout>} />
         <Route path="/lavora-con-noi/nutrizionista" element={<Layout><Nutrizionista /></Layout>} />

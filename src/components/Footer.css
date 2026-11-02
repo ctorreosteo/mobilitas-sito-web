@@ -92,6 +92,18 @@
   max-width: 100%;
 }
 
+/* Variante bottone (apre il modulo della pagina): stesso aspetto del link */
+.mx-footer__big--btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .mx-footer__big-text {
   position: relative;
   display: inline-block;
