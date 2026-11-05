@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
-import { RECENSIONI_IMAGES } from '../../data/recensioni'
-import { SCOMPENSI, VISITA, OBIETTIVO, MAPPA, RECENSIONI_CAROSELLO } from './contenuti'
+import React from 'react'
+import { SCOMPENSI, VISITA, OBIETTIVO, MAPPA } from './contenuti'
 import './foto.css'
 
 // Foto reali dello studio usate come grafica: scompensi su foto allineate, prima visita annotata, obiettivo.
@@ -83,37 +82,6 @@ export function Scompensi() {
       </ul>
       <figcaption className="ytp-sc__cap">{SCOMPENSI.nota}</figcaption>
     </figure>
-  )
-}
-
-/* ——— Recensioni: carosello orizzontale ——— */
-export function Carosello() {
-  const ref = useRef(null)
-  const vai = (dir) => {
-    const el = ref.current
-    if (!el) return
-    const passo = el.querySelector('li')?.getBoundingClientRect().width || 300
-    el.scrollBy({ left: dir * (passo + 16), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
-  }
-  return (
-    <div className="ytp-car">
-      <ul className="ytp-car__lista ytp-strip" ref={ref} aria-label="Recensioni Google">
-        {RECENSIONI_IMAGES.slice(0, RECENSIONI_CAROSELLO.quante).map((img, i) => (
-          <li key={img}>
-            <img src={img} alt={`Recensione Google ${i + 1}`} loading="lazy" decoding="async" />
-          </li>
-        ))}
-      </ul>
-      <div className="ytp-car__comandi">
-        <span className="ytp-car__hint">{RECENSIONI_CAROSELLO.scorri}</span>
-        <button type="button" className="ytp-car__btn" onClick={() => vai(-1)} aria-label="Recensioni precedenti">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-        <button type="button" className="ytp-car__btn" onClick={() => vai(1)} aria-label="Recensioni successive">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-      </div>
-    </div>
   )
 }
 
