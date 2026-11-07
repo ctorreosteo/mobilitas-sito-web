@@ -230,9 +230,7 @@
 }
 .ytp.ytp--scuro .ytp-sc__foto { border-radius: 14px; }
 .ytp.ytp--scuro .ytp-visita__foto { border-radius: 16px; }
-.ytp.ytp--scuro .ytp-car__lista > li { border-radius: 20px; border-color: var(--mx-line); }
 .ytp.ytp--scuro .ytp-mappa__quadro { border-radius: 28px; }
-.ytp.ytp--scuro .ytp-reviews li { border-radius: 20px; overflow: hidden; border-color: var(--mx-line); }
 
 /* ——— Punti sull'asse: si accendono di verde ——— */
 .ytp.ytp--scuro .ytp-ch.is-on .ytp-ch__dot,

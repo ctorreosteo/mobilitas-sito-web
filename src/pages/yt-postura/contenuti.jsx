@@ -480,4 +480,3 @@ export const MAPPA = {
   nota: 'Tocca una sede per aprirla in Google Maps.',
 }
 
-export const RECENSIONI_CAROSELLO = { quante: 8, scorri: 'Scorri per leggerne altre' }

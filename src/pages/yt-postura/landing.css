@@ -403,23 +403,17 @@ html:has(.ytp), body:has(.ytp), #root:has(.ytp), div:has(> main > .ytp) { overfl
   .ytp-deal__big { margin-top: 3rem; }
 }
 
-/* ——— 7. Recensioni ——— */
-.ytp-reviews { margin-top: 3rem; display: grid; gap: 1.25rem; }
-.ytp-reviews li { border: 1px solid var(--line); background: #fff; }
-.ytp-reviews li:nth-child(n + 4) { display: none; }
-.ytp-reviews li { width: 70%; }
-.ytp-reviews li:nth-child(even) { margin-left: 30%; }
-.ytp-reviews img { width: 100%; }
-.ytp-reviews__more { margin-top: 1.5rem; }
-@media (min-width: 40rem) {
-  .ytp-reviews { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
-  .ytp-reviews li, .ytp-reviews li:nth-child(even) { width: auto; margin-left: 0; }
-  .ytp-reviews li:nth-child(3n + 2) { margin-top: 3rem; }
-  .ytp-reviews li:nth-child(3n) { margin-top: 6rem; }
-}
+/* ——— 7. Recensioni ———
+   Le stesse delle landing di prima visita (RecensioniDolore: recensioni Google dal gestionale, totale delle due
+   sedi aggiornato). Il componente vive dentro .mx-page: qui quel contenitore perde fondo e grana (la landing ha
+   già i suoi) e i margini seguono la griglia della landing invece di quella del sito. */
+.ytp .ytp-mx { background: none; isolation: auto; }
+.ytp .ytp-mx::after { content: none; }
+.ytp .ytp-mx .mx-wrap { max-width: var(--max); padding-inline: var(--inset) var(--pad); }
+.ytp .ytp-mx .mx-rt__viewport { margin-inline: calc(-1 * var(--inset)) calc(-1 * var(--pad)); }
+.ytp .ytp-mx .mx-rt__track { padding-inline: var(--inset) var(--pad); scroll-padding-inline: var(--inset); }
 @media (min-width: 64rem) {
-  .ytp-reviews li:nth-child(n + 4) { display: block; }
-  .ytp-rev__head { grid-column: 1 / 7; }
+  .ytp .ytp-mx .mx-wrap { padding-inline: var(--pad); }
   .ytp-rev__close { grid-column: 8 / 13; padding-left: 1.5rem; align-self: end; }
 }
 .ytp-rev__close { margin-top: 3rem; }

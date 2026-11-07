@@ -14,7 +14,9 @@ import {
 import Prenotazione from './yt-postura/Prenotazione'
 import { APRI_CONSULTO } from '../components/Footer'
 import { TavolaTesta, TavolaFilo, TavolaOsso, FiguraAllineata } from './yt-postura/Tavole'
-import { Scompensi, Visita, Obiettivo, Carosello, MappaTorino, BottoneMaps } from './yt-postura/Foto'
+import { Scompensi, Visita, Obiettivo, MappaTorino, BottoneMaps } from './yt-postura/Foto'
+import RecensioniDolore from '../components/recensioni-tag/RecensioniDolore'
+import { RECENSIONI_TOTALI } from '../data/studi'
 import './yt-postura/landing.css'
 import './yt-postura/sito.css'
 
@@ -86,9 +88,14 @@ function useVideoYtPosturaVsl() {
 }
 
 const FAQ_PRINCIPALI = FAQ_ITEMS.filter((f) => FAQ_SCELTE.includes(f.id)).sort((x, y) => FAQ_SCELTE.indexOf(x.id) - FAQ_SCELTE.indexOf(y.id))
-const RECENSIONI_TOTAL = 900
-const GOOGLE_RECENSIONI_URL =
-  'https://www.google.com/maps/place/Mobilitas+-+Studio+Osteopatico+-+Osteopata+Torino/@45.0802312,7.6577188,17z/data=!4m8!3m7!1s0xfe2e29f381fdc93:0x97eee174cab07ada!8m2!3d45.0802312!4d7.6577188!9m1!1b1!16s%2Fg%2F11kqfhtyvd?entry=ttu'
+// Recensioni come sulle landing di prima visita (RecensioniDolore): quelle Google sulla postura dal gestionale.
+// Le recensioni con il solo tag postura sono poche: si aggiungono schiena e collo, tenendo solo quelle che ne parlano.
+// Se restano meno di tre, il componente mostra recensioni generiche.
+const DOLORE_POSTURA = {
+  per: 'per la postura',
+  tags: ['TAG_DOLORE_POSTURA', 'TAG_DOLORE_SCOLIOSI', 'TAG_DOLORE_DORSALGIA', 'TAG_DOLORE_MAL_DI_SCHIENA', 'TAG_DOLORE_CERVICALGIA'],
+  parole: /\b(postur\w*|schiena|colonna|dorsal\w*|scolios\w*|spall[ae]|cervic\w*|collo)(?![\wàèéìòù])/i,
+}
 const MAPPE = {
   // Stesso formato di Crocetta: il vecchio link «/maps/place/…/@lat,lon» senza identificativo non apriva la scheda.
   sanDonato:
@@ -279,8 +286,9 @@ function YtPostura() {
       ],
       aggregateRating: {
         '@type': 'AggregateRating',
+        // Valori di riserva: dopo il caricamento li sostituiscono quelli di Google (somma delle due sedi).
         ratingValue: '5.0',
-        reviewCount: String(RECENSIONI_TOTAL),
+        reviewCount: String(RECENSIONI_TOTALI),
         bestRating: '5',
         worstRating: '1',
       },
@@ -441,7 +449,21 @@ function YtPostura() {
     }
     scriptLd.textContent = JSON.stringify(jsonLd)
 
+    // Totale e media delle recensioni Google delle due sedi, dal gestionale.
+    const ctrlTotali = new AbortController()
+    fetch(`${API_BASE}/api/sito/recensioni/totali`, { signal: ctrlTotali.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        const t = json?.data
+        if (!(t?.totale > 0)) return
+        businessShared.aggregateRating.reviewCount = String(t.totale)
+        if (t.media != null) businessShared.aggregateRating.ratingValue = t.media.toFixed(1)
+        scriptLd.textContent = JSON.stringify(jsonLd)
+      })
+      .catch(() => {})
+
     return () => {
+      ctrlTotali.abort()
       document.title = prevTitle
       if (prevRobots === null) document.querySelector('meta[name="robots"]')?.remove()
       else ensureMetaByName('robots', prevRobots)
@@ -850,24 +872,11 @@ function YtPostura() {
           </section>
 
           {/* ——— 7. RECENSIONI ——— */}
-          <section className="ytp-section" aria-labelledby="ytp-h-recensioni">
+          <section className="ytp-section" aria-label="Recensioni Google">
+            <div className="mx-page ytp-mx">
+              <RecensioniDolore dolore={DOLORE_POSTURA} />
+            </div>
             <div className="ytp-wrap">
-              <div className="ytp-grid">
-                <div className="ytp-rev__head">
-                  <Titolo id="ytp-h-recensioni">
-                    Più di <strong>900 recensioni</strong> su Google.
-                  </Titolo>
-                </div>
-              </div>
-              <Carosello />
-              <a
-                className="ytp-link ytp-reviews__more"
-                href={GOOGLE_RECENSIONI_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Leggi tutte le recensioni su Google Maps
-              </a>
               <div className="ytp-grid">
                 <div className="ytp-rev__close">
                   <p className="ytp-lead">
