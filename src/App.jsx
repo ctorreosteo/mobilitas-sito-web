@@ -27,10 +27,6 @@ import PrivacyPolicyApplicazione from './pages/sito-web/PrivacyPolicyApplicazion
 import SupportoApp from './pages/sito-web/SupportoApp'
 
 // Job position pages
-import Segretaria from './pages/sito-web/posizioni/Segretaria'
-import VideoMaker from './pages/sito-web/posizioni/VideoMaker'
-import Nutrizionista from './pages/sito-web/posizioni/Nutrizionista'
-import SocialMediaManager from './pages/sito-web/posizioni/SocialMediaManager'
 import Influencer from './pages/sito-web/posizioni/Influencer'
 import OsteopataTirocinante from './pages/sito-web/posizioni/OsteopataTirocinante'
 import OsteopataJunior from './pages/sito-web/posizioni/OsteopataJunior'
@@ -161,10 +157,10 @@ function App() {
         {/* Job position routes with layout */}
         <Route path="/lavora-con-noi/osteopata_tirocinante" element={<Layout><OsteopataTirocinante /></Layout>} />
         <Route path="/lavora-con-noi/osteopata_junior" element={<Layout><OsteopataJunior /></Layout>} />
-        <Route path="/lavora-con-noi/segretaria" element={<Layout><Segretaria /></Layout>} />
-        <Route path="/lavora-con-noi/video-maker" element={<Layout><VideoMaker /></Layout>} />
-        <Route path="/lavora-con-noi/nutrizionista" element={<Layout><Nutrizionista /></Layout>} />
-        <Route path="/lavora-con-noi/social-media-manager" element={<Layout><SocialMediaManager /></Layout>} />
+        {/* Posizioni chiuse: niente scheda, si torna al tabellone */}
+        {['segretaria', 'video-maker', 'nutrizionista', 'social-media-manager'].map((id) => (
+          <Route key={id} path={`/lavora-con-noi/${id}`} element={<Navigate to="/lavora-con-noi#posizioni" replace />} />
+        ))}
         
         {/* Influencer page - direct menu item */}
         <Route path="/influencer" element={<Layout><Influencer /></Layout>} />

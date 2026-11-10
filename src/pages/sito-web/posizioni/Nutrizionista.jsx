@@ -8,6 +8,7 @@ const Nutrizionista = () => (
     immagine="/lavori/nutrizionista.png"
     tipo="Partita iva"
     luogo="In presenza/Ibrido"
+    stato="closed"
     lead="Valutazioni nutrizionali e piani alimentari personalizzati, dentro un team multidisciplinare che lavora fianco a fianco con gli osteopati."
     manifesto={[
       'Stiamo cercando un',

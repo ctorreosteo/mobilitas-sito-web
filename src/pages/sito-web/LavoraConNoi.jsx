@@ -53,10 +53,10 @@ const jobRoles = [
   {
     id: 'nutrizionista',
     title: 'Nutrizionista',
-    type: 'Assunzione',
-    location: 'In presenza',
+    type: 'Partita iva',
+    location: 'In presenza/Ibrido',
     image: '/lavori/nutrizionista.png',
-    status: 'open'
+    status: 'closed'
   },
   {
     id: 'segretaria',
@@ -268,6 +268,11 @@ const BoardRow = ({ job, index }) => {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const open = job.status === 'open'
+  // Solo le posizioni aperte portano alla scheda: quelle chiuse restano visibili ma non cliccabili
+  const Row = open ? Link : 'div'
+  const rowProps = open
+    ? { to: `/lavora-con-noi/${job.id}`, className: 'mx-jobs-row__link' }
+    : { className: 'mx-jobs-row__link mx-jobs-row__link--static' }
   return (
     <motion.li
       ref={ref}
@@ -278,7 +283,7 @@ const BoardRow = ({ job, index }) => {
       transition={{ duration: 0.6, ease: EASE }}
       className={`mx-jobs-row ${open ? 'is-open' : ''}`}
     >
-      <Link to={`/lavora-con-noi/${job.id}`} className="mx-jobs-row__link">
+      <Row {...rowProps}>
         <span className="mx-jobs-row__thumb">
           <img src={webImage(job.image)} alt={job.title} loading="lazy" decoding="async" />
         </span>
@@ -298,12 +303,16 @@ const BoardRow = ({ job, index }) => {
         <span className="mx-jobs-row__place">{job.location}</span>
         <StatusFlap status={job.status} play={inView} delay={0.15 + 0.05 * (index % 6)} />
         <span className="mx-jobs-row__go">
-          <span>Candidati</span>
-          <span className="mx-jobs-row__arrow" aria-hidden="true">
-            <ArrowRight size={18} strokeWidth={2.6} />
-          </span>
+          {open && (
+            <>
+              <span>Candidati</span>
+              <span className="mx-jobs-row__arrow" aria-hidden="true">
+                <ArrowRight size={18} strokeWidth={2.6} />
+              </span>
+            </>
+          )}
         </span>
-      </Link>
+      </Row>
     </motion.li>
   )
 }

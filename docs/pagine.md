@@ -23,10 +23,10 @@ Tutte con `Layout`.
 | `/mentorship` | `Mentorship` | Ha un Meta Pixel proprio |
 | `/links` | `Links` | |
 | `/lavora-con-noi` | `LavoraConNoi` | |
-| `/lavora-con-noi/segretaria` | `posizioni/Segretaria` | |
-| `/lavora-con-noi/video-maker` | `posizioni/VideoMaker` | |
-| `/lavora-con-noi/nutrizionista` | `posizioni/Nutrizionista` | |
-| `/lavora-con-noi/social-media-manager` | `posizioni/SocialMediaManager` | |
+| `/lavora-con-noi/segretaria` | redirect a `/lavora-con-noi#posizioni` | Posizione chiusa |
+| `/lavora-con-noi/video-maker` | redirect a `/lavora-con-noi#posizioni` | Posizione chiusa |
+| `/lavora-con-noi/nutrizionista` | redirect a `/lavora-con-noi#posizioni` | Posizione chiusa |
+| `/lavora-con-noi/social-media-manager` | redirect a `/lavora-con-noi#posizioni` | Posizione chiusa |
 | `/influencer` | `posizioni/Influencer` | |
 | `/partnership/gpadel` | `partnership/GPADEL` | |
 | `/partnership/stampa-subalpina` | `partnership/StampaSubalpina` | |
