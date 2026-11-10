@@ -53,7 +53,7 @@ Lo `slug` è la chiave che collega tutto: `pageContext` del popup, `dolori.js`, 
 
 1. **Pagina.** Copia una landing simile in `src/pages/landing-prima-visita/<Nome>.jsx` e sostituisci i contenuti.
 2. **Route.** In `src/App.jsx` importala e aggiungi `<Route path="/<slug>" element={<Layout hideWhatsApp><Nome /></Layout>} />`.
-3. **Popup.** In `src/components/BookingPopup.jsx` aggiungi lo slug a `isLandingVisita` e a `tagsByContext`. Senza il primo passaggio la pagina di conferma non mostra il calendario.
+3. **Popup.** In `src/components/BookingPopup.jsx` aggiungi lo slug a `isLandingVisita` e a `tagsByContext`. Senza il primo passaggio la pagina di conferma non mostra il calendario. Con lo slug `gravidanza` o `pediatria` il calendario mostra solo gli orari degli osteopati di quel percorso (`PERCORSI` in `PrenotaVisita.jsx`).
 4. **Dolore.** In `src/data/dolori.js` aggiungi la chiave con `ilTuo`, `per`, `tags` e `parole`. Senza, conferma e recensioni restano generiche.
 5. **Foto.** In `src/data/fotoTrattamenti.js` aggiungi lo slug a `ZONE`.
 6. **Gestionale.** Verifica che esistano il video `<NOME>_VSL` e il tag `TAG_DOLORE_<NOME>`.

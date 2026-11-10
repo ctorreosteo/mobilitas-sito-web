@@ -12,6 +12,7 @@ import './prenota-visita.css'
 // Il paziente sceglie studio, giorno e ora; l'osteopata lo assegna il gestionale (/api/sito/prenotazione).
 // tipo 'primaVisita': ha chiesto la visita a 49€, qui la blocca subito.
 // tipo 'consulto': ha chiesto la chiamata gratuita, qui gli proponiamo di prendere già la visita scontata.
+// Dalle landing di gravidanza e pediatria il gestionale propone solo gli orari degli osteopati di quel percorso.
 
 const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE ?? 'https://hq.studiomobilitas.it')
 const EASE = [0.16, 1, 0.3, 1]
@@ -27,6 +28,9 @@ const comeData = (iso) => {
 }
 const dataLunga = (iso) => fmtLungo.format(comeData(iso))
 const prima = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+
+const PERCORSI = ['gravidanza', 'pediatria']
+const percorsoDi = (pageContext) => (PERCORSI.includes(pageContext) ? pageContext : null)
 
 const FASCE = [
   { nome: 'Mattina', da: '00:00', a: '13:00' },
@@ -82,12 +86,13 @@ const googleCalendarUrl = (v, studio, dolore) => {
 }
 
 // Orari liberi dei due studi, chiesti insieme all'apertura: così ogni studio mostra già il primo posto libero
-function useDisponibilita() {
+function useDisponibilita(percorso) {
   const [stato, setStato] = useState({})
 
   const carica = (id) => {
     setStato((s) => ({ ...s, [id]: { ...s[id], caricamento: true, errore: false } }))
-    return fetch(`${API_BASE}/api/sito/prenotazione/disponibilita?studio=${id}`)
+    const qs = new URLSearchParams({ studio: id, ...(percorso && { percorso }) })
+    return fetch(`${API_BASE}/api/sito/prenotazione/disponibilita?${qs}`)
       .then((res) => res.json())
       .then((json) => {
         if (!json.success) throw new Error(json.message)
@@ -98,7 +103,7 @@ function useDisponibilita() {
 
   useEffect(() => {
     STUDI.forEach((s) => carica(s.id))
-  }, [])
+  }, [percorso])
 
   return [stato, carica]
 }
@@ -107,7 +112,8 @@ function useDisponibilita() {
 export default function PrenotaVisita({ richiesta, dolore = null, onPrenotata }) {
   const tipo = richiesta.tipo === 'consulto' ? 'consulto' : 'primaVisita'
   const copy = copyPer(tipo, dolore)
-  const [disponibilita, ricarica] = useDisponibilita()
+  const percorso = percorsoDi(richiesta.pageContext)
+  const [disponibilita, ricarica] = useDisponibilita(percorso)
   const [studioId, setStudioId] = useState(null)
   const [giorno, setGiorno] = useState(null)
   const [ora, setOra] = useState(null)
@@ -142,7 +148,7 @@ export default function PrenotaVisita({ richiesta, dolore = null, onPrenotata })
       const res = await fetch(`${API_BASE}/api/sito/prenotazione`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ richiestaId: richiesta.id, token: richiesta.token, studio: studio.id, data: giorno, ora }),
+        body: JSON.stringify({ richiestaId: richiesta.id, token: richiesta.token, studio: studio.id, data: giorno, ora, percorso }),
       })
       const json = await res.json()
       if (!json.success) {

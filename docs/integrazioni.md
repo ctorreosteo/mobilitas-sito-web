@@ -15,8 +15,8 @@
 | Metodo | Endpoint | Uso |
 |--------|----------|-----|
 | POST | `/api/richieste` | Crea la richiesta (lead) |
-| GET | `/api/sito/prenotazione/disponibilita?studio=<id>` | Giorni e orari liberi |
-| POST | `/api/sito/prenotazione` | Prenota: `{ richiestaId, token, studio, data, ora }`. 409 se l'orario è stato preso |
+| GET | `/api/sito/prenotazione/disponibilita?studio=<id>&percorso=<p>` | Giorni e orari liberi. `percorso` (`gravidanza` o `pediatria`, facoltativo): solo gli osteopati con la spunta «Prenotabile dal sito per gravidanza e pediatria» nel gestionale |
+| POST | `/api/sito/prenotazione` | Prenota: `{ richiestaId, token, studio, data, ora, percorso? }`. 409 se l'orario è stato preso. Il percorso vale anche se la richiesta ha il tag `TAG_DOLORE_GRAVIDANZA` o `TAG_DOLORE_PEDIATRIA` |
 | GET | `/api/sito/video/codice/<codice>` | Video per codice: `cloudflareUid`, `anteprimaUrl`. 404 se non esiste |
 | GET | `/api/sito/recensioni?tag=<tag>&limite=<n>` | Recensioni per tag, `tag` ripetibile |
 | GET | `/api/sito/recensioni/totali` | Totale recensioni Google |
@@ -57,7 +57,7 @@ Le risposte hanno la forma `{ success, data, message }`.
 2. `BookingPopup` invia `POST /api/richieste`.
 3. Il gestionale risponde con `id` e `tokenPrenotazione`.
 4. Il popup salva `pageContext`, `id`, `token`, `tipo` e `nome` in `sessionStorage` (`richiestaSalvata.js`) e porta a `/conferma-richiesta`. L'URL è uguale per tutte le landing: è lo storage a dire da dove arriva l'utente.
-5. `ThankYouRichiesta` parte con testi e recensioni del dolore e, se ha `id` e `token`, mostra il calendario `PrenotaVisita`.
+5. `ThankYouRichiesta` parte con testi e recensioni del dolore e, se ha `id` e `token`, mostra il calendario `PrenotaVisita`. Se `pageContext` è `gravidanza` o `pediatria`, il calendario lo manda come `percorso`.
 6. L'utente sceglie studio, giorno e ora. L'osteopata lo assegna il gestionale.
 
 Senza dati in `sessionStorage` (storage bloccato, pagina aperta direttamente) la conferma resta generica e senza calendario. Lista d'attesa e pacchetti non salvano la richiesta.
