@@ -93,19 +93,14 @@ export default function VslPlayer({ video, title }) {
       )}
 
       {!conAudio ? (
+        // Tutto il video è cliccabile; l'unico invito è la pillola in alto a sinistra, così il video resta visibile
         <button type="button" className="mx-vsl__unmute" onClick={attivaAudio} aria-label="Attiva l'audio del video">
-          <span className="mx-vsl__muted" aria-hidden="true">
-            <VolumeX size={14} strokeWidth={2.5} />
-            Video senza audio
-          </span>
-          <span className="mx-vsl__cta">
-            <span className="mx-vsl__icon" aria-hidden="true">
-              <Volume2 size={26} strokeWidth={2.5} />
+          <span className="mx-vsl__badge" aria-hidden="true">
+            <span className="mx-vsl__icon">
+              <VolumeX size={16} strokeWidth={2.5} className="mx-vsl__icon-off" />
+              <Volume2 size={16} strokeWidth={2.5} className="mx-vsl__icon-on" />
             </span>
-            <span className="mx-vsl__text">
-              <strong>{tocco ? 'Tocca per ascoltare' : 'Clicca per ascoltare'}</strong>
-              <span>Il video riparte dall’inizio</span>
-            </span>
+            {tocco ? 'Tocca per ascoltare' : 'Clicca per ascoltare'}
           </span>
         </button>
       ) : null}

@@ -23,66 +23,63 @@
 /* Con l'audio il video si vede intero, controlli compresi */
 .mx-vsl.is-audio .mx-vsl__media { object-fit: contain; transform: none; }
 
+/* Livello cliccabile su tutto il video, trasparente: il video muto resta ben visibile */
 .mx-vsl__unmute {
   position: absolute;
   inset: 0;
   z-index: 2;
-  display: grid;
-  place-items: center;
-  padding: 16px;
+  padding: 0;
   border: 0;
   cursor: pointer;
   color: #002552;
   font: inherit;
-  background: radial-gradient(closest-side, rgba(0, 37, 82, 0.45), rgba(0, 37, 82, 0.1));
+  background: transparent;
   -webkit-tap-highlight-color: transparent;
 }
 
-.mx-vsl__muted {
+.mx-vsl__unmute:focus-visible { outline: 3px solid #72fa93; outline-offset: -3px; }
+
+/* Invito in alto a sinistra: al posto della vecchia etichetta "Video senza audio" */
+.mx-vsl__badge {
   position: absolute;
   top: 12px;
   left: 12px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(0, 37, 82, 0.75);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.mx-vsl__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 20px 10px 10px;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
   border-radius: 999px;
   background: #72fa93;
-  box-shadow: 0 12px 34px -10px rgba(0, 0, 0, 0.6);
-  text-align: left;
+  color: #002552;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.55);
   transition: transform 0.2s;
+  transform-origin: left center;
 }
 
-.mx-vsl__unmute:hover .mx-vsl__cta,
-.mx-vsl__unmute:focus-visible .mx-vsl__cta { transform: scale(1.05); }
-
-.mx-vsl__unmute:focus-visible { outline: 3px solid #72fa93; outline-offset: -3px; }
+.mx-vsl__unmute:hover .mx-vsl__badge,
+.mx-vsl__unmute:focus-visible .mx-vsl__badge { transform: scale(1.06); }
 
 .mx-vsl__icon {
   position: relative;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #002552;
   color: #72fa93;
 }
 
-/* Onda che pulsa intorno all'icona: attira l'occhio sul tocco */
+.mx-vsl__icon svg { grid-area: 1 / 1; }
+.mx-vsl__icon-on { display: none; }
+.mx-vsl__unmute:hover .mx-vsl__icon-off { display: none; }
+.mx-vsl__unmute:hover .mx-vsl__icon-on { display: block; }
+
+/* Onda che pulsa intorno all'icona: attira l'occhio senza coprire il video */
 .mx-vsl__icon::after {
   content: '';
   position: absolute;
@@ -97,14 +94,8 @@
   to { transform: scale(1.7); opacity: 0; }
 }
 
-.mx-vsl__text { display: grid; line-height: 1.2; }
-.mx-vsl__text strong { font-size: 17px; font-weight: 800; }
-.mx-vsl__text span { font-size: 12px; font-weight: 600; opacity: 0.75; }
-
 @media (max-width: 420px) {
-  .mx-vsl__cta { gap: 10px; padding: 8px 16px 8px 8px; }
-  .mx-vsl__icon { width: 40px; height: 40px; }
-  .mx-vsl__text strong { font-size: 15px; }
+  .mx-vsl__badge { top: 10px; left: 10px; font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

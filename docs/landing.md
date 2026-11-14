@@ -79,7 +79,7 @@ La VSL dell'apertura arriva dal gestionale per codice (`prefetchHeroVideo('<NOME
 | Tipo | Pagine | Comportamento |
 |------|--------|---------------|
 | Muta | Le altre landing con video | Autoplay muto in loop, si comporta come una foto |
-| Con audio (`videoAudio: true`) | `cervicalgia`, `bruxismo`, `maldischiena`, `sciatalgia` | Parte muta in loop con l'invito «Tocca per ascoltare»; al tocco riparte da capo con audio e controlli. Evento `vsl_audio_on` su Google e `VslAudioOn` su Meta |
+| Con audio (`videoAudio: true`) | `cervicalgia`, `bruxismo`, `maldischiena`, `sciatalgia` | Parte muta in loop, ben visibile, con la pillola «Tocca per ascoltare» in alto a sinistra; il tocco funziona su tutto il video e lo fa ripartire da capo con audio e controlli. Evento `vsl_audio_on` su Google e `VslAudioOn` su Meta |
 
 I browser non permettono un autoplay con audio: per questo si parte sempre muti. Il player con audio è `condition-landing/VslPlayer.jsx`. `/cervicalgia` è fatta a mano e lo usa direttamente.
 
