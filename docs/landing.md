@@ -56,7 +56,7 @@ Lo `slug` è la chiave che collega tutto: `pageContext` del popup, `dolori.js`, 
 3. **Popup.** In `src/components/BookingPopup.jsx` aggiungi lo slug a `isLandingVisita` e a `tagsByContext`. Senza il primo passaggio la pagina di conferma non mostra il calendario. Con lo slug `gravidanza` o `pediatria` il calendario mostra solo gli orari degli osteopati di quel percorso (`PERCORSI` in `PrenotaVisita.jsx`).
 4. **Dolore.** In `src/data/dolori.js` aggiungi la chiave con `ilTuo`, `per`, `tags` e `parole`. Senza, conferma e recensioni restano generiche.
 5. **Foto.** In `src/data/fotoTrattamenti.js` aggiungi lo slug a `ZONE`.
-6. **Gestionale.** Verifica che esistano il video `<NOME>_VSL` e il tag `TAG_DOLORE_<NOME>`.
+6. **Gestionale.** Verifica che esistano il video `<NOME>_VSL` e il tag `TAG_DOLORE_<NOME>`. Il video lo carica il marketing in Marketing → Video sito, che mostra anche codice, API e URL del player da usare.
 7. **Google Ads.** Se la campagna misura la conversione, aggiungi lo slug a `CONVERSIONI_GOOGLE_ADS` in `src/pages/landing-pages/ThankYouRichiesta.jsx`.
 8. **Controllo.** Prova su telefono popup, conferma e calendario, poi ricontrolla la [regola sui farmaci](#regole-sui-testi).
 
