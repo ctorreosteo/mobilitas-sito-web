@@ -95,8 +95,8 @@ Gli script sono in `index.html`.
 
 | Servizio | Uso | Dove |
 |----------|-----|------|
-| Cloudflare Stream | Video delle landing, codice dal gestionale | `condition-landing/heroVideo.js` |
-| Cloudflare Stream | Video di `/cervicalgia`, ID fisso più `VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE` | `Cervicalgia.jsx` |
+| Cloudflare Stream | Video delle landing, codice dal gestionale (anche `/cervicalgia`: `CERVICALGIA_VSL`) | `condition-landing/heroVideo.js` |
+| Cloudflare Stream | VSL con audio al tocco (HLS nativo, iframe su Chrome e Firefox da computer) | `condition-landing/VslPlayer.jsx` |
 | Vimeo | Video di `/mal-di-schiena` | `mal-di-schiena-sections/VSLSection.jsx` |
 | Wistia | Video di `/gravidanza` | `gravidanza-sections/VSLSection.jsx` |
 | Stripe Payment Links | Pagamento di `/mal-di-schiena` | `mal-di-schiena-sections/OfferSection.jsx` |

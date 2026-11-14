@@ -280,6 +280,8 @@ const PAGE = {
   slug: 'bruxismo',
   heroVideo,
   videoTitle: 'Video trattamento bruxismo - Mobilitas Torino',
+  // La VSL ha l'audio: parte muta, al tocco riparte da capo e si sente
+  videoAudio: true,
   images: {
     hero: '/trattamenti/atm_mandibola-con-guanto_02_orizzontale',
     heroClassName: 'object-[50%_70%]',

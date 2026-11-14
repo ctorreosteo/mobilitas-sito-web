@@ -56,7 +56,7 @@ Lo `slug` è la chiave che collega tutto: `pageContext` del popup, `dolori.js`, 
 3. **Popup.** In `src/components/BookingPopup.jsx` aggiungi lo slug a `isLandingVisita` e a `tagsByContext`. Senza il primo passaggio la pagina di conferma non mostra il calendario. Con lo slug `gravidanza` o `pediatria` il calendario mostra solo gli orari degli osteopati di quel percorso (`PERCORSI` in `PrenotaVisita.jsx`).
 4. **Dolore.** In `src/data/dolori.js` aggiungi la chiave con `ilTuo`, `per`, `tags` e `parole`. Senza, conferma e recensioni restano generiche.
 5. **Foto.** In `src/data/fotoTrattamenti.js` aggiungi lo slug a `ZONE`.
-6. **Gestionale.** Verifica che esistano il video `<NOME>_VSL` e il tag `TAG_DOLORE_<NOME>`.
+6. **Gestionale.** Verifica che esistano il video `<NOME>_VSL` e il tag `TAG_DOLORE_<NOME>`. Se la VSL ha l'audio, aggiungi `videoAudio: true` al `PAGE`: vedi [Video](#video).
 7. **Google Ads.** Se la campagna misura la conversione, aggiungi lo slug a `CONVERSIONI_GOOGLE_ADS` in `src/pages/landing-pages/ThankYouRichiesta.jsx`.
 8. **Controllo.** Prova su telefono popup, conferma e calendario, poi ricontrolla la [regola sui farmaci](#regole-sui-testi).
 
@@ -71,6 +71,19 @@ Lo `slug` è la chiave che collega tutto: `pageContext` del popup, `dolori.js`, 
 | Studi | Via Peyron 54, Via Lamarmora 35 | `data/studi.js`, `useConditionSeo.js` |
 
 Se cambia il prezzo, cercalo in tutto `src/`: compare anche nei testi delle singole pagine e nei dati SEO.
+
+## Video
+
+La VSL dell'apertura arriva dal gestionale per codice (`prefetchHeroVideo('<NOME>_VSL')`): il video si cambia dal gestionale senza toccare il sito. Caricamento: file su Cloudflare Stream, poi il responsabile del gestionale registra codice e UID nella tabella `video_sito_web`.
+
+| Tipo | Pagine | Comportamento |
+|------|--------|---------------|
+| Muta | Le altre landing con video | Autoplay muto in loop, si comporta come una foto |
+| Con audio (`videoAudio: true`) | `cervicalgia`, `bruxismo`, `maldischiena`, `sciatalgia` | Parte muta in loop con l'invito «Tocca per ascoltare»; al tocco riparte da capo con audio e controlli. Evento `vsl_audio_on` su Google e `VslAudioOn` su Meta |
+
+I browser non permettono un autoplay con audio: per questo si parte sempre muti. Il player con audio è `condition-landing/VslPlayer.jsx`. `/cervicalgia` è fatta a mano e lo usa direttamente.
+
+In locale il sito chiede i video al gestionale acceso sul Mac (`localhost:8080`). Il suo database parte vuoto: per vedere i video bisogna registrarli anche lì.
 
 ## Foto
 

@@ -43,7 +43,6 @@ Vanno in `.env`, escluso da Git. Sono lette durante la build.
 | Variabile | Obbligatoria | Uso |
 |-----------|--------------|-----|
 | `VITE_API_BASE` | No | Indirizzo del gestionale. Se vuota: `https://hq.studiomobilitas.it` |
-| `VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE` | No | Video di `/cervicalgia` |
 
 ## Deploy
 

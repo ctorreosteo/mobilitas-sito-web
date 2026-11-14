@@ -18,7 +18,7 @@ import { prefetchHeroVideo } from '../../components/condition-landing/heroVideo'
 
 // Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
 // Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
-const heroVideo = prefetchHeroVideo('MALDISCHIENA_VSL')
+const heroVideo = prefetchHeroVideo('MAL_DI_SCHIENA_VSL')
 
 const HERO_BENEFITS = [
   <>
@@ -281,6 +281,8 @@ const PAGE = {
   slug: 'maldischiena',
   heroVideo,
   videoTitle: 'Video trattamento mal di schiena - Mobilitas Torino',
+  // La VSL ha l'audio: parte muta, al tocco riparte da capo e si sente
+  videoAudio: true,
   images: {
     hero: '/trattamenti/anca_decubito-laterale_06_orizzontale',
     heroClassName: 'object-[50%_60%]',

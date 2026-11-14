@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import ClImg from './ClImg'
 import { heroVideoSrc } from './heroVideo'
+import VslPlayer from './VslPlayer'
 
 // Riquadro media dell'apertura, usato dalle landing di prima visita (PrimaVisitaLanding).
 // Video VSL dal gestionale: autoplay muto in loop, si comporta come un'immagine.
+// audio: la VSL ha l'audio, al tocco riparte da capo e si sente (VslPlayer).
 // Mentre carica: riquadro blu; senza video: foto della pagina.
-export const HeroMedia = ({ video, loading, videoTitle, fallback, fallbackWhileLoading }) => {
+export const HeroMedia = ({ video, loading, videoTitle, fallback, fallbackWhileLoading, audio = false }) => {
   const [cover, setCover] = useState(true)
 
   useEffect(() => {
@@ -21,7 +23,9 @@ export const HeroMedia = ({ video, loading, videoTitle, fallback, fallbackWhileL
     <div className="mx-cl-media">
       <span className="mx-cl-media__halo" aria-hidden="true" />
       <div className={`mx-cl-media__frame ${loading && !showFallback ? 'is-loading' : ''}`}>
-        {video ? (
+        {video && audio ? (
+          <VslPlayer video={video} title={video.titolo || videoTitle} />
+        ) : video ? (
           <>
             {video.anteprimaUrl ? (
               <img src={video.anteprimaUrl} alt="" className="mx-cl-media__fill" decoding="async" fetchPriority="high" />

@@ -36,6 +36,8 @@ import CervDial from '../../components/cervicalgia/CervDial'
 import RecensioniTag from '../../components/recensioni-tag/RecensioniTag'
 import { VisitaCtas, VisitaDock } from '../../components/landing/VisitaCtas'
 import StudioCollage from '../../components/landing/StudioCollage'
+import VslPlayer from '../../components/condition-landing/VslPlayer'
+import { prefetchHeroVideo, useHeroVideo } from '../../components/condition-landing/heroVideo'
 import { DOLORI } from '../../data/dolori'
 import { FAQ_PRIMA_VISITA as FAQ_ITEMS } from '../../data/faqPrimaVisita'
 import '../../styles/pages/cervicalgia.css'
@@ -138,13 +140,9 @@ const NOI_ITEMS = [
 ]
 
 
-// Cloudflare Stream: video ID dalla dashboard; customer code in .env come VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE
-// loop=true: quando il video finisce riparte da capo in automatico (loop infinito)
-const STREAM_VIDEO_ID = '6ce867ac62c039c989cad30f7699d750'
-const STREAM_CUSTOMER_CODE = import.meta.env.VITE_CLOUDFLARE_STREAM_CUSTOMER_CODE ?? ''
-const STREAM_IFRAME_SRC = STREAM_CUSTOMER_CODE
-  ? `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${STREAM_VIDEO_ID}/iframe?autoplay=true&muted=true&controls=false&letterboxColor=%23002552&loop=true`
-  : ''
+// VSL dal gestionale (Cloudflare Stream), con l'audio al tocco. Codice stabile: non hardcodare l'UID Cloudflare.
+// Il fetch parte subito, prima del mount, per avere il video il prima possibile.
+const heroVideo = prefetchHeroVideo('CERVICALGIA_VSL')
 
 // Foto dei trattamenti in versione web (public/trattamenti/web, larghe 900 e 1600 px)
 const webImg = (nome, w = 900) => `/trattamenti/web/${nome}-${w}.jpg`
@@ -199,6 +197,7 @@ function Cervicalgia() {
   const heroCtaRef = useRef(null)
   const [agRef, agY] = useParallax(8)
   const [benRef, benY] = useParallax(8)
+  const { video, loading } = useHeroVideo(heroVideo)
 
   // SEO – metadata ottimizzati per Google e social (cervicalgia / dolore cervicale)
   useEffect(() => {
@@ -377,14 +376,10 @@ function Cervicalgia() {
             transition={{ duration: 1.1, ease: EASE, delay: 0.2 }}
           >
             <div className="mx-cerv-hero__frame">
-              {STREAM_IFRAME_SRC ? (
-                <iframe
-                  src={STREAM_IFRAME_SRC}
-                  title="Trattamento osteopatico per dolore cervicale - Mobilitas Torino"
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
+              {/* Mentre il video carica resta il fondo della cornice; senza video (404) la foto */}
+              {video ? (
+                <VslPlayer video={video} title="Trattamento osteopatico per dolore cervicale - Mobilitas Torino" />
+              ) : loading ? null : (
                 <img
                   src={webImg(FOTO_HERO, 1600)}
                   style={{ objectPosition: '50% 60%' }}
