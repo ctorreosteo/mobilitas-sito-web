@@ -18,7 +18,7 @@ import { prefetchHeroVideo } from '../../components/condition-landing/heroVideo'
 
 // Codice stabile del video nel gestionale: non hardcodare l'UID Cloudflare.
 // Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
-const heroVideo = prefetchHeroVideo('MAL_DI_SCHIENA_VSL')
+const heroVideo = prefetchHeroVideo('MALDISCHIENA_VSL')
 
 const HERO_BENEFITS = [
   <>
