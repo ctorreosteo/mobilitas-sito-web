@@ -281,6 +281,8 @@ const PAGE = {
   slug: 'maldischiena',
   heroVideo,
   videoTitle: 'Video trattamento mal di schiena - Mobilitas Torino',
+  // La VSL ha l'audio: parte muta, al tocco riparte da capo e si sente
+  videoAudio: true,
   images: {
     hero: '/trattamenti/anca_decubito-laterale_06_orizzontale',
     heroClassName: 'object-[50%_60%]',

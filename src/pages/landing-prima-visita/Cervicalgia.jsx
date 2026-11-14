@@ -36,9 +36,10 @@ import CervDial from '../../components/cervicalgia/CervDial'
 import RecensioniTag from '../../components/recensioni-tag/RecensioniTag'
 import { VisitaCtas, VisitaDock } from '../../components/landing/VisitaCtas'
 import StudioCollage from '../../components/landing/StudioCollage'
+import VslPlayer from '../../components/condition-landing/VslPlayer'
+import { prefetchHeroVideo, useHeroVideo } from '../../components/condition-landing/heroVideo'
 import { DOLORI } from '../../data/dolori'
 import { FAQ_PRIMA_VISITA as FAQ_ITEMS } from '../../data/faqPrimaVisita'
-import { heroVideoSrc, prefetchHeroVideo, useHeroVideo } from '../../components/condition-landing/heroVideo'
 import '../../styles/pages/cervicalgia.css'
 
 // Concetto: "Il raggio di rotazione". Il dolore cervicale si misura in quanto
@@ -139,8 +140,9 @@ const NOI_ITEMS = [
 ]
 
 
-// Codice stabile del video nel gestionale (Marketing → Video sito): non hardcodare l'UID Cloudflare.
-// Il fetch parte subito (prima del mount) per ridurre il tempo a primo frame.
+// VSL dal gestionale (Cloudflare Stream, caricata in Marketing → Video sito), con l'audio al tocco.
+// Codice stabile: non hardcodare l'UID Cloudflare.
+// Il fetch parte subito, prima del mount, per avere il video il prima possibile.
 const heroVideo = prefetchHeroVideo('CERVICALGIA_VSL')
 
 // Foto dei trattamenti in versione web (public/trattamenti/web, larghe 900 e 1600 px)
@@ -375,13 +377,9 @@ function Cervicalgia() {
             transition={{ duration: 1.1, ease: EASE, delay: 0.2 }}
           >
             <div className="mx-cerv-hero__frame">
+              {/* Mentre il video carica resta il fondo della cornice; senza video (404) la foto */}
               {video ? (
-                <iframe
-                  src={heroVideoSrc(video)}
-                  title="Trattamento osteopatico per dolore cervicale - Mobilitas Torino"
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                  allowFullScreen
-                />
+                <VslPlayer video={video} title="Trattamento osteopatico per dolore cervicale - Mobilitas Torino" />
               ) : loading ? null : (
                 <img
                   src={webImg(FOTO_HERO, 1600)}

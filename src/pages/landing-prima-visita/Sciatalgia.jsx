@@ -305,6 +305,8 @@ const PAGE = {
   slug: 'sciatalgia',
   heroVideo,
   videoTitle: 'Video trattamento sciatalgia - Mobilitas Torino',
+  // La VSL ha l'audio: parte muta, al tocco riparte da capo e si sente
+  videoAudio: true,
   images: {
     hero: '/trattamenti/anca_flessa-supino_12_orizzontale',
     heroClassName: 'object-[50%_60%]',

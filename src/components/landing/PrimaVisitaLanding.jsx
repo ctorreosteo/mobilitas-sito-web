@@ -157,6 +157,7 @@ export default function PrimaVisitaLanding({ page }) {
               video={video}
               loading={loading}
               videoTitle={page.videoTitle}
+              audio={page.videoAudio}
               fallback={{ src: fotoHero?.src, alt: page.videoTitle, className: fotoHero?.className }}
             />
             <span className="mx-cerv-hero__arc" aria-hidden="true" />
