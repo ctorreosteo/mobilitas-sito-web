@@ -19,6 +19,11 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_API_BASE || 'http://localhost:8080',
           changeOrigin: true,
         },
+        // Video delle landing: stessa cosa, sola lettura e pubblici, così le VSL si vedono anche in locale
+        '/api/sito/video': {
+          target: env.VITE_API_BASE || 'http://localhost:8080',
+          changeOrigin: true,
+        },
         // Tutto il resto (form, calendario, prenotazioni) resta sul gestionale locale: niente richieste vere per sbaglio
         '/api': {
           target: 'http://localhost:8080',

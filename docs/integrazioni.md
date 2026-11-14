@@ -8,7 +8,7 @@
 |----------|-----------|
 | Produzione | `VITE_API_BASE`, altrimenti `https://hq.studiomobilitas.it` |
 | Sviluppo | `/api` su `localhost:5173`, inoltrato dal proxy di Vite a `localhost:8080` |
-| Sviluppo, solo recensioni | `VITE_API_BASE`, così il carosello funziona senza gestionale locale |
+| Sviluppo, recensioni e video | `VITE_API_BASE`, così carosello e VSL funzionano senza gestionale locale |
 
 `VITE_API_BASE` viene letta durante la build: il valore del `.env` della macchina che fa il deploy finisce nel bundle.
 

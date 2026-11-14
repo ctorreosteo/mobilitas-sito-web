@@ -24,7 +24,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Il sito è su `http://localhost:5173`. Senza gestionale locale su `localhost:8080` non funzionano form, calendario e video delle landing; le recensioni funzionano se `VITE_API_BASE` è impostata.
+Il sito è su `http://localhost:5173`. Senza gestionale locale su `localhost:8080` non funzionano form e calendario; recensioni e video delle landing funzionano se `VITE_API_BASE` è impostata.
 
 **Attenzione:** alcuni form scrivono in produzione anche da locale, vedi i [problemi noti](docs/architettura.md#problemi-noti).
 
