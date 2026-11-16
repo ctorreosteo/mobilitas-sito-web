@@ -23,6 +23,8 @@ Il testo della sezione `seo.faq` finisce nel JSON-LD: vanno controllati anche qu
 | Fatte a mano | `Cervicalgia`, `OsteopataTorino` | Nel file della pagina |
 | Solo contenuti | Tutte le altre 26 | `components/landing/PrimaVisitaLanding.jsx` |
 
+`/black-friday` (`pages/landing-pages/BlackFriday.jsx`) è fatta a mano: offerta per chi è già paziente (10 visite a 450€, porta un amico, scadenza 29/11/2026), stessa grafica delle landing della prima visita più `styles/pages/black-friday.css`. È in `noindex`; i bottoni chiamano `riservaVisite` e `portaUnAmico` in cima al file, da collegare.
+
 `/yt-postura` è fatta a mano (`pages/YtPostura.jsx` e `pages/yt-postura/`). Il vecchio template `ConditionLanding` è stato tolto il 02/11/2026: di `components/condition-landing/` restano solo i pezzi che usa `PrimaVisitaLanding` (foto, video, riquadro media dell'apertura, SEO).
 
 Una pagina "solo contenuti" è un oggetto `PAGE` passato al template:

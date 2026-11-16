@@ -126,6 +126,8 @@ const ZONE = {
   scoliosi: ['schiena', 'collo', 'spalla'],
   'ernia-del-disco': ['schiena', 'anca', 'gamba'],
   lombalgia: ['schiena', 'anca', 'pancia'],
+  // Offerta per tutti i dolori: foto di tutto il corpo
+  'black-friday': ['collo', 'schiena', 'anca', 'spalla', 'pancia', 'gamba'],
 }
 
 // Una foto per serie prima di ripetere la serie: gli scatti consecutivi (es. anca_flessa-supino_05, _06, _07)

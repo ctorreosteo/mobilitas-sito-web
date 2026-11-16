@@ -52,6 +52,7 @@ import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
 import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
 import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
+import BlackFriday from './pages/landing-pages/BlackFriday'
 import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata'
 import Cervicalgia from './pages/landing-prima-visita/Cervicalgia'
 import Reflusso from './pages/landing-prima-visita/Reflusso'
@@ -184,6 +185,8 @@ function App() {
         <Route path="/lm-gpadel-infortuni-grazie" element={<GpadelInfortuniThankYou />} />
         <Route path="/lm-gpadel-sconto39-generico" element={<LmGpadelSconto39 />} />
         <Route path="/cofanetto-natale" element={<CofanettoNatale />} />
+        {/* Offerta Black Friday per chi è già paziente (fino al 29/11/2026). Footer senza CTA finché non c'è il percorso dei bottoni */}
+        <Route path="/black-friday" element={<Layout hideWhatsApp hideFooterCta><BlackFriday /></Layout>} />
         <Route path="/iter-selezione-osteopata" element={<Layout hideWhatsApp><IterSelezioneOsteopata /></Layout>} />
         
         {/* Login Page */}
