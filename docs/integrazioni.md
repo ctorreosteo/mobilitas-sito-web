@@ -15,7 +15,7 @@
 | Metodo | Endpoint | Uso |
 |--------|----------|-----|
 | POST | `/api/richieste` | Crea la richiesta (lead) |
-| GET | `/api/sito/prenotazione/disponibilita?studio=<id>&percorso=<p>` | Giorni e orari liberi. `percorso` (`gravidanza` o `pediatria`, facoltativo): solo gli osteopati con la spunta «Prenotabile dal sito per gravidanza e pediatria» nel gestionale |
+| GET | `/api/sito/prenotazione/disponibilita?studio=<id>&percorso=<p>` | Giorni e orari liberi (senza le ore in cui la stanza dell'osteopata è occupata da un'altra visita o da un evento del gestionale). `percorso` (`gravidanza` o `pediatria`, facoltativo): solo gli osteopati con la spunta «Prenotabile dal sito per gravidanza e pediatria» nel gestionale |
 | POST | `/api/sito/prenotazione` | Prenota: `{ richiestaId, token, studio, data, ora, percorso? }`. 409 se l'orario è stato preso. Il percorso vale anche se la richiesta ha il tag `TAG_DOLORE_GRAVIDANZA` o `TAG_DOLORE_PEDIATRIA` |
 | GET | `/api/sito/video/codice/<codice>` | Video per codice: `cloudflareUid`, `anteprimaUrl`. 404 se non esiste |
 | GET | `/api/sito/recensioni?tag=<tag>&limite=<n>` | Recensioni per tag, `tag` ripetibile |
