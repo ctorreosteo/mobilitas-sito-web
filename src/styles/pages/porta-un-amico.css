@@ -294,11 +294,17 @@
 
 /* ---------- Apertura ---------- */
 
+/* Il layout comune lascia sopra la pagina una fascia color panna alta quanto il menu (pt-16 / sm:pt-20 di <main>):
+   scorrendo, sotto la pillola del menu si vedeva come una barra bianca. Come in /black-friday-2026: la pagina sale
+   sotto il menu e l'apertura recupera lo stesso spazio nel padding (--pa-nav). */
+.mx-page.mx-pa { --pa-nav: 64px; margin-top: calc(var(--pa-nav) * -1); }
+@media (min-width: 640px) { .mx-page.mx-pa { --pa-nav: 80px; } }
+
 .pa-hero {
   position: relative;
   overflow: hidden;
   overflow: clip;
-  padding: 18px 0 72px;
+  padding: calc(18px + var(--pa-nav, 0px)) 0 72px;
   background:
     radial-gradient(80% 50% at 50% 38%, rgba(114, 250, 147, 0.08), transparent 70%),
     radial-gradient(120% 80% at 50% 0%, var(--navy-2) 0%, var(--navy) 50%, var(--ink) 100%);
@@ -432,7 +438,7 @@
 .pa-hero__sub { grid-area: sub; margin-top: 10px !important; }
 
 @media (min-width: 1024px) {
-  .pa-hero { padding: clamp(48px, 6vw, 88px) 0 clamp(88px, 9vw, 130px); }
+  .pa-hero { padding: calc(clamp(48px, 6vw, 88px) + var(--pa-nav, 0px)) 0 clamp(88px, 9vw, 130px); }
 
   .pa-hero__orbit {
     background: repeating-radial-gradient(circle at 74% 46%, transparent 0 89px, rgba(244, 244, 244, 0.045) 90px 91px);
