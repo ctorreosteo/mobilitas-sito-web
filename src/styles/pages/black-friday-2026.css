@@ -1,0 +1,1514 @@
+/* Landing Black Friday 2026 (pages/landing-pages/BlackFriday.jsx), redesign del 16/11/2026.
+   Mondo visivo: notte blu, Montserrat leggero a scala display, verde solo su blu, una sola sezione panna.
+   Elemento firma: il 10 in 3D (components/black-friday-2026-sections/Dieci3D.jsx). Prefisso: .bfx
+   Non tocca black-friday.css (comune con /black-friday-2026-amico). */
+
+.bfx {
+  --bfx-night: #002552;
+  --bfx-deep: #001a3d;
+  --bfx-ink: #000f2b;
+  --bfx-green: #72fa93;
+  --bfx-cream: #f4f4f4;
+  --bfx-text: rgba(244, 244, 244, 0.78);
+  --bfx-text-2: rgba(244, 244, 244, 0.7);
+  --bfx-rule: rgba(244, 244, 244, 0.14);
+  --bfx-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --bfx-ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --bfx-gutter: 16px;
+
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+  font-variant-numeric: lining-nums;
+  overflow-x: clip;
+}
+
+.bfx ::selection { background: var(--bfx-green); color: var(--bfx-night); }
+
+/* mx.css colora ogni strong/b di panna a 700: qui ereditano e il colore si decide per contesto */
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-hero__caption, .bfx-deal, .bfx-ledger, .bfx-count) b,
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-hero__caption, .bfx-deal, .bfx-ledger, .bfx-count) strong {
+  color: inherit;
+  font-weight: 600;
+}
+
+.bfx :focus-visible {
+  outline: 2px solid var(--bfx-green);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.bfx-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.bfx-wrap {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2 * var(--bfx-gutter), 1240px);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .bfx { --bfx-gutter: 40px; }
+}
+
+/* Da 1024px la colonna vertebrale fissa del sito (SpineProgress) occupa i primi ~100px a sinistra */
+@media (min-width: 1024px) {
+  .bfx { --bfx-gutter: 120px; }
+}
+
+/* ======================================================================
+   Tipografia. Le dimensioni dei titoli stanno in @layer base con !important
+   perché index.css forza h1..h4 su telefono (stesso trucco di mx.css).
+   ====================================================================== */
+
+.bfx-h {
+  margin: 0;
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+  font-weight: 300;
+  color: var(--bfx-cream);
+  text-wrap: balance;
+}
+
+.bfx :is(.bfx-h, .bfx-h *) strong,
+.bfx .bfx-h strong { font-weight: 600; color: inherit; }
+.bfx-h .is-green { color: var(--bfx-green); }
+.bfx-h .is-dim { color: rgba(244, 244, 244, 0.62); }
+
+@layer base {
+  .bfx h2.bfx-why-us__q { font-size: 1.0625rem !important; line-height: 1.3; letter-spacing: 0; }
+  .bfx h1.bfx-h.bfx-hero__title {
+    font-size: clamp(2.2rem, 9.6vw, 4.5rem) !important;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+  .bfx :is(h2, h3).bfx-h.bfx-h2 {
+    font-size: clamp(2rem, 7.4vw, 4.1rem) !important;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+  .bfx h3.bfx-h.bfx-h3 {
+    font-size: clamp(1.5rem, 4.6vw, 2.2rem) !important;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+  .bfx :is(h3, h4).bfx-h.bfx-h4 {
+    font-size: clamp(1.2rem, 3.4vw, 1.45rem) !important;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+}
+
+.bfx-lead {
+  margin: 0;
+  max-width: 60ch;
+  font-size: clamp(1.06rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--bfx-text);
+}
+
+.bfx-body {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-weight: 400;
+  color: var(--bfx-text);
+}
+
+.bfx-lead strong,
+.bfx-body strong { font-weight: 600; color: var(--bfx-cream); }
+
+/* ======================================================================
+   Sezioni: ritmo per colore di fondo, non per riquadri
+   ====================================================================== */
+
+.bfx-section {
+  position: relative;
+  padding: 88px 0;
+}
+
+@media (min-width: 1024px) {
+  .bfx-section { padding: 140px 0; }
+}
+
+/* ======================================================================
+   Bottoni
+   ====================================================================== */
+
+.bfx-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+  margin-top: 40px;
+}
+
+.bfx-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 8px 8px 8px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font: 600 1.0625rem/1.2 'Montserrat', sans-serif;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 18px 40px -18px rgba(114, 250, 147, 0.55);
+  transition: transform 160ms var(--bfx-ease-out), box-shadow 200ms ease;
+}
+
+.bfx-btn:active { transform: scale(0.97); }
+
+.bfx-btn__txt {
+  flex: 1;
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.bfx-btn__txt small {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-btn__txt small s { opacity: 0.62; }
+.bfx-btn__txt small b { font-weight: 700; }
+
+.bfx-btn__arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bfx-night);
+  color: var(--bfx-green);
+  transition: transform 200ms var(--bfx-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-btn:hover { box-shadow: 0 22px 50px -16px rgba(114, 250, 147, 0.7); }
+  .bfx-btn:hover .bfx-btn__arrow { transform: translateX(3px); }
+}
+
+.bfx-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--bfx-cream);
+  font: 500 1rem/1.2 'Montserrat', sans-serif;
+  text-decoration: underline;
+  text-decoration-color: rgba(244, 244, 244, 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  cursor: pointer;
+  transition: text-decoration-color 200ms ease, color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-link:hover { text-decoration-color: var(--bfx-green); }
+}
+
+@media (max-width: 639px) {
+  .bfx-ctas { flex-direction: column; align-items: stretch; }
+  .bfx-btn { width: 100%; }
+  .bfx-link { justify-content: center; }
+}
+
+/* Sulla sezione panna il verde non si usa: bottone blu notte */
+.bfx-ctas.is-light .bfx-btn {
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  box-shadow: 0 18px 40px -20px rgba(0, 37, 82, 0.6);
+}
+
+.bfx-ctas.is-light .bfx-btn__arrow { background: var(--bfx-cream); color: var(--bfx-night); }
+.bfx-ctas.is-light .bfx-link { color: var(--bfx-night); text-decoration-color: rgba(0, 37, 82, 0.35); }
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-ctas.is-light .bfx-link:hover { text-decoration-color: var(--bfx-night); }
+}
+
+/* ======================================================================
+   Conto alla rovescia
+   ====================================================================== */
+
+.bfx-count {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin: 0;
+}
+
+.bfx-count__lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--bfx-cream);
+}
+
+.bfx-count__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18);
+}
+
+.bfx-count__time { display: inline-flex; gap: 16px; }
+
+.bfx-count__u {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.bfx-count__u b {
+  font-size: 1.375rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--bfx-cream);
+}
+
+.bfx-count__u small {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bfx-text-2);
+}
+
+.bfx-count.is-over { font-size: 0.9375rem; font-weight: 500; color: var(--bfx-text); }
+
+/* ======================================================================
+   Apertura
+   ====================================================================== */
+
+/* Il layout comune lascia sopra la pagina una fascia color panna alta quanto il menu (pt-16 / sm:pt-20 di <main>):
+   quando il menu diventa la pillola staccata dal bordo, quella fascia si vedeva come una barra bianca. La pagina sale
+   sotto il menu e l'apertura recupera lo stesso spazio nel padding. */
+.mx-page.bfx { margin-top: -64px; }
+
+.bfx-hero {
+  position: relative;
+  overflow: clip;
+  padding: calc(22px + 64px) 0 64px;
+  background: var(--bfx-night);
+}
+
+@media (min-width: 640px) {
+  .mx-page.bfx { margin-top: -80px; }
+  .bfx-hero { padding-top: calc(22px + 80px); }
+}
+
+.bfx-hero__grid {
+  display: grid;
+  gap: 18px;
+}
+
+.bfx-hero__copy { display: contents; }
+
+.bfx-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  margin: 0;
+  padding: 7px 14px 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.4);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bfx-green);
+}
+
+.bfx-hero__title { order: 1; }
+.bfx-tag { order: 0; }
+.bfx-hero__media { order: 2; }
+.bfx-hero__offer { order: 3; }
+.bfx-hero__sub { order: 4; }
+
+.bfx-hero__line { display: block; }
+.bfx-hero__line.is-green { color: var(--bfx-green); margin-top: 0.18em; }
+
+.bfx-hero__offer .bfx-ctas { margin-top: 0; }
+.bfx-hero__count { margin-top: 18px; }
+
+.bfx-hero__media { position: relative; }
+
+/* Il riquadro del video è quello comune (condition-landing.css): qui solo il bordo e l'alone, più sobri */
+.bfx-hero__media .mx-cl-media__halo { display: none; }
+.bfx-hero__media .mx-cl-media__frame {
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.14), 0 40px 80px -36px rgba(0, 0, 0, 0.75);
+}
+.bfx-hero__media .mx-cl-media__frame::after { box-shadow: none; }
+
+.bfx-hero__caption {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 18px 0 0;
+  border-top: 1px solid var(--bfx-rule);
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-hero__caption > span {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0 0 18px;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--bfx-cream);
+}
+
+.bfx-hero__caption > span:first-child { padding-left: 0; }
+.bfx-hero__caption > span + span { border-left: 1px solid var(--bfx-rule); }
+
+.bfx-hero__caption small {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--bfx-text-2);
+}
+
+.bfx-hero__caption s { color: var(--bfx-text-2); text-decoration-thickness: 1px; }
+.bfx-hero__caption .is-deal b { font-weight: 400; color: var(--bfx-green); }
+
+/* Il 10 in 3D, appoggiato sull'angolo in alto a destra del video: ne copre solo l'angolo */
+.bfx-hero__ten {
+  position: absolute;
+  z-index: 3;
+  top: -30px;
+  right: -2px;
+  width: 128px;
+  height: 108px;
+  pointer-events: none;
+  --ten-size: 4.4rem;
+}
+
+.bfx-hero .bfx-wrap { z-index: 1; }
+
+@media (min-width: 640px) {
+  .bfx-hero__caption { display: grid; }
+}
+
+@media (min-width: 1024px) {
+  .bfx-hero {
+    padding: calc(80px + 92px) 0 104px;
+    min-height: min(100svh, 1000px);
+    display: flex;
+    align-items: center;
+  }
+  .bfx-hero__grid {
+    width: min(100% - 2 * var(--bfx-gutter), 1240px);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 72px;
+  }
+  .bfx-hero__copy {
+    display: grid;
+    gap: 26px;
+    align-content: center;
+  }
+  .bfx-hero__offer { order: 4; margin-top: 8px; }
+  .bfx-hero__sub { order: 3; }
+  .bfx-hero__media { order: 2; padding-top: 150px; }
+  .bfx-hero__ten {
+    top: -10px;
+    right: -46px;
+    width: 400px;
+    height: 250px;
+    --ten-size: 13.5rem;
+  }
+}
+
+/* ——— Scultura del 10: numero pieno estruso, anello che lo attraversa ——— */
+.bfx-ten {
+  --ten-size: 8rem;
+  perspective: 1000px;
+  perspective-origin: 50% 40%;
+}
+
+/* Alone verde sotto il numero */
+.bfx-ten__glow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 2%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.45), transparent);
+  filter: blur(14px);
+  opacity: 0;
+  transition: opacity 1.2s var(--bfx-ease-out) 0.4s;
+}
+
+.bfx-ten.is-built .bfx-ten__glow { opacity: 1; }
+
+.bfx-ten__tilt,
+.bfx-ten__spin {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.bfx-ten__spin { transform: rotateY(-24deg) rotateX(10deg); }
+
+.bfx-ten.is-live .bfx-ten__spin { animation: bfx-sway 9s var(--bfx-ease-io) infinite alternate; }
+
+@keyframes bfx-sway {
+  from { transform: rotateY(-32deg) rotateX(12deg); }
+  to { transform: rotateY(22deg) rotateX(4deg); }
+}
+
+.bfx-ten__layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: var(--ten-size);
+  line-height: 1;
+  letter-spacing: -0.07em;
+  transform: translateZ(0);
+  opacity: 0;
+  transition:
+    transform 1.4s var(--bfx-ease-out) var(--d),
+    opacity 0.7s var(--bfx-ease-out) var(--d);
+  user-select: none;
+}
+
+/* Faccia: verde chiaro con un riflesso che scorre */
+.bfx-ten__layer.is-front {
+  color: transparent;
+  background: linear-gradient(115deg, #2fd46a 0%, #72fa93 30%, #eafff0 46%, #72fa93 60%, #39dc75 100%) 0 0 / 260% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-stroke: 1px rgba(234, 255, 240, 0.5);
+}
+
+.bfx-ten.is-live .bfx-ten__layer.is-front { animation: bfx-riflesso 5s var(--bfx-ease-io) 1.2s infinite; }
+
+@keyframes bfx-riflesso {
+  0% { background-position: 100% 0; }
+  45%, 100% { background-position: 0% 0; }
+}
+
+.bfx-ten.is-built .bfx-ten__layer {
+  transform: translateZ(var(--z));
+  opacity: 1;
+}
+
+/* Anello: un'orbita sottile inclinata che passa davanti e dietro al numero, con un punto che gira */
+.bfx-ten__ring {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  top: 50%;
+  aspect-ratio: 1;
+  margin-top: -56%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(114, 250, 147, 0.55);
+  box-shadow: 0 0 18px rgba(114, 250, 147, 0.25);
+  transform: rotateX(68deg) rotateY(-10deg) scale(0.6);
+  transform-style: preserve-3d;
+  opacity: 0;
+  transition: opacity 1s var(--bfx-ease-out) 0.6s, transform 1.4s var(--bfx-ease-out) 0.4s;
+}
+
+.bfx-ten.is-built .bfx-ten__ring { opacity: 1; transform: rotateX(68deg) rotateY(-10deg) scale(1); }
+
+.bfx-ten__dot {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.bfx-ten__dot::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: #eafff0;
+  box-shadow: 0 0 12px 3px rgba(114, 250, 147, 0.85);
+}
+
+.bfx-ten.is-live .bfx-ten__dot { animation: bfx-orbita 7s linear infinite; }
+
+@keyframes bfx-orbita { to { transform: rotate(360deg); } }
+
+/* ======================================================================
+   L'offerta: mazzo delle dieci visite e prezzo gigante
+   ====================================================================== */
+
+.bfx-deal { background: var(--bfx-night); padding-bottom: 72px; }
+
+/* Subito dopo l'apertura (stesso blu): niente doppio spazio, un filo separa le due parti */
+.bfx-hero + .bfx-deal { padding-top: 0; }
+.bfx-hero + .bfx-deal > .bfx-wrap:first-child { padding-top: 64px; border-top: 1px solid var(--bfx-rule); }
+
+@media (min-width: 1024px) {
+  .bfx-hero + .bfx-deal > .bfx-wrap:first-child { padding-top: 104px; }
+}
+
+.bfx-deal__head { display: grid; gap: 22px; margin-bottom: 48px; }
+
+@media (min-width: 1024px) {
+  .bfx-deal__head { grid-template-columns: 1.2fr 0.8fr; gap: 72px; align-items: end; margin-bottom: 72px; }
+}
+
+.bfx-deck { perspective: 1100px; }
+
+.bfx-deck__list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) { .bfx-deck__list { gap: 14px; } }
+@media (min-width: 1024px) { .bfx-deck__list { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 14px; } }
+
+.bfx-vcard { position: relative; aspect-ratio: 5 / 7; }
+
+.bfx-vcard__in {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 900ms var(--bfx-ease-out) var(--d);
+}
+
+.bfx-deck.is-flipped .bfx-vcard.is-gift .bfx-vcard__in { transform: rotateY(180deg); }
+
+.bfx-vcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--bfx-rule);
+  background: rgba(244, 244, 244, 0.035);
+  color: var(--bfx-cream);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.bfx-vcard__face b {
+  font-size: clamp(1.1rem, 4.6vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-vcard__face svg { color: var(--bfx-text-2); }
+
+.bfx-vcard__pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 244, 244, 0.5);
+}
+
+.bfx-vcard__face.is-back {
+  transform: rotateY(180deg);
+  border-color: transparent;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  box-shadow: 0 20px 36px -22px rgba(114, 250, 147, 0.8);
+}
+
+.bfx-vcard__face.is-back svg { color: var(--bfx-night); }
+
+@media (min-width: 640px) {
+  .bfx-vcard__face { padding: 14px 12px; border-radius: 16px; }
+}
+
+.bfx-deck__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 20px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--bfx-text);
+}
+
+.bfx-deck__legend span { display: inline-flex; align-items: center; gap: 10px; }
+
+.bfx-deck__legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(244, 244, 244, 0.45);
+}
+
+.bfx-deck__legend i.is-gift { border: 0; background: var(--bfx-green); }
+
+/* Il prezzo a tutta larghezza */
+.bfx-deal__price { margin-top: 72px; }
+
+.bfx-deal__was {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--bfx-text);
+}
+
+.bfx-deal__was s { margin-left: 6px; font-weight: 300; font-size: 1.5rem; color: var(--bfx-text-2); }
+
+.bfx-mega {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0 var(--bfx-gutter);
+  color: var(--bfx-green);
+  font-weight: 300;
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.bfx-mega__n { font-size: clamp(8.5rem, 38vw, 28rem); }
+
+.bfx-mega__eur {
+  margin-top: 0.12em;
+  font-size: clamp(3.4rem, 15vw, 10rem);
+}
+
+.bfx-deal__facts {
+  display: grid;
+  gap: 20px 40px;
+  margin-top: 32px;
+  padding-top: 26px;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-deal__facts p {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+}
+
+.bfx-deal__facts b {
+  font-size: 1.85rem;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  color: var(--bfx-cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-deal__facts span { font-size: 1rem; color: var(--bfx-text); }
+
+@media (min-width: 900px) {
+  .bfx-deal__facts { grid-template-columns: auto auto 1fr; align-items: center; }
+  .bfx-deal__count { justify-content: flex-end; }
+}
+
+/* ======================================================================
+   Perché dieci visite: scene alternate e linea del percorso
+   ====================================================================== */
+
+/* Perché lo facciamo: una frase sola, grande e leggera */
+.bfx-why-us { background: var(--bfx-deep); }
+.bfx-why-us { overflow: clip; }
+.bfx-why-us__inner { display: grid; gap: 20px; }
+.bfx-why-us__a { max-width: 22ch; }
+.bfx-why-us__q { margin: 0; font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; color: var(--bfx-green); }
+.bfx-why-us__a {
+  margin: 0;
+  font-size: clamp(1.9rem, 5.4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--bfx-cream);
+  text-wrap: balance;
+}
+.bfx-why-us__a .is-dim { color: rgba(244, 244, 244, 0.5); }
+.bfx-why-us__a .is-green { display: block; margin-top: 0.35em; color: var(--bfx-green); }
+
+@media (min-width: 1024px) {
+  .bfx-why-us__inner {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 80px;
+    align-items: start;
+  }
+  .bfx-why-us__q { grid-column: 1; align-self: end; }
+  .bfx-why-us__a { grid-column: 1; }
+  .bfx-receipt-wrap { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+}
+
+/* ——— Lo scontrino ——— */
+.bfx-receipt-wrap {
+  display: grid;
+  justify-items: center;
+  margin-top: 28px;
+  perspective: 1100px;
+  /* L'ombra sta sul contenitore: la maschera del bordo strappato taglierebbe quella dello scontrino */
+  filter: drop-shadow(0 34px 34px rgba(0, 0, 0, 0.55));
+}
+
+.bfx-receipt {
+  --tear: 10px;
+  position: relative;
+  width: min(100% - 28px, 340px);
+  padding: 24px 22px calc(20px + var(--tear));
+  background: #f4f1ea;
+  color: var(--bfx-night);
+  font-variant-numeric: tabular-nums;
+  transform-style: preserve-3d;
+  rotate: -3deg;
+  /* Bordo strappato in basso */
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--tear)) 100%;
+          mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--tear)) 100%;
+}
+
+.bfx-receipt p { margin: 0; }
+
+.bfx-receipt__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 16px;
+  border-bottom: 1.5px dashed rgba(0, 37, 82, 0.35);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bfx .bfx-receipt__head b { font-weight: 700; color: var(--bfx-night); }
+
+.bfx-receipt__rows { display: grid; gap: 12px; margin: 0; padding: 18px 0; list-style: none; }
+
+.bfx-receipt__rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.bfx-receipt__rows li.is-struck { color: rgba(0, 37, 82, 0.45); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.bfx-receipt__rows li.is-gift { font-weight: 600; }
+
+.bfx-receipt__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 16px 0 14px;
+  border-top: 1.5px dashed rgba(0, 37, 82, 0.35);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bfx .bfx-receipt__total b {
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: none;
+  color: var(--bfx-night);
+  transform: translateZ(30px);
+}
+
+.bfx-receipt__foot { font-size: 0.8125rem; font-weight: 500; color: rgba(0, 37, 82, 0.7); }
+
+.bfx-receipt__code {
+  display: block;
+  height: 34px;
+  margin-top: 16px;
+  background: repeating-linear-gradient(90deg, var(--bfx-night) 0 2px, transparent 2px 4px, var(--bfx-night) 4px 5px, transparent 5px 9px, var(--bfx-night) 9px 12px, transparent 12px 14px);
+  opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .bfx-receipt-wrap { margin-top: 0; }
+  .bfx-receipt { width: 420px; padding: 34px 34px calc(28px + var(--tear)); }
+  .bfx-receipt__rows li { font-size: 1rem; }
+  .bfx .bfx-receipt__total b { font-size: 3.6rem; }
+}
+
+.bfx-why { background: var(--bfx-ink); }
+
+.bfx-why__title { max-width: 18ch; }
+
+.bfx-why__list {
+  display: grid;
+  gap: 64px;
+  margin: 64px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-scene { display: grid; gap: 22px; }
+
+.bfx-scene__img {
+  margin: 0 calc(-1 * var(--bfx-gutter));
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.bfx-scene__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-scene__txt { display: grid; gap: 14px; align-content: center; }
+
+.bfx-scene__n {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bfx-green);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 900px) {
+  .bfx-why__list { gap: 96px; margin-top: 88px; }
+  .bfx-scene { grid-template-columns: 1.25fr 0.75fr; gap: 64px; align-items: center; }
+  .bfx-scene.is-flip { grid-template-columns: 0.75fr 1.25fr; }
+  .bfx-scene.is-flip .bfx-scene__img { order: 2; }
+  .bfx-scene__img { margin: 0; border-radius: 20px; aspect-ratio: 3 / 2; }
+}
+
+.bfx-path {
+  display: grid;
+  gap: 48px;
+  margin-top: 112px;
+}
+
+.bfx-path__copy { display: grid; gap: 22px; align-content: start; }
+
+.bfx-path__img {
+  margin: 12px 0 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.bfx-path__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-path__steps { position: relative; padding-left: 36px; }
+
+/* Il bottone dopo il percorso: meno distanza, il percorso finisce già con la linea */
+.bfx-path + .bfx-ctas { margin-top: 56px; }
+
+.bfx-path__rail {
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: var(--bfx-rule);
+}
+
+.bfx-path__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--bfx-green);
+  transform-origin: top;
+}
+
+.bfx-path__steps ol {
+  display: grid;
+  gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-path__steps li { position: relative; display: grid; gap: 10px; }
+
+.bfx-path__node {
+  position: absolute;
+  left: -36px;
+  top: 6px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--bfx-ink);
+  border: 1px solid var(--bfx-green);
+}
+
+@media (min-width: 1024px) {
+  .bfx-path { grid-template-columns: 1fr 1fr; gap: 96px; margin-top: 136px; align-items: center; }
+  .bfx-path__steps { padding-top: 12px; }
+  .bfx-path__steps ol { gap: 64px; }
+}
+
+/* ======================================================================
+   Cosa cambia: una visita → un percorso
+   ====================================================================== */
+
+.bfx-change { background: var(--bfx-night); }
+
+.bfx-change__head { display: grid; gap: 32px; margin-bottom: 44px; }
+
+.bfx-change__photo { display: none; }
+
+@media (min-width: 1024px) {
+  .bfx-change__head { grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; margin-bottom: 72px; }
+  .bfx-change__photo {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 22px;
+    box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.1), 0 40px 70px -40px rgba(0, 0, 0, 0.8);
+  }
+  .bfx-change__photo img { width: 100%; height: 112%; object-fit: cover; display: block; }
+}
+
+/* ——— Confronto: due colonne, la seconda è una carta verde che si accende ——— */
+.bfx-vs {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+}
+
+.bfx-vs__row { display: contents; margin: 0; }
+
+.bfx-vs__card {
+  grid-column: 2;
+  grid-row: 1 / span var(--righe);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(114, 250, 147, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(0, 51, 110, 0.9), rgba(0, 31, 70, 0.9));
+  box-shadow:
+    0 0 0 1px rgba(114, 250, 147, 0.4),
+    0 40px 90px -40px rgba(114, 250, 147, 0.35);
+}
+
+.bfx-vs__row > span {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 12px;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.bfx-vs__row > span { grid-row: var(--r); }
+.bfx-vs__row > .is-to { grid-column: 2; }
+
+.bfx-vs__row > .is-from {
+  grid-column: 1;
+  padding-left: 0;
+  color: rgba(244, 244, 244, 0.5);
+  border-bottom: 1px solid var(--bfx-rule);
+}
+
+.bfx-vs__row > .is-to {
+  padding-left: 16px;
+  padding-right: 16px;
+  color: var(--bfx-cream);
+  border-bottom: 1px solid rgba(114, 250, 147, 0.14);
+}
+
+.bfx .bfx-vs__row > .is-to strong { font-weight: 600; color: var(--bfx-cream); }
+
+.bfx-vs__ico { flex-shrink: 0; margin-top: 2px; color: rgba(244, 244, 244, 0.35); }
+
+.bfx-vs__ok {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+}
+
+/* Intestazione: Una visita (contorno) → Un percorso (verde) */
+.bfx-vs__row.is-head > span {
+  padding-top: 22px;
+  padding-bottom: 18px;
+  font-size: clamp(1.45rem, 5.6vw, 3rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.bfx-vs__row.is-head > .is-from {
+  align-self: end;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 244, 244, 0.5);
+}
+
+.bfx-vs__row.is-head > .is-to { color: var(--bfx-green); }
+
+/* Ultima riga: il prezzo a visita */
+.bfx-vs__row.is-price > span {
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 22px;
+  padding-bottom: 24px;
+  border-bottom: 0;
+}
+
+.bfx-vs__row.is-price b {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-vs__row.is-price .is-from b { color: rgba(244, 244, 244, 0.5); }
+.bfx .bfx-vs__row.is-price .is-to b { font-weight: 300; color: var(--bfx-green); }
+.bfx-vs__row.is-price small { font-size: 0.875rem; font-weight: 500; color: var(--bfx-text-2); }
+
+.bfx-change__cta { margin-top: 48px; }
+
+@media (min-width: 768px) {
+  .bfx-vs__row > span { padding: 22px 28px; font-size: 1.0625rem; gap: 14px; }
+  .bfx-vs__row > .is-from { padding-left: 0; }
+  .bfx-vs__row.is-head > span { padding-top: 34px; padding-bottom: 26px; }
+  .bfx-vs__row.is-price > span { padding-top: 28px; padding-bottom: 32px; }
+  .bfx-vs__ok { width: 24px; height: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .bfx-vs { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+  .bfx-vs__row > .is-to { padding-left: 40px; padding-right: 40px; }
+}
+
+/* ======================================================================
+   Porta un amico: sezione panna, inchiostro blu, niente verde
+   ====================================================================== */
+
+.bfx-friend {
+  background: var(--bfx-cream);
+  color: var(--bfx-night);
+}
+
+.bfx-friend .bfx-h { color: var(--bfx-night); }
+.bfx-friend .bfx-lead,
+.bfx-friend .bfx-body { color: rgba(0, 37, 82, 0.8); }
+.bfx-friend strong,
+.bfx-friend .bfx-lead strong,
+.bfx-friend .bfx-body strong { color: var(--bfx-night); }
+.bfx-friend .bfx-pass.is-you strong { color: var(--bfx-cream); }
+.bfx-friend ::selection { background: var(--bfx-night); color: var(--bfx-cream); }
+.bfx-friend :focus-visible { outline-color: var(--bfx-night); }
+
+.bfx-friend__head { display: grid; gap: 22px; margin-bottom: 48px; }
+
+@media (min-width: 1024px) {
+  .bfx-friend__head { grid-template-columns: 1.1fr 0.9fr; gap: 72px; align-items: end; margin-bottom: 72px; }
+}
+
+.bfx-friend__passes {
+  display: grid;
+  gap: 16px;
+  perspective: 1200px;
+}
+
+@media (min-width: 900px) {
+  .bfx-friend__passes { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
+.bfx-pass {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 28px 24px 30px;
+  border-radius: 24px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.bfx-pass.is-you {
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  box-shadow: 0 40px 60px -40px rgba(0, 37, 82, 0.7);
+}
+
+.bfx-pass.is-you .bfx-h { color: var(--bfx-cream); }
+.bfx-pass.is-you .bfx-body { color: var(--bfx-text); }
+.bfx-pass.is-you .bfx-pass__who,
+.bfx-pass.is-you .bfx-pass__big { color: var(--bfx-green); }
+
+.bfx-pass.is-friend {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 37, 82, 0.12), 0 40px 60px -44px rgba(0, 37, 82, 0.45);
+}
+
+.bfx-pass__who {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.bfx-pass__big {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 8px 0 6px;
+  font-size: clamp(4.6rem, 20vw, 8rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  transform: translateZ(40px);
+}
+
+.bfx-pass__big s {
+  font-size: 0.32em;
+  letter-spacing: -0.02em;
+  color: rgba(0, 37, 82, 0.55);
+}
+
+@media (min-width: 640px) {
+  .bfx-pass { padding: 40px 40px 44px; border-radius: 28px; }
+}
+
+/* Come funziona (offerta 450): tre passi come pass, il primo blu */
+.bfx-friend__passes.is-three { margin: 0; padding: 0; list-style: none; }
+.bfx-friend__passes.is-three .bfx-pass__big { font-size: clamp(3.4rem, 15vw, 5.5rem); }
+
+@media (min-width: 900px) {
+  .bfx-friend__passes.is-three { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bfx-how .bfx-ctas { margin-top: 48px; }
+
+.bfx-friend__problems { margin-top: 56px; }
+
+.bfx-friend__pt {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(0, 37, 82, 0.8);
+}
+
+.bfx-friend__problems ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-friend__problems li {
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--bfx-night);
+}
+
+.bfx-friend__problems li:not(:last-child)::after {
+  content: '·';
+  margin: 0 12px;
+  color: rgba(0, 37, 82, 0.35);
+}
+
+.bfx-friend__problems li.is-more { font-weight: 600; }
+
+.bfx-friend__photos { margin-top: 56px; }
+
+/* ======================================================================
+   Riepilogo: registro tipografico
+   ====================================================================== */
+
+.bfx-recap { background: var(--bfx-deep); }
+
+.bfx-recap__grid { display: grid; gap: 48px; }
+
+.bfx-recap__side { display: grid; gap: 36px; align-content: start; }
+
+.bfx-recap__photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.bfx-recap__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-ledger li {
+  display: grid;
+  grid-template-columns: minmax(104px, 0.42fr) 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--bfx-rule);
+}
+
+.bfx-ledger__big {
+  font-size: clamp(2.1rem, 7vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--bfx-green);
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-ledger__big.is-icon { align-self: start; display: block; line-height: 0; }
+.bfx-ledger__big.is-icon + .bfx-ledger__t { align-self: start; }
+.bfx-ledger__t { display: grid; gap: 6px; }
+.bfx-ledger__t b { font-size: 1.0625rem; font-weight: 600; line-height: 1.35; color: var(--bfx-cream); }
+.bfx-ledger__t span { font-size: 1rem; line-height: 1.5; color: var(--bfx-text); }
+
+.bfx-recap__count { margin-top: 28px; }
+
+@media (min-width: 1024px) {
+  .bfx-recap__grid { grid-template-columns: 0.8fr 1.2fr; gap: 96px; }
+  .bfx-recap__side { position: sticky; top: 120px; }
+}
+
+/* ======================================================================
+   Chi ti tratta
+   ====================================================================== */
+
+.bfx-team { background: var(--bfx-night); }
+
+.bfx-team__grid { display: grid; gap: 40px; }
+.bfx-team__grid > div { display: grid; gap: 22px; align-content: center; }
+.bfx-team .mx-studio-collage { margin-bottom: 0; }
+
+@media (min-width: 1024px) {
+  .bfx-team__grid { grid-template-columns: 0.9fr 1.1fr; gap: 88px; align-items: center; }
+}
+
+/* ======================================================================
+   Domande frequenti: filetti, niente riquadri
+   ====================================================================== */
+
+.bfx-faq { background: var(--bfx-ink); }
+
+.bfx-faq__grid { display: grid; gap: 40px; }
+.bfx-faq__intro { display: grid; gap: 20px; align-content: start; }
+
+.bfx-faq__photo {
+  display: none;
+  margin: 16px 0 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.bfx-faq__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (min-width: 1024px) {
+  .bfx-faq__grid { grid-template-columns: 0.8fr 1.2fr; gap: 96px; }
+  .bfx-faq__intro { position: sticky; top: 120px; }
+  .bfx-faq__photo { display: block; }
+}
+
+.bfx-faq__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-faq__item { border-bottom: 1px solid var(--bfx-rule); }
+
+.bfx-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 72px;
+  padding: 18px 0;
+  border: 0;
+  background: none;
+  color: var(--bfx-cream);
+  font: 400 1.125rem/1.4 'Montserrat', sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bfx-faq__q strong { font-weight: 600; }
+
+.bfx-faq__plus {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--bfx-rule);
+  color: var(--bfx-cream);
+  transition: transform 250ms var(--bfx-ease-out), background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.bfx-faq__item.is-open .bfx-faq__plus {
+  transform: rotate(45deg);
+  background: var(--bfx-green);
+  border-color: var(--bfx-green);
+  color: var(--bfx-night);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-faq__q:hover .bfx-faq__plus { border-color: rgba(244, 244, 244, 0.45); }
+}
+
+.bfx-faq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--bfx-ease-out);
+}
+
+.bfx-faq__a > div { overflow: hidden; }
+.bfx-faq__a .bfx-body { padding: 0 56px 24px 0; }
+.bfx-faq__item.is-open .bfx-faq__a { grid-template-rows: 1fr; }
+
+.bfx-faq__closing { margin-top: 36px; }
+.bfx-faq .bfx-ctas { margin-top: 28px; }
+
+/* ======================================================================
+   Dove siamo
+   ====================================================================== */
+
+.bfx-where { background: var(--bfx-night); }
+
+.bfx-where__head { display: grid; gap: 32px; margin-bottom: 40px; }
+.bfx-where__head > div { display: grid; gap: 20px; }
+
+@media (min-width: 1024px) {
+  .bfx-where__head { grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+}
+
+.bfx-where__map { margin-top: 8px; }
+
+.bfx-where__map .mx-studi-map {
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 50px 90px -50px rgba(0, 0, 0, 0.9);
+}
+
+@media (max-width: 767px) {
+  .bfx-where__map { margin-left: calc(-1 * var(--bfx-gutter) + 8px); margin-right: calc(-1 * var(--bfx-gutter) + 8px); }
+  .bfx-where__map .mx-studi-map { border-radius: 20px; }
+  .bfx-where__map .mx-studi-map__canvas { height: 420px; }
+}
+
+/* ======================================================================
+   Barra fissa su telefono
+   ====================================================================== */
+
+.bfx-dock {
+  position: fixed;
+  z-index: 70;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(0, 15, 43, 0.92);
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+.bfx-dock__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font: 600 1rem/1.1 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform 160ms var(--bfx-ease-out);
+}
+
+.bfx-dock__main:active,
+.bfx-dock__ghost:active { transform: scale(0.97); }
+
+.bfx-dock__price { display: inline-flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
+.bfx-dock__price s { font-size: 0.875rem; font-weight: 500; opacity: 0.6; }
+.bfx-dock__price b { font-weight: 700; }
+.bfx-dock__txt { flex: 1; text-align: left; }
+
+.bfx-dock__ghost {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  min-height: 52px;
+  border: 1px solid rgba(244, 244, 244, 0.2);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bfx-cream);
+  cursor: pointer;
+  transition: transform 160ms var(--bfx-ease-out);
+}
+
+@media (min-width: 1024px) {
+  .bfx-dock { display: none; }
+}
+
+/* ======================================================================
+   Riduci movimento: tutto fermo e nello stato finale
+   ====================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-ten.is-live .bfx-ten__spin,
+  .bfx-ten.is-live .bfx-ten__layer.is-front,
+  .bfx-ten.is-live .bfx-ten__dot { animation: none; }
+  .bfx-ten__layer,
+  .bfx-ten__ring,
+  .bfx-ten__glow,
+  .bfx-vcard__in,
+  .bfx-faq__a,
+  .bfx-faq__plus { transition: none; }
+}
