@@ -10,9 +10,9 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { ArrowRight, CalendarClock, Check, PenLine, Phone } from 'lucide-react'
+import { AlarmClock, ArrowRight, CalendarClock, Check, PenLine, Phone } from 'lucide-react'
 import ClImg from '../condition-landing/ClImg'
-import { SCADENZA_TESTO, due, useMancano } from '../black-friday/offerta'
+import { SCADENZA_TESTO, due, urgenza, useMancano } from '../black-friday/offerta'
 import { EASE } from '../home-sections/homeMotion'
 import '../../styles/pages/porta-un-amico.css'
 
@@ -80,7 +80,7 @@ export function Legame({ className = '' }) {
   )
 }
 
-// ——— Conto alla rovescia con le cifre che scorrono ———
+// ——— Conto alla rovescia: banner rosso con sveglia che squilla e cifre che scorrono (uguale a /black-friday-2026) ———
 
 function Cifra({ d }) {
   return (
@@ -124,9 +124,18 @@ export function Contatore({ className = '', etichetta = `Fino a ${SCADENZA_TESTO
       role="timer"
       aria-label={`Mancano ${mancano.giorni} giorni e ${mancano.ore} ore alla fine dell’offerta, ${SCADENZA_TESTO}`}
     >
-      <span className="pa-cnt__lbl">{etichetta}</span>
+      <span className="pa-cnt__sweep" aria-hidden="true" />
+      <span className="pa-cnt__head" aria-hidden="true">
+        <span className="pa-cnt__ico">
+          <AlarmClock size={20} strokeWidth={2.2} />
+        </span>
+        <span className="pa-cnt__lbl">
+          <small>{urgenza(mancano)}</small>
+          <b>{etichetta}</b>
+        </span>
+      </span>
       <span className="pa-cnt__time" aria-hidden="true">
-        {parti.map(([v, u], i) => (
+        {parti.map(([v, u]) => (
           <span key={u} className="pa-cnt__unit">
             <span className="pa-cnt__num">
               {v.split('').map((d, j) => (
@@ -134,7 +143,6 @@ export function Contatore({ className = '', etichetta = `Fino a ${SCADENZA_TESTO
               ))}
             </span>
             <small>{u}</small>
-            {i < parti.length - 1 && <span className="pa-cnt__sep">:</span>}
           </span>
         ))}
       </span>

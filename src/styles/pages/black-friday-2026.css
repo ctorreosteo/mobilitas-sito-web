@@ -248,54 +248,153 @@
    Conto alla rovescia
    ====================================================================== */
 
+/* Banner rosso con sveglia che squilla: deve farsi notare (stesso banner di /black-friday-2026-amico) */
 .bfx-count {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 20px;
+  justify-content: space-between;
+  gap: 14px 22px;
+  width: 100%;
+  max-width: 500px;
   margin: 0;
+  padding: 14px 14px 14px 16px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #fff;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(255, 110, 120, 0.55) 0%, transparent 55%),
+    linear-gradient(135deg, #f02a3e 0%, #cc1230 55%, #9a0a22 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 24px 50px -22px rgba(240, 40, 60, 0.85),
+    0 10px 24px -14px rgba(0, 0, 0, 0.6);
 }
 
-.bfx-count__lbl {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--bfx-cream);
+/* Lampo di luce che attraversa il banner */
+.bfx-count__sweep {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.26) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: bfx-count-lampo 4.5s ease-in-out 1.2s infinite;
 }
 
-.bfx-count__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--bfx-green);
-  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18);
+.bfx-count__head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.bfx-count__ico {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
 }
 
-.bfx-count__time { display: inline-flex; gap: 16px; }
+.bfx-count__ico::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  animation: bfx-count-onda 2s ease-out infinite;
+}
+
+.bfx-count__ico svg { transform-origin: 50% 15%; animation: bfx-count-squillo 2s ease-in-out infinite; }
+
+.bfx-count__txt { display: grid; gap: 3px; line-height: 1.15; }
+
+.bfx-count__txt small {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bfx-count .bfx-count__txt b { font-size: 1rem; font-weight: 700; color: #fff; }
+
+.bfx-count__time {
+  display: grid;
+  flex: 1 1 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
 
 .bfx-count__u {
-  display: inline-flex;
-  align-items: baseline;
+  display: grid;
+  justify-items: center;
   gap: 4px;
+  padding: 8px 4px 7px;
+  border-radius: 11px;
+  background: rgba(70, 0, 12, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .bfx-count__u b {
-  font-size: 1.375rem;
-  font-weight: 300;
+  display: inline-flex;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  color: var(--bfx-cream);
+  color: #fff;
 }
 
 .bfx-count__u small {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--bfx-text-2);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.bfx-count.is-over { font-size: 0.9375rem; font-weight: 500; color: var(--bfx-text); }
+.bfx-count__slot { position: relative; display: inline-block; height: 1.05em; overflow: hidden; }
+.bfx-count__ghost { visibility: hidden; }
+.bfx-count__d { position: absolute; inset: 0; display: block; text-align: center; }
+
+@keyframes bfx-count-lampo {
+  0% { transform: translateX(-120%); }
+  35%, 100% { transform: translateX(120%); }
+}
+
+@keyframes bfx-count-onda {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+}
+
+@keyframes bfx-count-squillo {
+  0%, 56%, 100% { transform: rotate(0deg); }
+  60% { transform: rotate(-16deg); }
+  64% { transform: rotate(14deg); }
+  68% { transform: rotate(-10deg); }
+  72% { transform: rotate(8deg); }
+  76% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-count__sweep, .bfx-count__ico::after, .bfx-count__ico svg { animation: none; }
+}
+
+/* Offerta finita: niente banner, solo una riga */
+.bfx-count.is-over {
+  display: flex;
+  width: auto;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bfx-text);
+}
 
 /* ======================================================================
    Apertura: titolo enorme, la foto del trattamento, la carta Black Friday posata sopra
@@ -876,7 +975,7 @@
   margin: 0;
 }
 
-.bfx-deal__facts b {
+.bfx-deal__facts > p b {
   font-size: 1.85rem;
   font-weight: 300;
   letter-spacing: -0.03em;
@@ -884,11 +983,11 @@
   font-variant-numeric: tabular-nums;
 }
 
-.bfx-deal__facts span { font-size: 1rem; color: var(--bfx-text); }
+.bfx-deal__facts > p span { font-size: 1rem; color: var(--bfx-text); }
 
 @media (min-width: 900px) {
   .bfx-deal__facts { grid-template-columns: auto auto 1fr; align-items: center; }
-  .bfx-deal__count { justify-content: flex-end; }
+  .bfx-deal__count { justify-self: end; }
 }
 
 /* ======================================================================

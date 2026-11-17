@@ -1,21 +1,43 @@
 import { useEffect, useRef, useState } from 'react'
-import { animate, motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
-import { Check, Gift } from 'lucide-react'
-import { SCADENZA_TESTO, due, useMancano } from '../black-friday/offerta'
+import { AnimatePresence, animate, motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { AlarmClock, Check, Gift } from 'lucide-react'
+import { SCADENZA_TESTO, due, urgenza, useMancano } from '../black-friday/offerta'
 
 // Pezzi grafici della sola landing /black-friday-2026 (stile in styles/pages/black-friday-2026.css, prefisso bfx-).
 // I dati dell'offerta restano in components/black-friday/offerta.js, comune con /black-friday-2026-amico.
 
 const EASE_OUT = [0.23, 1, 0.32, 1]
 
-// Conto alla rovescia fino alla scadenza dell'offerta: cifre leggere e tabellari, niente riquadro rosso
-export function Countdown({ className = '' }) {
+// Cifra che scorre quando cambia (come nel contatore di /black-friday-2026-amico)
+function Cifra({ d }) {
+  return (
+    <span className="bfx-count__slot">
+      <AnimatePresence initial={false}>
+        <motion.span
+          key={d}
+          className="bfx-count__d"
+          initial={{ y: '-105%' }}
+          animate={{ y: '0%' }}
+          exit={{ y: '105%' }}
+          transition={{ duration: 0.5, ease: EASE_OUT }}
+        >
+          {d}
+        </motion.span>
+      </AnimatePresence>
+      <span className="bfx-count__ghost">{d}</span>
+    </span>
+  )
+}
+
+// Conto alla rovescia fino alla scadenza dell'offerta: banner rosso con sveglia che squilla, perché si noti.
+// Stesso banner di /black-friday-2026-amico (AmicoKit → Contatore).
+export function Countdown({ className = '', etichetta = `Fino a ${SCADENZA_TESTO}` }) {
   const mancano = useMancano()
   if (!mancano) {
     return <p className={`bfx-count is-over ${className}`}>L’offerta Black Friday è terminata</p>
   }
   const parti = [
-    [mancano.giorni, mancano.giorni === 1 ? 'giorno' : 'giorni'],
+    [String(mancano.giorni), mancano.giorni === 1 ? 'giorno' : 'giorni'],
     [due(mancano.ore), 'ore'],
     [due(mancano.min), 'min'],
     [due(mancano.sec), 'sec'],
@@ -26,14 +48,24 @@ export function Countdown({ className = '' }) {
       role="timer"
       aria-label={`Mancano ${mancano.giorni} giorni e ${mancano.ore} ore alla fine dell’offerta, ${SCADENZA_TESTO}`}
     >
-      <span className="bfx-count__lbl">
-        <i className="bfx-count__dot" aria-hidden="true" />
-        Fino a {SCADENZA_TESTO}
+      <span className="bfx-count__sweep" aria-hidden="true" />
+      <span className="bfx-count__head" aria-hidden="true">
+        <span className="bfx-count__ico">
+          <AlarmClock size={20} strokeWidth={2.2} />
+        </span>
+        <span className="bfx-count__txt">
+          <small>{urgenza(mancano)}</small>
+          <b>{etichetta}</b>
+        </span>
       </span>
       <span className="bfx-count__time" aria-hidden="true">
         {parti.map(([v, u]) => (
           <span key={u} className="bfx-count__u">
-            <b>{v}</b>
+            <b>
+              {v.split('').map((d, j) => (
+                <Cifra key={`${v.length}-${j}`} d={d} />
+              ))}
+            </b>
             <small>{u}</small>
           </span>
         ))}

@@ -106,3 +106,10 @@ export function useMancano(scadenza = SCADENZA) {
   }, [scadenza])
   return mancano
 }
+
+// Riga piccola sopra il conto alla rovescia (banner rosso): si fa più urgente avvicinandosi alla scadenza
+export function urgenza(mancano) {
+  if (mancano.giorni < 1) return 'Ultime ore'
+  if (mancano.giorni <= 3) return 'Ultimi giorni'
+  return 'Offerta a tempo'
+}
