@@ -1,6 +1,6 @@
 /* Landing Black Friday 2026 (pages/landing-pages/BlackFriday.jsx), redesign del 16/11/2026.
    Mondo visivo: notte blu, Montserrat leggero a scala display, verde solo su blu, una sola sezione panna.
-   Elemento firma: il 10 in 3D (components/black-friday-2026-sections/Dieci3D.jsx). Prefisso: .bfx
+   Elemento firma: la carta Black Friday in 3D posata sulla foto dell'apertura (components/black-friday-2026-sections/CartaBlack.jsx). Prefisso: .bfx
    Non tocca black-friday.css (comune con /black-friday-2026-amico). */
 
 .bfx {
@@ -26,8 +26,8 @@
 .bfx ::selection { background: var(--bfx-green); color: var(--bfx-night); }
 
 /* mx.css colora ogni strong/b di panna a 700: qui ereditano e il colore si decide per contesto */
-.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-hero__caption, .bfx-deal, .bfx-ledger, .bfx-count) b,
-.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-hero__caption, .bfx-deal, .bfx-ledger, .bfx-count) strong {
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) b,
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) strong {
   color: inherit;
   font-weight: 600;
 }
@@ -83,11 +83,8 @@
 
 @layer base {
   .bfx h2.bfx-why-us__q { font-size: 1.0625rem !important; line-height: 1.3; letter-spacing: 0; }
-  .bfx h1.bfx-h.bfx-hero__title {
-    font-size: clamp(2.2rem, 9.6vw, 4.5rem) !important;
-    line-height: 1.02;
-    letter-spacing: -0.04em;
-  }
+  /* Il titolo dell'apertura ha le misure sulle due righe (span): qui solo l'h1 neutro */
+  .bfx h1.bfx-hero__title { font-size: 1rem !important; line-height: 1; }
   .bfx :is(h2, h3).bfx-h.bfx-h2 {
     font-size: clamp(2rem, 7.4vw, 4.1rem) !important;
     line-height: 1.04;
@@ -301,7 +298,7 @@
 .bfx-count.is-over { font-size: 0.9375rem; font-weight: 500; color: var(--bfx-text); }
 
 /* ======================================================================
-   Apertura
+   Apertura: titolo enorme, la foto del trattamento, la carta Black Friday posata sopra
    ====================================================================== */
 
 /* Il layout comune lascia sopra la pagina una fascia color panna alta quanto il menu (pt-16 / sm:pt-20 di <main>):
@@ -312,7 +309,7 @@
 .bfx-hero {
   position: relative;
   overflow: clip;
-  padding: calc(22px + 64px) 0 64px;
+  padding: calc(22px + 64px) 0 72px;
   background: var(--bfx-night);
 }
 
@@ -321,248 +318,402 @@
   .bfx-hero { padding-top: calc(22px + 80px); }
 }
 
-.bfx-hero__grid {
-  display: grid;
-  gap: 18px;
+/* Fondo: notte profonda, luce verde dietro la carta, orbite concentriche (come /black-friday-2026-amico) */
+.bfx-hero__bg {
+  --cx: 50%;
+  --cy: 60%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 35% at var(--cx) var(--cy), rgba(114, 250, 147, 0.12), transparent 70%),
+    radial-gradient(120% 80% at 50% 0%, #00377a 0%, var(--bfx-night) 48%, var(--bfx-ink) 100%);
 }
 
-.bfx-hero__copy { display: contents; }
+.bfx-hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(circle at var(--cx) var(--cy), transparent 0 69px, rgba(244, 244, 244, 0.05) 70px 71px);
+  -webkit-mask-image: radial-gradient(60% 40% at var(--cx) var(--cy), #000 25%, transparent 75%);
+          mask-image: radial-gradient(60% 40% at var(--cx) var(--cy), #000 25%, transparent 75%);
+}
+
+.bfx-hero .bfx-wrap { z-index: 1; }
+
+.bfx-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "tag" "title" "stage" "offer" "sub";
+  row-gap: 20px;
+}
 
 .bfx-tag {
+  grid-area: tag;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   justify-self: start;
   margin: 0;
   padding: 7px 14px 7px 12px;
   border-radius: 999px;
   border: 1px solid rgba(114, 250, 147, 0.4);
+  background: rgba(114, 250, 147, 0.06);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--bfx-green);
 }
 
-.bfx-hero__title { order: 1; }
-.bfx-tag { order: 0; }
-.bfx-hero__media { order: 2; }
-.bfx-hero__offer { order: 3; }
-.bfx-hero__sub { order: 4; }
-
-.bfx-hero__line { display: block; }
-.bfx-hero__line.is-green { color: var(--bfx-green); margin-top: 0.18em; }
-
-.bfx-hero__offer .bfx-ctas { margin-top: 0; }
-.bfx-hero__count { margin-top: 18px; }
-
-.bfx-hero__media { position: relative; }
-
-/* Il riquadro del video è quello comune (condition-landing.css): qui solo il bordo e l'alone, più sobri */
-.bfx-hero__media .mx-cl-media__halo { display: none; }
-.bfx-hero__media .mx-cl-media__frame {
-  border-radius: 18px;
-  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.14), 0 40px 80px -36px rgba(0, 0, 0, 0.75);
-}
-.bfx-hero__media .mx-cl-media__frame::after { box-shadow: none; }
-
-.bfx-hero__caption {
-  display: none;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 18px 0 0;
-  border-top: 1px solid var(--bfx-rule);
-  font-variant-numeric: tabular-nums;
+.bfx-tag__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18);
 }
 
-.bfx-hero__caption > span {
-  display: grid;
-  gap: 4px;
-  padding: 14px 0 0 18px;
-  font-size: clamp(1.5rem, 2.2vw, 2rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.03em;
+/* Titolo: due righe enormi, la prima panna, la seconda verde */
+.bfx-hero__title {
+  grid-area: title;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+}
+
+.bfx-hero__l1,
+.bfx-hero__l2 {
+  display: block;
+  font-size: clamp(2.6rem, 12.6vw, 7.2rem);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.055em;
   color: var(--bfx-cream);
 }
 
-.bfx-hero__caption > span:first-child { padding-left: 0; }
-.bfx-hero__caption > span + span { border-left: 1px solid var(--bfx-rule); }
-
-.bfx-hero__caption small {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--bfx-text-2);
+.bfx-hero__l2 {
+  font-size: clamp(1.85rem, 8.6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--bfx-green);
 }
 
-.bfx-hero__caption s { color: var(--bfx-text-2); text-decoration-thickness: 1px; }
-.bfx-hero__caption .is-deal b { font-weight: 400; color: var(--bfx-green); }
-
-/* Il 10 in 3D, appoggiato sull'angolo in alto a destra del video: ne copre solo l'angolo */
-.bfx-hero__ten {
-  position: absolute;
-  z-index: 3;
-  top: -30px;
-  right: -2px;
-  width: 128px;
-  height: 108px;
-  pointer-events: none;
-  --ten-size: 4.4rem;
+/* Il palco: la foto, e la carta che si posa sul suo angolo */
+.bfx-hero__stage {
+  grid-area: stage;
+  position: relative;
+  display: grid;
+  margin-top: 8px;
 }
 
-.bfx-hero .bfx-wrap { z-index: 1; }
+.bfx-hero__media { position: relative; z-index: 0; }
+
+.bfx-hero__media .mx-cl-media__halo { display: none; }
+.bfx-hero__media .mx-cl-media__frame {
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.14), 0 40px 80px -36px rgba(0, 0, 0, 0.8);
+}
+.bfx-hero__media .mx-cl-media__frame::after { box-shadow: none; }
+
+.bfx-hero__card {
+  --w: min(70vw, 290px);
+  position: relative;
+  z-index: 1;
+  justify-self: end;
+  margin: calc(var(--w) * -0.2) 4% 0 0;
+}
+
+.bfx-hero__offer { grid-area: offer; margin-top: 4px; }
+.bfx-hero__offer .bfx-ctas { margin-top: 0; }
+.bfx-hero__count { margin-top: 18px; }
+
+.bfx-hero__sub { grid-area: sub; }
 
 @media (min-width: 640px) {
-  .bfx-hero__caption { display: grid; }
+  .bfx-hero__card { --w: 360px; margin-right: 6%; }
 }
 
 @media (min-width: 1024px) {
   .bfx-hero {
-    padding: calc(80px + 92px) 0 104px;
-    min-height: min(100svh, 1000px);
     display: flex;
     align-items: center;
+    min-height: max(100svh, 800px);
+    padding: calc(80px + 40px) 0 88px;
   }
+  .bfx-hero__bg { --cx: 70%; --cy: 64%; }
   .bfx-hero__grid {
     width: min(100% - 2 * var(--bfx-gutter), 1240px);
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: center;
-    gap: 72px;
-  }
-  .bfx-hero__copy {
-    display: grid;
-    gap: 26px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "tag   stage"
+      "title stage"
+      "offer stage"
+      "sub   stage";
+    column-gap: 64px;
+    row-gap: 28px;
     align-content: center;
   }
-  .bfx-hero__offer { order: 4; margin-top: 8px; }
-  .bfx-hero__sub { order: 3; }
-  .bfx-hero__media { order: 2; padding-top: 150px; }
-  .bfx-hero__ten {
-    top: -10px;
-    right: -46px;
-    width: 400px;
-    height: 250px;
-    --ten-size: 13.5rem;
-  }
+  .bfx-hero__l1 { font-size: clamp(4.2rem, 6.6vw, 7.2rem); }
+  .bfx-hero__l2 { font-size: clamp(2.4rem, 3.5vw, 4rem); }
+  .bfx-hero__stage { align-self: center; margin: 0; }
+  .bfx-hero__card { --w: clamp(320px, 26vw, 390px); justify-self: start; margin: calc(var(--w) * -0.36) 0 0 -6%; }
+  .bfx-hero__offer { display: flex; align-items: center; flex-wrap: wrap; gap: 18px 32px; margin-top: 8px; }
+  .bfx-hero__count { margin-top: 0; }
+  .bfx-hero__sub { align-self: start; max-width: 46ch; }
 }
 
-/* ——— Scultura del 10: numero pieno estruso, anello che lo attraversa ——— */
-.bfx-ten {
-  --ten-size: 8rem;
-  perspective: 1000px;
-  perspective-origin: 50% 40%;
+/* ——— La carta Black Friday (CartaBlack.jsx). Misure in em: tutto scala con --w ——— */
+.bfx-card {
+  position: relative;
+  width: var(--w, 340px);
+  aspect-ratio: 1.586;
+  font-size: calc(var(--w, 340px) / 24);
+  perspective: 1400px;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Alone verde sotto il numero */
-.bfx-ten__glow {
+.bfx-card__glow {
   position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 2%;
-  height: 26%;
+  inset: -30% -20%;
+  z-index: -1;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.45), transparent);
+  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.28), rgba(56, 189, 248, 0.08) 55%, transparent);
   filter: blur(14px);
-  opacity: 0;
-  transition: opacity 1.2s var(--bfx-ease-out) 0.4s;
 }
 
-.bfx-ten.is-built .bfx-ten__glow { opacity: 1; }
-
-.bfx-ten__tilt,
-.bfx-ten__spin {
+.bfx-card__enter,
+.bfx-card__float,
+.bfx-card__pose,
+.bfx-card__body {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
 }
 
-.bfx-ten__spin { transform: rotateY(-24deg) rotateX(10deg); }
+/* Posa: inclinata, come appoggiata in diagonale sulla foto */
+.bfx-card__pose { transform: rotateX(10deg) rotateY(-14deg) rotateZ(-5deg); }
 
-.bfx-ten.is-live .bfx-ten__spin { animation: bfx-sway 9s var(--bfx-ease-io) infinite alternate; }
+.bfx-card__float { animation: bfx-galleggia 7s ease-in-out infinite; }
 
-@keyframes bfx-sway {
-  from { transform: rotateY(-32deg) rotateX(12deg); }
-  to { transform: rotateY(22deg) rotateX(4deg); }
+@keyframes bfx-galleggia {
+  0%, 100% { transform: translateY(0) rotateZ(0deg); }
+  50% { transform: translateY(-3%) rotateZ(1.2deg); }
 }
 
-.bfx-ten__layer {
+/* Spessore: tre lastre dietro la faccia */
+.bfx-card__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.15em;
+  background: linear-gradient(135deg, #2a3546, #0b111c 60%, #1d2838);
+}
+.bfx-card__edge.is-1 { transform: translateZ(-2px); }
+.bfx-card__edge.is-2 { transform: translateZ(-4px); }
+.bfx-card__edge.is-3 { transform: translateZ(-6px); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); }
+
+.bfx-card__face {
   position: absolute;
   inset: 0;
   display: grid;
-  place-items: center;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 800;
-  font-size: var(--ten-size);
-  line-height: 1;
-  letter-spacing: -0.07em;
-  transform: translateZ(0);
-  opacity: 0;
-  transition:
-    transform 1.4s var(--bfx-ease-out) var(--d),
-    opacity 0.7s var(--bfx-ease-out) var(--d);
-  user-select: none;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.25em 1.4em 1.2em;
+  border-radius: 1.15em;
+  overflow: hidden;
+  color: var(--bfx-cream);
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgba(114, 250, 147, 0.1), transparent 60%),
+    radial-gradient(120% 90% at 0% 0%, #1a2232 0%, #0a0e16 45%, #030508 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
-/* Faccia: verde chiaro con un riflesso che scorre */
-.bfx-ten__layer.is-front {
-  color: transparent;
-  background: linear-gradient(115deg, #2fd46a 0%, #72fa93 30%, #eafff0 46%, #72fa93 60%, #39dc75 100%) 0 0 / 260% 100%;
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-stroke: 1px rgba(234, 255, 240, 0.5);
-}
-
-.bfx-ten.is-live .bfx-ten__layer.is-front { animation: bfx-riflesso 5s var(--bfx-ease-io) 1.2s infinite; }
-
-@keyframes bfx-riflesso {
-  0% { background-position: 100% 0; }
-  45%, 100% { background-position: 0% 0; }
-}
-
-.bfx-ten.is-built .bfx-ten__layer {
-  transform: translateZ(var(--z));
-  opacity: 1;
-}
-
-/* Anello: un'orbita sottile inclinata che passa davanti e dietro al numero, con un punto che gira */
-.bfx-ten__ring {
-  position: absolute;
-  left: -6%;
-  right: -6%;
-  top: 50%;
-  aspect-ratio: 1;
-  margin-top: -56%;
-  border-radius: 50%;
-  border: 1.5px solid rgba(114, 250, 147, 0.55);
-  box-shadow: 0 0 18px rgba(114, 250, 147, 0.25);
-  transform: rotateX(68deg) rotateY(-10deg) scale(0.6);
-  transform-style: preserve-3d;
-  opacity: 0;
-  transition: opacity 1s var(--bfx-ease-out) 0.6s, transform 1.4s var(--bfx-ease-out) 0.4s;
-}
-
-.bfx-ten.is-built .bfx-ten__ring { opacity: 1; transform: rotateX(68deg) rotateY(-10deg) scale(1); }
-
-.bfx-ten__dot {
+/* Riflesso olografico: si sposta con il puntatore */
+.bfx-card__holo {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(114, 250, 147, 0.55) 42%,
+    rgba(56, 189, 248, 0.45) 48%,
+    rgba(167, 139, 250, 0.4) 53%,
+    transparent 64%);
+  background-size: 300% 300%;
+  mix-blend-mode: screen;
+  opacity: 0.16;
+  pointer-events: none;
 }
 
-.bfx-ten__dot::before {
+.bfx-card__light { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; }
+
+/* Lampo di luce che attraversa la carta ogni tanto */
+.bfx-card__sweep {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -40%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: translateX(0) skewX(-20deg);
+  animation: bfx-lampo 6s cubic-bezier(0.77, 0, 0.175, 1) 1.6s infinite;
+  pointer-events: none;
+}
+
+@keyframes bfx-lampo {
+  0% { transform: translateX(0) skewX(-20deg); }
+  35%, 100% { transform: translateX(560%) skewX(-20deg); }
+}
+
+.bfx-card__top {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bfx-card__top b {
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--bfx-cream);
+}
+
+.bfx-card__top span {
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bfx-green);
+}
+
+.bfx-card__mid {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+}
+
+/* Il chip della carta */
+.bfx-card__chip {
+  position: relative;
+  flex: none;
+  width: 2.6em;
+  height: 2em;
+  border-radius: 0.38em;
+  background: linear-gradient(135deg, #e9fff0 0%, #9fe8b6 30%, #4fbf7a 55%, #c8f7d6 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.bfx-card__chip i,
+.bfx-card__chip::before,
+.bfx-card__chip::after {
   content: '';
   position: absolute;
-  top: -5px;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  margin-left: -5px;
-  border-radius: 50%;
-  background: #eafff0;
-  box-shadow: 0 0 12px 3px rgba(114, 250, 147, 0.85);
+  border: 1px solid rgba(0, 40, 20, 0.35);
+}
+.bfx-card__chip i { inset: 28% 32%; border-radius: 0.15em; }
+.bfx-card__chip::before { left: 0; right: 0; top: 50%; border-width: 1px 0 0; }
+.bfx-card__chip::after { top: 0; bottom: 0; left: 50%; border-width: 0 0 0 1px; }
+
+/* Il 10 in rilievo, verde metallico. La sfumatura (background-clip: text) colora solo il riquadro del testo e la
+   spaziatura stretta fa uscire lo 0 a destra: margine interno, compensato da quello esterno, perché non venga tagliato */
+.bfx-card__ten {
+  margin-left: auto;
+  margin-right: -0.12em;
+  padding: 0.04em 0.12em 0.06em 0;
+  font-size: 5.4em;
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  color: transparent;
+  background: linear-gradient(180deg, #f2fff5 0%, #9dffb5 32%, #3ccf72 52%, #1a8c4a 60%, #b6ffc9 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25)) drop-shadow(0 6px 14px rgba(114, 250, 147, 0.3));
 }
 
-.bfx-ten.is-live .bfx-ten__dot { animation: bfx-orbita 7s linear infinite; }
+.bfx-card__unit {
+  display: grid;
+  gap: 0.35em;
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
 
-@keyframes bfx-orbita { to { transform: rotate(360deg); } }
+.bfx-card__unit em {
+  font-size: 0.5em;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--bfx-green);
+}
+
+.bfx-card__bot {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.bfx-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-card__price b { font-size: 1.9em; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--bfx-green); }
+.bfx-card__price s { font-size: 0.9em; font-weight: 500; color: rgba(244, 244, 244, 0.5); }
+
+.bfx-card__exp {
+  display: grid;
+  gap: 0.2em;
+  text-align: right;
+  font-size: 0.95em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-card__exp small {
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 244, 0.55);
+}
+
+/* Ombra sul piano, respira con il galleggiare */
+.bfx-card__shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -14%;
+  height: 16%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent);
+  filter: blur(8px);
+  animation: bfx-ombra 7s ease-in-out infinite;
+}
+
+@keyframes bfx-ombra {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.9); opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-card__float,
+  .bfx-card__sweep,
+  .bfx-card__shadow { animation: none; }
+}
 
 /* ======================================================================
    L'offerta: mazzo delle dieci visite e prezzo gigante
@@ -807,7 +958,7 @@
   align-items: baseline;
   padding-bottom: 16px;
   border-bottom: 1.5px dashed rgba(0, 37, 82, 0.35);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1502,12 +1653,6 @@
    ====================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .bfx-ten.is-live .bfx-ten__spin,
-  .bfx-ten.is-live .bfx-ten__layer.is-front,
-  .bfx-ten.is-live .bfx-ten__dot { animation: none; }
-  .bfx-ten__layer,
-  .bfx-ten__ring,
-  .bfx-ten__glow,
   .bfx-vcard__in,
   .bfx-faq__a,
   .bfx-faq__plus { transition: none; }

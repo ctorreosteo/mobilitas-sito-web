@@ -143,7 +143,7 @@ export function Contatore({ className = '', etichetta = `Fino a ${SCADENZA_TESTO
 }
 
 // ——— L'invito: il biglietto in 3D, si inclina col puntatore (e col dito, trascinandolo) ———
-// Dal punto di vista dell'amico invitato: la sua prima visita e chi lo ha invitato (daChi: nome dal link, o vuoto)
+// Dal punto di vista dell'amico invitato: la sua prima visita e chi lo ha invitato (daChi: nome dal gestionale, o vuoto)
 
 export function Invito({ prezzo, prezzoAmico, scadenza, daChi = '' }) {
   const ref = useRef(null)
@@ -197,9 +197,9 @@ export function Invito({ prezzo, prezzoAmico, scadenza, daChi = '' }) {
           <p className="pa-invito__was">invece di {prezzo}€</p>
           <div className="pa-invito__rule" aria-hidden="true" />
           <div className="pa-invito__friend">
-            <span className="pa-invito__friend-l">Ti invita</span>
+            <span className="pa-invito__friend-l">{daChi ? 'Ti invita' : 'Porta un amico'}</span>
             <span className="pa-invito__friend-v">
-              <b className="is-name">{daChi || 'Un amico'}</b>
+              <b className="is-name">{daChi || 'Black Friday'}</b>
             </span>
           </div>
           <div className="pa-invito__foot">Valido fino a {scadenza}</div>

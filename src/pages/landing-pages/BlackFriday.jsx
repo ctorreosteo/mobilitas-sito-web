@@ -10,8 +10,8 @@ import { prefetchHeroVideo, useHeroVideo } from '../../components/condition-land
 import CityMap from '../../components/landing/CityMap'
 import StudioCollage from '../../components/landing/StudioCollage'
 import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
-import { PREZZO_VISITA, SCADENZA_TESTO, due, useSeoOfferta } from '../../components/black-friday/offerta'
-import Dieci3D from '../../components/black-friday-2026-sections/Dieci3D'
+import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useSeoOfferta } from '../../components/black-friday/offerta'
+import CartaBlack from '../../components/black-friday-2026-sections/CartaBlack'
 import {
   Countdown,
   MazzoVisite,
@@ -31,7 +31,8 @@ import '../../styles/pages/black-friday-2026.css'
 // Generica anche nei dolori: tutti, nessuno specifico. Solo l'offerta 10 visite a 450€, da pagare online, con scadenza.
 // "Porta un amico" non è più qui (strategia del 16/11/2026): i pazienti ricevono un messaggio con il link personale
 // da mandare all'amico, che arriva sull'invito /black-friday-2026-amico.
-// Grafica propria (redesign del 16/11/2026): notte blu, il 10 in 3D come elemento firma, prezzo a tutta larghezza.
+// Grafica propria (redesign del 16/11/2026, apertura rifatta il 17/11/2026): notte blu; nell'apertura la carta Black
+// Friday in 3D (nera, olografica, con il 10 in rilievo) posata sulla foto del trattamento; prezzo a tutta larghezza.
 // Stile in styles/pages/black-friday-2026.css (prefisso bfx-), pezzi grafici in components/black-friday-2026-sections.
 // Dati comuni con /black-friday-2026-amico (scadenza, prezzi, SEO): components/black-friday/offerta.js.
 
@@ -42,6 +43,8 @@ const VISITE = 10
 const PREZZO_PIENO = 900
 const PREZZO_OFFERTA = 450
 // Prezzo della visita e scadenza: components/black-friday/offerta.js
+// Scadenza stampata sulla carta dell'apertura, «29/11»: dalla stessa data di offerta.js
+const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Rome' })
 
 // ——— Pagamento online ———
 // Tutti i bottoni della pagina (apertura, sezioni, barra in basso su telefono) portano alla pagina di pagamento dei
@@ -369,66 +372,58 @@ export default function BlackFriday() {
 
   return (
     <PageShell className={`bfx mx-pvl--${SLUG}`}>
-      {/* ——— Apertura: titolo leggero, il 10 in 3D, video, bottone ——— */}
+      {/* ——— Apertura: titolo enorme, la foto del trattamento e la carta Black Friday che ci si posa sopra ——— */}
       <header className="bfx-hero">
+        <div className="bfx-hero__bg" aria-hidden="true" />
         <div className="bfx-wrap bfx-hero__grid">
-          <div className="bfx-hero__copy">
-            <motion.p className="bfx-tag" {...entra(0)}>
-              <Gift size={16} strokeWidth={2.2} aria-hidden="true" />
-              Black Friday · Per i nostri pazienti
-            </motion.p>
+          <motion.p className="bfx-tag" {...entra(0)}>
+            <span className="bfx-tag__dot" aria-hidden="true" />
+            Black Friday · Per i nostri pazienti
+          </motion.p>
 
-            <h1 className="bfx-h bfx-hero__title">
-              <motion.span className="bfx-hero__line" {...entra(0.06)}>
-                Dieci visite, ne paghi <strong>solo cinque.</strong>
-              </motion.span>
-              <motion.span className="bfx-hero__line is-green" {...entra(0.14)}>
-                Le altre cinque sono in omaggio.
-              </motion.span>
-            </h1>
+          <h1 className="bfx-hero__title">
+            <motion.span className="bfx-hero__l1" {...entra(0.05)}>
+              Dieci visite.
+            </motion.span>
+            <motion.span className="bfx-hero__l2" {...entra(0.12)}>
+              Ne paghi solo cinque.
+            </motion.span>
+          </h1>
 
-            <motion.p className="bfx-lead bfx-hero__sub" {...entra(0.22)}>
-              Sei già un nostro paziente, e per il Black Friday abbiamo pensato a te. Che il dolore ti dia ancora fastidio o
-              che oggi tu stia bene, <strong>{VISITE} visite a metà prezzo</strong> sono il modo per{' '}
-              <strong>non farlo tornare</strong>. Le blocchi <strong>pagando online</strong>, direttamente da qui.
-            </motion.p>
-
-            <motion.div className="bfx-hero__offer" ref={heroCtaRef} {...entra(0.28)}>
-              <OffertaCtas />
-              <Countdown className="bfx-hero__count" />
+          <div className="bfx-hero__stage">
+            <motion.div
+              className="bfx-hero__media"
+              initial={{ opacity: 0, transform: 'translateY(24px) scale(0.97)' }}
+              animate={{ opacity: 1, transform: 'translateY(0px) scale(1)' }}
+              transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1], delay: 0.1 }}
+            >
+              <HeroMedia
+                video={video}
+                loading={loading}
+                videoTitle="Black Friday Mobilitas: 10 visite a metà prezzo"
+                audio
+                fallback={{ src: fotoHero, alt: 'Trattamento osteopatico nello studio Mobilitas' }}
+              />
             </motion.div>
+            <CartaBlack
+              className="bfx-hero__card"
+              visite={VISITE}
+              prezzo={PREZZO_OFFERTA}
+              prezzoPieno={PREZZO_PIENO}
+              scadenzaBreve={SCADENZA_BREVE}
+            />
           </div>
 
-          <motion.div
-            className="bfx-hero__media"
-            initial={{ opacity: 0, transform: 'translateY(24px) scale(0.97)' }}
-            animate={{ opacity: 1, transform: 'translateY(0px) scale(1)' }}
-            transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1], delay: 0.18 }}
-          >
-            {/* Il 10 in 3D, appoggiato sull'angolo in alto a destra del video */}
-            <Dieci3D className="bfx-hero__ten" />
-            <HeroMedia
-              video={video}
-              loading={loading}
-              videoTitle="Black Friday Mobilitas: 10 visite a metà prezzo"
-              audio
-              fallback={{ src: fotoHero, alt: 'Trattamento osteopatico nello studio Mobilitas' }}
-            />
-            <p className="bfx-hero__caption" aria-hidden="true">
-              <span>
-                <small>Visite</small>
-                {VISITE}
-              </span>
-              <span>
-                <small>Di solito</small>
-                <s>{PREZZO_PIENO}€</s>
-              </span>
-              <span className="is-deal">
-                <small>Black Friday</small>
-                <b>{PREZZO_OFFERTA}€</b>
-              </span>
-            </p>
+          <motion.div className="bfx-hero__offer" ref={heroCtaRef} {...entra(0.22)}>
+            <OffertaCtas />
+            <Countdown className="bfx-hero__count" />
           </motion.div>
+
+          <motion.p className="bfx-lead bfx-hero__sub" {...entra(0.28)}>
+            Sei già un nostro paziente, e per il Black Friday abbiamo pensato a te. Che il dolore ti dia ancora fastidio o
+            che oggi tu stia bene, <strong>{VISITE} visite a metà prezzo</strong> sono il modo per{' '}
+            <strong>non farlo tornare</strong>. Le blocchi <strong>pagando online</strong>, direttamente da qui.
+          </motion.p>
         </div>
       </header>
 

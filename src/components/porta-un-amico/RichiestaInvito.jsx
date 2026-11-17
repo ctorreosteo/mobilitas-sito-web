@@ -7,6 +7,7 @@ import { ORARI, costruisciRichiesta, inviaRichiesta } from './invito'
 
 // Form dell'invito "porta un amico": lo stesso form del popup di prenotazione (stessi campi, stessa grafica mx-dlg-),
 // con i valori della campagna (COUPON49, tag blackfriday, chi ha invitato): vedi invito.js.
+// invito: la risposta del gestionale con valido = true, oppure null (nessun invito: la richiesta parte lo stesso).
 
 const EMPTY_FORM = { nome: '', cognome: '', cellulare: '', orarioChiamata: '', privacy: false }
 const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/67925714'
@@ -56,8 +57,8 @@ export default function RichiestaInvito({ isOpen, onClose, invito }) {
         title={titolo}
         subtitle={`Invito Black Friday · ${PRIMA_VISITA_AMICO}€ invece di ${PREZZO_VISITA}€`}
         text={
-          invito.nome
-            ? `L’invito di ${invito.nome} è già collegato. Lasciaci i tuoi dati: la segreteria ti chiama per fissare l’appuntamento quando ti è più comodo.`
+          invito?.nomeInvitante
+            ? `L’invito di ${invito.nomeInvitante} è già collegato. Lasciaci i tuoi dati: la segreteria ti chiama per fissare l’appuntamento quando ti è più comodo.`
             : 'Lasciaci i tuoi dati: la segreteria ti chiama per fissare l’appuntamento quando ti è più comodo.'
         }
       />

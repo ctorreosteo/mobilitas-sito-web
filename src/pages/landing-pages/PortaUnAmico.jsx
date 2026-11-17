@@ -14,7 +14,7 @@ import {
   Nastro,
 } from '../../components/porta-un-amico/AmicoKit'
 import RichiestaInvito from '../../components/porta-un-amico/RichiestaInvito'
-import { leggiInvito } from '../../components/porta-un-amico/invito'
+import { chiediInvito, leggiCodice } from '../../components/porta-un-amico/invito'
 import {
   MAX_AMICI,
   PREZZO_VISITA,
@@ -25,7 +25,10 @@ import {
 } from '../../components/black-friday/offerta'
 import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
 
-// Invito "porta un amico" del Black Friday 2026 (strategia del 16/11/2026). Ci arriva l'AMICO del paziente:
+// Invito "porta un amico" del Black Friday 2026 (strategia del 16/11/2026). Ci arriva l'AMICO del paziente.
+// Lettura del codice, nome di chi invita e nota della richiesta seguono la guida interna «Richieste API · Porta un amico»
+// (dettagli in components/porta-un-amico/invito.js). Tre casi: invito valido con nome («Mario ti ha invitato»), valido
+// senza nome («Un nostro paziente ti ha invitato»), nessun invito valido (pagina dell'offerta normale, senza nome).
 // il paziente riceve per messaggio il suo link personale e lo inoltra (formato del link in
 // components/porta-un-amico/invito.js). L'amico paga la prima visita 49€ invece di 90€ e la richiede con il form
 // normale (COUPON49, tag blackfriday); chi lo ha invitato riceve una visita gratis, fino a 3 amici.
@@ -45,7 +48,7 @@ const PASSI = [
   {
     n: '01',
     title: 'Premi il bottone e lascia i tuoi dati',
-    body: 'Tocca «Richiedi la prima visita» e compila il form: nome, cognome e cellulare. Ci vuole un minuto, e l’invito è già collegato a chi te l’ha mandato.',
+    body: 'Tocca «Richiedi la prima visita» e compila il form: nome, cognome e cellulare. Ci vuole un minuto: se sei arrivato da un link personale, l’invito è già collegato.',
     big: <IllustraForm />,
   },
   {
@@ -66,6 +69,13 @@ const PASSI = [
     gift: true,
   },
 ]
+
+// Titolo dell'apertura e della chiusura nei tre casi della guida (passo 3)
+const titoloDi = (invito) => {
+  if (!invito) return ['La tua prima visita', `costa solo ${PRIMA_VISITA_AMICO}€.`]
+  const chi = invito.nomeInvitante ? `${invito.nomeInvitante} ti ha invitato:` : 'Un nostro paziente ti ha invitato:'
+  return [chi, `la tua prima visita costa ${PRIMA_VISITA_AMICO}€.`]
+}
 
 const faqDi = (daChi) => [
   {
@@ -253,14 +263,28 @@ function Passi() {
 
 export default function PortaUnAmico() {
   useSeoOfferta(SEO)
-  const [invito] = useState(leggiInvito)
+  // Guida, passi 1-3: il codice dall'indirizzo (o dalla sessione), una sola richiesta al gestionale all'apertura.
+  // Finché non risponde (o se il codice non c'è o non è valido) la pagina mostra il testo generico, senza nome.
+  const [codice] = useState(leggiCodice)
+  const [invito, setInvito] = useState(null)
+  useEffect(() => {
+    let attivo = true
+    chiediInvito(codice).then((risposta) => {
+      if (attivo) setInvito(risposta)
+    })
+    return () => {
+      attivo = false
+    }
+  }, [codice])
   const [formAperto, setFormAperto] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   const [showDock, setShowDock] = useState(false)
   const heroCtaRef = useRef(null)
   const apri = () => setFormAperto(true)
   // Chi ha invitato: il nome dal link personale, se c'è
-  const daChi = invito.nome
+  // Nome di battesimo di chi invita, così come arriva dal gestionale (può mancare anche con un invito valido)
+  const daChi = invito?.nomeInvitante || ''
+  const [titolo1, titolo2] = titoloDi(invito)
   const faq = faqDi(daChi)
 
   // Dock mobile: compare quando i bottoni dell'apertura escono dallo schermo
@@ -286,15 +310,15 @@ export default function PortaUnAmico() {
         <div className="pa-wrap pa-hero__grid">
           <motion.p className="pa-chip" {...entra(0)}>
             <span className="pa-chip__dot" aria-hidden="true" />
-            Black Friday · Un invito per te
+            {invito ? 'Black Friday · Un invito per te' : 'Black Friday · Porta un amico'}
           </motion.p>
 
           <h1 className="pa-hero__title">
             <motion.span className="pa-hero__l1" {...entra(0.05)}>
-              {daChi ? `${daChi} ti ha invitato.` : 'Un amico ti ha invitato.'}
+              {titolo1}
             </motion.span>
             <motion.span className="pa-hero__l2" {...entra(0.12)}>
-              La tua prima visita a {PRIMA_VISITA_AMICO}€.
+              {titolo2}
             </motion.span>
           </h1>
 
@@ -330,8 +354,12 @@ export default function PortaUnAmico() {
           </motion.div>
 
           <motion.p className="pa-lead pa-hero__sub" {...entra(0.36)}>
-            {daChi ? <strong>{daChi}</strong> : 'Chi ti ha mandato questo link'} è già nostro paziente e ha pensato a te. Per il
-            Black Friday la tua prima visita costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>,
+            {invito && (
+              <>
+                {daChi ? <strong>{daChi}</strong> : 'Chi ti ha mandato questo link'} è già nostro paziente e ha pensato a te.{' '}
+              </>
+            )}
+            Per il Black Friday la tua prima visita costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>,
             qualunque sia il tuo problema. <strong>Richiedila entro {SCADENZA_TESTO}</strong>: la visita puoi farla anche dopo.
           </motion.p>
         </div>
@@ -379,7 +407,10 @@ export default function PortaUnAmico() {
               <span className="pa-green">solo per te.</span>
             </h2>
             <p className="pa-lead">
-              {daChi ? `${daChi} ti ha mandato` : 'Ti è arrivato'} il suo link personale: così sappiamo chi ti ha invitato.{' '}
+              {daChi
+                ? `${daChi} ti ha mandato il suo link personale`
+                : 'L’invito arriva con il link personale di un nostro paziente'}
+              : così sappiamo chi ti ha invitato.{' '}
               <strong>
                 Tu paghi la prima visita {PRIMA_VISITA_AMICO}€, e {daChi ? `${daChi} riceve` : 'chi ti ha invitato riceve'} una
                 visita gratis.
@@ -389,7 +420,7 @@ export default function PortaUnAmico() {
             <Condizioni />
           </div>
           <div className="pa-link__card">
-            <Invito prezzo={PREZZO_VISITA} prezzoAmico={PRIMA_VISITA_AMICO} scadenza={SCADENZA_TESTO} daChi={daChi} />
+            <Invito prezzo={PREZZO_VISITA} prezzoAmico={PRIMA_VISITA_AMICO} scadenza={SCADENZA_TESTO} daChi={daChi || (invito ? 'Un nostro paziente' : '')} />
           </div>
         </div>
       </section>
@@ -486,7 +517,7 @@ export default function PortaUnAmico() {
             </p>
           </div>
           <div className="pa-where__map">
-            <StudiMap />
+            <StudiMap tema="notte" />
           </div>
         </div>
       </section>
@@ -501,8 +532,8 @@ export default function PortaUnAmico() {
             {PRIMA_VISITA_AMICO}€
           </p>
           <h2 className="pa-h2 pa-close__t">
-            <span>{daChi ? `${daChi} ti ha invitato.` : 'Un amico ti ha invitato.'}</span>
-            <span className="pa-green">La tua prima visita a {PRIMA_VISITA_AMICO}€.</span>
+            <span>{titolo1}</span>
+            <span className="pa-green">{titolo2}</span>
           </h2>
           <InvitoCta onApri={apri} className="pa-ctas--center" />
           <Contatore className="pa-cnt--center" etichetta={ENTRO} />
