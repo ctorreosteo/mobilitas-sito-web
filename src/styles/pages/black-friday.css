@@ -1,0 +1,472 @@
+/* Landing Black Friday (pages/landing-pages/BlackFriday.jsx): le parti che le landing della prima visita non hanno.
+   Tutto il resto viene da cervicalgia.css (mx-cerv-*), prima-visita-landing.css (mx-pvl-*) e visita-ctas.css (mx-vc-*).
+   Prefisso: .mx-bf */
+
+/* ======================================================================
+   Conto alla rovescia (apertura, offerta, riepilogo)
+   ====================================================================== */
+
+.mx-bf-count {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  border-radius: 18px;
+  background: rgba(255, 104, 105, 0.1);
+  border: 1px solid rgba(255, 104, 105, 0.32);
+}
+
+.mx-bf-count__lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ff8a8b;
+}
+
+.mx-bf-count__time { display: inline-flex; gap: 6px; }
+
+.mx-bf-count__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 44px;
+  padding: 4px 6px;
+  border-radius: 10px;
+  background: rgba(0, 15, 43, 0.55);
+}
+
+.mx-bf-count__unit b {
+  font-size: 1.12rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.mx-bf-count__unit small {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.mx-bf-count.is-over {
+  justify-content: flex-start;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ff8a8b;
+}
+
+@media (min-width: 640px) {
+  .mx-bf-hero__offer { max-width: 560px; }
+}
+
+/* ======================================================================
+   L'offerta: dieci gettoni (5 pagati, 5 in omaggio) e il riquadro del prezzo
+   ====================================================================== */
+
+.mx-bf-offer__grid { display: grid; gap: 22px; margin-bottom: 8px; }
+
+@media (min-width: 1000px) {
+  .mx-bf-offer__grid { grid-template-columns: 1.15fr 0.85fr; gap: 40px; align-items: stretch; }
+}
+
+.mx-bf-tokens {
+  padding: 22px;
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.03);
+}
+
+.mx-bf-tokens__list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mx-bf-token {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  aspect-ratio: 1 / 1.15;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 244, 244, 0.16);
+  background: rgba(244, 244, 244, 0.05);
+  color: var(--cream);
+}
+
+.mx-bf-token__n { font-size: 0.7rem; font-weight: 900; color: var(--muted); }
+.mx-bf-token small { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+
+.mx-bf-token.is-gift {
+  border-color: rgba(114, 250, 147, 0.5);
+  background: linear-gradient(160deg, rgba(114, 250, 147, 0.22), rgba(114, 250, 147, 0.06));
+  color: var(--green);
+}
+
+.mx-bf-token.is-gift small,
+.mx-bf-token.is-gift .mx-bf-token__n { color: var(--green); }
+
+@media (min-width: 640px) {
+  .mx-bf-tokens { padding: 28px; }
+  .mx-bf-tokens__list { gap: 12px; }
+  .mx-bf-token small { font-size: 0.7rem; }
+}
+
+.mx-bf-tokens__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 18px 0 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.mx-bf-tokens__legend span { display: inline-flex; align-items: center; gap: 8px; }
+
+.mx-bf-tokens__legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: rgba(244, 244, 244, 0.2);
+}
+
+.mx-bf-tokens__legend i.is-gift { background: var(--green); }
+
+.mx-bf-price {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 26px;
+  border: 1px solid rgba(114, 250, 147, 0.32);
+  background: linear-gradient(170deg, rgba(114, 250, 147, 0.12), rgba(244, 244, 244, 0.02) 60%);
+}
+
+.mx-bf-price__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mx-bf-price__lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.mx-bf-price__row.is-main .mx-bf-price__lbl { color: var(--green); }
+
+.mx-bf-price__old {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ff8a8b;
+  text-decoration-thickness: 3px;
+}
+
+/* b.: batte il colore crema dei <b> della pagina (mx.css) */
+.mx-bf-price b.mx-bf-price__new {
+  font-size: clamp(2.6rem, 7vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--green);
+}
+
+.mx-bf-price__facts {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.98rem;
+  color: var(--muted);
+}
+
+.mx-bf-price__facts b { color: var(--cream); font-weight: 900; }
+.mx-bf-price__count { margin-top: auto; }
+
+/* ======================================================================
+   Perché dieci visite: due schede invece delle quattro dei sintomi
+   ====================================================================== */
+
+@media (min-width: 1200px) {
+  .mx-cerv-pains.mx-bf-pains { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ======================================================================
+   Porta un amico
+   ====================================================================== */
+
+.mx-bf-friend__cards { display: grid; gap: 16px; }
+
+@media (min-width: 900px) {
+  .mx-bf-friend__cards { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+}
+
+.mx-bf-gift {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px 24px;
+  border-radius: 26px;
+  border: 1px solid rgba(114, 250, 147, 0.32);
+  background: linear-gradient(170deg, rgba(114, 250, 147, 0.13), rgba(244, 244, 244, 0.02) 60%);
+}
+
+.mx-bf-gift.is-friend {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: linear-gradient(170deg, rgba(56, 189, 248, 0.13), rgba(244, 244, 244, 0.02) 60%);
+}
+
+.mx-bf-gift__who {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--green);
+  color: var(--navy);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mx-bf-gift.is-friend .mx-bf-gift__who { background: var(--sky); }
+
+:is(.mx-home, .mx-page) .mx-bf-gift__big {
+  margin: 6px 0 0;
+  font-size: clamp(2.8rem, 8vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--green);
+}
+
+.mx-bf-gift.is-friend .mx-bf-gift__big { color: var(--sky); }
+
+.mx-bf-gift__big s {
+  margin-right: 6px;
+  font-size: 0.5em;
+  font-weight: 800;
+  color: #ff8a8b;
+  text-decoration-thickness: 3px;
+  vertical-align: middle;
+}
+
+.mx-bf-friend__photos { margin-top: 40px; }
+
+.mx-bf-problems { margin-top: 32px; }
+
+:is(.mx-home, .mx-page) .mx-bf-problems__t {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.mx-bf-problems__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mx-bf-problems__list li {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.05);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.mx-bf-problems__list li.is-more {
+  border-color: rgba(114, 250, 147, 0.4);
+  color: var(--green);
+}
+
+/* ======================================================================
+   Riepilogo
+   ====================================================================== */
+
+.mx-bf-recap__count { margin-top: 22px; }
+
+/* ======================================================================
+   /amico (PortaUnAmico.jsx): porta un amico, dal biglietto sulle scrivanie
+   ====================================================================== */
+
+/* Apertura: per te / per il tuo amico, affiancati */
+.mx-bf-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+}
+
+:is(.mx-home, .mx-page) .mx-bf-duo__half {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 10px 14px;
+  background: rgba(114, 250, 147, 0.1);
+}
+
+:is(.mx-home, .mx-page) .mx-bf-duo__half.is-friend {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 1px solid rgba(244, 244, 244, 0.12);
+}
+
+.mx-bf-duo__half small {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.mx-bf-duo__half b { font-size: 1.2rem; font-weight: 900; letter-spacing: -0.02em; color: var(--green); }
+.mx-bf-duo__half.is-friend b { color: var(--sky); }
+
+.mx-bf-duo__half s {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ff8a8b;
+  text-decoration-thickness: 2px;
+}
+
+/* Come funziona: i tre passi del biglietto, l'ultimo (la visita gratis) in verde */
+.mx-bf-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .mx-bf-steps { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+
+.mx-bf-step {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: rgba(244, 244, 244, 0.04);
+}
+
+.mx-bf-step.is-gift {
+  border-color: rgba(114, 250, 147, 0.4);
+  background: linear-gradient(170deg, rgba(114, 250, 147, 0.14), rgba(244, 244, 244, 0.02) 60%);
+}
+
+.mx-bf-step.is-gift h3 { color: var(--green); }
+
+.mx-bf-step__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+
+.mx-bf-step__n {
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--green);
+}
+
+.mx-bf-step__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(114, 250, 147, 0.12);
+  color: var(--green);
+}
+
+.mx-bf-step.is-gift .mx-bf-step__icon { background: var(--green); color: var(--navy); }
+
+/* Il link è solo tuo: riquadro centrale con il bottone */
+.mx-bf-link {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 22px;
+  border-radius: 30px;
+  border: 1px solid rgba(114, 250, 147, 0.3);
+  background: linear-gradient(170deg, rgba(114, 250, 147, 0.1), rgba(244, 244, 244, 0.02) 55%);
+}
+
+@media (min-width: 640px) {
+  .mx-bf-link { padding: 48px 44px; }
+}
+
+.mx-bf-link__icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: var(--green);
+  color: var(--navy);
+}
+
+.mx-bf-link .mx-vc-ctas { margin-top: 28px; }
+.mx-bf-link__count { margin-top: 18px; }
+
+/* Le condizioni del biglietto, in piccolo */
+:is(.mx-home, .mx-page) .mx-bf-note {
+  margin: 20px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.mx-bf-note strong { color: var(--cream); }
+
+/* Dock: un solo bottone a tutta larghezza; +1 gratis al posto del prezzo */
+.mx-vc-dock.is-single .mx-vc-dock__btn.is-primary { flex: 1; }
+.mx-bf-dock__gift b { margin-top: 0 !important; }
+
+.mx-bf-dock__gift small {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--green);
+}
+
+/* Per il tuo amico: le foto sotto il titolo */
+.mx-bf-friend .mx-bf-friend__photos { margin-top: 8px; }

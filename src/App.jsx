@@ -52,6 +52,8 @@ import LmGPadelInfortuni from './pages/landing-pages/LmGPadelInfortuni'
 import GpadelInfortuniThankYou from './pages/landing-pages/GpadelInfortuniThankYou'
 import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
 import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
+import BlackFriday from './pages/landing-pages/BlackFriday'
+import PortaUnAmico from './pages/landing-pages/PortaUnAmico'
 import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata'
 import Cervicalgia from './pages/landing-prima-visita/Cervicalgia'
 import Reflusso from './pages/landing-prima-visita/Reflusso'
@@ -184,6 +186,14 @@ function App() {
         <Route path="/lm-gpadel-infortuni-grazie" element={<GpadelInfortuniThankYou />} />
         <Route path="/lm-gpadel-sconto39-generico" element={<LmGpadelSconto39 />} />
         <Route path="/cofanetto-natale" element={<CofanettoNatale />} />
+        {/* Offerta Black Friday per chi è già paziente: 10 visite a 450€ da pagare online (fino al 29/11/2026). Footer senza CTA: l'unico bottone è il pagamento */}
+        <Route path="/black-friday-2026" element={<Layout hideWhatsApp hideFooterCta><BlackFriday /></Layout>} />
+        {/* Indirizzo provvisorio usato in revisione il 16/11/2026: rimanda a quello definitivo */}
+        <Route path="/black-friday-2026-PX" element={<VaiA to="/black-friday-2026" />} />
+        {/* Invito "porta un amico" del Black Friday: ci arriva l'amico dal link personale che il paziente riceve per messaggio e gli inoltra */}
+        <Route path="/black-friday-2026-amico" element={<Layout hideWhatsApp hideFooterCta><PortaUnAmico /></Layout>} />
+        {/* /amico è l'indirizzo stampato sotto il QR del biglietto sulle scrivanie: non toglierlo finché il biglietto è in giro */}
+        <Route path="/amico" element={<VaiA to="/black-friday-2026-amico" />} />
         <Route path="/iter-selezione-osteopata" element={<Layout hideWhatsApp><IterSelezioneOsteopata /></Layout>} />
         
         {/* Login Page */}

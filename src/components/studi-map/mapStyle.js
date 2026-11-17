@@ -39,9 +39,63 @@ function strada(id, classi, colore, bordo, larghezze, minzoom = 0) {
   ]
 }
 
-export const MAP_STYLE = {
+// Colori dei due temi. «chiaro» (alla Google Maps) è quello di sempre; «notte» è nei colori Mobilitas (blu notte,
+// vie in blu più chiaro, metro e parchi in verde): per le pagine scure, per esempio /black-friday-2026.
+const CHIARO = {
+  nome: 'Mobilitas Chiaro',
+  fondo: '#f1f3f4',
+  servizi: '#eceff3',
+  parco: '#cdeccf',
+  verde: '#d4eed5',
+  acqua: '#a8d4f5',
+  edifici: '#e3e5e8',
+  edificiBordo: '#d6d9dd',
+  ferrovia: '#c4c7cc',
+  viaMinore: '#ffffff',
+  viaMinoreBordo: '#dadce0',
+  viaMedia: '#ffffff',
+  viaMediaBordo: '#cfd3d8',
+  viaPrincipale: '#fde9a6',
+  viaPrincipaleBordo: '#f2c94c',
+  civici: '#9aa0a6',
+  metro: '#e8453c',
+  metroBordo: '#ffffff',
+  metroNome: '#c5221f',
+  alone: '#ffffff',
+  quartieri: '#80868b',
+  citta: '#3c4043',
+  vie: '#5f6368',
+}
+
+const NOTTE = {
+  nome: 'Mobilitas Notte',
+  fondo: '#001a3d',
+  servizi: '#011f47',
+  parco: '#06343f',
+  verde: '#053139',
+  acqua: '#0a3f7a',
+  edifici: '#04254f',
+  edificiBordo: '#082d5c',
+  ferrovia: '#23466f',
+  viaMinore: '#0b3060',
+  viaMinoreBordo: '#062a55',
+  viaMedia: '#123d73',
+  viaMediaBordo: '#0a3163',
+  viaPrincipale: '#1d5291',
+  viaPrincipaleBordo: '#2a64a8',
+  civici: '#4f6f99',
+  metro: '#72fa93',
+  metroBordo: '#001a3d',
+  metroNome: '#72fa93',
+  alone: '#001a3d',
+  quartieri: '#6f88ab',
+  citta: '#f4f4f4',
+  vie: '#9fb4d1',
+}
+
+const creaStile = (c) => ({
   version: 8,
-  name: 'Mobilitas Chiaro',
+  name: c.nome,
   glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
   sources: {
     omt: {
@@ -51,21 +105,21 @@ export const MAP_STYLE = {
     },
   },
   layers: [
-    { id: 'background', type: 'background', paint: { 'background-color': '#f1f3f4' } },
+    { id: 'background', type: 'background', paint: { 'background-color': c.fondo } },
     {
       id: 'landuse',
       type: 'fill',
       source: 'omt',
       'source-layer': 'landuse',
       filter: ['in', ['get', 'class'], ['literal', ['hospital', 'school', 'university', 'college']]],
-      paint: { 'fill-color': '#eceff3' },
+      paint: { 'fill-color': c.servizi },
     },
     {
       id: 'park',
       type: 'fill',
       source: 'omt',
       'source-layer': 'park',
-      paint: { 'fill-color': '#cdeccf' },
+      paint: { 'fill-color': c.parco },
     },
     {
       id: 'landcover-verde',
@@ -73,16 +127,16 @@ export const MAP_STYLE = {
       source: 'omt',
       'source-layer': 'landcover',
       filter: ['in', ['get', 'class'], ['literal', ['wood', 'grass']]],
-      paint: { 'fill-color': '#d4eed5' },
+      paint: { 'fill-color': c.verde },
     },
-    { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': '#a8d4f5' } },
+    { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': c.acqua } },
     {
       id: 'waterway',
       type: 'line',
       source: 'omt',
       'source-layer': 'waterway',
       filter: ['in', ['get', 'class'], ['literal', ['river', 'canal']]],
-      paint: { 'line-color': '#a8d4f5', 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1, 16, 8] },
+      paint: { 'line-color': c.acqua, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1, 16, 8] },
     },
     {
       id: 'building',
@@ -90,7 +144,7 @@ export const MAP_STYLE = {
       source: 'omt',
       'source-layer': 'building',
       minzoom: 14,
-      paint: { 'fill-color': '#e3e5e8', 'fill-outline-color': '#d6d9dd' },
+      paint: { 'fill-color': c.edifici, 'fill-outline-color': c.edificiBordo },
     },
     {
       id: 'railway',
@@ -99,11 +153,11 @@ export const MAP_STYLE = {
       'source-layer': 'transportation',
       minzoom: 12,
       filter: ['all', ['==', ['get', 'class'], 'rail'], ['!=', ['get', 'brunnel'], 'tunnel']],
-      paint: { 'line-color': '#c4c7cc', 'line-width': 1.4, 'line-dasharray': [3, 3] },
+      paint: { 'line-color': c.ferrovia, 'line-width': 1.4, 'line-dasharray': [3, 3] },
     },
-    ...strada('road-minor', STRADE_MINORI, '#ffffff', '#dadce0', [0.6, 2.5, 7, 18], 13),
-    ...strada('road-medium', STRADE_MEDIE, '#ffffff', '#cfd3d8', [1.2, 4, 10, 24], 11),
-    ...strada('road-major', STRADE_PRINCIPALI, '#fde9a6', '#f2c94c', [1.8, 5, 12, 28], 9),
+    ...strada('road-minor', STRADE_MINORI, c.viaMinore, c.viaMinoreBordo, [0.6, 2.5, 7, 18], 13),
+    ...strada('road-medium', STRADE_MEDIE, c.viaMedia, c.viaMediaBordo, [1.2, 4, 10, 24], 11),
+    ...strada('road-major', STRADE_PRINCIPALI, c.viaPrincipale, c.viaPrincipaleBordo, [1.8, 5, 12, 28], 9),
     {
       id: 'housenumber',
       type: 'symbol',
@@ -111,7 +165,7 @@ export const MAP_STYLE = {
       'source-layer': 'housenumber',
       minzoom: 17,
       layout: { 'text-field': ['get', 'housenumber'], 'text-font': FONT, 'text-size': 10 },
-      paint: { 'text-color': '#9aa0a6' },
+      paint: { 'text-color': c.civici },
     },
     {
       id: 'metro-dot',
@@ -120,7 +174,7 @@ export const MAP_STYLE = {
       'source-layer': 'poi',
       minzoom: 13,
       filter: ['all', ['==', ['get', 'class'], 'railway'], ['==', ['get', 'subclass'], 'station']],
-      paint: { 'circle-radius': 5, 'circle-color': '#e8453c', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.5 },
+      paint: { 'circle-radius': 5, 'circle-color': c.metro, 'circle-stroke-color': c.metroBordo, 'circle-stroke-width': 1.5 },
     },
     {
       id: 'metro-label',
@@ -137,7 +191,7 @@ export const MAP_STYLE = {
         'text-offset': [0.8, 0],
         'text-optional': true,
       },
-      paint: { 'text-color': '#c5221f', 'text-halo-color': '#ffffff', 'text-halo-width': 1.4 },
+      paint: { 'text-color': c.metroNome, 'text-halo-color': c.alone, 'text-halo-width': 1.4 },
     },
     {
       id: 'place-suburb',
@@ -153,7 +207,7 @@ export const MAP_STYLE = {
         'text-size': ['interpolate', ['linear'], ['zoom'], 11, 9.5, 15, 12],
         'text-letter-spacing': 0.12,
       },
-      paint: { 'text-color': '#80868b', 'text-halo-color': '#f1f3f4', 'text-halo-width': 1.5 },
+      paint: { 'text-color': c.quartieri, 'text-halo-color': c.fondo, 'text-halo-width': 1.5 },
     },
     {
       id: 'place-city',
@@ -163,7 +217,7 @@ export const MAP_STYLE = {
       maxzoom: 13,
       filter: ['in', ['get', 'class'], ['literal', ['city', 'town']]],
       layout: { 'text-field': NOME, 'text-font': FONT_BOLD, 'text-size': 15 },
-      paint: { 'text-color': '#3c4043', 'text-halo-color': '#ffffff', 'text-halo-width': 1.8 },
+      paint: { 'text-color': c.citta, 'text-halo-color': c.alone, 'text-halo-width': 1.8 },
     },
     // In fondo: i nomi delle vie hanno la precedenza sui nomi dei quartieri quando si sovrappongono.
     {
@@ -188,7 +242,10 @@ export const MAP_STYLE = {
         'text-max-angle': 40,
         'text-padding': 1,
       },
-      paint: { 'text-color': '#5f6368', 'text-halo-color': '#ffffff', 'text-halo-width': 1.6 },
+      paint: { 'text-color': c.vie, 'text-halo-color': c.alone, 'text-halo-width': 1.6 },
     },
   ],
-}
+})
+
+export const MAP_STYLE = creaStile(CHIARO)
+export const MAP_STYLE_NOTTE = creaStile(NOTTE)

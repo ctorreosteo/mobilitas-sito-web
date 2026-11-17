@@ -1,0 +1,1758 @@
+/* Landing Black Friday 2026 (pages/landing-pages/BlackFriday.jsx), redesign del 16/11/2026.
+   Mondo visivo: notte blu, Montserrat leggero a scala display, verde solo su blu, una sola sezione panna.
+   Elemento firma: la carta Black Friday in 3D posata sulla foto dell'apertura (components/black-friday-2026-sections/CartaBlack.jsx). Prefisso: .bfx
+   Non tocca black-friday.css (comune con /black-friday-2026-amico). */
+
+.bfx {
+  --bfx-night: #002552;
+  --bfx-deep: #001a3d;
+  --bfx-ink: #000f2b;
+  --bfx-green: #72fa93;
+  --bfx-cream: #f4f4f4;
+  --bfx-text: rgba(244, 244, 244, 0.78);
+  --bfx-text-2: rgba(244, 244, 244, 0.7);
+  --bfx-rule: rgba(244, 244, 244, 0.14);
+  --bfx-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --bfx-ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --bfx-gutter: 16px;
+
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+  font-variant-numeric: lining-nums;
+  overflow-x: clip;
+}
+
+.bfx ::selection { background: var(--bfx-green); color: var(--bfx-night); }
+
+/* mx.css colora ogni strong/b di panna a 700: qui ereditano e il colore si decide per contesto */
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) b,
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) strong {
+  color: inherit;
+  font-weight: 600;
+}
+
+.bfx :focus-visible {
+  outline: 2px solid var(--bfx-green);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.bfx-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.bfx-wrap {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2 * var(--bfx-gutter), 1240px);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .bfx { --bfx-gutter: 40px; }
+}
+
+/* Da 1024px la colonna vertebrale fissa del sito (SpineProgress) occupa i primi ~100px a sinistra */
+@media (min-width: 1024px) {
+  .bfx { --bfx-gutter: 120px; }
+}
+
+/* ======================================================================
+   Tipografia. Le dimensioni dei titoli stanno in @layer base con !important
+   perché index.css forza h1..h4 su telefono (stesso trucco di mx.css).
+   ====================================================================== */
+
+.bfx-h {
+  margin: 0;
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+  font-weight: 300;
+  color: var(--bfx-cream);
+  text-wrap: balance;
+}
+
+.bfx :is(.bfx-h, .bfx-h *) strong,
+.bfx .bfx-h strong { font-weight: 600; color: inherit; }
+.bfx-h .is-green { color: var(--bfx-green); }
+.bfx-h .is-dim { color: rgba(244, 244, 244, 0.62); }
+
+@layer base {
+  .bfx h2.bfx-why-us__q { font-size: 1.0625rem !important; line-height: 1.3; letter-spacing: 0; }
+  /* Il titolo dell'apertura ha le misure sulle due righe (span): qui solo l'h1 neutro */
+  .bfx h1.bfx-hero__title { font-size: 1rem !important; line-height: 1; }
+  .bfx :is(h2, h3).bfx-h.bfx-h2 {
+    font-size: clamp(2rem, 7.4vw, 4.1rem) !important;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+  .bfx h3.bfx-h.bfx-h3 {
+    font-size: clamp(1.5rem, 4.6vw, 2.2rem) !important;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+  .bfx :is(h3, h4).bfx-h.bfx-h4 {
+    font-size: clamp(1.2rem, 3.4vw, 1.45rem) !important;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+}
+
+.bfx-lead {
+  margin: 0;
+  max-width: 60ch;
+  font-size: clamp(1.06rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--bfx-text);
+}
+
+.bfx-body {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-weight: 400;
+  color: var(--bfx-text);
+}
+
+.bfx-lead strong,
+.bfx-body strong { font-weight: 600; color: var(--bfx-cream); }
+
+/* ======================================================================
+   Sezioni: ritmo per colore di fondo, non per riquadri
+   ====================================================================== */
+
+.bfx-section {
+  position: relative;
+  padding: 88px 0;
+}
+
+@media (min-width: 1024px) {
+  .bfx-section { padding: 140px 0; }
+}
+
+/* ======================================================================
+   Bottoni
+   ====================================================================== */
+
+.bfx-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+  margin-top: 40px;
+}
+
+.bfx-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 8px 8px 8px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font: 600 1.0625rem/1.2 'Montserrat', sans-serif;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 18px 40px -18px rgba(114, 250, 147, 0.55);
+  transition: transform 160ms var(--bfx-ease-out), box-shadow 200ms ease;
+}
+
+.bfx-btn:active { transform: scale(0.97); }
+
+.bfx-btn__txt {
+  flex: 1;
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.bfx-btn__txt small {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-btn__txt small s { opacity: 0.62; }
+.bfx-btn__txt small b { font-weight: 700; }
+
+.bfx-btn__arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bfx-night);
+  color: var(--bfx-green);
+  transition: transform 200ms var(--bfx-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-btn:hover { box-shadow: 0 22px 50px -16px rgba(114, 250, 147, 0.7); }
+  .bfx-btn:hover .bfx-btn__arrow { transform: translateX(3px); }
+}
+
+.bfx-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--bfx-cream);
+  font: 500 1rem/1.2 'Montserrat', sans-serif;
+  text-decoration: underline;
+  text-decoration-color: rgba(244, 244, 244, 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  cursor: pointer;
+  transition: text-decoration-color 200ms ease, color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-link:hover { text-decoration-color: var(--bfx-green); }
+}
+
+@media (max-width: 639px) {
+  .bfx-ctas { flex-direction: column; align-items: stretch; }
+  .bfx-btn { width: 100%; }
+  .bfx-link { justify-content: center; }
+}
+
+/* Sulla sezione panna il verde non si usa: bottone blu notte */
+.bfx-ctas.is-light .bfx-btn {
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  box-shadow: 0 18px 40px -20px rgba(0, 37, 82, 0.6);
+}
+
+.bfx-ctas.is-light .bfx-btn__arrow { background: var(--bfx-cream); color: var(--bfx-night); }
+.bfx-ctas.is-light .bfx-link { color: var(--bfx-night); text-decoration-color: rgba(0, 37, 82, 0.35); }
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-ctas.is-light .bfx-link:hover { text-decoration-color: var(--bfx-night); }
+}
+
+/* ======================================================================
+   Conto alla rovescia
+   ====================================================================== */
+
+/* Banner rosso con sveglia che squilla: deve farsi notare (stesso banner di /black-friday-2026-amico) */
+.bfx-count {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 22px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0;
+  padding: 14px 14px 14px 16px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #fff;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(255, 110, 120, 0.55) 0%, transparent 55%),
+    linear-gradient(135deg, #f02a3e 0%, #cc1230 55%, #9a0a22 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 24px 50px -22px rgba(240, 40, 60, 0.85),
+    0 10px 24px -14px rgba(0, 0, 0, 0.6);
+}
+
+/* Lampo di luce che attraversa il banner */
+.bfx-count__sweep {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.26) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: bfx-count-lampo 4.5s ease-in-out 1.2s infinite;
+}
+
+.bfx-count__head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.bfx-count__ico {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+.bfx-count__ico::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  animation: bfx-count-onda 2s ease-out infinite;
+}
+
+.bfx-count__ico svg { transform-origin: 50% 15%; animation: bfx-count-squillo 2s ease-in-out infinite; }
+
+.bfx-count__txt { display: grid; gap: 3px; line-height: 1.15; }
+
+.bfx-count__txt small {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bfx-count .bfx-count__txt b { font-size: 1rem; font-weight: 700; color: #fff; }
+
+.bfx-count__time {
+  display: grid;
+  flex: 1 1 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.bfx-count__u {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 4px 7px;
+  border-radius: 11px;
+  background: rgba(70, 0, 12, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.bfx-count__u b {
+  display: inline-flex;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.bfx-count__u small {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bfx-count__slot { position: relative; display: inline-block; height: 1.05em; overflow: hidden; }
+.bfx-count__ghost { visibility: hidden; }
+.bfx-count__d { position: absolute; inset: 0; display: block; text-align: center; }
+
+@keyframes bfx-count-lampo {
+  0% { transform: translateX(-120%); }
+  35%, 100% { transform: translateX(120%); }
+}
+
+@keyframes bfx-count-onda {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+}
+
+@keyframes bfx-count-squillo {
+  0%, 56%, 100% { transform: rotate(0deg); }
+  60% { transform: rotate(-16deg); }
+  64% { transform: rotate(14deg); }
+  68% { transform: rotate(-10deg); }
+  72% { transform: rotate(8deg); }
+  76% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-count__sweep, .bfx-count__ico::after, .bfx-count__ico svg { animation: none; }
+}
+
+/* Offerta finita: niente banner, solo una riga */
+.bfx-count.is-over {
+  display: flex;
+  width: auto;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bfx-text);
+}
+
+/* ======================================================================
+   Apertura: titolo enorme, la foto del trattamento, la carta Black Friday posata sopra
+   ====================================================================== */
+
+/* Il layout comune lascia sopra la pagina una fascia color panna alta quanto il menu (pt-16 / sm:pt-20 di <main>):
+   quando il menu diventa la pillola staccata dal bordo, quella fascia si vedeva come una barra bianca. La pagina sale
+   sotto il menu e l'apertura recupera lo stesso spazio nel padding. */
+.mx-page.bfx { margin-top: -64px; }
+
+.bfx-hero {
+  position: relative;
+  overflow: clip;
+  padding: calc(22px + 64px) 0 72px;
+  background: var(--bfx-night);
+}
+
+@media (min-width: 640px) {
+  .mx-page.bfx { margin-top: -80px; }
+  .bfx-hero { padding-top: calc(22px + 80px); }
+}
+
+/* Fondo: notte profonda, luce verde dietro la carta, orbite concentriche (come /black-friday-2026-amico) */
+.bfx-hero__bg {
+  --cx: 50%;
+  --cy: 60%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 35% at var(--cx) var(--cy), rgba(114, 250, 147, 0.12), transparent 70%),
+    radial-gradient(120% 80% at 50% 0%, #00377a 0%, var(--bfx-night) 48%, var(--bfx-ink) 100%);
+}
+
+.bfx-hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(circle at var(--cx) var(--cy), transparent 0 69px, rgba(244, 244, 244, 0.05) 70px 71px);
+  -webkit-mask-image: radial-gradient(60% 40% at var(--cx) var(--cy), #000 25%, transparent 75%);
+          mask-image: radial-gradient(60% 40% at var(--cx) var(--cy), #000 25%, transparent 75%);
+}
+
+.bfx-hero .bfx-wrap { z-index: 1; }
+
+.bfx-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "tag" "title" "stage" "offer" "sub";
+  row-gap: 20px;
+}
+
+.bfx-tag {
+  grid-area: tag;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: start;
+  margin: 0;
+  padding: 7px 14px 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 250, 147, 0.4);
+  background: rgba(114, 250, 147, 0.06);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bfx-green);
+}
+
+.bfx-tag__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  box-shadow: 0 0 0 4px rgba(114, 250, 147, 0.18);
+}
+
+/* Titolo: due righe enormi, la prima panna, la seconda verde */
+.bfx-hero__title {
+  grid-area: title;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  font-family: 'Montserrat', var(--font-primary, sans-serif);
+}
+
+.bfx-hero__l1,
+.bfx-hero__l2 {
+  display: block;
+  font-size: clamp(2.6rem, 12.6vw, 7.2rem);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+  color: var(--bfx-cream);
+}
+
+.bfx-hero__l2 {
+  font-size: clamp(1.85rem, 8.6vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--bfx-green);
+}
+
+/* Il palco: la foto, e la carta che si posa sul suo angolo */
+.bfx-hero__stage {
+  grid-area: stage;
+  position: relative;
+  display: grid;
+  margin-top: 8px;
+}
+
+.bfx-hero__media { position: relative; z-index: 0; }
+
+.bfx-hero__media .mx-cl-media__halo { display: none; }
+.bfx-hero__media .mx-cl-media__frame {
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.14), 0 40px 80px -36px rgba(0, 0, 0, 0.8);
+}
+.bfx-hero__media .mx-cl-media__frame::after { box-shadow: none; }
+
+.bfx-hero__card {
+  --w: min(70vw, 290px);
+  position: relative;
+  z-index: 1;
+  justify-self: end;
+  margin: calc(var(--w) * -0.2) 4% 0 0;
+}
+
+.bfx-hero__offer { grid-area: offer; margin-top: 4px; }
+.bfx-hero__offer .bfx-ctas { margin-top: 0; }
+.bfx-hero__count { margin-top: 18px; }
+
+.bfx-hero__sub { grid-area: sub; }
+
+@media (min-width: 640px) {
+  .bfx-hero__card { --w: 360px; margin-right: 6%; }
+}
+
+@media (min-width: 1024px) {
+  .bfx-hero {
+    display: flex;
+    align-items: center;
+    min-height: max(100svh, 800px);
+    padding: calc(80px + 40px) 0 88px;
+  }
+  .bfx-hero__bg { --cx: 70%; --cy: 64%; }
+  .bfx-hero__grid {
+    width: min(100% - 2 * var(--bfx-gutter), 1240px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "tag   stage"
+      "title stage"
+      "offer stage"
+      "sub   stage";
+    column-gap: 64px;
+    row-gap: 28px;
+    align-content: center;
+  }
+  .bfx-hero__l1 { font-size: clamp(4.2rem, 6.6vw, 7.2rem); }
+  .bfx-hero__l2 { font-size: clamp(2.4rem, 3.5vw, 4rem); }
+  .bfx-hero__stage { align-self: center; margin: 0; }
+  .bfx-hero__card { --w: clamp(320px, 26vw, 390px); justify-self: start; margin: calc(var(--w) * -0.36) 0 0 -6%; }
+  .bfx-hero__offer { display: flex; align-items: center; flex-wrap: wrap; gap: 18px 32px; margin-top: 8px; }
+  .bfx-hero__count { margin-top: 0; }
+  .bfx-hero__sub { align-self: start; max-width: 46ch; }
+}
+
+/* ——— La carta Black Friday (CartaBlack.jsx). Misure in em: tutto scala con --w ——— */
+.bfx-card {
+  position: relative;
+  width: var(--w, 340px);
+  aspect-ratio: 1.586;
+  font-size: calc(var(--w, 340px) / 24);
+  perspective: 1400px;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bfx-card__glow {
+  position: absolute;
+  inset: -30% -20%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(114, 250, 147, 0.28), rgba(56, 189, 248, 0.08) 55%, transparent);
+  filter: blur(14px);
+}
+
+.bfx-card__enter,
+.bfx-card__float,
+.bfx-card__pose,
+.bfx-card__body {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Posa: inclinata, come appoggiata in diagonale sulla foto */
+.bfx-card__pose { transform: rotateX(10deg) rotateY(-14deg) rotateZ(-5deg); }
+
+.bfx-card__float { animation: bfx-galleggia 7s ease-in-out infinite; }
+
+@keyframes bfx-galleggia {
+  0%, 100% { transform: translateY(0) rotateZ(0deg); }
+  50% { transform: translateY(-3%) rotateZ(1.2deg); }
+}
+
+/* Spessore: tre lastre dietro la faccia */
+.bfx-card__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.15em;
+  background: linear-gradient(135deg, #2a3546, #0b111c 60%, #1d2838);
+}
+.bfx-card__edge.is-1 { transform: translateZ(-2px); }
+.bfx-card__edge.is-2 { transform: translateZ(-4px); }
+.bfx-card__edge.is-3 { transform: translateZ(-6px); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); }
+
+.bfx-card__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.25em 1.4em 1.2em;
+  border-radius: 1.15em;
+  overflow: hidden;
+  color: var(--bfx-cream);
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgba(114, 250, 147, 0.1), transparent 60%),
+    radial-gradient(120% 90% at 0% 0%, #1a2232 0%, #0a0e16 45%, #030508 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Riflesso olografico: si sposta con il puntatore */
+.bfx-card__holo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(114, 250, 147, 0.55) 42%,
+    rgba(56, 189, 248, 0.45) 48%,
+    rgba(167, 139, 250, 0.4) 53%,
+    transparent 64%);
+  background-size: 300% 300%;
+  mix-blend-mode: screen;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.bfx-card__light { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; }
+
+/* Lampo di luce che attraversa la carta ogni tanto */
+.bfx-card__sweep {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -40%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: translateX(0) skewX(-20deg);
+  animation: bfx-lampo 6s cubic-bezier(0.77, 0, 0.175, 1) 1.6s infinite;
+  pointer-events: none;
+}
+
+@keyframes bfx-lampo {
+  0% { transform: translateX(0) skewX(-20deg); }
+  35%, 100% { transform: translateX(560%) skewX(-20deg); }
+}
+
+.bfx-card__top {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bfx-card__top b {
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--bfx-cream);
+}
+
+.bfx-card__top span {
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bfx-green);
+}
+
+.bfx-card__mid {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+}
+
+/* Il chip della carta */
+.bfx-card__chip {
+  position: relative;
+  flex: none;
+  width: 2.6em;
+  height: 2em;
+  border-radius: 0.38em;
+  background: linear-gradient(135deg, #e9fff0 0%, #9fe8b6 30%, #4fbf7a 55%, #c8f7d6 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.bfx-card__chip i,
+.bfx-card__chip::before,
+.bfx-card__chip::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(0, 40, 20, 0.35);
+}
+.bfx-card__chip i { inset: 28% 32%; border-radius: 0.15em; }
+.bfx-card__chip::before { left: 0; right: 0; top: 50%; border-width: 1px 0 0; }
+.bfx-card__chip::after { top: 0; bottom: 0; left: 50%; border-width: 0 0 0 1px; }
+
+/* Il 10 in rilievo, verde metallico. La sfumatura (background-clip: text) colora solo il riquadro del testo e la
+   spaziatura stretta fa uscire lo 0 a destra: margine interno, compensato da quello esterno, perché non venga tagliato */
+.bfx-card__ten {
+  margin-left: auto;
+  margin-right: -0.12em;
+  padding: 0.04em 0.12em 0.06em 0;
+  font-size: 5.4em;
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  color: transparent;
+  background: linear-gradient(180deg, #f2fff5 0%, #9dffb5 32%, #3ccf72 52%, #1a8c4a 60%, #b6ffc9 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.25)) drop-shadow(0 6px 14px rgba(114, 250, 147, 0.3));
+}
+
+.bfx-card__unit {
+  display: grid;
+  gap: 0.35em;
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.bfx-card__unit em {
+  font-size: 0.5em;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--bfx-green);
+}
+
+.bfx-card__bot {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.bfx-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-card__price b { font-size: 1.9em; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--bfx-green); }
+.bfx-card__price s { font-size: 0.9em; font-weight: 500; color: rgba(244, 244, 244, 0.5); }
+
+.bfx-card__exp {
+  display: grid;
+  gap: 0.2em;
+  text-align: right;
+  font-size: 0.95em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-card__exp small {
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 244, 0.55);
+}
+
+/* Ombra sul piano, respira con il galleggiare */
+.bfx-card__shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -14%;
+  height: 16%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent);
+  filter: blur(8px);
+  animation: bfx-ombra 7s ease-in-out infinite;
+}
+
+@keyframes bfx-ombra {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.9); opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-card__float,
+  .bfx-card__sweep,
+  .bfx-card__shadow { animation: none; }
+}
+
+/* ======================================================================
+   L'offerta: mazzo delle dieci visite e prezzo gigante
+   ====================================================================== */
+
+.bfx-deal { background: var(--bfx-night); padding-bottom: 72px; }
+
+/* Subito dopo l'apertura (stesso blu): niente doppio spazio, un filo separa le due parti */
+.bfx-hero + .bfx-deal { padding-top: 0; }
+.bfx-hero + .bfx-deal > .bfx-wrap:first-child { padding-top: 64px; border-top: 1px solid var(--bfx-rule); }
+
+@media (min-width: 1024px) {
+  .bfx-hero + .bfx-deal > .bfx-wrap:first-child { padding-top: 104px; }
+}
+
+.bfx-deal__head { display: grid; gap: 22px; margin-bottom: 48px; }
+
+@media (min-width: 1024px) {
+  .bfx-deal__head { grid-template-columns: 1.2fr 0.8fr; gap: 72px; align-items: end; margin-bottom: 72px; }
+}
+
+.bfx-deck { perspective: 1100px; }
+
+.bfx-deck__list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) { .bfx-deck__list { gap: 14px; } }
+@media (min-width: 1024px) { .bfx-deck__list { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 14px; } }
+
+.bfx-vcard { position: relative; aspect-ratio: 5 / 7; }
+
+.bfx-vcard__in {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 900ms var(--bfx-ease-out) var(--d);
+}
+
+.bfx-deck.is-flipped .bfx-vcard.is-gift .bfx-vcard__in { transform: rotateY(180deg); }
+
+.bfx-vcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--bfx-rule);
+  background: rgba(244, 244, 244, 0.035);
+  color: var(--bfx-cream);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.bfx-vcard__face b {
+  font-size: clamp(1.1rem, 4.6vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-vcard__face svg { color: var(--bfx-text-2); }
+
+.bfx-vcard__pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 244, 244, 0.5);
+}
+
+.bfx-vcard__face.is-back {
+  transform: rotateY(180deg);
+  border-color: transparent;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  box-shadow: 0 20px 36px -22px rgba(114, 250, 147, 0.8);
+}
+
+.bfx-vcard__face.is-back svg { color: var(--bfx-night); }
+
+@media (min-width: 640px) {
+  .bfx-vcard__face { padding: 14px 12px; border-radius: 16px; }
+}
+
+.bfx-deck__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 20px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--bfx-text);
+}
+
+.bfx-deck__legend span { display: inline-flex; align-items: center; gap: 10px; }
+
+.bfx-deck__legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(244, 244, 244, 0.45);
+}
+
+.bfx-deck__legend i.is-gift { border: 0; background: var(--bfx-green); }
+
+/* Il prezzo a tutta larghezza */
+.bfx-deal__price { margin-top: 72px; }
+
+.bfx-deal__was {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--bfx-text);
+}
+
+.bfx-deal__was s { margin-left: 6px; font-weight: 300; font-size: 1.5rem; color: var(--bfx-text-2); }
+
+.bfx-mega {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0 var(--bfx-gutter);
+  color: var(--bfx-green);
+  font-weight: 300;
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.bfx-mega__n { font-size: clamp(8.5rem, 38vw, 28rem); }
+
+.bfx-mega__eur {
+  margin-top: 0.12em;
+  font-size: clamp(3.4rem, 15vw, 10rem);
+}
+
+.bfx-deal__facts {
+  display: grid;
+  gap: 20px 40px;
+  margin-top: 32px;
+  padding-top: 26px;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-deal__facts p {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+}
+
+.bfx-deal__facts > p b {
+  font-size: 1.85rem;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  color: var(--bfx-cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-deal__facts > p span { font-size: 1rem; color: var(--bfx-text); }
+
+@media (min-width: 900px) {
+  .bfx-deal__facts { grid-template-columns: auto auto 1fr; align-items: center; }
+  .bfx-deal__count { justify-self: end; }
+}
+
+/* ======================================================================
+   Perché dieci visite: scene alternate e linea del percorso
+   ====================================================================== */
+
+/* Perché lo facciamo: una frase sola, grande e leggera */
+.bfx-why-us { background: var(--bfx-deep); }
+.bfx-why-us { overflow: clip; }
+.bfx-why-us__inner { display: grid; gap: 20px; }
+.bfx-why-us__a { max-width: 22ch; }
+.bfx-why-us__q { margin: 0; font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; color: var(--bfx-green); }
+.bfx-why-us__a {
+  margin: 0;
+  font-size: clamp(1.9rem, 5.4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--bfx-cream);
+  text-wrap: balance;
+}
+.bfx-why-us__a .is-dim { color: rgba(244, 244, 244, 0.5); }
+.bfx-why-us__a .is-green { display: block; margin-top: 0.35em; color: var(--bfx-green); }
+
+@media (min-width: 1024px) {
+  .bfx-why-us__inner {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 80px;
+    align-items: start;
+  }
+  .bfx-why-us__q { grid-column: 1; align-self: end; }
+  .bfx-why-us__a { grid-column: 1; }
+  .bfx-receipt-wrap { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+}
+
+/* ——— Lo scontrino ——— */
+.bfx-receipt-wrap {
+  display: grid;
+  justify-items: center;
+  margin-top: 28px;
+  perspective: 1100px;
+  /* L'ombra sta sul contenitore: la maschera del bordo strappato taglierebbe quella dello scontrino */
+  filter: drop-shadow(0 34px 34px rgba(0, 0, 0, 0.55));
+}
+
+.bfx-receipt {
+  --tear: 10px;
+  position: relative;
+  width: min(100% - 28px, 340px);
+  padding: 24px 22px calc(20px + var(--tear));
+  background: #f4f1ea;
+  color: var(--bfx-night);
+  font-variant-numeric: tabular-nums;
+  transform-style: preserve-3d;
+  rotate: -3deg;
+  /* Bordo strappato in basso */
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--tear)) 100%;
+          mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--tear)) 100%;
+}
+
+.bfx-receipt p { margin: 0; }
+
+.bfx-receipt__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 16px;
+  border-bottom: 1.5px dashed rgba(0, 37, 82, 0.35);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bfx .bfx-receipt__head b { font-weight: 700; color: var(--bfx-night); }
+
+.bfx-receipt__rows { display: grid; gap: 12px; margin: 0; padding: 18px 0; list-style: none; }
+
+.bfx-receipt__rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.bfx-receipt__rows li.is-struck { color: rgba(0, 37, 82, 0.45); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.bfx-receipt__rows li.is-gift { font-weight: 600; }
+
+.bfx-receipt__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 16px 0 14px;
+  border-top: 1.5px dashed rgba(0, 37, 82, 0.35);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bfx .bfx-receipt__total b {
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: none;
+  color: var(--bfx-night);
+  transform: translateZ(30px);
+}
+
+.bfx-receipt__foot { font-size: 0.8125rem; font-weight: 500; color: rgba(0, 37, 82, 0.7); }
+
+.bfx-receipt__code {
+  display: block;
+  height: 34px;
+  margin-top: 16px;
+  background: repeating-linear-gradient(90deg, var(--bfx-night) 0 2px, transparent 2px 4px, var(--bfx-night) 4px 5px, transparent 5px 9px, var(--bfx-night) 9px 12px, transparent 12px 14px);
+  opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .bfx-receipt-wrap { margin-top: 0; }
+  .bfx-receipt { width: 420px; padding: 34px 34px calc(28px + var(--tear)); }
+  .bfx-receipt__rows li { font-size: 1rem; }
+  .bfx .bfx-receipt__total b { font-size: 3.6rem; }
+}
+
+.bfx-why { background: var(--bfx-ink); }
+
+.bfx-why__title { max-width: 18ch; }
+
+.bfx-why__list {
+  display: grid;
+  gap: 64px;
+  margin: 64px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-scene { display: grid; gap: 22px; }
+
+.bfx-scene__img {
+  margin: 0 calc(-1 * var(--bfx-gutter));
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.bfx-scene__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-scene__txt { display: grid; gap: 14px; align-content: center; }
+
+.bfx-scene__n {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bfx-green);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 900px) {
+  .bfx-why__list { gap: 96px; margin-top: 88px; }
+  .bfx-scene { grid-template-columns: 1.25fr 0.75fr; gap: 64px; align-items: center; }
+  .bfx-scene.is-flip { grid-template-columns: 0.75fr 1.25fr; }
+  .bfx-scene.is-flip .bfx-scene__img { order: 2; }
+  .bfx-scene__img { margin: 0; border-radius: 20px; aspect-ratio: 3 / 2; }
+}
+
+.bfx-path {
+  display: grid;
+  gap: 48px;
+  margin-top: 112px;
+}
+
+.bfx-path__copy { display: grid; gap: 22px; align-content: start; }
+
+.bfx-path__img {
+  margin: 12px 0 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.bfx-path__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-path__steps { position: relative; padding-left: 36px; }
+
+/* Il bottone dopo il percorso: meno distanza, il percorso finisce già con la linea */
+.bfx-path + .bfx-ctas { margin-top: 56px; }
+
+.bfx-path__rail {
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: var(--bfx-rule);
+}
+
+.bfx-path__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--bfx-green);
+  transform-origin: top;
+}
+
+.bfx-path__steps ol {
+  display: grid;
+  gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-path__steps li { position: relative; display: grid; gap: 10px; }
+
+.bfx-path__node {
+  position: absolute;
+  left: -36px;
+  top: 6px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--bfx-ink);
+  border: 1px solid var(--bfx-green);
+}
+
+@media (min-width: 1024px) {
+  .bfx-path { grid-template-columns: 1fr 1fr; gap: 96px; margin-top: 136px; align-items: center; }
+  .bfx-path__steps { padding-top: 12px; }
+  .bfx-path__steps ol { gap: 64px; }
+}
+
+/* ======================================================================
+   Cosa cambia: una visita → un percorso
+   ====================================================================== */
+
+.bfx-change { background: var(--bfx-night); }
+
+.bfx-change__head { display: grid; gap: 32px; margin-bottom: 44px; }
+
+.bfx-change__photo { display: none; }
+
+@media (min-width: 1024px) {
+  .bfx-change__head { grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; margin-bottom: 72px; }
+  .bfx-change__photo {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 22px;
+    box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.1), 0 40px 70px -40px rgba(0, 0, 0, 0.8);
+  }
+  .bfx-change__photo img { width: 100%; height: 112%; object-fit: cover; display: block; }
+}
+
+/* ——— Confronto: due colonne, la seconda è una carta verde che si accende ——— */
+.bfx-vs {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+}
+
+.bfx-vs__row { display: contents; margin: 0; }
+
+.bfx-vs__card {
+  grid-column: 2;
+  grid-row: 1 / span var(--righe);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(114, 250, 147, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(0, 51, 110, 0.9), rgba(0, 31, 70, 0.9));
+  box-shadow:
+    0 0 0 1px rgba(114, 250, 147, 0.4),
+    0 40px 90px -40px rgba(114, 250, 147, 0.35);
+}
+
+.bfx-vs__row > span {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 12px;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.bfx-vs__row > span { grid-row: var(--r); }
+.bfx-vs__row > .is-to { grid-column: 2; }
+
+.bfx-vs__row > .is-from {
+  grid-column: 1;
+  padding-left: 0;
+  color: rgba(244, 244, 244, 0.5);
+  border-bottom: 1px solid var(--bfx-rule);
+}
+
+.bfx-vs__row > .is-to {
+  padding-left: 16px;
+  padding-right: 16px;
+  color: var(--bfx-cream);
+  border-bottom: 1px solid rgba(114, 250, 147, 0.14);
+}
+
+.bfx .bfx-vs__row > .is-to strong { font-weight: 600; color: var(--bfx-cream); }
+
+.bfx-vs__ico { flex-shrink: 0; margin-top: 2px; color: rgba(244, 244, 244, 0.35); }
+
+.bfx-vs__ok {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+}
+
+/* Intestazione: Una visita (contorno) → Un percorso (verde) */
+.bfx-vs__row.is-head > span {
+  padding-top: 22px;
+  padding-bottom: 18px;
+  font-size: clamp(1.45rem, 5.6vw, 3rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.bfx-vs__row.is-head > .is-from {
+  align-self: end;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 244, 244, 0.5);
+}
+
+.bfx-vs__row.is-head > .is-to { color: var(--bfx-green); }
+
+/* Ultima riga: il prezzo a visita */
+.bfx-vs__row.is-price > span {
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 22px;
+  padding-bottom: 24px;
+  border-bottom: 0;
+}
+
+.bfx-vs__row.is-price b {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-vs__row.is-price .is-from b { color: rgba(244, 244, 244, 0.5); }
+.bfx .bfx-vs__row.is-price .is-to b { font-weight: 300; color: var(--bfx-green); }
+.bfx-vs__row.is-price small { font-size: 0.875rem; font-weight: 500; color: var(--bfx-text-2); }
+
+.bfx-change__cta { margin-top: 48px; }
+
+@media (min-width: 768px) {
+  .bfx-vs__row > span { padding: 22px 28px; font-size: 1.0625rem; gap: 14px; }
+  .bfx-vs__row > .is-from { padding-left: 0; }
+  .bfx-vs__row.is-head > span { padding-top: 34px; padding-bottom: 26px; }
+  .bfx-vs__row.is-price > span { padding-top: 28px; padding-bottom: 32px; }
+  .bfx-vs__ok { width: 24px; height: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .bfx-vs { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+  .bfx-vs__row > .is-to { padding-left: 40px; padding-right: 40px; }
+}
+
+/* ======================================================================
+   Porta un amico: sezione panna, inchiostro blu, niente verde
+   ====================================================================== */
+
+.bfx-friend {
+  background: var(--bfx-cream);
+  color: var(--bfx-night);
+}
+
+.bfx-friend .bfx-h { color: var(--bfx-night); }
+.bfx-friend .bfx-lead,
+.bfx-friend .bfx-body { color: rgba(0, 37, 82, 0.8); }
+.bfx-friend strong,
+.bfx-friend .bfx-lead strong,
+.bfx-friend .bfx-body strong { color: var(--bfx-night); }
+.bfx-friend .bfx-pass.is-you strong { color: var(--bfx-cream); }
+.bfx-friend ::selection { background: var(--bfx-night); color: var(--bfx-cream); }
+.bfx-friend :focus-visible { outline-color: var(--bfx-night); }
+
+.bfx-friend__head { display: grid; gap: 22px; margin-bottom: 48px; }
+
+@media (min-width: 1024px) {
+  .bfx-friend__head { grid-template-columns: 1.1fr 0.9fr; gap: 72px; align-items: end; margin-bottom: 72px; }
+}
+
+.bfx-friend__passes {
+  display: grid;
+  gap: 16px;
+  perspective: 1200px;
+}
+
+@media (min-width: 900px) {
+  .bfx-friend__passes { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
+.bfx-pass {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 28px 24px 30px;
+  border-radius: 24px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.bfx-pass.is-you {
+  background: var(--bfx-night);
+  color: var(--bfx-cream);
+  box-shadow: 0 40px 60px -40px rgba(0, 37, 82, 0.7);
+}
+
+.bfx-pass.is-you .bfx-h { color: var(--bfx-cream); }
+.bfx-pass.is-you .bfx-body { color: var(--bfx-text); }
+.bfx-pass.is-you .bfx-pass__who,
+.bfx-pass.is-you .bfx-pass__big { color: var(--bfx-green); }
+
+.bfx-pass.is-friend {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 37, 82, 0.12), 0 40px 60px -44px rgba(0, 37, 82, 0.45);
+}
+
+.bfx-pass__who {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.bfx-pass__big {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 8px 0 6px;
+  font-size: clamp(4.6rem, 20vw, 8rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  transform: translateZ(40px);
+}
+
+.bfx-pass__big s {
+  font-size: 0.32em;
+  letter-spacing: -0.02em;
+  color: rgba(0, 37, 82, 0.55);
+}
+
+@media (min-width: 640px) {
+  .bfx-pass { padding: 40px 40px 44px; border-radius: 28px; }
+}
+
+/* Come funziona (offerta 450): tre passi come pass, il primo blu */
+.bfx-friend__passes.is-three { margin: 0; padding: 0; list-style: none; }
+.bfx-friend__passes.is-three .bfx-pass__big { font-size: clamp(3.4rem, 15vw, 5.5rem); }
+
+@media (min-width: 900px) {
+  .bfx-friend__passes.is-three { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bfx-how .bfx-ctas { margin-top: 48px; }
+
+.bfx-friend__problems { margin-top: 56px; }
+
+.bfx-friend__pt {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(0, 37, 82, 0.8);
+}
+
+.bfx-friend__problems ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bfx-friend__problems li {
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--bfx-night);
+}
+
+.bfx-friend__problems li:not(:last-child)::after {
+  content: '·';
+  margin: 0 12px;
+  color: rgba(0, 37, 82, 0.35);
+}
+
+.bfx-friend__problems li.is-more { font-weight: 600; }
+
+.bfx-friend__photos { margin-top: 56px; }
+
+/* ======================================================================
+   Riepilogo: registro tipografico
+   ====================================================================== */
+
+.bfx-recap { background: var(--bfx-deep); }
+
+.bfx-recap__grid { display: grid; gap: 48px; }
+
+.bfx-recap__side { display: grid; gap: 36px; align-content: start; }
+
+.bfx-recap__photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.bfx-recap__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bfx-ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-ledger li {
+  display: grid;
+  grid-template-columns: minmax(104px, 0.42fr) 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--bfx-rule);
+}
+
+.bfx-ledger__big {
+  font-size: clamp(2.1rem, 7vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--bfx-green);
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-ledger__big.is-icon { align-self: start; display: block; line-height: 0; }
+.bfx-ledger__big.is-icon + .bfx-ledger__t { align-self: start; }
+.bfx-ledger__t { display: grid; gap: 6px; }
+.bfx-ledger__t b { font-size: 1.0625rem; font-weight: 600; line-height: 1.35; color: var(--bfx-cream); }
+.bfx-ledger__t span { font-size: 1rem; line-height: 1.5; color: var(--bfx-text); }
+
+.bfx-recap__count { margin-top: 28px; }
+
+@media (min-width: 1024px) {
+  .bfx-recap__grid { grid-template-columns: 0.8fr 1.2fr; gap: 96px; }
+  .bfx-recap__side { position: sticky; top: 120px; }
+}
+
+/* ======================================================================
+   Chi ti tratta
+   ====================================================================== */
+
+.bfx-team { background: var(--bfx-night); }
+
+.bfx-team__grid { display: grid; gap: 40px; }
+.bfx-team__grid > div { display: grid; gap: 22px; align-content: center; }
+.bfx-team .mx-studio-collage { margin-bottom: 0; }
+
+@media (min-width: 1024px) {
+  .bfx-team__grid { grid-template-columns: 0.9fr 1.1fr; gap: 88px; align-items: center; }
+}
+
+/* ======================================================================
+   Domande frequenti: filetti, niente riquadri
+   ====================================================================== */
+
+.bfx-faq { background: var(--bfx-ink); }
+
+.bfx-faq__grid { display: grid; gap: 40px; }
+.bfx-faq__intro { display: grid; gap: 20px; align-content: start; }
+
+.bfx-faq__photo {
+  display: none;
+  margin: 16px 0 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.bfx-faq__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (min-width: 1024px) {
+  .bfx-faq__grid { grid-template-columns: 0.8fr 1.2fr; gap: 96px; }
+  .bfx-faq__intro { position: sticky; top: 120px; }
+  .bfx-faq__photo { display: block; }
+}
+
+.bfx-faq__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-faq__item { border-bottom: 1px solid var(--bfx-rule); }
+
+.bfx-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 72px;
+  padding: 18px 0;
+  border: 0;
+  background: none;
+  color: var(--bfx-cream);
+  font: 400 1.125rem/1.4 'Montserrat', sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bfx-faq__q strong { font-weight: 600; }
+
+.bfx-faq__plus {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--bfx-rule);
+  color: var(--bfx-cream);
+  transition: transform 250ms var(--bfx-ease-out), background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.bfx-faq__item.is-open .bfx-faq__plus {
+  transform: rotate(45deg);
+  background: var(--bfx-green);
+  border-color: var(--bfx-green);
+  color: var(--bfx-night);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-faq__q:hover .bfx-faq__plus { border-color: rgba(244, 244, 244, 0.45); }
+}
+
+.bfx-faq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--bfx-ease-out);
+}
+
+.bfx-faq__a > div { overflow: hidden; }
+.bfx-faq__a .bfx-body { padding: 0 56px 24px 0; }
+.bfx-faq__item.is-open .bfx-faq__a { grid-template-rows: 1fr; }
+
+.bfx-faq__closing { margin-top: 36px; }
+.bfx-faq .bfx-ctas { margin-top: 28px; }
+
+/* ======================================================================
+   Dove siamo
+   ====================================================================== */
+
+.bfx-where { background: var(--bfx-night); }
+
+.bfx-where__head { display: grid; gap: 32px; margin-bottom: 40px; }
+.bfx-where__head > div { display: grid; gap: 20px; }
+
+@media (min-width: 1024px) {
+  .bfx-where__head { grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+}
+
+.bfx-where__map { margin-top: 8px; }
+
+.bfx-where__map .mx-studi-map {
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 50px 90px -50px rgba(0, 0, 0, 0.9);
+}
+
+@media (max-width: 767px) {
+  .bfx-where__map { margin-left: calc(-1 * var(--bfx-gutter) + 8px); margin-right: calc(-1 * var(--bfx-gutter) + 8px); }
+  .bfx-where__map .mx-studi-map { border-radius: 20px; }
+  .bfx-where__map .mx-studi-map__canvas { height: 420px; }
+}
+
+/* ======================================================================
+   Barra fissa su telefono
+   ====================================================================== */
+
+.bfx-dock {
+  position: fixed;
+  z-index: 70;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(0, 15, 43, 0.92);
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+.bfx-dock__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font: 600 1rem/1.1 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform 160ms var(--bfx-ease-out);
+}
+
+.bfx-dock__main:active,
+.bfx-dock__ghost:active { transform: scale(0.97); }
+
+.bfx-dock__price { display: inline-flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
+.bfx-dock__price s { font-size: 0.875rem; font-weight: 500; opacity: 0.6; }
+.bfx-dock__price b { font-weight: 700; }
+.bfx-dock__txt { flex: 1; text-align: left; }
+
+.bfx-dock__ghost {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  min-height: 52px;
+  border: 1px solid rgba(244, 244, 244, 0.2);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bfx-cream);
+  cursor: pointer;
+  transition: transform 160ms var(--bfx-ease-out);
+}
+
+@media (min-width: 1024px) {
+  .bfx-dock { display: none; }
+}
+
+/* ======================================================================
+   Riduci movimento: tutto fermo e nello stato finale
+   ====================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-vcard__in,
+  .bfx-faq__a,
+  .bfx-faq__plus { transition: none; }
+}

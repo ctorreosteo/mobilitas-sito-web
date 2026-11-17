@@ -138,3 +138,66 @@
 
 .mx-studi-map .maplibregl-ctrl-attrib.maplibregl-compact { font-size: 10px; }
 .mx-studi-map .maplibregl-cooperative-gesture-screen { font-family: inherit; }
+
+/* ======================================================================
+   Tema notte (tema="notte"): mappa nei colori Mobilitas per le pagine scure
+   ====================================================================== */
+
+.mx-studi-map.is-notte { background: #002552; }
+.mx-studi-map.is-notte .mx-studi-map__canvas { background: #001a3d; }
+
+/* Etichetta del pin in vetro blu, nome in panna */
+.mx-studi-map.is-notte .mx-studi-map__label {
+  background: rgba(0, 37, 82, 0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.16), 0 10px 24px rgba(0, 0, 0, 0.45);
+  color: rgba(244, 244, 244, 0.7);
+}
+
+.mx-studi-map.is-notte .mx-studi-map__label b { color: #f4f4f4; }
+.mx-studi-map.is-notte .mx-studi-map__pin.is-active .mx-studi-map__label { box-shadow: 0 0 0 1.5px #72fa93, 0 10px 24px rgba(0, 0, 0, 0.45); }
+
+/* Onda verde che parte dal punto dello studio */
+.mx-studi-map.is-notte .mx-studi-map__badge::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -26px;
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  border-radius: 50%;
+  background: rgba(114, 250, 147, 0.45);
+  transform: scale(0.3);
+  opacity: 0;
+  animation: mx-studi-onda 2.8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+  z-index: -1;
+}
+
+.mx-studi-map.is-notte .mx-studi-map__pin + .mx-studi-map__pin .mx-studi-map__badge::before { animation-delay: 1.4s; }
+
+@keyframes mx-studi-onda {
+  0% { transform: scale(0.3); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-studi-map.is-notte .mx-studi-map__badge::before { animation: none; }
+}
+
+/* Zoom e crediti in blu */
+.mx-studi-map.is-notte .maplibregl-ctrl-group {
+  background: rgba(0, 37, 82, 0.9);
+  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.16);
+}
+
+.mx-studi-map.is-notte .maplibregl-ctrl-group button + button { border-top-color: rgba(244, 244, 244, 0.14); }
+.mx-studi-map.is-notte .maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1) brightness(1.4); }
+.mx-studi-map.is-notte .maplibregl-ctrl-group button:hover { background-color: rgba(114, 250, 147, 0.12); }
+.mx-studi-map.is-notte .maplibregl-ctrl-attrib { background: rgba(0, 26, 61, 0.75); color: rgba(244, 244, 244, 0.6); }
+.mx-studi-map.is-notte .maplibregl-ctrl-attrib a { color: rgba(244, 244, 244, 0.75); }
+.mx-studi-map.is-notte .maplibregl-ctrl-attrib-button { filter: invert(1); }
+
+/* Schede delle sedi: separate dalla mappa da un filo verde */
+.mx-studi-map.is-notte .mx-studi-map__sedi { border-top: 1px solid rgba(114, 250, 147, 0.3); }

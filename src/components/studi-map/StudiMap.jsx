@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, Car, MapPin, TrainFront } from 'lucide-react'
 import { STUDI } from '../../data/studi'
-import { MAP_STYLE } from './mapStyle'
+import { MAP_STYLE, MAP_STYLE_NOTTE } from './mapStyle'
 import './studi-map.css'
 
 // Pin dello studio: badge col pittogramma ed etichetta con l'indirizzo; il click apre le indicazioni.
@@ -29,7 +29,8 @@ function creaPin(studio) {
 // Quanto allontanare la mappa rispetto al taglio che inquadra esattamente gli studi
 const ZOOM_PIU_LONTANO = 0.7
 
-export default function StudiMap({ studi = STUDI, className = '' }) {
+// tema: 'chiaro' (di sempre, alla Google Maps) o 'notte' (colori Mobilitas, per le pagine scure)
+export default function StudiMap({ studi = STUDI, className = '', tema = 'chiaro' }) {
   const box = useRef(null)
   const [visibile, setVisibile] = useState(false)
 
@@ -57,7 +58,7 @@ export default function StudiMap({ studi = STUDI, className = '' }) {
       studi.forEach((s) => bounds.extend([s.lng, s.lat]))
       map = new maplibregl.Map({
         container: box.current,
-        style: MAP_STYLE,
+        style: tema === 'notte' ? MAP_STYLE_NOTTE : MAP_STYLE,
         bounds,
         // Spazio in alto e a destra per badge ed etichette dei pin.
         fitBoundsOptions: { padding: { top: 80, bottom: 40, left: 40, right: 170 }, maxZoom: 15 },
@@ -87,13 +88,13 @@ export default function StudiMap({ studi = STUDI, className = '' }) {
       annullato = true
       map?.remove()
     }
-  }, [visibile, studi])
+  }, [visibile, studi, tema])
 
   const evidenzia = (id, on) =>
     box.current?.querySelector(`[data-studio="${id}"]`)?.classList.toggle('is-active', on)
 
   return (
-    <div className={`mx-studi-map ${className}`}>
+    <div className={`mx-studi-map ${tema === 'notte' ? 'is-notte' : ''} ${className}`}>
       <div
         ref={box}
         className="mx-studi-map__canvas"
