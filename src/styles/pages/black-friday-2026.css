@@ -790,8 +790,8 @@
 }
 
 /* Ombra sul piano, respira con il galleggiare */
-/* ——— Variante blu Mobilitas (pagamento e conferma): blu notte → blu brillante, filigrana, pittogramma in
-   trasparenza, luci verde e azzurro. Stessa struttura e stessi movimenti della carta nera. ——— */
+/* ——— Variante blu Mobilitas (landing, pagamento e conferma): blu notte → blu brillante, filigrana, pittogramma
+   accanto alla scritta, bordo metallico, luci verde e azzurro. Stessa struttura e movimenti della carta nera. ——— */
 .bfx-card--blu .bfx-card__glow {
   background: radial-gradient(closest-side, rgba(56, 189, 248, 0.35), rgba(114, 250, 147, 0.14) 55%, transparent);
 }

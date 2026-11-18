@@ -33,7 +33,7 @@ import '../../styles/pages/black-friday-2026.css'
 // "Porta un amico" non è più qui (strategia del 16/11/2026): i pazienti ricevono un messaggio con il link personale
 // da mandare all'amico, che arriva sull'invito /black-friday-2026-amico.
 // Grafica propria (redesign del 16/11/2026, apertura rifatta il 17/11/2026): notte blu; nell'apertura la carta Black
-// Friday in 3D (nera, olografica, con il 10 in rilievo) posata sulla foto del trattamento; prezzo a tutta larghezza.
+// Friday in 3D (blu Mobilitas, olografica, con il 10 in rilievo) posata sulla foto del trattamento; prezzo a tutta larghezza.
 // Stile in styles/pages/black-friday-2026.css (prefisso bfx-), pezzi grafici in components/black-friday-2026-sections.
 // Dati comuni con /black-friday-2026-amico (scadenza, prezzi, SEO): components/black-friday/offerta.js.
 
@@ -408,6 +408,7 @@ export default function BlackFriday() {
               />
             </motion.div>
             <CartaBlack
+              variante="blu"
               className="bfx-hero__card"
               visite={VISITE}
               prezzo={PREZZO_OFFERTA}

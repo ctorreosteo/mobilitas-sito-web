@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
 
-// Elemento firma dell'apertura di /black-friday-2026: la carta Black Friday. Nera, in metallo spazzolato, con un
+// Elemento firma dell'apertura di /black-friday-2026 (e del pagamento e della conferma): la carta Black Friday, con un
 // riflesso olografico verde e il 10 in rilievo: è quello che il paziente compra (10 visite, 5 in omaggio, 450€).
 // Stesso linguaggio del biglietto 3D di /black-friday-2026-amico (AmicoKit → Invito): CSS 3D, nessuna libreria.
 // Entra ruotando e si posa; poi galleggia, un lampo di luce la attraversa e su desktop si inclina col puntatore
 // (la luce segue il puntatore). Con "riduci movimento" è ferma nella posa finale.
 // Decorativa: prezzo, scadenza e offerta sono già nel titolo, nel bottone e nel conto alla rovescia.
 
-// variante 'blu': la carta nei colori Mobilitas (pagamento e conferma); senza variante resta nera, come nella landing.
+// variante 'blu': la carta nei colori Mobilitas, usata dappertutto; senza variante è la versione nera originale.
 export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve, className = '', variante }) {
   const reduce = useReducedMotion()
   const x = useMotionValue(0)
