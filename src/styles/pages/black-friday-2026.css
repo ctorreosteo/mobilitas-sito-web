@@ -26,8 +26,8 @@
 .bfx ::selection { background: var(--bfx-green); color: var(--bfx-night); }
 
 /* mx.css colora ogni strong/b di panna a 700: qui ereditano e il colore si decide per contesto */
-.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) b,
-.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-ledger, .bfx-count) strong {
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-count) b,
+.bfx :where(.bfx-btn, .bfx-dock, .bfx-deck, .bfx-h, .bfx-friend, .bfx-card, .bfx-deal, .bfx-count) strong {
   color: inherit;
   font-weight: 600;
 }
@@ -891,7 +891,45 @@
 .bfx-deal__head { display: grid; gap: 22px; margin-bottom: 48px; }
 
 @media (min-width: 1024px) {
-  .bfx-deal__head { grid-template-columns: 1.2fr 0.8fr; gap: 72px; align-items: end; margin-bottom: 72px; }
+  .bfx-deal__head { grid-template-columns: 0.9fr 1.1fr; gap: 72px; align-items: start; margin-bottom: 72px; }
+}
+
+/* Cosa ottieni: i benefici in breve, una riga ciascuno con la spunta verde */
+.bfx-perks {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bfx-rule);
+}
+
+.bfx-perks li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--bfx-rule);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: var(--bfx-text);
+}
+
+.bfx .bfx-perks b { font-weight: 700; color: var(--bfx-cream); }
+
+.bfx-perks__ok {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+}
+
+@media (min-width: 1024px) {
+  .bfx-perks li { padding: 18px 0; font-size: 1.125rem; }
 }
 
 .bfx-deck { perspective: 1100px; }
@@ -1216,71 +1254,6 @@
   .bfx-scene__img { margin: 0; border-radius: 20px; aspect-ratio: 3 / 2; }
 }
 
-.bfx-path {
-  display: grid;
-  gap: 48px;
-  margin-top: 112px;
-}
-
-.bfx-path__copy { display: grid; gap: 22px; align-content: start; }
-
-.bfx-path__img {
-  margin: 12px 0 0;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border-radius: 18px;
-}
-
-.bfx-path__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.bfx-path__steps { position: relative; padding-left: 36px; }
-
-/* Il bottone dopo il percorso: meno distanza, il percorso finisce già con la linea */
-.bfx-path + .bfx-ctas { margin-top: 56px; }
-
-.bfx-path__rail {
-  position: absolute;
-  left: 7px;
-  top: 10px;
-  bottom: 10px;
-  width: 1px;
-  background: var(--bfx-rule);
-}
-
-.bfx-path__fill {
-  position: absolute;
-  inset: 0;
-  background: var(--bfx-green);
-  transform-origin: top;
-}
-
-.bfx-path__steps ol {
-  display: grid;
-  gap: 48px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.bfx-path__steps li { position: relative; display: grid; gap: 10px; }
-
-.bfx-path__node {
-  position: absolute;
-  left: -36px;
-  top: 6px;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: var(--bfx-ink);
-  border: 1px solid var(--bfx-green);
-}
-
-@media (min-width: 1024px) {
-  .bfx-path { grid-template-columns: 1fr 1fr; gap: 96px; margin-top: 136px; align-items: center; }
-  .bfx-path__steps { padding-top: 12px; }
-  .bfx-path__steps ol { gap: 64px; }
-}
-
 /* ======================================================================
    Cosa cambia: una visita → un percorso
    ====================================================================== */
@@ -1387,25 +1360,8 @@
 .bfx-vs__row.is-head > .is-to { color: var(--bfx-green); }
 
 /* Ultima riga: il prezzo a visita */
-.bfx-vs__row.is-price > span {
-  flex-direction: column;
-  gap: 4px;
-  padding-top: 22px;
-  padding-bottom: 24px;
-  border-bottom: 0;
-}
 
-.bfx-vs__row.is-price b {
-  font-size: clamp(2rem, 7vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-}
 
-.bfx-vs__row.is-price .is-from b { color: rgba(244, 244, 244, 0.5); }
-.bfx .bfx-vs__row.is-price .is-to b { font-weight: 300; color: var(--bfx-green); }
-.bfx-vs__row.is-price small { font-size: 0.875rem; font-weight: 500; color: var(--bfx-text-2); }
 
 .bfx-change__cta { margin-top: 48px; }
 
@@ -1413,7 +1369,6 @@
   .bfx-vs__row > span { padding: 22px 28px; font-size: 1.0625rem; gap: 14px; }
   .bfx-vs__row > .is-from { padding-left: 0; }
   .bfx-vs__row.is-head > span { padding-top: 34px; padding-bottom: 26px; }
-  .bfx-vs__row.is-price > span { padding-top: 28px; padding-bottom: 32px; }
   .bfx-vs__ok { width: 24px; height: 24px; }
 }
 
@@ -1526,6 +1481,84 @@
 
 .bfx-how .bfx-ctas { margin-top: 48px; }
 
+/* Come si prenota dopo il pagamento: due strade affiancate (da solo / con la segreteria) con un «oppure» in mezzo */
+.bfx-book { margin-top: 56px; }
+
+.bfx-friend .bfx-book__title { max-width: 26ch; margin: 0 0 24px; font-weight: 400; }
+.bfx-friend .bfx-book__title strong { display: block; font-weight: 700; }
+
+.bfx-book__ways { display: grid; gap: 12px; align-items: stretch; }
+
+.bfx-book__way {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 24px 22px 26px;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 37, 82, 0.12), 0 30px 50px -40px rgba(0, 37, 82, 0.45);
+}
+
+.bfx-book__way .bfx-body { margin: 0; }
+
+.bfx-book__ico {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--bfx-night);
+  color: var(--bfx-green);
+}
+
+.bfx-book__k {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--bfx-night);
+}
+
+.bfx-book__or {
+  justify-self: center;
+  padding: 2px 14px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0, 37, 82, 0.6);
+  background: rgba(0, 37, 82, 0.06);
+}
+
+.bfx-book__tel {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  color: var(--bfx-night);
+  box-shadow: inset 0 0 0 1.5px var(--bfx-night);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bfx-book__tel:hover { background: var(--bfx-night); color: var(--bfx-cream); }
+}
+
+@media (min-width: 900px) {
+  .bfx-book { margin-top: 72px; }
+  .bfx-book__ways { grid-template-columns: 1fr auto 1fr; gap: 20px; }
+  .bfx-book__or { align-self: center; }
+  .bfx-book__way { padding: 32px 32px 34px; }
+}
+
 .bfx-friend__problems { margin-top: 56px; }
 
 .bfx-friend__pt {
@@ -1561,63 +1594,6 @@
 .bfx-friend__problems li.is-more { font-weight: 600; }
 
 .bfx-friend__photos { margin-top: 56px; }
-
-/* ======================================================================
-   Riepilogo: registro tipografico
-   ====================================================================== */
-
-.bfx-recap { background: var(--bfx-deep); }
-
-.bfx-recap__grid { display: grid; gap: 48px; }
-
-.bfx-recap__side { display: grid; gap: 36px; align-content: start; }
-
-.bfx-recap__photo {
-  margin: 0;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 20px;
-}
-
-.bfx-recap__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.bfx-ledger {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--bfx-rule);
-}
-
-.bfx-ledger li {
-  display: grid;
-  grid-template-columns: minmax(104px, 0.42fr) 1fr;
-  gap: 16px;
-  align-items: baseline;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--bfx-rule);
-}
-
-.bfx-ledger__big {
-  font-size: clamp(2.1rem, 7vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--bfx-green);
-  font-variant-numeric: tabular-nums;
-}
-
-.bfx-ledger__big.is-icon { align-self: start; display: block; line-height: 0; }
-.bfx-ledger__big.is-icon + .bfx-ledger__t { align-self: start; }
-.bfx-ledger__t { display: grid; gap: 6px; }
-.bfx-ledger__t b { font-size: 1.0625rem; font-weight: 600; line-height: 1.35; color: var(--bfx-cream); }
-.bfx-ledger__t span { font-size: 1rem; line-height: 1.5; color: var(--bfx-text); }
-
-.bfx-recap__count { margin-top: 28px; }
-
-@media (min-width: 1024px) {
-  .bfx-recap__grid { grid-template-columns: 0.8fr 1.2fr; gap: 96px; }
-  .bfx-recap__side { position: sticky; top: 120px; }
-}
 
 /* ======================================================================
    Chi ti tratta
@@ -1718,7 +1694,6 @@
 .bfx-faq__a .bfx-body { padding: 0 56px 24px 0; }
 .bfx-faq__item.is-open .bfx-faq__a { grid-template-rows: 1fr; }
 
-.bfx-faq__closing { margin-top: 36px; }
 .bfx-faq .bfx-ctas { margin-top: 28px; }
 
 /* ======================================================================
@@ -1755,52 +1730,133 @@
 .bfx-dock {
   position: fixed;
   z-index: 70;
-  left: 12px;
-  right: 12px;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 8px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(0, 15, 43, 0.92);
-  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
 }
 
+/* Pannello di vetro blu con filo verde: prezzo e tempo a sinistra, bottone verde a destra */
 .bfx-dock__main {
-  flex: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
-  padding: 0 18px;
+  width: 100%;
+  padding: 9px 9px 9px 18px;
   border: 0;
-  border-radius: 999px;
-  background: var(--bfx-green);
-  color: var(--bfx-night);
-  font: 600 1rem/1.1 'Montserrat', sans-serif;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(12, 46, 96, 0.95), rgba(0, 15, 43, 0.97));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 0 0 1px rgba(114, 250, 147, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 50px -16px rgba(0, 0, 0, 0.75),
+    0 0 44px -12px rgba(114, 250, 147, 0.3);
+  color: var(--bfx-cream);
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
   cursor: pointer;
   transition: transform 160ms var(--bfx-ease-out);
 }
 
-.bfx-dock__main:active,
-.bfx-dock__ghost:active { transform: scale(0.97); }
+.bfx-dock__main:active { transform: scale(0.98); }
 
-.bfx-dock__price { display: inline-flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
-.bfx-dock__price s { font-size: 0.875rem; font-weight: 500; opacity: 0.6; }
-.bfx-dock__price b { font-weight: 700; }
-.bfx-dock__txt { flex: 1; text-align: left; }
+.bfx-dock__info { display: grid; gap: 5px; min-width: 0; }
 
-.bfx-dock__ghost {
+.bfx-dock__price { display: flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
+.bfx .bfx-dock__price b {
+  font-size: 1.625rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--bfx-green);
+}
+.bfx-dock__price s { font-size: 0.9375rem; font-weight: 500; color: rgba(244, 244, 244, 0.5); }
+
+.bfx-dock__timer,
+.bfx-dock__sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-dock__timer { color: #ff7480; }
+.bfx-dock__sub { color: var(--bfx-text-2); }
+
+.bfx-dock__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff3b4d;
+  animation: bfx-dock-polso 1.6s ease-out infinite;
+}
+
+.bfx-dock__cta {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 8px 0 20px;
+  border-radius: 16px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 12px 26px -12px rgba(114, 250, 147, 0.8);
+}
+
+/* Lampo di luce sul bottone, ogni pochi secondi */
+.bfx-dock__cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: bfx-dock-lampo 3.8s ease-in-out 1s infinite;
+}
+
+.bfx-dock__arrow {
   display: grid;
   place-items: center;
-  width: 52px;
-  min-height: 52px;
-  border: 1px solid rgba(244, 244, 244, 0.2);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--bfx-cream);
-  cursor: pointer;
-  transition: transform 160ms var(--bfx-ease-out);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bfx-night);
+  color: var(--bfx-green);
+}
+
+@keyframes bfx-dock-polso {
+  0% { box-shadow: 0 0 0 0 rgba(255, 59, 77, 0.6); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(255, 59, 77, 0); }
+}
+
+@keyframes bfx-dock-lampo {
+  0% { transform: translateX(-120%); }
+  30%, 100% { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-dock__dot,
+  .bfx-dock__cta::after { animation: none; }
+}
+
+/* Telefoni stretti: il tempo senza «Scade tra», il bottone più compatto */
+@media (max-width: 379px) {
+  .bfx-dock__lbl { display: none; }
+  .bfx-dock__main { padding-left: 14px; gap: 8px; }
+  .bfx .bfx-dock__price b { font-size: 1.375rem; }
+  .bfx-dock__cta { padding-left: 14px; font-size: 0.9375rem; }
 }
 
 @media (min-width: 1024px) {

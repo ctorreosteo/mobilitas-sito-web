@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, animate, motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { AnimatePresence, animate, motion, useInView, useReducedMotion, useSpring } from 'framer-motion'
 import { AlarmClock, Check, Gift } from 'lucide-react'
 import { SCADENZA_TESTO, due, urgenza, useMancano } from '../black-friday/offerta'
 
@@ -184,17 +184,5 @@ export function TiltPass({ as = 'article', className = '', children }) {
     >
       {children}
     </Tag>
-  )
-}
-
-// Linea del percorso: si disegna scorrendo la sezione (scaleY, legata allo scorrimento)
-export function PercorsoLinea({ target }) {
-  const { scrollYProgress } = useScroll({ target, offset: ['start 75%', 'end 55%'] })
-  const scaleY = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 })
-  const reduce = useReducedMotion()
-  return (
-    <span className="bfx-path__rail" aria-hidden="true">
-      <motion.span className="bfx-path__fill" style={reduce ? undefined : { scaleY }} />
-    </span>
   )
 }
