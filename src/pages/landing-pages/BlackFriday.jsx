@@ -10,7 +10,7 @@ import { prefetchHeroVideo, useHeroVideo } from '../../components/condition-land
 import CityMap from '../../components/landing/CityMap'
 import StudioCollage from '../../components/landing/StudioCollage'
 import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
-import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useSeoOfferta } from '../../components/black-friday/offerta'
+import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useMancano, useSeoOfferta } from '../../components/black-friday/offerta'
 import CartaBlack from '../../components/black-friday-2026-sections/CartaBlack'
 import { Countdown, MazzoVisite, PrezzoGigante, TiltPass } from '../../components/black-friday-2026-sections/BfxKit'
 import '../../styles/pages/condition-landing.css'
@@ -193,8 +193,10 @@ function OffertaCtas({ tone = 'dark', className = '' }) {
   )
 }
 
-// Barra fissa in basso su telefono (nascosta da 1024px)
+// Barra fissa in basso su telefono (nascosta da 1024px): a sinistra il prezzo e il tempo che resta, a destra il bottone.
+// Tutta la barra è un unico bottone, così si tocca facilmente.
 function OffertaDock({ visible }) {
+  const mancano = useMancano()
   return (
     <AnimatePresence>
       {visible && (
@@ -209,14 +211,28 @@ function OffertaDock({ visible }) {
             type="button"
             className="bfx-dock__main"
             onClick={pagaOnline}
-            aria-label={`Riserva le ${VISITE} visite del Black Friday: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€`}
+            aria-label={`Riserva le ${VISITE} visite del Black Friday: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, fino a ${SCADENZA_TESTO}`}
           >
-            <span className="bfx-dock__price" aria-hidden="true">
-              <s>{PREZZO_PIENO}€</s>
-              <b>{PREZZO_OFFERTA}€</b>
+            <span className="bfx-dock__info" aria-hidden="true">
+              <span className="bfx-dock__price">
+                <b>{PREZZO_OFFERTA}€</b>
+                <s>{PREZZO_PIENO}€</s>
+              </span>
+              {mancano ? (
+                <span className="bfx-dock__timer">
+                  <i className="bfx-dock__dot" />
+                  <span className="bfx-dock__lbl">Scade tra</span> {mancano.giorni}g {due(mancano.ore)}:{due(mancano.min)}:{due(mancano.sec)}
+                </span>
+              ) : (
+                <span className="bfx-dock__sub">{VISITE} visite, metà prezzo</span>
+              )}
             </span>
-            <span className="bfx-dock__txt">Riserva {VISITE} visite</span>
-            <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
+            <span className="bfx-dock__cta" aria-hidden="true">
+              Riserva ora
+              <span className="bfx-dock__arrow">
+                <ArrowRight size={18} strokeWidth={2.6} />
+              </span>
+            </span>
           </button>
         </motion.div>
       )}

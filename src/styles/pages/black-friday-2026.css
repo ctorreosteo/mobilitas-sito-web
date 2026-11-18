@@ -1670,52 +1670,133 @@
 .bfx-dock {
   position: fixed;
   z-index: 70;
-  left: 12px;
-  right: 12px;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 8px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(0, 15, 43, 0.92);
-  box-shadow: 0 0 0 1px rgba(244, 244, 244, 0.12), 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
 }
 
+/* Pannello di vetro blu con filo verde: prezzo e tempo a sinistra, bottone verde a destra */
 .bfx-dock__main {
-  flex: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
-  padding: 0 18px;
+  width: 100%;
+  padding: 9px 9px 9px 18px;
   border: 0;
-  border-radius: 999px;
-  background: var(--bfx-green);
-  color: var(--bfx-night);
-  font: 600 1rem/1.1 'Montserrat', sans-serif;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(12, 46, 96, 0.95), rgba(0, 15, 43, 0.97));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 0 0 1px rgba(114, 250, 147, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 50px -16px rgba(0, 0, 0, 0.75),
+    0 0 44px -12px rgba(114, 250, 147, 0.3);
+  color: var(--bfx-cream);
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
   cursor: pointer;
   transition: transform 160ms var(--bfx-ease-out);
 }
 
-.bfx-dock__main:active,
-.bfx-dock__ghost:active { transform: scale(0.97); }
+.bfx-dock__main:active { transform: scale(0.98); }
 
-.bfx-dock__price { display: inline-flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
-.bfx-dock__price s { font-size: 0.875rem; font-weight: 500; opacity: 0.6; }
-.bfx-dock__price b { font-weight: 700; }
-.bfx-dock__txt { flex: 1; text-align: left; }
+.bfx-dock__info { display: grid; gap: 5px; min-width: 0; }
 
-.bfx-dock__ghost {
+.bfx-dock__price { display: flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
+.bfx .bfx-dock__price b {
+  font-size: 1.625rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--bfx-green);
+}
+.bfx-dock__price s { font-size: 0.9375rem; font-weight: 500; color: rgba(244, 244, 244, 0.5); }
+
+.bfx-dock__timer,
+.bfx-dock__sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.bfx-dock__timer { color: #ff7480; }
+.bfx-dock__sub { color: var(--bfx-text-2); }
+
+.bfx-dock__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff3b4d;
+  animation: bfx-dock-polso 1.6s ease-out infinite;
+}
+
+.bfx-dock__cta {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 8px 0 20px;
+  border-radius: 16px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 12px 26px -12px rgba(114, 250, 147, 0.8);
+}
+
+/* Lampo di luce sul bottone, ogni pochi secondi */
+.bfx-dock__cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: bfx-dock-lampo 3.8s ease-in-out 1s infinite;
+}
+
+.bfx-dock__arrow {
   display: grid;
   place-items: center;
-  width: 52px;
-  min-height: 52px;
-  border: 1px solid rgba(244, 244, 244, 0.2);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--bfx-cream);
-  cursor: pointer;
-  transition: transform 160ms var(--bfx-ease-out);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bfx-night);
+  color: var(--bfx-green);
+}
+
+@keyframes bfx-dock-polso {
+  0% { box-shadow: 0 0 0 0 rgba(255, 59, 77, 0.6); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(255, 59, 77, 0); }
+}
+
+@keyframes bfx-dock-lampo {
+  0% { transform: translateX(-120%); }
+  30%, 100% { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfx-dock__dot,
+  .bfx-dock__cta::after { animation: none; }
+}
+
+/* Telefoni stretti: il tempo senza «Scade tra», il bottone più compatto */
+@media (max-width: 379px) {
+  .bfx-dock__lbl { display: none; }
+  .bfx-dock__main { padding-left: 14px; gap: 8px; }
+  .bfx .bfx-dock__price b { font-size: 1.375rem; }
+  .bfx-dock__cta { padding-left: 14px; font-size: 0.9375rem; }
 }
 
 @media (min-width: 1024px) {
