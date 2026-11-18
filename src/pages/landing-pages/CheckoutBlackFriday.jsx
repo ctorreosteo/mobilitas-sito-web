@@ -160,10 +160,11 @@ export default function CheckoutBlackFriday() {
     }
   }, [])
 
-  // Pagamento riuscito: la ricevuta va alla pagina di conferma (sessionStorage), che fa partire le conversioni
+  // Pagamento riuscito: la ricevuta va alla pagina di conferma (sessionStorage, che regge il ricaricamento, e lo stato
+  // della navigazione, se il browser blocca lo storage), che fa partire le conversioni
   const fatto = (ricevuta) => {
     salvaRicevuta(ricevuta)
-    navigate('/black-friday-2026/grazie')
+    navigate('/black-friday-2026/grazie', { state: { ricevuta } })
   }
 
   const err = useMemo(() => errori(campi), [campi])

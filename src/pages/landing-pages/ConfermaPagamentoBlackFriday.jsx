@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, ArrowUpRight, CalendarHeart, Check, CreditCard, Mail, MapPin, MessageCircle, PhoneCall, Printer, Sparkles, TrainFront } from 'lucide-react'
 import CheckoutShell from '../../components/checkout/CheckoutShell'
@@ -36,10 +36,14 @@ const SEO = {
   ogImageAlt: 'Trattamento osteopatico nello studio Mobilitas di Torino',
 }
 
-function traccia() {
+// Ordini già tracciati in questa pagina: con lo storage bloccato è l'unico ricordo (e regge il doppio effetto di React)
+const tracciati = new Set()
+
+function traccia(fallback) {
   // Si rilegge dal browser: se le conversioni sono già partite per questo ordine (anche un istante prima), niente
-  const r = leggiRicevuta()
-  if (!r || r.tracciata || r.ambiente !== 'LIVE' || typeof window === 'undefined') return
+  const r = leggiRicevuta() ?? fallback
+  if (!r || r.tracciata || r.ambiente !== 'LIVE' || typeof window === 'undefined' || tracciati.has(r.numero)) return
+  tracciati.add(r.numero)
   segnaTracciata()
   const valore = Number(r.importo)
   const id = `ordine-${r.numero}`
@@ -168,11 +172,13 @@ function Studi() {
 export default function ConfermaPagamentoBlackFriday() {
   useSeoOfferta(SEO)
   const reduce = useReducedMotion()
-  const [ricevuta] = useState(leggiRicevuta)
+  const location = useLocation()
+  // Dal browser (regge il ricaricamento) o, se lo storage è bloccato, dalla navigazione appena fatta
+  const [ricevuta] = useState(() => leggiRicevuta() ?? location.state?.ricevuta ?? null)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
-    if (ricevuta) traccia()
+    if (ricevuta) traccia(ricevuta)
   }, [ricevuta])
 
   const entra = (delay = 0) => (reduce ? {} : { initial: { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, ease: EASE, delay } })
