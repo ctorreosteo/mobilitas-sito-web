@@ -74,83 +74,127 @@ export function Countdown({ className = '', etichetta = `Fino a ${SCADENZA_TESTO
   )
 }
 
-// Le dieci visite come dieci carte: le ultime cinque si girano e diventano verdi ("in omaggio") quando il mazzo
-// entra nello schermo. Il numero della visita è su entrambe le facce: nessun testo resta nascosto.
+// Le dieci visite in due gruppi: «Le paghi» (cinque carte) + «In omaggio» (cinque carte verdi in un riquadro regalo).
+// Le carte in omaggio si girano e diventano verdi quando il gruppo entra nello schermo. Il numero della visita è su
+// entrambe le facce: nessun testo resta nascosto.
 export function MazzoVisite({ visite = 10 }) {
   const ref = useRef(null)
   const reduce = useReducedMotion()
   const inView = useInView(ref, { once: true, margin: '0px 0px -18% 0px' })
   const girate = reduce || inView
   const meta = visite / 2
+  const numeri = (da) => Array.from({ length: meta }, (_, i) => da + i)
+
   return (
     <div ref={ref} className={`bfx-deck ${girate ? 'is-flipped' : ''}`}>
-      <ol className="bfx-deck__list" aria-label={`${visite} visite: ${meta} le paghi, ${meta} sono in omaggio`}>
-        {Array.from({ length: visite }, (_, i) => {
-          const omaggio = i >= meta
-          return (
-            <li
-              key={i}
-              className={`bfx-vcard ${omaggio ? 'is-gift' : ''}`}
-              style={{ '--d': `${Math.max(0, i - meta) * 110 + 120}ms` }}
-            >
+      <div className="bfx-deck__group">
+        <p className="bfx-deck__tag">
+          <Check size={14} strokeWidth={3} aria-hidden="true" />
+          <span>
+            <b>{meta} visite</b> le paghi
+          </span>
+        </p>
+        <ol className="bfx-deck__list" aria-label={`${meta} visite che paghi`}>
+          {numeri(1).map((n) => (
+            <li key={n} className="bfx-vcard">
               <span className="bfx-vcard__in" aria-hidden="true">
                 <span className="bfx-vcard__face is-front">
-                  <b>{due(i + 1)}</b>
-                  {omaggio ? <i className="bfx-vcard__pip" /> : <Check size={18} strokeWidth={2.2} />}
+                  <b>{due(n)}</b>
                 </span>
-                {omaggio && (
-                  <span className="bfx-vcard__face is-back">
-                    <b>{due(i + 1)}</b>
-                    <Gift size={18} strokeWidth={2.2} />
-                  </span>
-                )}
               </span>
-              <span className="bfx-sr">
-                Visita {i + 1}: {omaggio ? 'in omaggio' : 'la paghi'}
-              </span>
+              <span className="bfx-sr">Visita {n}</span>
             </li>
-          )
-        })}
-      </ol>
-      <p className="bfx-deck__legend">
-        <span>
-          <i aria-hidden="true" /> {meta} le paghi
-        </span>
-        <span>
-          <i className="is-gift" aria-hidden="true" /> {meta} in omaggio
-        </span>
-      </p>
+          ))}
+        </ol>
+      </div>
+
+      <span className="bfx-deck__plus" aria-hidden="true">
+        +
+      </span>
+
+      <div className="bfx-deck__group is-gift">
+        <p className="bfx-deck__tag">
+          <Gift size={15} strokeWidth={2.4} aria-hidden="true" />
+          <span>
+            <b>{meta} visite</b> in omaggio
+          </span>
+        </p>
+        <ol className="bfx-deck__list" aria-label={`${meta} visite in omaggio`}>
+          {numeri(meta + 1).map((n, i) => (
+            <li key={n} className="bfx-vcard is-gift" style={{ '--d': `${i * 110 + 150}ms` }}>
+              <span className="bfx-vcard__in" aria-hidden="true">
+                <span className="bfx-vcard__face is-front">
+                  <b>{due(n)}</b>
+                </span>
+                <span className="bfx-vcard__face is-back">
+                  <b>{due(n)}</b>
+                  <Gift size={16} strokeWidth={2.2} />
+                </span>
+              </span>
+              <span className="bfx-sr">Visita {n}, in omaggio</span>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   )
 }
 
-// Prezzo a tutta larghezza: quando sta per entrare nello schermo scende dal prezzo pieno a quello dell'offerta.
-// Di base (e con "riduci movimento") mostra subito il prezzo giusto.
-export function PrezzoGigante({ da, a }) {
+// Banner del prezzo (sezione «Cosa ottieni», prima del conto alla rovescia): un biglietto nero come la carta Black
+// Friday, con il prezzo che scende dal pieno a quello dell'offerta quando entra nello schermo, lo sconto in un bollino
+// e, oltre una linea di luce, i tre conti che contano. Di base (e con "riduci movimento") mostra subito il prezzo.
+// fatti = [{ k: 'A visita', v: '45€', prima: '90€', t: 'testo piccolo accanto' }, …] (prima e t facoltativi)
+export function BannerPrezzo({ da, a, visite, fatti = [], nota }) {
   const ref = useRef(null)
   const reduce = useReducedMotion()
-  const vicino = useInView(ref, { once: true, margin: '0px 0px 15% 0px' })
+  const vicino = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const [valore, setValore] = useState(a)
 
   useEffect(() => {
     if (!vicino || reduce) return undefined
     const controls = animate(da, a, {
-      duration: 1.5,
+      duration: 1.4,
       ease: EASE_OUT,
       onUpdate: (v) => setValore(Math.round(v)),
     })
     return () => controls.stop()
   }, [vicino, reduce, da, a])
 
+  const sconto = Math.round((1 - a / da) * 100)
+
   return (
-    <p ref={ref} className="bfx-mega" aria-label={`${a}€`}>
-      <span className="bfx-mega__n" aria-hidden="true">
-        {valore}
-      </span>
-      <span className="bfx-mega__eur" aria-hidden="true">
-        €
-      </span>
-    </p>
+    <div ref={ref} className="bfx-ticket">
+      <span className="bfx-ticket__sweep" aria-hidden="true" />
+      <div className="bfx-ticket__main">
+        <p className="bfx-ticket__eyebrow">
+          <span>Black Friday</span> Le tue {visite} visite
+        </p>
+        <p className="bfx-ticket__price" aria-label={`${a}€ invece di ${da}€`}>
+          <s aria-hidden="true">{da}€</s>
+          <b aria-hidden="true">
+            {valore}
+            <small>€</small>
+          </b>
+          <span className="bfx-ticket__badge" aria-hidden="true">
+            −{sconto}%
+          </span>
+        </p>
+        {nota ? <p className="bfx-ticket__note">{nota}</p> : null}
+      </div>
+      <span className="bfx-ticket__cut" aria-hidden="true" />
+      <ul className="bfx-ticket__facts">
+        {fatti.map((f) => (
+          <li key={f.k}>
+            <small>{f.k}</small>
+            <span className="bfx-ticket__fact">
+              <b>{f.v}</b>
+              {f.prima ? <s>{f.prima}</s> : null}
+              {f.t ? <span>{f.t}</span> : null}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 

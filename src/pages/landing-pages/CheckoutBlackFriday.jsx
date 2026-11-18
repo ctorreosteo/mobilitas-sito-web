@@ -102,7 +102,7 @@ function Riepilogo({ offerta }) {
   return (
     <aside className="ckx-sum" aria-label="Riepilogo dell'ordine">
       <div className="ckx-sum__card">
-        <CartaBlack variante="blu" visite={VISITE} prezzo={importo} prezzoPieno={PREZZO_PIENO} scadenzaBreve={SCADENZA_BREVE} />
+        <CartaBlack visite={VISITE} prezzo={importo} prezzoPieno={PREZZO_PIENO} scadenzaBreve={SCADENZA_BREVE} />
       </div>
       <div className="ckx-sum__head">
         <p className="ckx-eyebrow">Il tuo ordine</p>
@@ -120,7 +120,7 @@ function Riepilogo({ offerta }) {
       <ul className="ckx-trust">
         <li><ShieldCheck size={18} aria-hidden="true" /> <span><b>Pagamento protetto da PayPal</b>I dati della carta non passano da noi</span></li>
         <li><Mail size={18} aria-hidden="true" /> <span><b>Conferma subito</b>Ti arriva l'email appena hai pagato</span></li>
-        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Ti contattiamo noi</b>La segreteria ti chiama, o ti manda su WhatsApp il link per prenotare</span></li>
+        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Prenoti subito</b>Da solo, oppure chiamando la segreteria. Le visite non scadono</span></li>
       </ul>
       <div className="ckx-proof">
         <span className="ckx-proof__stars" aria-hidden="true">

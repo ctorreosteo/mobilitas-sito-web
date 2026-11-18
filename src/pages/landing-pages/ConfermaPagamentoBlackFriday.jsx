@@ -56,8 +56,8 @@ function traccia(fallback) {
 }
 
 const PASSI = [
-  { icona: PhoneCall, titolo: 'Ti contattiamo noi', testo: 'Nei prossimi giorni la segreteria ti chiama, oppure ti manda su WhatsApp il link per prenotarti.' },
-  { icona: CalendarHeart, titolo: 'Fissiamo le date', testo: 'Le visite si organizzano con il tuo osteopata, come ti consiglia in base a come stai.' },
+  { icona: PhoneCall, titolo: 'Prenoti la prima visita', testo: 'Anche subito: da solo, oppure chiamando la segreteria al 351 819 8457.' },
+  { icona: CalendarHeart, titolo: 'Fissi le altre', testo: 'Le visite si organizzano con il tuo osteopata, come ti consiglia in base a come stai. Non scadono.' },
   { icona: Sparkles, titolo: 'Inizi il percorso', testo: `Dieci visite in uno dei nostri due studi a Torino, quello più comodo per te.` },
 ]
 
@@ -228,7 +228,7 @@ export default function ConfermaPagamentoBlackFriday() {
           <motion.div className="ckx-ok-grid" {...entra(0.2)}>
             <div className="ckx-ok-pass">
               <div className="ckx-ok-pass__card">
-                <CartaBlack variante="blu" visite={VISITE} prezzo={ricevuta.importo} prezzoPieno={900} scadenzaBreve={SCADENZA_BREVE} />
+                <CartaBlack visite={VISITE} prezzo={ricevuta.importo} prezzoPieno={900} scadenzaBreve={SCADENZA_BREVE} />
                 <span className="ckx-ok-stamp" aria-hidden="true">Pagata</span>
               </div>
               <p className="ckx-ok-pass__cap">

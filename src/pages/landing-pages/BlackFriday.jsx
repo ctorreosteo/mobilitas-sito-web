@@ -1,25 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Check, CreditCard, Gift, Plus, X } from 'lucide-react'
+import { ArrowRight, Check, Gift, Plus, X } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
-import StudiMap from '../../components/studi-map/StudiMap'
 import { useParallax } from '../../components/home-sections/homeMotion'
 import ClImg from '../../components/condition-landing/ClImg'
 import { HeroMedia } from '../../components/condition-landing/Hero'
 import { prefetchHeroVideo, useHeroVideo } from '../../components/condition-landing/heroVideo'
-import CityMap from '../../components/landing/CityMap'
 import StudioCollage from '../../components/landing/StudioCollage'
 import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
-import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useSeoOfferta } from '../../components/black-friday/offerta'
+import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useMancano, useSeoOfferta } from '../../components/black-friday/offerta'
 import CartaBlack from '../../components/black-friday-2026-sections/CartaBlack'
-import {
-  Countdown,
-  MazzoVisite,
-  PercorsoLinea,
-  PrezzoGigante,
-  TiltPass,
-} from '../../components/black-friday-2026-sections/BfxKit'
+import { BannerPrezzo, Countdown, MazzoVisite } from '../../components/black-friday-2026-sections/BfxKit'
 import '../../styles/pages/condition-landing.css'
 import '../../styles/pages/cervicalgia.css'
 import '../../components/landing/prima-visita-landing.css'
@@ -33,9 +25,15 @@ import '../../styles/pages/black-friday-2026.css'
 // "Porta un amico" non è più qui (strategia del 16/11/2026): i pazienti ricevono un messaggio con il link personale
 // da mandare all'amico, che arriva sull'invito /black-friday-2026-amico.
 // Grafica propria (redesign del 16/11/2026, apertura rifatta il 17/11/2026): notte blu; nell'apertura la carta Black
-// Friday in 3D (blu Mobilitas, olografica, con il 10 in rilievo) posata sulla foto del trattamento; prezzo a tutta larghezza.
+// Friday in 3D (nera, olografica, con il 10 in rilievo) posata sulla foto del trattamento.
 // Stile in styles/pages/black-friday-2026.css (prefisso bfx-), pezzi grafici in components/black-friday-2026-sections.
 // Dati comuni con /black-friday-2026-amico (scadenza, prezzi, SEO): components/black-friday/offerta.js.
+// Revisione del 18/11/2026: niente commerciale, si paga subito online, quindi la pagina deve dire tutto quello che
+// serve per decidere (cosa comprende, durata delle sedute, le visite non scadono, sono personali, come si paga, fattura,
+// cosa succede dopo): sta nella sezione «Prima di pagare». I numeri dell'offerta si dicono per esteso una volta sola,
+// nel banner del prezzo; altrove la pagina parla dei benefici, legati alle leve delle ads (schede «Ti riconosci?»).
+// Le visite si prenotano subito dopo il pagamento: da soli, oppure chiamando la segreteria.
+// Niente sezione «Dove siamo» con le mappe: sono già pazienti, sanno dove siamo (tolta il 18/11/2026).
 
 const SLUG = 'black-friday-2026'
 
@@ -51,6 +49,10 @@ const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', mo
 // Tutti i bottoni della pagina (apertura, sezioni, barra in basso su telefono) portano alla pagina di pagamento
 // /black-friday-2026/pagamento (CheckoutBlackFriday.jsx): dati di fatturazione, poi carta, PayPal o PayPal in 3 rate.
 const PAGINA_PAGAMENTO = '/black-friday-2026/pagamento'
+
+// Dopo il pagamento si prenota subito: in autonomia, oppure chiamando la segreteria (numero del sito, come nel menu)
+const TELEFONO = { href: 'tel:+393518198457', testo: '351 819 8457' }
+const WHATSAPP = { href: 'https://wa.me/393518198457?text=' + encodeURIComponent('Ciao, ho una domanda sulle 10 visite del Black Friday.') }
 const usePagaOnline = () => {
   const navigate = useNavigate()
   return () => navigate(PAGINA_PAGAMENTO)
@@ -63,7 +65,6 @@ const heroVideo = prefetchHeroVideo('BLACK_FRIDAY_VSL')
 const IMMAGINI = {
   hero: '/trattamenti/collo_cervicale-e-spalle-supino_02_orizzontale',
   band: '/trattamenti/schiena_lombare-prono_03_orizzontale',
-  perche: '/trattamenti/anca_flessa-supino_07_orizzontale',
 }
 
 // La valutazione in piedi, come nelle landing della prima visita
@@ -71,34 +72,40 @@ const FOTO_VALUTAZIONE = '/trattamenti/spalla_valutazione-in-piedi_01_orizzontal
 
 // ——— Contenuti ———
 
-// Perché dieci visite: un caso per ogni copione delle ads, così ognuno ritrova il suo
+// Perché dieci visite: una scheda per ogni copione delle ads, così ognuno ritrova il suo. «gain» è il beneficio, in
+// evidenza sotto il racconto.
 const PERCHE_DIECI = [
   {
+    tab: 'Ho male da tanto',
     title: 'Se hai avuto male per tanto tempo',
     body: 'Il corpo impara a stare teso. Diventa un’abitudine, e un’abitudine non la cambi in un giorno: servono visite, una dopo l’altra.',
+    gain: (
+      <>
+        <b>Con dieci visite</b> il corpo ha il tempo di imparare un modo nuovo di stare, più sciolto. E il dolore smette di
+        essere la tua normalità.
+      </>
+    ),
   },
   {
+    tab: 'Oggi sto bene',
     title: 'Se oggi stai bene',
-    body: 'È perché insieme abbiamo fatto un ottimo lavoro. Ma la vita di tutti i giorni può far tornare il dolore, e spesso più forte di prima. Pensa al tagliando della macchina: non lo fai perché è rotta, lo fai perché va bene e vuoi che continui così.',
+    body: 'È perché insieme abbiamo fatto un ottimo lavoro. Ma la vita di tutti i giorni può far tornare il dolore, spesso più forte di prima. È come il tagliando della macchina: non lo fai perché è rotta, lo fai perché va bene e vuoi che continui così.',
+    gain: (
+      <>
+        <b>Con dieci visite</b> tieni il risultato che hai ottenuto, invece di ricominciare da capo quando il dolore torna.
+      </>
+    ),
   },
   {
+    tab: 'Rimando sempre',
     title: 'Se rimandi sempre al mese prossimo',
     body: 'La rata, le bollette, la spesa: e tu vieni dopo tutto il resto. Ma il dolore non aspetta il mese giusto. È come una macchia sul vestito: se la lavi subito va via, se aspetti si attacca.',
-  },
-]
-
-const PASSI_PERCORSO = [
-  {
-    t: 'Sciogliere la tensione',
-    b: 'Le prime visite lavorano sul dolore e sulla tensione che il corpo si porta dietro da tempo.',
-  },
-  {
-    t: 'Cambiare l’abitudine',
-    b: 'Il corpo impara un nuovo modo di stare, più libero e meno rigido. Come ogni abitudine, serve ripetere.',
-  },
-  {
-    t: 'Non far tornare il dolore',
-    b: 'Le ultime visite mantengono il risultato e ti proteggono dalle ricadute. Il tuo osteopata ti dice come distribuirle, in base a come stai.',
+    gain: (
+      <>
+        <b>Oggi ti costa la metà</b>, anche in tre rate, e le visite non scadono: le blocchi adesso, prima che il dolore si
+        attacchi, e le usi con calma.
+      </>
+    ),
   },
 ]
 
@@ -111,123 +118,108 @@ const CONFRONTO = [
   { da: 'Dici di no: alla cena, alla passeggiata, al weekend fuori', a: <>Continui a dire di <strong>sì</strong></> },
 ]
 
-// Riepilogo: il valore grande a sinistra, il testo a destra
-const RIEPILOGO = [
-  {
-    big: `${PREZZO_OFFERTA}€`,
-    title: `${VISITE} visite a ${PREZZO_OFFERTA}€`,
-    body: `Invece di ${PREZZO_PIENO}€: metà prezzo, ${PREZZO_OFFERTA / VISITE}€ a visita.`,
-  },
-  {
-    big: '5+5',
-    title: 'Ne paghi cinque, cinque sono in omaggio',
-    body: 'Un percorso completo, per togliere il dolore e non farlo tornare.',
-  },
-  {
-    big: <CreditCard size={44} strokeWidth={1.3} />,
-    icon: true,
-    title: 'Paghi online',
-    body: `Con carta, direttamente da questa pagina: ${PREZZO_OFFERTA}€ e le tue ${VISITE} visite sono bloccate.`,
-  },
-  {
-    big: '29.11',
-    title: `Valida fino a ${SCADENZA_TESTO}`,
-    body: 'Dopo, l’offerta Black Friday non è più disponibile.',
-  },
+// Cosa ottieni con le 10 visite (non chiamarlo «pacchetto»): i benefici in breve, in elenco (i numeri sono nel banner)
+const BENEFICI = [
+  { t: 'Metà prezzo', b: 'ne paghi cinque, le altre cinque sono in omaggio.' },
+  { t: 'Il dolore smette di tornare', b: 'lavori sulla causa e non lo rincorri più ogni volta che si fa sentire.' },
+  { t: 'Con il tuo osteopata', b: 'lo stesso metodo che conosci, nello studio più comodo per te.' },
+  { t: 'Le visite non scadono', b: 'le usi con calma, al ritmo che ti consiglia il tuo osteopata in base a come stai.' },
+  { t: 'Prenoti subito', b: 'appena hai pagato, da solo oppure con una telefonata alla segreteria.' },
 ]
 
-// Come funziona: i tre passi della sezione panna
+// Come funziona: tre passi in fila, la prenotazione è dentro il secondo
 const PASSI_OFFERTA = [
+  { title: 'Paghi online', body: 'Due minuti, con carta o PayPal, anche in 3 rate. L’email di conferma arriva subito.' },
   {
-    title: 'Paghi online',
-    body: `${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, con carta o PayPal, anche in 3 rate.`,
-  },
-  {
-    title: 'Fissiamo le visite',
-    body: 'La segreteria ti chiama, oppure ti manda su WhatsApp il link per prenotare le visite con il tuo osteopata.',
-  },
-  {
-    title: 'Inizi il percorso',
-    body: `Dieci visite, distribuite come ti consiglia il tuo osteopata in base a come stai.`,
-  },
-]
-
-const FAQ = [
-  {
-    question: (
+    title: 'Prenoti',
+    body: (
       <>
-        Chi può usare l’<strong>offerta</strong>?
+        Anche subito: da solo, oppure chiamando la segreteria al{' '}
+        <a className="bfx-steps__tel" href={TELEFONO.href}>
+          {TELEFONO.testo}
+        </a>
+        .
       </>
     ),
+  },
+  { title: 'Inizi il percorso', body: 'Le altre visite le fissi con il tuo osteopata, in base a come stai. Non scadono.' },
+]
+
+// Prima di pagare: tutto quello che il paziente deve sapere, perché non parla con nessuno prima di pagare.
+// Fatti confermati da Riccardo il 18/11/2026: le visite non scadono, sono personali (non si dividono con familiari).
+// Non scrivere che la fattura è detraibile. Durata delle sedute: come in data/faqPrimaVisita.jsx.
+const FAQ = [
+  {
+    question: <>Chi può usare l’<strong>offerta</strong>?</>,
     answer: (
       <>
         È pensata per chi è <strong>già nostro paziente</strong>: dieci visite per continuare il lavoro che hai iniziato con
-        il tuo osteopata, a metà prezzo.
+        il tuo osteopata.
       </>
     ),
   },
   {
-    question: (
-      <>
-        Fino a <strong>quando</strong> posso prenderla?
-      </>
-    ),
+    question: <>Cosa <strong>comprende</strong>?</>,
     answer: (
       <>
-        Fino a <strong>{SCADENZA_TESTO}</strong>. Dopo questa data l’offerta Black Friday non è più disponibile.
+        <strong>Dieci visite osteopatiche</strong> con il tuo osteopata, in uno dei nostri due studi a Torino: scegli tu
+        quello più comodo. Ogni seduta dura circa <strong>40-55 minuti</strong>, in base al problema.
       </>
     ),
   },
   {
-    question: (
-      <>
-        Quanto <strong>risparmio</strong> davvero?
-      </>
-    ),
+    question: <>Entro quando devo <strong>usare</strong> le visite?</>,
     answer: (
       <>
-        Dieci visite di solito costano <strong>{PREZZO_PIENO}€</strong>. Con il Black Friday le paghi{' '}
-        <strong>{PREZZO_OFFERTA}€</strong>: <strong>{PREZZO_OFFERTA / VISITE}€ a visita</strong> invece di {PREZZO_VISITA}€.
-        Risparmi {PREZZO_PIENO - PREZZO_OFFERTA}€, la metà.
+        <strong>Le visite non scadono.</strong> Le distribuisci con il tuo osteopata, in base a come stai. La data del{' '}
+        {SCADENZA_TESTO.replace('domenica ', '')} vale solo per pagarle a metà prezzo.
       </>
     ),
   },
   {
-    question: (
-      <>
-        Dieci visite non sono <strong>troppe</strong>?
-      </>
-    ),
+    question: <>Posso dividerle con un <strong>familiare</strong>?</>,
     answer: (
       <>
-        Possono sembrare tante. Ma se hai avuto male per tanto tempo, il corpo ha imparato a <strong>stare teso</strong> e
-        non cambia in un giorno. Se oggi stai bene, è come il <strong>tagliando</strong> della macchina: lo fai perché va bene
-        e vuoi che continui così. E se rimandi, il dolore <strong>si attacca</strong>, come una macchia lasciata lì. Dieci
-        visite sono il tempo per non ricominciare da capo.
+        No: le dieci visite sono <strong>personali</strong>, le usi solo tu.
       </>
     ),
   },
   {
-    question: (
-      <>
-        Come si <strong>paga</strong>?
-      </>
-    ),
+    question: <>Come si <strong>paga</strong>?</>,
     answer: (
       <>
-        <strong>Online, con carta o PayPal</strong>, anche in 3 rate senza interessi con PayPal: tocchi il bottone, paghi{' '}
-        <strong>{PREZZO_OFFERTA}€</strong> e le tue {VISITE} visite sono bloccate al prezzo del Black Friday. Poi la segreteria
-        ti chiama, oppure ti manda su WhatsApp il link per prenotare le visite con il tuo osteopata.
+        <strong>Solo online</strong>, con carta o PayPal, anche <strong>in 3 rate senza interessi</strong> con PayPal. Paghi
+        una volta sola, niente abbonamenti. In studio l’offerta non si può pagare.
       </>
     ),
   },
   {
-    question: 'Dove si fanno le visite?',
+    question: <>Ricevo la <strong>fattura</strong>?</>,
     answer: (
       <>
-        Nei nostri <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) e in{' '}
-        <strong>Via Lamarmora 35</strong> (Crocetta). Ci arrivi comodo in metro (fermate Bernini per Via Peyron, Re Umberto per
-        Via Lamarmora) e in auto.
+        Sì, <strong>intestata a te</strong>: per questo, al pagamento, ti chiediamo codice fiscale e indirizzo.
+      </>
+    ),
+  },
+  {
+    question: <>Cosa succede <strong>dopo</strong> il pagamento?</>,
+    answer: (
+      <>
+        Ti arriva subito l’<strong>email di conferma</strong> con il numero dell’ordine (se non la trovi, guarda nello spam).
+        Poi <strong>prenoti la prima visita</strong>: da solo, oppure chiamando la segreteria al{' '}
+        <a className="bfx-link" href={TELEFONO.href}>
+          {TELEFONO.testo}
+        </a>
+        .
+      </>
+    ),
+  },
+  {
+    question: <>Entro quando devo <strong>decidere</strong>?</>,
+    answer: (
+      <>
+        Entro <strong>{SCADENZA_TESTO}</strong>: è l’ultimo giorno per pagare online. Dopo, l’offerta Black Friday non è più
+        disponibile.
       </>
     ),
   },
@@ -244,29 +236,43 @@ const SEO = {
 
 // ——— Pezzi della pagina ———
 
-// Bottone dell'offerta: porta al pagamento online. tone="light" sulla sezione panna: lì il verde non si usa, il bottone
-// diventa blu.
-function OffertaCtas({ tone = 'dark', className = '' }) {
+// Bottone dell'offerta: porta al pagamento online. Testo in prima persona, polarizzante («Sì, voglio…»): chi lo tocca
+// sceglie le visite in omaggio. tone="light" sulla sezione panna: lì il verde non si usa, il bottone diventa blu.
+// «nota» è la riga piccola sotto: di base il prezzo (apertura e offerta); più giù un beneficio, così il prezzo non si
+// ripete a ogni sezione.
+const TESTO_BOTTONE = 'Sì, voglio 5 visite in omaggio'
+
+function OffertaCtas({ tone = 'dark', className = '', nota }) {
   const pagaOnline = usePagaOnline()
   return (
     <div className={`bfx-ctas ${tone === 'light' ? 'is-light' : ''} ${className}`}>
       <button type="button" className="bfx-btn" onClick={pagaOnline}>
+        <span className="bfx-btn__shine" aria-hidden="true" />
+        <span className="bfx-btn__gift" aria-hidden="true">
+          <Gift size={20} strokeWidth={2.3} />
+        </span>
         <span className="bfx-btn__txt">
+          <b>{TESTO_BOTTONE}</b>
           <small>
-            Paghi online · <s>{PREZZO_PIENO}€</s> <b>{PREZZO_OFFERTA}€</b>
+            {nota ?? (
+              <>
+                <b>{PREZZO_OFFERTA}€</b> <s>{PREZZO_PIENO}€</s> · paghi online
+              </>
+            )}
           </small>
-          Riserva le tue {VISITE} visite
         </span>
         <span className="bfx-btn__arrow" aria-hidden="true">
-          <ArrowRight size={18} strokeWidth={2.4} />
+          <ArrowRight size={20} strokeWidth={2.6} />
         </span>
       </button>
     </div>
   )
 }
 
-// Barra fissa in basso su telefono (nascosta da 1024px)
+// Barra fissa in basso su telefono (nascosta da 1024px): a sinistra il prezzo e il tempo che resta, a destra il bottone.
+// Tutta la barra è un unico bottone, così si tocca facilmente.
 function OffertaDock({ visible }) {
+  const mancano = useMancano()
   const pagaOnline = usePagaOnline()
   return (
     <AnimatePresence>
@@ -282,53 +288,32 @@ function OffertaDock({ visible }) {
             type="button"
             className="bfx-dock__main"
             onClick={pagaOnline}
-            aria-label={`Riserva le ${VISITE} visite del Black Friday: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€`}
+            aria-label={`Sì, voglio le ${VISITE} visite del Black Friday, 5 in omaggio: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, fino a ${SCADENZA_TESTO}`}
           >
-            <span className="bfx-dock__price" aria-hidden="true">
-              <s>{PREZZO_PIENO}€</s>
-              <b>{PREZZO_OFFERTA}€</b>
+            <span className="bfx-dock__info" aria-hidden="true">
+              <span className="bfx-dock__price">
+                <b>{PREZZO_OFFERTA}€</b>
+                <s>{PREZZO_PIENO}€</s>
+              </span>
+              {mancano ? (
+                <span className="bfx-dock__timer">
+                  <i className="bfx-dock__dot" />
+                  <span className="bfx-dock__lbl">Scade tra</span> {mancano.giorni}g {due(mancano.ore)}:{due(mancano.min)}:{due(mancano.sec)}
+                </span>
+              ) : (
+                <span className="bfx-dock__sub">{VISITE} visite, metà prezzo</span>
+              )}
             </span>
-            <span className="bfx-dock__txt">Riserva {VISITE} visite</span>
-            <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
+            <span className="bfx-dock__cta" aria-hidden="true">
+              Sì, le voglio
+              <span className="bfx-dock__arrow">
+                <ArrowRight size={18} strokeWidth={2.6} />
+              </span>
+            </span>
           </button>
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
-
-// Lo scontrino del Black Friday: la prima riga (quello che di solito ti vendono) è barrata, il resto è l'offerta.
-// Decorativo: i dati sono già nel testo accanto e nel resto della pagina.
-function Scontrino() {
-  return (
-    <div className="bfx-receipt-wrap" aria-hidden="true">
-      <TiltPass as="div" className="bfx-receipt">
-        <p className="bfx-receipt__head">
-          <b>Mobilitas</b>
-          <span>Black Friday</span>
-        </p>
-        <ul className="bfx-receipt__rows">
-          <li className="is-struck">
-            <span>Cose che non ti servono</span>
-            <span>—</span>
-          </li>
-          <li>
-            <span>{VISITE} visite osteopatiche</span>
-            <span>{PREZZO_PIENO}€</span>
-          </li>
-          <li className="is-gift">
-            <span>5 visite in omaggio</span>
-            <span>−{PREZZO_PIENO - PREZZO_OFFERTA}€</span>
-          </li>
-        </ul>
-        <p className="bfx-receipt__total">
-          <span>Totale</span>
-          <b>{PREZZO_OFFERTA}€</b>
-        </p>
-        <p className="bfx-receipt__foot">Valido fino a {SCADENZA_TESTO}</p>
-        <span className="bfx-receipt__code" />
-      </TiltPass>
-    </div>
   )
 }
 
@@ -339,6 +324,81 @@ const entra = (delay) => ({
   transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1], delay },
 })
 
+// Perché dieci visite: tre schede, una per situazione. Il paziente tocca quella in cui si riconosce.
+function Situazioni({ foto }) {
+  const [attiva, setAttiva] = useState(0)
+  const tabsRef = useRef(null)
+  const s = PERCHE_DIECI[attiva]
+
+  // Frecce sinistra/destra tra le schede (come nei tab standard)
+  const onKeyDown = (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+    e.preventDefault()
+    const n = (attiva + (e.key === 'ArrowRight' ? 1 : -1) + PERCHE_DIECI.length) % PERCHE_DIECI.length
+    setAttiva(n)
+    tabsRef.current?.querySelectorAll('[role="tab"]')[n]?.focus()
+  }
+
+  return (
+    <div className="bfx-situ">
+      <div className="bfx-situ__tabs" role="tablist" aria-label="La tua situazione" ref={tabsRef} onKeyDown={onKeyDown}>
+        {PERCHE_DIECI.map((x, i) => (
+          <button
+            key={x.tab}
+            type="button"
+            role="tab"
+            id={`bfx-situ-tab-${i}`}
+            aria-selected={i === attiva}
+            aria-controls="bfx-situ-panel"
+            tabIndex={i === attiva ? 0 : -1}
+            className="bfx-situ__tab"
+            onClick={() => setAttiva(i)}
+          >
+            {i === attiva && (
+              <motion.i
+                layoutId="bfx-situ-pill"
+                className="bfx-situ__pill"
+                transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }}
+              />
+            )}
+            <span>{x.tab}</span>
+          </button>
+        ))}
+      </div>
+
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={attiva}
+          id="bfx-situ-panel"
+          role="tabpanel"
+          aria-labelledby={`bfx-situ-tab-${attiva}`}
+          className="bfx-situ__panel"
+          initial={{ opacity: 0, transform: 'translateY(8px)' }}
+          animate={{ opacity: 1, transform: 'translateY(0px)' }}
+          exit={{ opacity: 0, transform: 'translateY(-6px)', transition: { duration: 0.15 } }}
+          transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+        >
+          {foto[attiva] && (
+            <figure className="bfx-situ__img">
+              <ClImg src={foto[attiva]} alt="" sizes="(min-width: 900px) 440px, 100vw" />
+            </figure>
+          )}
+          <div className="bfx-situ__txt">
+            <h3 className="bfx-h bfx-h3">{s.title}</h3>
+            <p className="bfx-body">{s.body}</p>
+            <p className="bfx-situ__gain">
+              <i className="bfx-perks__ok" aria-hidden="true">
+                <Check size={14} strokeWidth={3} />
+              </i>
+              <span>{s.gain}</span>
+            </p>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  )
+}
+
 // ——— Pagina ———
 
 export default function BlackFriday() {
@@ -347,7 +407,6 @@ export default function BlackFriday() {
   const [openFaq, setOpenFaq] = useState(null)
   const [showDock, setShowDock] = useState(false)
   const heroCtaRef = useRef(null)
-  const pathRef = useRef(null)
   const [benRef, benY] = useParallax(8)
 
   // Dock mobile: compare quando i bottoni dell'apertura escono dallo schermo
@@ -367,10 +426,16 @@ export default function BlackFriday() {
   const fotoHero = !loading && !video ? prendi(IMMAGINI.hero) : null
   const fotoBen = prendi(IMMAGINI.band)
   const fotoPerche = PERCHE_DIECI.map(() => prendi())
-  const fotoPercorso = prendi(IMMAGINI.perche)
   const fotoFaq = prendi(undefined, true)
 
   const risparmio = PREZZO_PIENO - PREZZO_OFFERTA
+
+  // I tre conti del banner del prezzo
+  const fatti = [
+    { k: 'A visita', v: `${PREZZO_OFFERTA / VISITE}€`, prima: `${PREZZO_VISITA}€` },
+    { k: 'Risparmi', v: `${risparmio}€`, t: 'restano a te' },
+    { k: 'Con PayPal', v: '3 rate', t: 'senza interessi' },
+  ]
 
   return (
     <PageShell className={`bfx mx-pvl--${SLUG}`}>
@@ -408,7 +473,6 @@ export default function BlackFriday() {
               />
             </motion.div>
             <CartaBlack
-              variante="blu"
               className="bfx-hero__card"
               visite={VISITE}
               prezzo={PREZZO_OFFERTA}
@@ -423,50 +487,47 @@ export default function BlackFriday() {
           </motion.div>
 
           <motion.p className="bfx-lead bfx-hero__sub" {...entra(0.28)}>
-            Sei già un nostro paziente, e per il Black Friday abbiamo pensato a te. Che il dolore ti dia ancora fastidio o
-            che oggi tu stia bene, <strong>{VISITE} visite a metà prezzo</strong> sono il modo per{' '}
-            <strong>non farlo tornare</strong>. Le blocchi <strong>pagando online</strong>, direttamente da qui.
+            Per il Black Friday abbiamo pensato a chi è <strong>già nostro paziente</strong>: dieci visite con il tuo osteopata,
+            per togliere il dolore e <strong>non farlo tornare</strong>. Paghi online, prenoti subito e le visite non scadono.
           </motion.p>
         </div>
       </header>
 
-      {/* ——— L'offerta: 5 + 5 e il prezzo a tutta larghezza (momento di scala) ——— */}
+      {/* ——— L'offerta: i benefici in elenco, 5 + 5, il banner del prezzo e poi il conto alla rovescia ——— */}
       <section className="bfx-section bfx-deal" aria-labelledby="bfx-deal-t">
         <div className="bfx-wrap">
           <div className="bfx-deal__head">
             <h2 id="bfx-deal-t" className="bfx-h bfx-h2">
-              {VISITE} visite a {PREZZO_OFFERTA}€. <span className="is-green">La metà del prezzo.</span>
+              Cosa ottieni <span className="is-green">con le tue {VISITE} visite</span>
             </h2>
-            <p className="bfx-lead">
-              Di solito {VISITE} visite costano <strong>{PREZZO_PIENO}€</strong>. Per il Black Friday ne paghi solo cinque: le
-              altre cinque sono <strong>in omaggio</strong>.
-            </p>
+            <ul className="bfx-perks">
+              {BENEFICI.map((x) => (
+                <li key={x.t}>
+                  <i className="bfx-perks__ok" aria-hidden="true">
+                    <Check size={14} strokeWidth={3} />
+                  </i>
+                  <span>
+                    <b>{x.t}</b>: {x.b}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
           <MazzoVisite visite={VISITE} />
-        </div>
 
-        <div className="bfx-deal__price">
-          <div className="bfx-wrap">
-            <p className="bfx-deal__was">
-              Di solito <s>{PREZZO_PIENO}€</s>
-            </p>
+          <div className="bfx-deal__offer">
+            <BannerPrezzo
+              da={PREZZO_PIENO}
+              a={PREZZO_OFFERTA}
+              visite={VISITE}
+              fatti={fatti}
+              nota="Paghi online una volta sola, niente abbonamenti. Le visite non scadono."
+            />
+            <div className="bfx-deal__close">
+              <OffertaCtas />
+              <Countdown />
+            </div>
           </div>
-          <PrezzoGigante da={PREZZO_PIENO} a={PREZZO_OFFERTA} />
-          <div className="bfx-wrap bfx-deal__facts">
-            <p>
-              <b>{PREZZO_OFFERTA / VISITE}€</b>
-              <span>a visita invece di {PREZZO_VISITA}€</span>
-            </p>
-            <p>
-              <b>{risparmio}€</b>
-              <span>di risparmio</span>
-            </p>
-            <Countdown className="bfx-deal__count" />
-          </div>
-        </div>
-
-        <div className="bfx-wrap">
-          <OffertaCtas />
         </div>
       </section>
 
@@ -480,67 +541,23 @@ export default function BlackFriday() {
             Al Black Friday, di solito, ti vendono cose <span className="is-dim">che non ti servono.</span>{' '}
             <span className="is-green">Noi vogliamo darti qualcosa che ti fa stare bene.</span>
           </p>
-          <Scontrino />
+          <p className="bfx-lead bfx-why-us__b">
+            Niente da mettere in un cassetto: <strong>tempo per il tuo corpo</strong>, con l’osteopata che già ti conosce.
+          </p>
         </div>
       </section>
 
-      {/* ——— Perché dieci visite: un caso per ogni copione ——— */}
+      {/* ——— Perché dieci visite: tre schede, una per copione ——— */}
       <section className="bfx-section bfx-why" aria-labelledby="bfx-why-t">
         <div className="bfx-wrap">
-          <h2 id="bfx-why-t" className="bfx-h bfx-h2 bfx-why__title">
-            Dieci visite possono sembrare tante.{' '}
-            <span className="is-dim">Ma c’è una cosa che forse nessuno ti ha mai spiegato.</span>
-          </h2>
-
-          <ol className="bfx-why__list">
-            {PERCHE_DIECI.map((item, i) => (
-              <li key={item.title} className={`bfx-scene ${i % 2 ? 'is-flip' : ''}`}>
-                {fotoPerche[i] && (
-                  <figure className="bfx-scene__img">
-                    <ClImg src={fotoPerche[i]} alt="" sizes="(min-width: 1000px) 56vw, 100vw" />
-                  </figure>
-                )}
-                <div className="bfx-scene__txt">
-                  <span className="bfx-scene__n" aria-hidden="true">
-                    {due(i + 1)}
-                  </span>
-                  <h3 className="bfx-h bfx-h3">{item.title}</h3>
-                  <p className="bfx-body">{item.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          {/* Come si usano le dieci visite: spiegazione e linea del percorso */}
-          <div className="bfx-path" ref={pathRef}>
-            <div className="bfx-path__copy">
-              <h3 className="bfx-h bfx-h2 bfx-path__title">
-                Non è una visita in più. <span className="is-green">È il tempo che serve al corpo per cambiare.</span>
-              </h3>
-              <p className="bfx-body">
-                Una visita toglie il dolore di oggi. Un <strong>percorso</strong> fa sì che il lavoro fatto insieme non vada
-                perso, e protegge il corpo dal dolore di domani. Per questo le visite sono dieci.
-              </p>
-              {fotoPercorso && (
-                <figure className="bfx-path__img">
-                  <ClImg src={fotoPercorso} alt="" sizes="(min-width: 1000px) 520px, 100vw" />
-                </figure>
-              )}
-            </div>
-            <div className="bfx-path__steps">
-              <PercorsoLinea target={pathRef} />
-              <ol>
-                {PASSI_PERCORSO.map((s) => (
-                  <li key={s.t}>
-                    <i className="bfx-path__node" aria-hidden="true" />
-                    <h4 className="bfx-h bfx-h4">{s.t}</h4>
-                    <p className="bfx-body">{s.b}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
+          <div className="bfx-why__head">
+            <h2 id="bfx-why-t" className="bfx-h bfx-h2 bfx-why__title">
+              Dieci visite possono sembrare tante.{' '}
+              <span className="is-dim">Ma c’è una cosa che forse nessuno ti ha mai spiegato.</span>
+            </h2>
+            <p className="bfx-lead">Ti riconosci in una di queste situazioni? Tocca la tua.</p>
           </div>
-          <OffertaCtas />
+          <Situazioni foto={fotoPerche} />
         </div>
       </section>
 
@@ -560,7 +577,7 @@ export default function BlackFriday() {
             )}
           </div>
 
-          <div className="bfx-vs" style={{ '--righe': CONFRONTO.length + 2 }}>
+          <div className="bfx-vs" style={{ '--righe': CONFRONTO.length + 1 }}>
             <motion.span
               className="bfx-vs__card"
               aria-hidden="true"
@@ -593,111 +610,52 @@ export default function BlackFriday() {
                 </span>
               </p>
             ))}
-            <p className="bfx-vs__row is-price" style={{ '--r': CONFRONTO.length + 2 }}>
-              <span className="is-from">
-                <b>{PREZZO_VISITA}€</b>
-                <small>a visita</small>
-              </span>
-              <span className="is-to">
-                <b>{PREZZO_OFFERTA / VISITE}€</b>
-                <small>a visita, metà prezzo</small>
-              </span>
-            </p>
           </div>
 
-          <OffertaCtas className="bfx-change__cta" />
+          <OffertaCtas className="bfx-change__cta" nota="Le visite non scadono" />
         </div>
       </section>
 
-      {/* ——— Come funziona: l'unica sezione panna (cambio di mondo), tre passi dal pagamento al percorso ——— */}
+      {/* ——— Come funziona: l'unica sezione panna (cambio di mondo), tre passi in fila ——— */}
       <section className="bfx-section bfx-friend bfx-how" aria-labelledby="bfx-how-t">
         <div className="bfx-wrap">
-          <div className="bfx-friend__head">
+          <div className="bfx-how__head">
             <h2 id="bfx-how-t" className="bfx-h bfx-h2">
               Come funziona: <strong>tre passi, e inizi.</strong>
             </h2>
-            <p className="bfx-lead">
-              Blocchi le tue {VISITE} visite a <strong>metà prezzo</strong> pagando online. Al resto pensiamo noi.
-            </p>
+            <p className="bfx-lead">Fai tutto da qui, in pochi minuti, senza aspettare nessuno.</p>
           </div>
 
-          <ol className="bfx-friend__passes is-three">
+          <ol className="bfx-steps">
             {PASSI_OFFERTA.map((p, i) => (
-              <TiltPass key={p.title} as="li" className={`bfx-pass ${i === 0 ? 'is-you' : 'is-friend'}`}>
-                <p className="bfx-pass__big" aria-hidden="true">
+              <li key={p.title}>
+                <span className="bfx-steps__n" aria-hidden="true">
                   {due(i + 1)}
-                </p>
+                </span>
                 <h3 className="bfx-h bfx-h4">{p.title}</h3>
                 <p className="bfx-body">{p.body}</p>
-              </TiltPass>
+              </li>
             ))}
           </ol>
 
-          <OffertaCtas tone="light" />
+          <OffertaCtas tone="light" nota="Paghi online e prenoti subito" />
         </div>
       </section>
 
-      {/* ——— Riepilogo dell'offerta: un registro tipografico ——— */}
-      <section className="bfx-section bfx-recap" aria-labelledby="bfx-recap-t">
-        <div className="bfx-wrap bfx-recap__grid">
-          <div className="bfx-recap__side">
-            <h2 id="bfx-recap-t" className="bfx-h bfx-h2">
-              Tutta l’offerta <span className="is-green">in un colpo d’occhio</span>
-            </h2>
-            <figure className="bfx-recap__photo">
-              <ClImg
-                src={FOTO_VALUTAZIONE}
-                alt="L’osteopata valuta la postura del paziente in piedi"
-                sizes="(min-width: 1000px) 420px, 100vw"
-                style={{ objectPosition: '42% 35%' }}
-              />
-            </figure>
-          </div>
-          <div>
-            <ul className="bfx-ledger">
-              {RIEPILOGO.map((s) => (
-                <li key={s.title}>
-                  <span className={`bfx-ledger__big ${s.icon ? 'is-icon' : ''}`} aria-hidden="true">
-                    {s.big}
-                  </span>
-                  <span className="bfx-ledger__t">
-                    <b>{s.title}</b>
-                    <span>{s.body}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <Countdown className="bfx-recap__count" />
-            <OffertaCtas />
-          </div>
-        </div>
-      </section>
-
-      {/* ——— Chi ti tratta ——— */}
-      <section className="bfx-section bfx-team" aria-labelledby="bfx-team-t">
-        <div className="bfx-wrap bfx-team__grid">
-          <div>
-            <h2 id="bfx-team-t" className="bfx-h bfx-h2">
-              Lo stesso metodo <span className="is-green">che conosci già</span>
-            </h2>
-            <p className="bfx-lead">
-              Sei già stato da noi: sai come lavoriamo. Tutti i nostri osteopati usano lo <strong>stesso metodo</strong>:
-              ascoltano, ti visitano e trattano con le mani. Le tue {VISITE} visite le fai con il tuo osteopata, nello studio
-              che preferisci.
-            </p>
-          </div>
-          <StudioCollage />
-        </div>
-      </section>
-
-      {/* ——— Domande frequenti ——— */}
+      {/* ——— Prima di pagare: tutto quello che serve sapere (niente commerciale, quindi tutto scritto qui) ——— */}
       <section className="bfx-section bfx-faq" aria-labelledby="bfx-faq-t">
         <div className="bfx-wrap bfx-faq__grid">
           <div className="bfx-faq__intro">
             <h2 id="bfx-faq-t" className="bfx-h bfx-h2">
-              Tutto quello che ti serve sapere sull’offerta
+              Prima di pagare: <span className="is-green">tutto quello che devi sapere</span>
             </h2>
-            <p className="bfx-lead">Risposte semplici, senza giri di parole.</p>
+            <p className="bfx-lead">
+              Hai ancora un dubbio? Scrivici su WhatsApp al{' '}
+              <a className="bfx-link" href={WHATSAPP.href} target="_blank" rel="noopener noreferrer">
+                {TELEFONO.testo}
+              </a>
+              : ti rispondiamo noi.
+            </p>
             {fotoFaq && (
               <figure className="bfx-faq__photo">
                 <ClImg src={fotoFaq} alt="" sizes="(min-width: 1000px) 420px, 100vw" />
@@ -731,34 +689,24 @@ export default function BlackFriday() {
                 )
               })}
             </ul>
-            <p className="bfx-body bfx-faq__closing">
-              Dieci visite a {PREZZO_OFFERTA}€ invece di {PREZZO_PIENO}€.{' '}
-              <strong>Riserva le tue {VISITE} visite a metà prezzo</strong> pagando online entro {SCADENZA_TESTO}: ci vediamo
-              in studio da Mobilitas!
-            </p>
-            <OffertaCtas />
+            <OffertaCtas className="bfx-faq__cta" nota="Paghi una volta sola, anche in 3 rate" />
           </div>
         </div>
       </section>
 
-      {/* ——— Dove siamo ——— */}
-      <section className="bfx-section bfx-where" aria-labelledby="bfx-where-t">
-        <div className="bfx-wrap">
-          <div className="bfx-where__head">
-            <div>
-              <h2 id="bfx-where-t" className="bfx-h bfx-h2">
-                Ci vediamo in studio <span className="is-green">nel cuore di Torino</span>
-              </h2>
-              <p className="bfx-lead">
-                Abbiamo due studi: uno a San Donato, vicino alle fermate Bernini e Principi d’Acaja, e uno in Crocetta, vicino a
-                Re Umberto. Scegli quello più comodo per te e tocca “Indicazioni” per arrivarci.
-              </p>
-            </div>
-            <CityMap />
+      {/* ——— Chi ti tratta ——— */}
+      <section className="bfx-section bfx-team" aria-labelledby="bfx-team-t">
+        <div className="bfx-wrap bfx-team__grid">
+          <div>
+            <h2 id="bfx-team-t" className="bfx-h bfx-h2">
+              Lo stesso metodo <span className="is-green">che conosci già</span>
+            </h2>
+            <p className="bfx-lead">
+              Sei già stato da noi: sai come lavoriamo. Tutti i nostri osteopati usano lo <strong>stesso metodo</strong>:
+              ascoltano, ti visitano e trattano con le mani.
+            </p>
           </div>
-          <div className="bfx-where__map">
-            <StudiMap tema="notte" />
-          </div>
+          <StudioCollage />
         </div>
       </section>
 
