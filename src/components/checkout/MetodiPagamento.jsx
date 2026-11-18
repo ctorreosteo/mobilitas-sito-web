@@ -162,9 +162,26 @@ export default function MetodiPagamento({ offerta, getDati, onFatto, disabilitat
                   {off
                     ? 'Non disponibile in questo momento'
                     : m.id === 'PAYPAL_RATE'
-                      ? `3 rate da ${euro(rata)} senza interessi, soggetto ad approvazione di PayPal.`
+                      ? 'Senza interessi, soggetto ad approvazione di PayPal.'
                       : m.nota}
                 </small>
+              </span>
+              <span className="ckx-method__side" aria-hidden="true">
+                {m.id === 'CARTA' ? (
+                  <span className="ckx-nets">
+                    <i>VISA</i>
+                    <i>MC</i>
+                    <i>AMEX</i>
+                  </span>
+                ) : m.id === 'PAYPAL' ? (
+                  <span className="ckx-ppword">
+                    Pay<em>Pal</em>
+                  </span>
+                ) : (
+                  <span className="ckx-rate">
+                    3 × <b>{euro(rata)}</b>
+                  </span>
+                )}
               </span>
             </button>
           )
@@ -181,7 +198,7 @@ export default function MetodiPagamento({ offerta, getDati, onFatto, disabilitat
           </p>
         ) : simulato ? (
           <div className="ckx-sim">
-            <p className="ckx-sim__tag"><FlaskConical size={14} aria-hidden="true" /> Pagamento simulato · nessun addebito</p>
+            <p className="ckx-sim__tag"><FlaskConical size={14} aria-hidden="true" /> Prova · nessun addebito</p>
             <button type="button" className="ckx-cta" disabled={disabilitato || lavoro != null} onClick={() => paga(false)}>
               {lavoro ? <Loader2 className="ckx-spin" size={18} aria-hidden="true" /> : <Lock size={16} aria-hidden="true" />}
               Paga {euro(offerta.importo)} {metodo.con}
@@ -205,7 +222,7 @@ export default function MetodiPagamento({ offerta, getDati, onFatto, disabilitat
             }}
           />
         ) : (
-          <p className="ckx-paybox__wait">Compila i tuoi dati per scegliere come pagare.</p>
+          <p className="ckx-paybox__wait"><Lock size={16} aria-hidden="true" /> Il bottone per pagare compare quando i tuoi dati sono completi.</p>
         )}
 
         <AnimatePresence>
