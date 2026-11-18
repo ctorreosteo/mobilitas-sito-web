@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Check, Plus, X } from 'lucide-react'
+import { ArrowRight, CalendarCheck, Check, Phone, Plus, X } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
 import StudiMap from '../../components/studi-map/StudiMap'
 import { useParallax } from '../../components/home-sections/homeMotion'
@@ -49,6 +49,9 @@ const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', mo
 // landing emicrania e mal di schiena), con la pagina di ritorno dopo il pagamento impostata da Stripe.
 // Finché è vuoto, i bottoni non fanno nulla.
 const LINK_PAGAMENTO = ''
+
+// Dopo il pagamento si prenota subito: in autonomia, oppure chiamando la segreteria (numero del sito, come nel menu)
+const TELEFONO = { href: 'tel:+393518198457', testo: '351 819 8457' }
 const pagaOnline = () => {
   if (LINK_PAGAMENTO) window.location.assign(LINK_PAGAMENTO)
 }
@@ -98,7 +101,7 @@ const BENEFICI = [
   { t: 'Un percorso completo', b: 'togli il dolore e lo tieni lontano, invece di rincorrerlo quando torna.' },
   { t: 'Con il tuo osteopata', b: 'lo stesso metodo che conosci, nello studio che preferisci.' },
   { t: 'Al tuo ritmo', b: 'le visite si distribuiscono in base a come stai.' },
-  { t: 'Zero pensieri', b: 'paghi una volta online, poi ti chiamiamo noi per le date.' },
+  { t: 'Prenoti subito', b: 'appena hai pagato, da solo oppure con una telefonata alla segreteria.' },
 ]
 
 // Come funziona: i tre passi della sezione panna
@@ -108,8 +111,8 @@ const PASSI_OFFERTA = [
     body: 'Con carta, direttamente da questa pagina: le tue visite sono bloccate a metà prezzo.',
   },
   {
-    title: 'Fissiamo le visite',
-    body: 'La segreteria ti chiama per organizzare con te le date, con il tuo osteopata.',
+    title: 'Prenoti la visita',
+    body: 'Subito dopo il pagamento, nel modo che preferisci: te lo spieghiamo qui sotto.',
   },
   {
     title: 'Inizi il percorso',
@@ -140,8 +143,7 @@ const FAQ = [
     ),
     answer: (
       <>
-        Entro <strong>{SCADENZA_TESTO}</strong>: è l’ultimo giorno per pagare online. Le date delle visite le fissi dopo,
-        con la segreteria.
+        Entro <strong>{SCADENZA_TESTO}</strong>: è l’ultimo giorno per pagare online.
       </>
     ),
   },
@@ -506,7 +508,7 @@ export default function BlackFriday() {
               Come funziona: <strong>tre passi, e inizi.</strong>
             </h2>
             <p className="bfx-lead">
-              Tu paghi online. <strong>Al resto pensiamo noi.</strong>
+              Paghi online e <strong>prenoti subito</strong>, senza aspettare nessuno.
             </p>
           </div>
 
@@ -521,6 +523,41 @@ export default function BlackFriday() {
               </TiltPass>
             ))}
           </ol>
+
+          {/* Come si prenota dopo il pagamento: deve saltare all'occhio, due strade semplici */}
+          <div className="bfx-book">
+            <h3 className="bfx-h bfx-h3 bfx-book__title">
+              Hai pagato? <strong>Prenoti subito, come preferisci.</strong>
+            </h3>
+            <div className="bfx-book__ways">
+              <div className="bfx-book__way is-self">
+                <span className="bfx-book__ico" aria-hidden="true">
+                  <CalendarCheck size={22} strokeWidth={2} />
+                </span>
+                <p className="bfx-book__k">Da solo</p>
+                <p className="bfx-body">
+                  Appena hai pagato puoi <strong>prenotare la tua visita in autonomia</strong>, senza telefonare.
+                </p>
+              </div>
+              <span className="bfx-book__or" aria-hidden="true">
+                oppure
+              </span>
+              <div className="bfx-book__way is-call">
+                <span className="bfx-book__ico" aria-hidden="true">
+                  <Phone size={22} strokeWidth={2} />
+                </span>
+                <p className="bfx-book__k">Con la segreteria</p>
+                <p className="bfx-body">
+                  Non riesci da solo o preferisci parlare con qualcuno? <strong>Chiamaci</strong> subito dopo il pagamento e
+                  prenotiamo insieme.
+                </p>
+                <a className="bfx-book__tel" href={TELEFONO.href}>
+                  <Phone size={16} strokeWidth={2.4} aria-hidden="true" />
+                  {TELEFONO.testo}
+                </a>
+              </div>
+            </div>
+          </div>
 
           <OffertaCtas tone="light" />
         </div>
