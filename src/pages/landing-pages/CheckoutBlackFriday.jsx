@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { Link, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
   ArrowLeft,
   ArrowRight,
   CalendarCheck,
   Check,
-  FlaskConical,
   Home,
   Loader2,
   Lock,
@@ -23,8 +22,9 @@ import { RECENSIONI_TOTALI } from '../../data/studi'
 import MetodiPagamento from '../../components/checkout/MetodiPagamento'
 import { leggiOfferta } from '../../components/checkout/checkoutApi'
 import { errori, pulisciCodiceFiscale } from '../../components/checkout/validazione'
-import '../../styles/pages/black-friday-2026.css'
-import '../../styles/pages/checkout.css'
+import CheckoutShell, { PRIVACY } from '../../components/checkout/CheckoutShell'
+import Passi from '../../components/checkout/Passi'
+import { salvaRicevuta } from '../../components/checkout/ricevutaSalvata'
 
 // Pagina di pagamento del Black Friday 2026 (/black-friday-2026/pagamento): ci portano tutti i bottoni di
 // /black-friday-2026. Dati di fatturazione tutti obbligatori, poi carta, PayPal o PayPal in 3 rate (PayPal).
@@ -38,7 +38,6 @@ import '../../styles/pages/checkout.css'
 const OFFERTA = 'BLACK_FRIDAY_2026'
 const VISITE = 10
 const PREZZO_PIENO = 900
-const PRIVACY = 'https://www.iubenda.com/privacy-policy/67925714'
 const WHATSAPP = '+39 351 819 8457'
 const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Rome' })
 const EASE = [0.16, 1, 0.3, 1]
@@ -74,9 +73,6 @@ const CAMPI = [...GRUPPI.flatMap((g) => g.campi), 'consensoPrivacy']
 
 const euro = (n) => `${Number(n).toLocaleString('it-IT', { minimumFractionDigits: Number.isInteger(Number(n)) ? 0 : 2 })}€`
 
-// Il metodo è sempre PayPal; qui come ha pagato su PayPal
-const PAGATO_CON = { CARTA: 'con carta', PAYPAL: 'con il conto', PAYPAL_RATE: 'in 3 rate' }
-
 const entra = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
@@ -97,21 +93,6 @@ function Campo({ id, label, errore, hint, valido, className = '', children }) {
         <p className="ckx-field__hint" id={`${id}-hint`}>{hint}</p>
       ) : null}
     </div>
-  )
-}
-
-// Passi in alto: dati, pagamento, fatto
-function Passi({ passo }) {
-  const passi = ['I tuoi dati', 'Pagamento', 'Fatto']
-  return (
-    <ol className="ckx-steps" aria-label="Passi del pagamento">
-      {passi.map((p, i) => (
-        <li key={p} className={i < passo ? 'is-done' : i === passo ? 'is-on' : ''} aria-current={i === passo ? 'step' : undefined}>
-          <span className="ckx-steps__dot">{i < passo ? <Check size={12} strokeWidth={3.4} /> : i + 1}</span>
-          <span className="ckx-steps__lbl">{p}</span>
-        </li>
-      ))}
-    </ol>
   )
 }
 
@@ -152,53 +133,6 @@ function Riepilogo({ offerta }) {
   )
 }
 
-function Ricevuta({ ricevuta }) {
-  const reduce = useReducedMotion()
-  return (
-    <motion.section
-      className="ckx-done"
-      initial={reduce ? false : { opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: EASE }}
-      aria-live="polite"
-    >
-      <motion.span
-        className="ckx-done__check"
-        initial={reduce ? false : { scale: 0.4, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: 'spring', duration: 0.7, bounce: 0.35, delay: 0.15 }}
-        aria-hidden="true"
-      >
-        <Check size={40} strokeWidth={2.6} />
-      </motion.span>
-      <p className="ckx-eyebrow">Pagamento riuscito{ricevuta.stato === 'IN_VERIFICA' ? ' · in accredito' : ''}</p>
-      <h1 className="bfx-h ckx-done__title">
-        Grazie {ricevuta.nome}, <strong>le tue {VISITE} visite sono bloccate.</strong>
-      </h1>
-      <p className="ckx-done__lead">
-        Ti abbiamo mandato la conferma a <b>{ricevuta.email}</b>. Se non la trovi, guarda nello spam.
-      </p>
-      <div className="ckx-receipt">
-        <div className="ckx-receipt__top">
-          <span>Ordine</span>
-          <b>n. {ricevuta.numero}</b>
-        </div>
-        <dl className="ckx-ledger">
-          <div><dt>{ricevuta.descrizione}</dt><dd /></div>
-          <div><dt>Pagamento</dt><dd>{ricevuta.metodoPagamento}{PAGATO_CON[ricevuta.pagatoCon] ? `, ${PAGATO_CON[ricevuta.pagatoCon]}` : ''}</dd></div>
-          <div className="is-total"><dt>Totale pagato</dt><dd>{euro(ricevuta.importo)}</dd></div>
-        </dl>
-      </div>
-      <ol className="ckx-next">
-        <li><span>1</span><div><b>Ti contattiamo noi</b>Nei prossimi giorni la segreteria ti chiama, oppure ti manda su WhatsApp il link per prenotarti.</div></li>
-        <li><span>2</span><div><b>Fissiamo le date</b>Le visite si organizzano con il tuo osteopata, come ti consiglia.</div></li>
-        <li><span>3</span><div><b>Inizi il percorso</b>Dieci visite, nei nostri studi di Via Peyron 54 e Via Lamarmora 35.</div></li>
-      </ol>
-      <Link to="/" className="ckx-link"><ArrowLeft size={16} aria-hidden="true" /> Torna al sito</Link>
-    </motion.section>
-  )
-}
-
 export default function CheckoutBlackFriday() {
   useSeoOfferta(SEO)
   const [offerta, setOfferta] = useState(null)
@@ -206,7 +140,7 @@ export default function CheckoutBlackFriday() {
   const [campi, setCampi] = useState(VUOTO)
   const [toccati, setToccati] = useState({})
   const [mostraTutti, setMostraTutti] = useState(false)
-  const [ricevuta, setRicevuta] = useState(null)
+  const navigate = useNavigate()
   const campiRef = useRef(campi)
   campiRef.current = campi
   const pagaRef = useRef(null)
@@ -226,13 +160,11 @@ export default function CheckoutBlackFriday() {
     }
   }, [])
 
-  useEffect(() => {
-    if (ricevuta) window.scrollTo({ top: 0, behavior: 'smooth' })
-    // Acquisto nel Meta Pixel solo per i pagamenti veri
-    if (ricevuta && ricevuta.ambiente === 'LIVE' && typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'Purchase', { value: Number(ricevuta.importo), currency: 'EUR', content_name: 'Black Friday 2026 10 visite' })
-    }
-  }, [ricevuta])
+  // Pagamento riuscito: la ricevuta va alla pagina di conferma (sessionStorage), che fa partire le conversioni
+  const fatto = (ricevuta) => {
+    salvaRicevuta(ricevuta)
+    navigate('/black-friday-2026/grazie')
+  }
 
   const err = useMemo(() => errori(campi), [campi])
   const completi = Object.keys(err).length === 0
@@ -291,9 +223,23 @@ export default function CheckoutBlackFriday() {
     }
   }
 
-  const prova = offerta && offerta.ambiente !== 'LIVE'
-  const pronta = statoOfferta === 'ok' && offerta?.disponibile && !ricevuta
-  const passo = ricevuta ? 3 : completi ? 1 : 0
+  const pronta = statoOfferta === 'ok' && offerta?.disponibile
+  const passo = completi ? 1 : 0
+
+  // Su telefono: totale sempre in vista, e un tocco porta al primo dato mancante o al pagamento
+  const dock = pronta ? (
+    <div className="ckx-dock">
+      <span className="ckx-dock__sum">
+        <small>Totale</small>
+        <b>{euro(offerta.importo)}</b>
+        <s>{euro(PREZZO_PIENO)}</s>
+      </span>
+      <button type="button" className="ckx-dock__btn" onClick={avanti}>
+        {completi ? 'Vai al pagamento' : `Completa i dati · ${fatti}/${CAMPI.length}`}
+        <ArrowRight size={17} aria-hidden="true" />
+      </button>
+    </div>
+  ) : null
 
   const campo = (k) => {
     switch (k) {
@@ -323,39 +269,12 @@ export default function CheckoutBlackFriday() {
   }
 
   return (
-    <div className={`bfx ckx ${pronta ? 'has-dock' : ''}`}>
-      <div className="ckx-bg" aria-hidden="true">
-        <span className="ckx-bg__glow is-a" />
-        <span className="ckx-bg__glow is-b" />
-        <span className="ckx-bg__grid" />
-      </div>
-
-      <header className="ckx-top">
-        <div className="ckx-wrap ckx-top__in">
-          <Link to="/black-friday-2026" className="ckx-link ckx-top__back"><ArrowLeft size={16} aria-hidden="true" /> <span>Torna all'offerta</span></Link>
-          <Link to="/" className="ckx-logo" aria-label="Studio Mobilitas">
-            <img src="/logo_verde.png" alt="Studio Mobilitas" />
-          </Link>
-          <span className="ckx-secure"><Lock size={14} aria-hidden="true" /> <span>Pagamento sicuro</span></span>
-        </div>
-      </header>
-
-      {prova ? (
-        <div className="ckx-test" role="note">
-          <FlaskConical size={16} aria-hidden="true" />
-          {offerta.ambiente === 'SANDBOX'
-            ? 'Ambiente di prova PayPal (sandbox): usa le carte e i conti di prova, nessun pagamento è reale.'
-            : 'Pagamento simulato dal gestionale locale: nessun pagamento è reale.'}
-        </div>
-      ) : null}
-
-      <main className="ckx-wrap ckx-main">
-        {ricevuta ? (
-          <>
-            <Passi passo={3} />
-            <Ricevuta ricevuta={ricevuta} />
-          </>
-        ) : statoOfferta === 'carica' ? (
+    <CheckoutShell
+      ambiente={offerta?.ambiente}
+      dock={pronta}
+      after={dock}
+    >
+        {statoOfferta === 'carica' ? (
           <p className="ckx-state"><Loader2 className="ckx-spin" size={22} aria-hidden="true" /> Preparo il pagamento…</p>
         ) : statoOfferta === 'errore' ? (
           <section className="ckx-state">
@@ -433,7 +352,7 @@ export default function CheckoutBlackFriday() {
                       <ArrowRight size={18} aria-hidden="true" />
                     </button>
                   ) : null}
-                  <MetodiPagamento offerta={offerta} getDati={getDati} onFatto={setRicevuta} disabilitato={!completi} />
+                  <MetodiPagamento offerta={offerta} getDati={getDati} onFatto={fatto} disabilitato={!completi} />
                   <p className="ckx-fine">
                     <ShieldCheck size={14} aria-hidden="true" /> Pagamento cifrato e gestito da PayPal. Paghi {euro(offerta.importo)} una volta sola, niente abbonamenti.
                   </p>
@@ -451,28 +370,6 @@ export default function CheckoutBlackFriday() {
             </div>
           </>
         )}
-      </main>
-
-      {pronta ? (
-        <div className="ckx-dock">
-          <span className="ckx-dock__sum">
-            <small>Totale</small>
-            <b>{euro(offerta.importo)}</b>
-            <s>{euro(PREZZO_PIENO)}</s>
-          </span>
-          <button type="button" className="ckx-dock__btn" onClick={avanti}>
-            {completi ? 'Vai al pagamento' : `Completa i dati · ${fatti}/${CAMPI.length}`}
-            <ArrowRight size={17} aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
-
-      <footer className="ckx-foot">
-        <div className="ckx-wrap">
-          Studio Mobilitas · Via Peyron 54 e Via Lamarmora 35, Torino ·{' '}
-          <a href={PRIVACY} target="_blank" rel="noopener noreferrer">Privacy</a>
-        </div>
-      </footer>
-    </div>
+    </CheckoutShell>
   )
 }

@@ -1104,3 +1104,26 @@ p.ckx-state { display: flex; align-items: center; justify-content: center; gap: 
 @media (max-width: 419px) {
   .ckx-nets { display: none; }
 }
+
+/* ——— Conferma (/black-friday-2026/grazie) senza ricevuta: due strade ——— */
+.ckx-done__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
+
+.ckx-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--bfx-green);
+  color: var(--bfx-night);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 14px 30px -16px rgba(114, 250, 147, 0.85);
+  transition: transform 160ms var(--ckx-ease);
+}
+
+.ckx-pill:active { transform: scale(0.97); }
+.ckx-pill.is-ghost { background: rgba(244, 244, 244, 0.08); border: 1px solid var(--bfx-rule); color: var(--bfx-cream); box-shadow: none; }
+.ckx-steps.is-center { display: flex; width: max-content; margin: 0 auto 34px; }

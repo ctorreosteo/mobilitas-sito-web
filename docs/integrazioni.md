@@ -85,7 +85,7 @@ Senza dati in `sessionStorage` (storage bloccato, pagina aperta direttamente) la
 3. Come pagare: carta (form della carta di PayPal, senza conto), PayPal o PayPal in 3 rate. Il bottone scelto va al gestionale come `pagatoCon`; il metodo di pagamento dell'ordine è sempre «PayPal». Sono i bottoni di PayPal (`components/checkout/paypalSdk.js`, script `paypal.com/sdk/js` col client id che dà il gestionale), uno per metodo: il bottone crea l'ordine nel gestionale, PayPal fa approvare, la pagina conferma. Carta rifiutata: PayPal fa riprovare.
 In alto i tre passi (dati, pagamento, fatto) avanzano da soli; i campi sono in tre gruppi con la spunta quando sono giusti e un contatore; su telefono il riepilogo sta in cima e una barra fissa in basso mostra il totale e porta al primo dato mancante, o al pagamento. Solo Montserrat, anche per codice fiscale e numeri.
 
-4. A pagamento riuscito la pagina mostra la ricevuta; il gestionale ha già mandato l'email di conferma e l'ordine è nella sua pagina Ordini online.
+4. A pagamento riuscito la pagina salva la ricevuta in `sessionStorage` (`components/checkout/ricevutaSalvata.js`, valida un giorno) e porta a `/black-friday-2026/grazie` (`ConfermaPagamentoBlackFriday.jsx`): ricevuta a scontrino, che regge il ricaricamento finché la scheda è aperta. Aperta senza ricevuta (link diretto, altro browser) mostra un ringraziamento generico, senza dati e senza conversioni. Il gestionale ha già mandato l'email di conferma e l'ordine è nella sua pagina Ordini online. Cornice comune alle due pagine: `components/checkout/CheckoutShell.jsx`, passi in `Passi.jsx`.
 
 **In locale non si paga mai davvero**: il proxy di Vite manda le chiamate al gestionale locale, che non usa mai PayPal vero. Senza credenziali sandbox nel gestionale locale il pagamento è simulato (bottone di prova e «Prova un pagamento rifiutato»); con `PAYPAL_SANDBOX_CLIENT_ID/SECRET` nel gestionale locale ci sono i bottoni veri della sandbox PayPal, con carte e conti di prova. Una striscia azzurra in cima dice quando è una prova. Dettagli e API: `docs/features/ORDINI_ONLINE.md` del gestionale.
 
@@ -104,7 +104,8 @@ Gli script sono in `index.html`.
 | Meta `PageView` | Solo al primo caricamento del sito, non ai cambi di route |
 | Meta `Lead` | Apertura di `/conferma-richiesta` |
 | Meta `Schedule` | Prenotazione dal calendario |
-| Meta `Purchase` | Pagamento riuscito su `/black-friday-2026/pagamento` (`value`, `currency` EUR), solo pagamenti veri |
+| Meta `Purchase` | Apertura di `/black-friday-2026/grazie` con la ricevuta di un pagamento vero (`value`, `currency` EUR, `eventID` `ordine-<numero>`), una volta sola per ordine anche ricaricando |
+| Conversione Google Ads | `/black-friday-2026/grazie`, alle stesse condizioni di Meta `Purchase` (`transaction_id` `ordine-<numero>`): parte solo quando `CONVERSIONE_GOOGLE_ADS` in `ConfermaPagamentoBlackFriday.jsx` ha l'etichetta dell'azione «Acquisto» (oggi vuota) |
 | Conversione Google Ads | `/conferma-richiesta`, solo per le landing in `CONVERSIONI_GOOGLE_ADS` |
 | Conversione Google Ads | `/offerta-influencer-conferma` |
 

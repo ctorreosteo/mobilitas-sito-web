@@ -54,6 +54,7 @@ import LmGpadelSconto39 from './pages/landing-pages/LmGpadelSconto39'
 import CofanettoNatale from './pages/landing-pages/CofanettoNatale'
 import BlackFriday from './pages/landing-pages/BlackFriday'
 import CheckoutBlackFriday from './pages/landing-pages/CheckoutBlackFriday'
+import ConfermaPagamentoBlackFriday from './pages/landing-pages/ConfermaPagamentoBlackFriday'
 import PortaUnAmico from './pages/landing-pages/PortaUnAmico'
 import IterSelezioneOsteopata from './pages/landing-pages/IterSelezioneOsteopata'
 import Cervicalgia from './pages/landing-prima-visita/Cervicalgia'
@@ -191,6 +192,8 @@ function App() {
         <Route path="/black-friday-2026" element={<Layout hideWhatsApp hideFooterCta><BlackFriday /></Layout>} />
         {/* Pagamento online del Black Friday (carta, PayPal, PayPal in 3 rate): pagina a sé, senza menu né piè di pagina del sito */}
         <Route path="/black-friday-2026/pagamento" element={<CheckoutBlackFriday />} />
+        {/* Conferma del pagamento: la ricevuta arriva dalla pagina di pagamento (sessionStorage); qui partono le conversioni */}
+        <Route path="/black-friday-2026/grazie" element={<ConfermaPagamentoBlackFriday />} />
         {/* Indirizzo provvisorio usato in revisione il 16/11/2026: rimanda a quello definitivo */}
         <Route path="/black-friday-2026-PX" element={<VaiA to="/black-friday-2026" />} />
         {/* Invito "porta un amico" del Black Friday: ci arriva l'amico dal link personale che il paziente riceve per messaggio e gli inoltra */}
