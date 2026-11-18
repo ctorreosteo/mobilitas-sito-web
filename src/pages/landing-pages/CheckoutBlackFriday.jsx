@@ -49,7 +49,8 @@ const VUOTO = {
 
 const euro = (n) => `${Number(n).toLocaleString('it-IT', { minimumFractionDigits: Number.isInteger(Number(n)) ? 0 : 2 })}€`
 
-const METODO_TESTO = { CARTA: 'Carta', PAYPAL: 'PayPal', PAYPAL_RATE: 'PayPal in 3 rate' }
+// Il metodo è sempre PayPal; qui come ha pagato su PayPal
+const PAGATO_CON = { CARTA: 'con carta', PAYPAL: 'con il conto', PAYPAL_RATE: 'in 3 rate' }
 
 function Campo({ id, label, errore, hint, className = '', children }) {
   return (
@@ -91,7 +92,7 @@ function Riepilogo({ offerta, compatto }) {
           <ul className="ckx-trust">
             <li><ShieldCheck size={18} aria-hidden="true" /> Pagamento protetto da PayPal: i dati della carta non passano da noi</li>
             <li><Mail size={18} aria-hidden="true" /> Email di conferma appena hai pagato</li>
-            <li><CalendarCheck size={18} aria-hidden="true" /> La segreteria ti chiama per fissare le date con il tuo osteopata</li>
+            <li><CalendarCheck size={18} aria-hidden="true" /> La segreteria ti chiama, o ti manda su WhatsApp il link per prenotare le visite</li>
           </ul>
         </>
       ) : null}
@@ -127,11 +128,11 @@ function Ricevuta({ ricevuta }) {
       </p>
       <dl className="ckx-ledger ckx-done__ledger">
         <div><dt>Ordine</dt><dd>n. {ricevuta.numero}</dd></div>
-        <div><dt>Pagamento</dt><dd>{METODO_TESTO[ricevuta.metodoPagamento] ?? ricevuta.metodoPagamento}</dd></div>
+        <div><dt>Pagamento</dt><dd>{ricevuta.metodoPagamento}{PAGATO_CON[ricevuta.pagatoCon] ? `, ${PAGATO_CON[ricevuta.pagatoCon]}` : ''}</dd></div>
         <div className="is-total"><dt>Totale pagato</dt><dd>{euro(ricevuta.importo)}</dd></div>
       </dl>
       <ol className="ckx-next">
-        <li><span>1</span><div><b>Ti chiamiamo noi</b>La segreteria ti contatta nei prossimi giorni.</div></li>
+        <li><span>1</span><div><b>Ti contattiamo noi</b>Nei prossimi giorni la segreteria ti chiama, oppure ti manda su WhatsApp il link per prenotarti.</div></li>
         <li><span>2</span><div><b>Fissiamo le date</b>Le visite si organizzano con il tuo osteopata, come ti consiglia.</div></li>
         <li><span>3</span><div><b>Inizi il percorso</b>Dieci visite, nei nostri studi di Via Peyron 54 e Via Lamarmora 35.</div></li>
       </ol>
@@ -283,7 +284,7 @@ export default function CheckoutBlackFriday() {
                   <Campo id="ckx-email" label="Email" errore={mostra('email')} hint="Ti mandiamo qui la conferma">
                     <input {...props('email', { type: 'email', autoComplete: 'email', inputMode: 'email' })} />
                   </Campo>
-                  <Campo id="ckx-cellulare" label="Cellulare" errore={mostra('cellulare')} hint="La segreteria ti chiama qui per le date">
+                  <Campo id="ckx-cellulare" label="Cellulare" errore={mostra('cellulare')} hint="Qui la segreteria ti chiama o ti scrive su WhatsApp">
                     <input {...props('cellulare', { type: 'tel', autoComplete: 'tel', inputMode: 'tel', placeholder: '333 123 4567' })} />
                   </Campo>
                   <Campo id="ckx-indirizzo" label="Indirizzo di residenza" errore={mostra('indirizzo')} className="is-wide">

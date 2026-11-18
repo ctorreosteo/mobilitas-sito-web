@@ -36,11 +36,11 @@ async function chiama(url, options) {
 // { codice, nome, descrizione, importo, valuta, validaFino, disponibile, motivo, ambiente, paypalClientId }
 export const leggiOfferta = (codice) => chiama(`${BASE}/offerte/${encodeURIComponent(codice)}`)
 
-// dati: { offerta, metodoPagamento, nome, cognome, indirizzo, citta, cap, nazione, codiceFiscale, email, cellulare, consensoPrivacy }
+// dati: { offerta, pagatoCon (CARTA, PAYPAL, PAYPAL_RATE: il bottone scelto), nome, cognome, indirizzo, citta, cap, nazione, codiceFiscale, email, cellulare, consensoPrivacy }
 // → { ordine, paypalOrderId, ambiente }
 export const creaOrdine = (dati) => chiama(`${BASE}/ordini`, { method: 'POST', body: JSON.stringify(dati) })
 
-// → { numero, stato, descrizione, importo, metodoPagamento, nome, email, pagatoIl, ambiente }
+// → { numero, stato, descrizione, importo, metodoPagamento (sempre «PayPal»), pagatoCon, nome, email, pagatoIl, ambiente }
 export const confermaOrdine = (ordine, paypalOrderId, simulaRifiuto = false) =>
   chiama(`${BASE}/ordini/${encodeURIComponent(ordine)}/conferma`, {
     method: 'POST',

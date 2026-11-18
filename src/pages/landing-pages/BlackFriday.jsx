@@ -144,7 +144,7 @@ const PASSI_OFFERTA = [
   },
   {
     title: 'Fissiamo le visite',
-    body: 'La segreteria ti chiama per organizzare con te le date, con il tuo osteopata.',
+    body: 'La segreteria ti chiama, oppure ti manda su WhatsApp il link per prenotare le visite con il tuo osteopata.',
   },
   {
     title: 'Inizi il percorso',
@@ -217,7 +217,7 @@ const FAQ = [
       <>
         <strong>Online, con carta o PayPal</strong>, anche in 3 rate senza interessi con PayPal: tocchi il bottone, paghi{' '}
         <strong>{PREZZO_OFFERTA}€</strong> e le tue {VISITE} visite sono bloccate al prezzo del Black Friday. Poi la segreteria
-        ti chiama per fissare le date con il tuo osteopata.
+        ti chiama, oppure ti manda su WhatsApp il link per prenotare le visite con il tuo osteopata.
       </>
     ),
   },

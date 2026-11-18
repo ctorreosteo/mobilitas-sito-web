@@ -94,7 +94,7 @@ export default function MetodiPagamento({ offerta, getDati, onFatto, disabilitat
     if (!dati) throw new Error('dati')
     setLavoro('crea')
     try {
-      const r = await creaOrdine({ ...dati, offerta: offerta.codice, metodoPagamento: id })
+      const r = await creaOrdine({ ...dati, offerta: offerta.codice, pagatoCon: id })
       ordineRef.current = r.ordine
       return r.paypalOrderId
     } catch (e) {

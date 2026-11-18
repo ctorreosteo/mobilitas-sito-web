@@ -1,6 +1,7 @@
 // Carica una volta sola lo script di PayPal (bottoni carta, PayPal e Paga in 3 rate) con il client id che dà il
 // gestionale: quello sandbox fuori produzione, quello vero in produzione. Paga in 3 rate va abilitato a mano
 // (enable-funding=paylater); in sandbox serve anche buyer-country=IT, che in produzione PayPal non accetta.
+// Niente disable-funding: ogni bottone ha già il suo fundingSource, e un metodo che PayPal dismette lo farebbe fallire.
 let caricamento = null
 
 export function caricaPayPal(clientId, sandbox) {
@@ -13,7 +14,6 @@ export function caricaPayPal(clientId, sandbox) {
     locale: 'it_IT',
     components: 'buttons',
     'enable-funding': 'paylater,card',
-    'disable-funding': 'venmo,sepa,mybank,bancontact,blik,eps,giropay,ideal,p24,sofort',
   })
   if (sandbox) params.set('buyer-country', 'IT')
   caricamento = new Promise((resolve, reject) => {

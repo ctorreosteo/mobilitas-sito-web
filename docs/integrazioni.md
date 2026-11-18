@@ -21,7 +21,7 @@
 | GET | `/api/sito/recensioni?tag=<tag>&limite=<n>` | Recensioni per tag, `tag` ripetibile |
 | GET | `/api/sito/recensioni/totali` | Totale recensioni Google |
 | GET | `/api/sito/checkout/offerte/<codice>` | Offerta da pagare online: `nome`, `importo`, `validaFino`, `disponibile` (e `motivo` se no), `ambiente`, `paypalClientId`. Vedi [Pagamento online](#pagamento-online) |
-| POST | `/api/sito/checkout/ordini` | Crea l'ordine con i dati di fatturazione → `{ ordine, paypalOrderId, ambiente }` |
+| POST | `/api/sito/checkout/ordini` | Crea l'ordine con i dati di fatturazione e `pagatoCon` (`CARTA`, `PAYPAL`, `PAYPAL_RATE`) → `{ ordine, paypalOrderId, ambiente }` |
 | POST | `/api/sito/checkout/ordini/<ordine>/conferma` | Incassa dopo PayPal: `{ paypalOrderId, simulaRifiuto? }` → ricevuta. 402 se il pagamento è rifiutato |
 
 Le risposte hanno la forma `{ success, data, message }`.
@@ -82,7 +82,7 @@ Senza dati in `sessionStorage` (storage bloccato, pagina aperta direttamente) la
 
 1. Legge l'offerta. Se non è disponibile (scaduta o pagamenti spenti) mostra il motivo e niente form.
 2. Dati di fatturazione, tutti obbligatori: nome, cognome, codice fiscale (controllato col carattere di controllo, `components/checkout/validazione.js`), email, cellulare, indirizzo, CAP, città, nazione, consenso privacy. I bottoni di pagamento compaiono solo a dati completi.
-3. Metodo: carta (form della carta di PayPal, senza conto), PayPal o PayPal in 3 rate. Sono i bottoni di PayPal (`components/checkout/paypalSdk.js`, script `paypal.com/sdk/js` col client id che dà il gestionale), uno per metodo: il bottone crea l'ordine nel gestionale, PayPal fa approvare, la pagina conferma. Carta rifiutata: PayPal fa riprovare.
+3. Come pagare: carta (form della carta di PayPal, senza conto), PayPal o PayPal in 3 rate. Il bottone scelto va al gestionale come `pagatoCon`; il metodo di pagamento dell'ordine è sempre «PayPal». Sono i bottoni di PayPal (`components/checkout/paypalSdk.js`, script `paypal.com/sdk/js` col client id che dà il gestionale), uno per metodo: il bottone crea l'ordine nel gestionale, PayPal fa approvare, la pagina conferma. Carta rifiutata: PayPal fa riprovare.
 4. A pagamento riuscito la pagina mostra la ricevuta; il gestionale ha già mandato l'email di conferma e l'ordine è nella sua pagina Ordini online.
 
 **In locale non si paga mai davvero**: il proxy di Vite manda le chiamate al gestionale locale, che non usa mai PayPal vero. Senza credenziali sandbox nel gestionale locale il pagamento è simulato (bottone di prova e «Prova un pagamento rifiutato»); con `PAYPAL_SANDBOX_CLIENT_ID/SECRET` nel gestionale locale ci sono i bottoni veri della sandbox PayPal, con carte e conti di prova. Una striscia azzurra in cima dice quando è una prova. Dettagli e API: `docs/features/ORDINI_ONLINE.md` del gestionale.
