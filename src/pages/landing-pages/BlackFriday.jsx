@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Check, CreditCard, Gift, Plus, X } from 'lucide-react'
 import PageShell from '../../components/site/PageShell'
@@ -47,13 +48,12 @@ const PREZZO_OFFERTA = 450
 const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Rome' })
 
 // ——— Pagamento online ———
-// Tutti i bottoni della pagina (apertura, sezioni, barra in basso su telefono) portano alla pagina di pagamento dei
-// 450€. DA FARE: incollare qui il link di pagamento (per esempio un Payment Link di Stripe, come quello delle
-// landing emicrania e mal di schiena), con la pagina di ritorno dopo il pagamento impostata da Stripe.
-// Finché è vuoto, i bottoni non fanno nulla.
-const LINK_PAGAMENTO = ''
-const pagaOnline = () => {
-  if (LINK_PAGAMENTO) window.location.assign(LINK_PAGAMENTO)
+// Tutti i bottoni della pagina (apertura, sezioni, barra in basso su telefono) portano alla pagina di pagamento
+// /black-friday-2026/pagamento (CheckoutBlackFriday.jsx): dati di fatturazione, poi carta, PayPal o PayPal in 3 rate.
+const PAGINA_PAGAMENTO = '/black-friday-2026/pagamento'
+const usePagaOnline = () => {
+  const navigate = useNavigate()
+  return () => navigate(PAGINA_PAGAMENTO)
 }
 
 // Video dell'apertura dal gestionale (codice stabile, non l'UID Cloudflare). Finché non c'è, l'apertura mostra la foto.
@@ -140,7 +140,7 @@ const RIEPILOGO = [
 const PASSI_OFFERTA = [
   {
     title: 'Paghi online',
-    body: `${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, con carta, direttamente da questa pagina.`,
+    body: `${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, con carta o PayPal, anche in 3 rate.`,
   },
   {
     title: 'Fissiamo le visite',
@@ -215,7 +215,7 @@ const FAQ = [
     ),
     answer: (
       <>
-        <strong>Online, con carta</strong>, direttamente da questa pagina: tocchi il bottone, paghi{' '}
+        <strong>Online, con carta o PayPal</strong>, anche in 3 rate senza interessi con PayPal: tocchi il bottone, paghi{' '}
         <strong>{PREZZO_OFFERTA}€</strong> e le tue {VISITE} visite sono bloccate al prezzo del Black Friday. Poi la segreteria
         ti chiama per fissare le date con il tuo osteopata.
       </>
@@ -247,6 +247,7 @@ const SEO = {
 // Bottone dell'offerta: porta al pagamento online. tone="light" sulla sezione panna: lì il verde non si usa, il bottone
 // diventa blu.
 function OffertaCtas({ tone = 'dark', className = '' }) {
+  const pagaOnline = usePagaOnline()
   return (
     <div className={`bfx-ctas ${tone === 'light' ? 'is-light' : ''} ${className}`}>
       <button type="button" className="bfx-btn" onClick={pagaOnline}>
@@ -266,6 +267,7 @@ function OffertaCtas({ tone = 'dark', className = '' }) {
 
 // Barra fissa in basso su telefono (nascosta da 1024px)
 function OffertaDock({ visible }) {
+  const pagaOnline = usePagaOnline()
   return (
     <AnimatePresence>
       {visible && (

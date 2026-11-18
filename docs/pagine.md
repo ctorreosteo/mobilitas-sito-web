@@ -63,6 +63,8 @@ Tutte con `Layout hideWhatsApp`, tranne `/osteopata-torino`. Dettagli in [landin
 | `/cofanetto-natale` | `landing-pages/CofanettoNatale` | No | Stagionale |
 | `/lm-gpadel-infortuni` | `landing-pages/LmGPadelInfortuni` | No | Lead magnet |
 | `/lm-gpadel-sconto39-generico` | `landing-pages/LmGpadelSconto39` | No | |
+| `/black-friday-2026` | `landing-pages/BlackFriday` | Sì, senza WhatsApp né CTA nel piè di pagina | Tutti i bottoni portano a `/black-friday-2026/pagamento`. Vedi [landing.md](landing.md) |
+| `/black-friday-2026/pagamento` | `landing-pages/CheckoutBlackFriday` | No: intestazione e piè di pagina propri | Pagamento online con PayPal (carta, PayPal, 3 rate). Vedi [integrazioni.md](integrazioni.md#pagamento-online) |
 
 ## Conferme e redirect
 
