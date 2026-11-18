@@ -245,7 +245,7 @@ export default function ConfermaPagamentoBlackFriday() {
               <MessageCircle size={16} aria-hidden="true" /> Scrivici su WhatsApp
             </a>
             <Link className="ckx-pill is-ghost" to="/black-friday-2026/pagamento">
-              <CreditCard size={16} aria-hidden="true" /> Non ho ancora pagato
+              <CreditCard size={16} aria-hidden="true" /> Devi ancora pagare? Vai al pagamento
             </Link>
           </motion.div>
         )}
