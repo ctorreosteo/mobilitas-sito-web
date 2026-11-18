@@ -790,6 +790,66 @@
 }
 
 /* Ombra sul piano, respira con il galleggiare */
+/* ——— Variante blu Mobilitas (pagamento e conferma): blu notte → blu brillante, filigrana, pittogramma in
+   trasparenza, luci verde e azzurro. Stessa struttura e stessi movimenti della carta nera. ——— */
+.bfx-card--blu .bfx-card__glow {
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.35), rgba(114, 250, 147, 0.14) 55%, transparent);
+}
+
+.bfx-card--blu .bfx-card__edge { background: linear-gradient(135deg, #1b5fae, #00214a 55%, #0b3f82); }
+
+.bfx-card--blu .bfx-card__face {
+  background:
+    radial-gradient(60% 55% at 0% 0%, rgba(56, 189, 248, 0.42), transparent 60%),
+    radial-gradient(45% 55% at 78% 46%, rgba(114, 250, 147, 0.16), transparent 70%),
+    repeating-radial-gradient(circle at 118% 125%, transparent 0 0.55em, rgba(255, 255, 255, 0.05) 0.55em 0.61em),
+    linear-gradient(135deg, #0b5cc4 0%, #0046a0 26%, #00346f 52%, #002552 74%, #001433 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2em 3em -2em rgba(0, 8, 28, 0.7);
+}
+
+/* Bordo metallico sottile, più chiaro in alto a sinistra */
+.bfx-card--blu .bfx-card__face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.08) 40%, rgba(114, 250, 147, 0.5));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.bfx-card--blu .bfx-card__top b { display: inline-flex; align-items: center; gap: 0.5em; }
+
+.bfx-card__logo {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0.2em 0.6em rgba(0, 0, 0, 0.35);
+}
+
+.bfx-card--blu .bfx-card__holo { opacity: 0.3; }
+.bfx-card--blu .bfx-card__sweep { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent); }
+
+.bfx-card--blu .bfx-card__chip {
+  background: linear-gradient(135deg, #d9ffe4, #72fa93 45%, #2fbf63);
+  box-shadow: 0 0.1em 0.4em rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.bfx-card--blu .bfx-card__ten {
+  background: linear-gradient(180deg, #ffffff 0%, #c9ffd8 28%, #72fa93 50%, #2fbf63 60%, #d6ffe1 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4)) drop-shadow(0 8px 18px rgba(114, 250, 147, 0.45));
+}
+
+.bfx-card--blu .bfx-card__shadow { background: radial-gradient(closest-side, rgba(0, 20, 60, 0.75), transparent); }
+
 .bfx-card__shadow {
   position: absolute;
   left: 12%;

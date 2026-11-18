@@ -8,7 +8,8 @@ import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring,
 // (la luce segue il puntatore). Con "riduci movimento" è ferma nella posa finale.
 // Decorativa: prezzo, scadenza e offerta sono già nel titolo, nel bottone e nel conto alla rovescia.
 
-export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve, className = '' }) {
+// variante 'blu': la carta nei colori Mobilitas (pagamento e conferma); senza variante resta nera, come nella landing.
+export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve, className = '', variante }) {
   const reduce = useReducedMotion()
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -34,7 +35,7 @@ export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve,
   }, [reduce, x, y])
 
   return (
-    <div className={`bfx-card ${className}`} aria-hidden="true">
+    <div className={`bfx-card ${variante === 'blu' ? 'bfx-card--blu' : ''} ${className}`} aria-hidden="true">
       <span className="bfx-card__glow" />
       <motion.div
         className="bfx-card__enter"
@@ -54,7 +55,10 @@ export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve,
                 <span className="bfx-card__sweep" />
 
                 <div className="bfx-card__top">
-                  <b>Mobilitas</b>
+                  <b>
+                    {variante === 'blu' ? <img className="bfx-card__logo" src="/pittogramma.png" alt="" /> : null}
+                    Mobilitas
+                  </b>
                   <span>Black Friday</span>
                 </div>
 

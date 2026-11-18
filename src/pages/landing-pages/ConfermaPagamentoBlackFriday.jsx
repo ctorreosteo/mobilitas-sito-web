@@ -222,7 +222,7 @@ export default function ConfermaPagamentoBlackFriday() {
           <motion.div className="ckx-ok-grid" {...entra(0.2)}>
             <div className="ckx-ok-pass">
               <div className="ckx-ok-pass__card">
-                <CartaBlack visite={VISITE} prezzo={ricevuta.importo} prezzoPieno={900} scadenzaBreve={SCADENZA_BREVE} />
+                <CartaBlack variante="blu" visite={VISITE} prezzo={ricevuta.importo} prezzoPieno={900} scadenzaBreve={SCADENZA_BREVE} />
                 <span className="ckx-ok-stamp" aria-hidden="true">Pagata</span>
               </div>
               <p className="ckx-ok-pass__cap">

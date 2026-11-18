@@ -102,7 +102,7 @@ function Riepilogo({ offerta }) {
   return (
     <aside className="ckx-sum" aria-label="Riepilogo dell'ordine">
       <div className="ckx-sum__card">
-        <CartaBlack visite={VISITE} prezzo={importo} prezzoPieno={PREZZO_PIENO} scadenzaBreve={SCADENZA_BREVE} />
+        <CartaBlack variante="blu" visite={VISITE} prezzo={importo} prezzoPieno={PREZZO_PIENO} scadenzaBreve={SCADENZA_BREVE} />
       </div>
       <div className="ckx-sum__head">
         <p className="ckx-eyebrow">Il tuo ordine</p>
