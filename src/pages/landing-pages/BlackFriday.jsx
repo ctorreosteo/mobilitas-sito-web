@@ -92,7 +92,7 @@ const CONFRONTO = [
   { da: 'Dici di no: alla cena, alla passeggiata, al weekend fuori', a: <>Continui a dire di <strong>sì</strong></> },
 ]
 
-// Cosa ottieni con il pacchetto: i benefici in breve, in elenco (i numeri sono nel prezzo subito sotto)
+// Cosa ottieni con le 10 visite (non chiamarlo «pacchetto»): i benefici in breve, in elenco (i numeri sono nel prezzo subito sotto)
 const BENEFICI = [
   { t: 'Metà prezzo', b: 'ne paghi cinque, le altre cinque sono in omaggio.' },
   { t: 'Un percorso completo', b: 'togli il dolore e lo tieni lontano, invece di rincorrerlo quando torna.' },
@@ -356,7 +356,7 @@ export default function BlackFriday() {
         <div className="bfx-wrap">
           <div className="bfx-deal__head">
             <h2 id="bfx-deal-t" className="bfx-h bfx-h2">
-              Cosa ottieni <span className="is-green">con il pacchetto</span>
+              Cosa ottieni <span className="is-green">con le tue {VISITE} visite</span>
             </h2>
             <ul className="bfx-perks">
               {BENEFICI.map((x) => (
