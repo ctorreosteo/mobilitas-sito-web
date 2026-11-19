@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useInView, useReducedMotion, useSpring } from 'framer-motion'
-import { AlarmClock, Check, Gift, Moon } from 'lucide-react'
+import { AlarmClock, BellOff, Briefcase, Check, ChevronLeft, ChevronRight, Flower2, Leaf, Mail, Moon, Snowflake, Sun, Users } from 'lucide-react'
 import { SCADENZA_TESTO, due, urgenza, useMancano } from '../black-friday/offerta'
 
 // Pezzi grafici della sola landing /black-friday-2026 (stile in styles/pages/black-friday-2026.css, prefisso bfx-).
@@ -74,73 +74,7 @@ export function Countdown({ className = '', etichetta = `Fino a ${SCADENZA_TESTO
   )
 }
 
-// I dieci trattamenti in due gruppi: «Li paghi» (cinque carte) + «In omaggio» (cinque carte verdi in un riquadro regalo).
-// Le carte in omaggio si girano e diventano verdi quando il gruppo entra nello schermo. Il numero del trattamento è su
-// entrambe le facce: nessun testo resta nascosto.
-export function MazzoVisite({ visite = 10 }) {
-  const ref = useRef(null)
-  const reduce = useReducedMotion()
-  const inView = useInView(ref, { once: true, margin: '0px 0px -18% 0px' })
-  const girate = reduce || inView
-  const meta = visite / 2
-  const numeri = (da) => Array.from({ length: meta }, (_, i) => da + i)
-
-  return (
-    <div ref={ref} className={`bfx-deck ${girate ? 'is-flipped' : ''}`}>
-      <div className="bfx-deck__group">
-        <p className="bfx-deck__tag">
-          <Check size={14} strokeWidth={3} aria-hidden="true" />
-          <span>
-            <b>{meta} trattamenti</b> li paghi
-          </span>
-        </p>
-        <ol className="bfx-deck__list" aria-label={`${meta} trattamenti che paghi`}>
-          {numeri(1).map((n) => (
-            <li key={n} className="bfx-vcard">
-              <span className="bfx-vcard__in" aria-hidden="true">
-                <span className="bfx-vcard__face is-front">
-                  <b>{due(n)}</b>
-                </span>
-              </span>
-              <span className="bfx-sr">Trattamento {n}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <span className="bfx-deck__plus" aria-hidden="true">
-        +
-      </span>
-
-      <div className="bfx-deck__group is-gift">
-        <p className="bfx-deck__tag">
-          <Gift size={15} strokeWidth={2.4} aria-hidden="true" />
-          <span>
-            <b>{meta} trattamenti</b> in omaggio
-          </span>
-        </p>
-        <ol className="bfx-deck__list" aria-label={`${meta} trattamenti in omaggio`}>
-          {numeri(meta + 1).map((n, i) => (
-            <li key={n} className="bfx-vcard is-gift" style={{ '--d': `${i * 110 + 150}ms` }}>
-              <span className="bfx-vcard__in" aria-hidden="true">
-                <span className="bfx-vcard__face is-front">
-                  <b>{due(n)}</b>
-                </span>
-                <span className="bfx-vcard__face is-back">
-                  <b>{due(n)}</b>
-                  <Gift size={16} strokeWidth={2.2} />
-                </span>
-              </span>
-              <span className="bfx-sr">Trattamento {n}, in omaggio</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </div>
-  )
-}
-
-// Banner del prezzo (sezione «Cosa ottieni», prima del conto alla rovescia): un biglietto nero come la carta Black
+// Banner del prezzo (sezione «L’offerta», sopra la spiegazione; senza la carta, che è già nell’apertura): un biglietto nero come la carta Black
 // Friday, con il prezzo che scende dal pieno a quello dell'offerta quando entra nello schermo, lo sconto in un bollino
 // e, oltre una linea di luce, i tre conti che contano. Di base (e con "riduci movimento") mostra subito il prezzo.
 // fatti = [{ k: 'A trattamento', v: '45€', prima: '90€', t: 'testo piccolo accanto' }, …] (prima e t facoltativi)
@@ -231,7 +165,7 @@ export function TiltPass({ as = 'article', className = '', children }) {
   )
 }
 
-// Grafico «Il dolore smette di tornare» (sezione «Cosa ottieni»): illustrativo, senza numeri. In grigio i trattamenti
+// Grafico del dolore (carta «Il tuo problema» del carosello di «Cosa ottieni»): piccolo, illustrativo, senza numeri. In grigio i trattamenti
 // sparsi (il dolore cala e poi torna, a dente di sega); in verde dieci trattamenti di fila (cala e resta giù), un punto
 // per trattamento. Le linee si disegnano quando il grafico entra in vista; con «riduci movimento» sono già ferme.
 const W = 360
@@ -308,68 +242,219 @@ export function GraficoRicadute() {
         <span className="bfx-graph__axis is-x" aria-hidden="true">Tempo</span>
       </div>
       <figcaption className="bfx-graph__legend">
-        <span className="is-sparse">Trattamenti sparsi: il dolore se ne va e poi torna</span>
-        <span className="is-path">{PUNTI_PERCORSO.length} trattamenti di fila: se ne va e resta lontano</span>
+        <span className="is-sparse">Trattamenti sparsi</span>
+        <span className="is-path">{PUNTI_PERCORSO.length} di fila</span>
       </figcaption>
     </figure>
   )
 }
 
-// «La prevenzione»: un anno da dicembre a novembre, un appuntamento al mese (illustrativo: i trattamenti non scadono e
-// il ritmo lo decide l'osteopata). Dieci mesi segnati, agosto libero per le ferie e novembre, quando si ricomincia.
-const MESI = [
-  ['D', 'Dicembre', 1], ['G', 'Gennaio', 1], ['F', 'Febbraio', 1], ['M', 'Marzo', 1], ['A', 'Aprile', 1],
-  ['M', 'Maggio', 1], ['G', 'Giugno', 1], ['L', 'Luglio', 1], ['A', 'Agosto', 0], ['S', 'Settembre', 1],
-  ['O', 'Ottobre', 1], ['N', 'Novembre', 0],
+// «La prevenzione»: le quattro stagioni, tutte con la spunta: ti curi tutto l'anno (senza dire ogni quanto: i
+// trattamenti si fanno quando si vuole)
+const STAGIONI = [
+  { Icona: Flower2, nome: 'Primavera' },
+  { Icona: Sun, nome: 'Estate' },
+  { Icona: Leaf, nome: 'Autunno' },
+  { Icona: Snowflake, nome: 'Inverno' },
 ]
 
-export function AnnoVisite() {
-  const ref = useRef(null)
-  const reduce = useReducedMotion()
-  const on = useInView(ref, { once: true, margin: '0px 0px -15% 0px' }) || reduce
-  let n = 0
+export function TuttoLAnno() {
   return (
-    <div className="bfx-year" ref={ref}>
-      <ol className="bfx-year__months" aria-hidden="true">
-        {MESI.map(([l, nome, si]) => {
-          const i = si ? n++ : -1
-          return (
-            <li key={nome} className={si ? 'is-on' : ''}>
-              <motion.span
-                className="bfx-year__dot"
-                initial={reduce || !si ? false : { scale: 0.4, opacity: 0 }}
-                animate={on ? { scale: 1, opacity: 1 } : undefined}
-                transition={{ duration: 0.4, delay: 0.1 + i * 0.08, ease: EASE_OUT }}
-              >
-                {si ? <Check size={12} strokeWidth={3.4} /> : null}
-              </motion.span>
-              <small>{l}</small>
-            </li>
-          )
-        })}
-      </ol>
-      <p className="bfx-year__cap">Un appuntamento al mese, anche quando stai bene</p>
+    <ul className="bfx-seasons" aria-label="Tutto l’anno">
+      {STAGIONI.map((x) => (
+        <li key={x.nome}>
+          <x.Icona size={20} strokeWidth={2} aria-hidden="true" />
+          <span>{x.nome}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// «Il tuo tempo»: le notifiche che di solito ti rubano il tempo (lavoro, famiglia, email); quando la carta arriva al
+// centro del carosello si accende «Non disturbare» e si spengono una dopo l'altra. Riparte ogni volta che la carta
+// torna al centro. Con «riduci movimento» è già tutto spento. Decorativa: il senso è già nel testo della carta.
+const NOTIFICHE = [
+  { Icona: Briefcase, app: 'Lavoro', testo: 'La riunione è stata spostata' },
+  { Icona: Users, app: 'Famiglia', testo: '12 nuovi messaggi' },
+  { Icona: Mail, app: 'Email', testo: 'Urgente: rispondi entro oggi' },
+]
+
+export function TempoPerTe({ attiva = true }) {
+  const reduce = useReducedMotion()
+  const [zitto, setZitto] = useState(false)
+
+  useEffect(() => {
+    if (reduce || !attiva) return undefined
+    const t = setTimeout(() => setZitto(true), 900)
+    return () => {
+      clearTimeout(t)
+      setZitto(false)
+    }
+  }, [attiva, reduce])
+
+  const on = reduce || zitto
+  return (
+    <div className={`bfx-quiet ${on ? 'is-on' : ''}`} aria-hidden="true">
+      <ul className="bfx-quiet__list">
+        {NOTIFICHE.map((n, i) => (
+          <li key={n.app} style={{ '--i': i }}>
+            <span className="bfx-quiet__app">
+              <n.Icona size={16} strokeWidth={2.2} />
+            </span>
+            <span className="bfx-quiet__txt">
+              <b>{n.app}</b>
+              <small>{n.testo}</small>
+            </span>
+            <BellOff className="bfx-quiet__off" size={16} strokeWidth={2.2} />
+          </li>
+        ))}
+      </ul>
+      <div className={`bfx-dnd ${on ? 'is-on' : ''}`}>
+        <span className="bfx-dnd__ico">
+          <Moon size={18} strokeWidth={2.2} />
+        </span>
+        <span className="bfx-dnd__txt">
+          <b>Non disturbare</b>
+          <small>{on ? 'Attivo: ora pensi solo a te' : 'Spento'}</small>
+        </span>
+        <span className="bfx-dnd__switch">
+          <i />
+        </span>
+      </div>
     </div>
   )
 }
 
-// «La coccola»: l'interruttore «Non disturbare» che si accende quando entra in vista
-export function NonDisturbare() {
+// «Cosa ottieni»: le tre carte dei benefici come la scelta del personaggio in un videogioco. La carta attiva al centro,
+// illuminata; le altre due ai lati, più piccole, ruotate e in penombra. Si cambia con lo swipe (o trascinando col mouse),
+// con le frecce, toccando una carta di lato o i nomi sotto (frecce della tastiera comprese). Girano da sole ogni
+// «intervallo» ms mentre il carosello è in vista; si fermano sotto il puntatore o il dito, e per sempre dopo la prima
+// scelta. Con «riduci movimento» niente giro automatico e niente animazioni.
+// voci = [{ id, tag, titolo, testo, visual, tema: 'is-main' | 'is-green' | 'is-ink', decoro }]; visual può essere una
+// funzione (attiva) => disegno, per i disegni che si animano quando la carta arriva al centro
+export function CaroselloBenefici({ voci, intervallo = 5000 }) {
   const ref = useRef(null)
   const reduce = useReducedMotion()
-  const on = useInView(ref, { once: true, margin: '0px 0px -20% 0px' }) || reduce
+  const visibile = useInView(ref, { margin: '-15% 0px -15% 0px' })
+  const [attiva, setAttiva] = useState(0)
+  const [fermo, setFermo] = useState(false)
+  const [sopra, setSopra] = useState(false)
+  const n = voci.length
+  const auto = !reduce && !fermo && !sopra && visibile
+
+  const scegli = (i) => {
+    setFermo(true)
+    setAttiva(((i % n) + n) % n)
+  }
+
+  useEffect(() => {
+    if (!auto) return undefined
+    const t = setTimeout(() => setAttiva((a) => (a + 1) % n), intervallo)
+    return () => clearTimeout(t)
+  }, [auto, attiva, n, intervallo])
+
+  // Distanza dalla carta attiva, sul giro: −1 a sinistra, 0 al centro, 1 a destra
+  const distanza = (i) => {
+    let d = i - attiva
+    if (d > n / 2) d -= n
+    if (d < -n / 2) d += n
+    return d
+  }
+
+  const tasti = (e) => {
+    if (e.key === 'ArrowRight') scegli(attiva + 1)
+    else if (e.key === 'ArrowLeft') scegli(attiva - 1)
+  }
+
+  const molla = reduce ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 30 }
+
   return (
-    <div className={`bfx-dnd ${on ? 'is-on' : ''}`} ref={ref} aria-hidden="true">
-      <span className="bfx-dnd__ico">
-        <Moon size={18} strokeWidth={2.2} />
-      </span>
-      <span className="bfx-dnd__txt">
-        <b>Non disturbare</b>
-        <small>{on ? 'Attivo: è il tuo momento' : 'Spento'}</small>
-      </span>
-      <span className="bfx-dnd__switch">
-        <i />
-      </span>
+    <div
+      ref={ref}
+      className="bfx-sel"
+      role="region"
+      aria-roledescription="carosello"
+      aria-label="I tre benefici"
+      onPointerEnter={() => setSopra(true)}
+      onPointerLeave={() => setSopra(false)}
+    >
+      <div className="bfx-sel__stage">
+        <button type="button" className="bfx-sel__arrow is-prev" onClick={() => scegli(attiva - 1)} aria-label="Beneficio precedente">
+          <ChevronLeft size={22} strokeWidth={2.4} />
+        </button>
+
+        <motion.div
+          className="bfx-sel__track"
+          drag={reduce ? false : 'x'}
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.18}
+          dragMomentum={false}
+          onDragEnd={(e, info) => {
+            if (info.offset.x < -40 || info.velocity.x < -400) scegli(attiva + 1)
+            else if (info.offset.x > 40 || info.velocity.x > 400) scegli(attiva - 1)
+          }}
+        >
+          {voci.map((v, i) => {
+            const d = distanza(i)
+            const centro = d === 0
+            return (
+              <motion.article
+                key={v.id}
+                id={`bfx-sel-${v.id}`}
+                className={`bfx-sel__card ${v.tema} ${centro ? 'is-active' : ''}`}
+                role="tabpanel"
+                aria-hidden={!centro}
+                initial={false}
+                animate={{
+                  x: `${d * 74}%`,
+                  scale: centro ? 1 : 0.8,
+                  rotateY: d * -24,
+                  opacity: centro ? 1 : 0.45,
+                }}
+                transition={molla}
+                style={{ zIndex: centro ? 2 : 1 }}
+                onTap={() => !centro && scegli(i)}
+              >
+                {v.decoro}
+                <p className="bfx-sel__tag">{v.tag}</p>
+                <h3 className="bfx-h bfx-h4">{v.titolo}</h3>
+                <p className="bfx-sel__p">{v.testo}</p>
+                <div className="bfx-sel__visual">{typeof v.visual === 'function' ? v.visual(centro) : v.visual}</div>
+              </motion.article>
+            )
+          })}
+        </motion.div>
+
+        <button type="button" className="bfx-sel__arrow is-next" onClick={() => scegli(attiva + 1)} aria-label="Beneficio successivo">
+          <ChevronRight size={22} strokeWidth={2.4} />
+        </button>
+      </div>
+
+      {/* I «nomi dei personaggi»: la barra sotto quello attivo si riempie mentre le carte girano da sole */}
+      <div className="bfx-sel__picks" role="tablist" aria-label="Scegli il beneficio" onKeyDown={tasti}>
+        {voci.map((v, i) => {
+          const on = i === attiva
+          return (
+            <button
+              key={v.id}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              aria-controls={`bfx-sel-${v.id}`}
+              tabIndex={on ? 0 : -1}
+              className={`bfx-sel__pick ${on ? 'is-on' : ''}`}
+              onClick={() => scegli(i)}
+            >
+              <small>{due(i + 1)}</small>
+              {v.tag}
+              <span className="bfx-sel__bar" aria-hidden="true">
+                {on && <i key={`${attiva}-${auto}`} className={auto ? 'is-running' : ''} style={{ '--t': `${intervallo}ms` }} />}
+              </span>
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

@@ -56,7 +56,7 @@ function traccia(fallback) {
 }
 
 const PASSI = [
-  { icona: PhoneCall, titolo: 'Prenoti il primo trattamento', testo: 'Anche subito: da solo, oppure chiamando la segreteria al 351 819 8457.' },
+  { icona: PhoneCall, titolo: 'Prenoti il primo trattamento', testo: 'Quando vuoi: in autonomia, oppure chiamando la segreteria al 351 819 8457, che ti aiuta a trovare giorno e ora.' },
   { icona: CalendarHeart, titolo: 'Fissi gli altri', testo: 'I trattamenti si organizzano con il tuo osteopata, come ti consiglia in base a come stai. Non scadono.' },
   { icona: Sparkles, titolo: 'Inizi il percorso', testo: `Dieci trattamenti in uno dei nostri due studi a Torino, quello più comodo per te.` },
 ]

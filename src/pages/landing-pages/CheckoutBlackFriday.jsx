@@ -121,7 +121,7 @@ function Riepilogo({ offerta }) {
       <ul className="ckx-trust">
         <li><ShieldCheck size={18} aria-hidden="true" /> <span><b>Pagamento protetto da PayPal</b>I dati della carta non passano da noi</span></li>
         <li><Mail size={18} aria-hidden="true" /> <span><b>Conferma subito</b>Ti arriva l'email appena hai pagato</span></li>
-        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Prenoti subito</b>Da solo, oppure chiamando la segreteria. I trattamenti non scadono</span></li>
+        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Prenoti quando vuoi</b>In autonomia, oppure con l’aiuto della segreteria. I trattamenti non scadono</span></li>
       </ul>
       <div className="ckx-proof">
         <span className="ckx-proof__stars" aria-hidden="true">
