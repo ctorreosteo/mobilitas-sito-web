@@ -31,7 +31,7 @@ const euro = (n) => `${Number(n).toLocaleString('it-IT', { minimumFractionDigits
 const SEO = {
   path: '/black-friday-2026/grazie',
   title: 'Pagamento riuscito · Black Friday Mobilitas',
-  description: 'Le tue 10 visite del Black Friday Mobilitas sono confermate.',
+  description: 'I tuoi 10 trattamenti del Black Friday Mobilitas sono confermati.',
   ogImage: '/trattamenti/og/collo_cervicale-e-spalle-supino_02_orizzontale.jpg',
   ogImageAlt: 'Trattamento osteopatico nello studio Mobilitas di Torino',
 }
@@ -56,9 +56,9 @@ function traccia(fallback) {
 }
 
 const PASSI = [
-  { icona: PhoneCall, titolo: 'Prenoti la prima visita', testo: 'Anche subito: da solo, oppure chiamando la segreteria al 351 819 8457.' },
-  { icona: CalendarHeart, titolo: 'Fissi le altre', testo: 'Le visite si organizzano con il tuo osteopata, come ti consiglia in base a come stai. Non scadono.' },
-  { icona: Sparkles, titolo: 'Inizi il percorso', testo: `Dieci visite in uno dei nostri due studi a Torino, quello più comodo per te.` },
+  { icona: PhoneCall, titolo: 'Prenoti il primo trattamento', testo: 'Anche subito: da solo, oppure chiamando la segreteria al 351 819 8457.' },
+  { icona: CalendarHeart, titolo: 'Fissi gli altri', testo: 'I trattamenti si organizzano con il tuo osteopata, come ti consiglia in base a come stai. Non scadono.' },
+  { icona: Sparkles, titolo: 'Inizi il percorso', testo: `Dieci trattamenti in uno dei nostri due studi a Torino, quello più comodo per te.` },
 ]
 
 const dataOra = (iso) =>
@@ -204,7 +204,7 @@ export default function ConfermaPagamentoBlackFriday() {
             <>
               <p className="ckx-eyebrow">Pagamento riuscito{ricevuta.stato === 'IN_VERIFICA' ? ' · in accredito' : ''}</p>
               <h1 className="bfx-h ckx-ok-title">
-                Grazie {ricevuta.nome},<br /><strong>le tue {VISITE} visite sono bloccate.</strong>
+                Grazie {ricevuta.nome},<br /><strong>i tuoi {VISITE} trattamenti sono bloccati.</strong>
               </h1>
               <p className="ckx-ok-lead">
                 Ti abbiamo mandato la conferma a <span className="ckx-ok-mail"><Mail size={15} aria-hidden="true" /> {ricevuta.email}</span>
@@ -213,7 +213,7 @@ export default function ConfermaPagamentoBlackFriday() {
             </>
           ) : (
             <>
-              <p className="ckx-eyebrow">Black Friday · {VISITE} visite</p>
+              <p className="ckx-eyebrow">Black Friday · {VISITE} trattamenti</p>
               <h1 className="bfx-h ckx-ok-title">
                 Grazie,<br /><strong>ci vediamo presto.</strong>
               </h1>
@@ -232,13 +232,13 @@ export default function ConfermaPagamentoBlackFriday() {
                 <span className="ckx-ok-stamp" aria-hidden="true">Pagata</span>
               </div>
               <p className="ckx-ok-pass__cap">
-                <b>La tua carta Black Friday è attiva.</b> {VISITE} visite con il tuo osteopata, al prezzo bloccato.
+                <b>La tua carta Black Friday è attiva.</b> {VISITE} trattamenti con il tuo osteopata, al prezzo bloccato.
               </p>
               <div className="ckx-ok-actions">
                 <button type="button" className="ckx-pill is-ghost" onClick={() => window.print()}>
                   <Printer size={16} aria-hidden="true" /> Stampa la ricevuta
                 </button>
-                <a className="ckx-pill" href={WA_LINK(`Ciao, ho appena pagato le ${VISITE} visite del Black Friday (ordine n. ${ricevuta.numero}).`)} target="_blank" rel="noopener noreferrer">
+                <a className="ckx-pill" href={WA_LINK(`Ciao, ho appena pagato i ${VISITE} trattamenti del Black Friday (ordine n. ${ricevuta.numero}).`)} target="_blank" rel="noopener noreferrer">
                   <MessageCircle size={16} aria-hidden="true" /> Scrivici su WhatsApp
                 </a>
               </div>
@@ -247,7 +247,7 @@ export default function ConfermaPagamentoBlackFriday() {
           </motion.div>
         ) : (
           <motion.div className="ckx-done__actions" {...entra(0.2)}>
-            <a className="ckx-pill" href={WA_LINK(`Ciao, ho pagato le ${VISITE} visite del Black Friday sul sito e vorrei una conferma.`)} target="_blank" rel="noopener noreferrer">
+            <a className="ckx-pill" href={WA_LINK(`Ciao, ho pagato i ${VISITE} trattamenti del Black Friday sul sito e vorrei una conferma.`)} target="_blank" rel="noopener noreferrer">
               <MessageCircle size={16} aria-hidden="true" /> Scrivici su WhatsApp
             </a>
             <Link className="ckx-pill is-ghost" to="/black-friday-2026/pagamento">

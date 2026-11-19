@@ -30,8 +30,10 @@ import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
 // (dettagli in components/porta-un-amico/invito.js). Tre casi: invito valido con nome («Mario ti ha invitato»), valido
 // senza nome («Un nostro paziente ti ha invitato»), nessun invito valido (pagina dell'offerta normale, senza nome).
 // il paziente riceve per messaggio il suo link personale e lo inoltra (formato del link in
-// components/porta-un-amico/invito.js). L'amico paga la prima visita 49€ invece di 90€ e la richiede con il form
-// normale (COUPON49, tag blackfriday); chi lo ha invitato riceve una visita gratis, fino a 3 amici.
+// components/porta-un-amico/invito.js). L'amico paga il primo trattamento 49€ invece di 90€ e lo richiede con il
+// form normale (COUPON49, tag blackfriday); chi lo ha invitato riceve un trattamento gratis, fino a 3 amici.
+// Dal 19/11/2026 nei testi si dice «trattamento», mai «visita» (anche nelle grafiche); nel codice i nomi
+// (PRIMA_VISITA_AMICO, PREZZO_VISITA…) sono rimasti quelli di prima.
 // /amico (indirizzo stampato sotto il QR del biglietto sulle scrivanie) rimanda qui: vedi App.jsx.
 // Dati dell'offerta in components/black-friday/offerta.js (comuni con /black-friday-2026).
 // Grafica "il legame": due anelli 3D intrecciati (tu e chi ti ha invitato). Pezzi in components/porta-un-amico,
@@ -41,14 +43,14 @@ const SLUG = 'black-friday-2026-amico'
 
 // ——— Contenuti ———
 
-// La scadenza vale per la RICHIESTA: entro il 29 novembre si compila il form, la visita si può fare anche dopo
-const ENTRO = `Richiedila entro ${SCADENZA_TESTO}`
+// La scadenza vale per la RICHIESTA: entro il 29 novembre si compila il form, il trattamento si può fare anche dopo
+const ENTRO = `Richiedilo entro ${SCADENZA_TESTO}`
 
 const PASSI = [
   {
     n: '01',
     title: 'Premi il bottone e lascia i tuoi dati',
-    body: 'Tocca «Richiedi la prima visita» e compila il form: nome, cognome e cellulare. Ci vuole un minuto: se sei arrivato da un link personale, l’invito è già collegato.',
+    body: 'Tocca «Richiedi il primo trattamento» e compila il form: nome, cognome e cellulare. Ci vuole un minuto: se sei arrivato da un link personale, l’invito è già collegato.',
     big: <IllustraForm />,
   },
   {
@@ -64,7 +66,7 @@ const PASSI = [
         Paghi solo <span className="pa-green">{PRIMA_VISITA_AMICO}€</span>
       </>
     ),
-    body: `invece di ${PREZZO_VISITA}€ per la tua prima visita, anche se la fai dopo il 29 novembre: basta richiederla entro quella data.`,
+    body: `invece di ${PREZZO_VISITA}€ per il tuo primo trattamento, anche se lo fai dopo il 29 novembre: basta richiederlo entro quella data.`,
     big: `${PRIMA_VISITA_AMICO}€`,
     gift: true,
   },
@@ -72,9 +74,9 @@ const PASSI = [
 
 // Titolo dell'apertura e della chiusura nei tre casi della guida (passo 3)
 const titoloDi = (invito) => {
-  if (!invito) return ['La tua prima visita', `costa solo ${PRIMA_VISITA_AMICO}€.`]
+  if (!invito) return ['Il tuo primo trattamento', `costa solo ${PRIMA_VISITA_AMICO}€.`]
   const chi = invito.nomeInvitante ? `${invito.nomeInvitante} ti ha invitato:` : 'Un nostro paziente ti ha invitato:'
-  return [chi, `la tua prima visita costa ${PRIMA_VISITA_AMICO}€.`]
+  return [chi, `il tuo primo trattamento costa ${PRIMA_VISITA_AMICO}€.`]
 }
 
 const faqDi = (daChi) => [
@@ -82,17 +84,17 @@ const faqDi = (daChi) => [
     question: 'Chi può usare l’invito?',
     answer: (
       <>
-        Chi <strong>non è ancora nostro paziente</strong>: un amico, un familiare, un collega di chi ti ha mandato il link. La
-        prima visita a {PRIMA_VISITA_AMICO}€ è per chi viene da noi per la prima volta.
+        Chi <strong>non è ancora nostro paziente</strong>: un amico, un familiare, un collega di chi ti ha mandato il link. Il
+        primo trattamento a {PRIMA_VISITA_AMICO}€ è per chi viene da noi per la prima volta.
       </>
     ),
   },
   {
-    question: 'Cosa comprende la prima visita?',
+    question: 'Cosa comprende il primo trattamento?',
     answer: (
       <>
-        Dura circa <strong>un’ora</strong>: parliamo del tuo problema, ti visitiamo e facciamo il{' '}
-        <strong>primo trattamento</strong>. Costa {PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€.
+        Dura circa <strong>un’ora</strong>: parliamo del tuo problema, ti valutiamo e{' '}
+        <strong>iniziamo subito a trattarlo</strong>. Costa {PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€.
       </>
     ),
   },
@@ -109,8 +111,8 @@ const faqDi = (daChi) => [
     question: `Cosa riceve ${daChi || 'chi mi ha invitato'}?`,
     answer: (
       <>
-        <strong>Una visita gratis</strong>, quando hai fatto la tua prima visita. Ogni paziente può invitare fino a{' '}
-        {MAX_AMICI} amici: al massimo {MAX_AMICI} visite gratis.
+        <strong>Un trattamento gratis</strong>, quando hai fatto il tuo primo trattamento. Ogni paziente può invitare fino a{' '}
+        {MAX_AMICI} amici: al massimo {MAX_AMICI} trattamenti gratis.
       </>
     ),
   },
@@ -118,13 +120,13 @@ const faqDi = (daChi) => [
     question: 'Fino a quando vale l’invito?',
     answer: (
       <>
-        Devi <strong>richiedere la visita entro {SCADENZA_TESTO}</strong>: basta compilare il form. La visita puoi farla{' '}
+        Devi <strong>richiedere il trattamento entro {SCADENZA_TESTO}</strong>: basta compilare il form. Il trattamento puoi farlo{' '}
         <strong>anche dopo</strong>, nel giorno che fissiamo insieme quando ti chiamiamo.
       </>
     ),
   },
   {
-    question: 'Dove si fa la visita?',
+    question: 'Dove si fa il trattamento?',
     answer: (
       <>
         In uno dei nostri <strong>due studi a Torino</strong>: in <strong>Via Peyron 54</strong> (San Donato) o in{' '}
@@ -136,9 +138,9 @@ const faqDi = (daChi) => [
 
 const SEO = {
   path: '/black-friday-2026-amico',
-  title: 'Un invito per te | Prima visita a 49€ | Mobilitas Torino',
+  title: 'Un invito per te | Primo trattamento a 49€ | Mobilitas Torino',
   description:
-    'Un amico ti ha invitato da Mobilitas: la tua prima visita osteopatica costa 49€ invece di 90€. Richiedila entro domenica 29 novembre, puoi farla anche dopo.',
+    'Un amico ti ha invitato da Mobilitas: il tuo primo trattamento osteopatico costa 49€ invece di 90€. Richiedilo entro domenica 29 novembre, puoi farlo anche dopo.',
   ogImage: '/trattamenti/og/collo_cervicale-e-spalle-supino_02_orizzontale.jpg',
   ogImageAlt: 'Trattamento osteopatico nello studio Mobilitas di Torino',
 }
@@ -147,7 +149,7 @@ const SEO = {
 
 const vaiAComeFunziona = () => document.getElementById('come-funziona')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
-// Bottone "Richiedi la prima visita". conAiuto: aggiunge il secondario "Come funziona" (solo nell'apertura)
+// Bottone "Richiedi il primo trattamento". conAiuto: aggiunge il secondario "Come funziona" (solo nell'apertura)
 function InvitoCta({ onApri, conAiuto = false, className = '' }) {
   return (
     <div className={`pa-ctas ${className}`}>
@@ -162,7 +164,7 @@ function InvitoCta({ onApri, conAiuto = false, className = '' }) {
           <small>
             {PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€
           </small>
-          Richiedi la prima visita
+          Richiedi il primo trattamento
         </span>
         <span className="pa-btn__icon" aria-hidden="true">
           <ArrowRight size={20} strokeWidth={2.4} />
@@ -194,14 +196,14 @@ function InvitoDock({ visible, onApri }) {
             type="button"
             className="pa-dock__btn"
             onClick={onApri}
-            aria-label={`Richiedi la prima visita a ${PRIMA_VISITA_AMICO}€ invece di ${PREZZO_VISITA}€`}
+            aria-label={`Richiedi il primo trattamento a ${PRIMA_VISITA_AMICO}€ invece di ${PREZZO_VISITA}€`}
           >
             <span className="pa-dock__plus" aria-hidden="true">
               {PRIMA_VISITA_AMICO}€
             </span>
             <span className="pa-dock__txt">
               <small>Invito Black Friday</small>
-              Richiedi la prima visita
+              Richiedi il primo trattamento
             </span>
             <ArrowRight size={20} strokeWidth={2.4} aria-hidden="true" />
           </button>
@@ -215,8 +217,8 @@ function InvitoDock({ visible, onApri }) {
 const Condizioni = ({ className = '' }) => (
   <p className={`pa-note ${className}`}>
     <strong>
-      La prima visita a {PRIMA_VISITA_AMICO}€ è per chi non è ancora nostro paziente. Va richiesta entro {SCADENZA_TESTO},
-      ma puoi farla anche dopo.
+      Il primo trattamento a {PRIMA_VISITA_AMICO}€ è per chi non è ancora nostro paziente. Va richiesto entro {SCADENZA_TESTO},
+      ma puoi farlo anche dopo.
     </strong>{' '}
     Ogni paziente può invitare fino a {MAX_AMICI} amici.
   </p>
@@ -341,7 +343,7 @@ export default function PortaUnAmico() {
                 <i aria-hidden="true" />
                 {daChi ? `Per ${daChi}` : 'Per chi ti invita'}
               </span>
-              <b>1 visita gratis</b>
+              <b>1 trattamento gratis</b>
             </p>
           </motion.div>
 
@@ -359,8 +361,8 @@ export default function PortaUnAmico() {
                 {daChi ? <strong>{daChi}</strong> : 'Chi ti ha mandato questo link'} è già nostro paziente e ha pensato a te.{' '}
               </>
             )}
-            Per il Black Friday la tua prima visita costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>,
-            qualunque sia il tuo problema. <strong>Richiedila entro {SCADENZA_TESTO}</strong>: la visita puoi farla anche dopo.
+            Per il Black Friday il tuo primo trattamento costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>,
+            qualunque sia il tuo problema. <strong>Richiedilo entro {SCADENZA_TESTO}</strong>: il trattamento puoi farlo anche dopo.
           </motion.p>
         </div>
       </header>
@@ -372,16 +374,16 @@ export default function PortaUnAmico() {
             <p className="pa-kicker">Come funziona</p>
             <h2 className="pa-h2">
               <span>Tre passi.</span>
-              <span className="pa-green">E la tua prima visita è a {PRIMA_VISITA_AMICO}€.</span>
+              <span className="pa-green">E il tuo primo trattamento è a {PRIMA_VISITA_AMICO}€.</span>
             </h2>
           </div>
           <Passi />
 
-          {/* Quando: la scadenza è per la richiesta, non per la visita */}
+          {/* Quando: la scadenza è per la richiesta, non per il trattamento */}
           <div className="pa-when">
             <p className="pa-when__item is-now">
               <span className="pa-when__k">Entro {SCADENZA_TESTO}</span>
-              <b>Richiedi la visita</b>
+              <b>Richiedi il trattamento</b>
               <span>Compili il form e il prezzo di {PRIMA_VISITA_AMICO}€ è tuo.</span>
             </p>
             <span className="pa-when__date" aria-hidden="true">
@@ -389,7 +391,7 @@ export default function PortaUnAmico() {
             </span>
             <p className="pa-when__item">
               <span className="pa-when__k">Anche dopo</span>
-              <b>Fai la visita</b>
+              <b>Fai il trattamento</b>
               <span>Quando ti è più comodo: fissiamo il giorno insieme al telefono.</span>
             </p>
           </div>
@@ -412,8 +414,8 @@ export default function PortaUnAmico() {
                 : 'L’invito arriva con il link personale di un nostro paziente'}
               : così sappiamo chi ti ha invitato.{' '}
               <strong>
-                Tu paghi la prima visita {PRIMA_VISITA_AMICO}€, e {daChi ? `${daChi} riceve` : 'chi ti ha invitato riceve'} una
-                visita gratis.
+                Tu paghi il primo trattamento {PRIMA_VISITA_AMICO}€, e {daChi ? `${daChi} riceve` : 'chi ti ha invitato riceve'} un
+                trattamento gratis.
               </strong>
             </p>
             <InvitoCta onApri={apri} />
@@ -438,8 +440,8 @@ export default function PortaUnAmico() {
             </div>
             <p className="pa-lead">
               Quando ti chiamiamo, scegliamo per te l’osteopata con <strong>più esperienza</strong> nel tuo problema. Tutti i
-              nostri osteopati lavorano con lo stesso metodo: ascoltano, visitano e trattano con le mani. La tua prima visita
-              costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>.
+              nostri osteopati lavorano con lo stesso metodo: ascoltano, valutano e trattano con le mani. Il tuo primo
+              trattamento costa <strong>{PRIMA_VISITA_AMICO}€ invece di {PREZZO_VISITA}€</strong>.
             </p>
           </div>
         </div>
@@ -494,13 +496,13 @@ export default function PortaUnAmico() {
               })}
             </ul>
             <p className="pa-body pa-faq__closing">
-              Altre domande? <strong>Richiedi la prima visita</strong>: quando ti chiamiamo ti rispondiamo su tutto.
+              Altre domande? <strong>Richiedi il primo trattamento</strong>: quando ti chiamiamo ti rispondiamo su tutto.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ——— Dove si fa la visita ——— */}
+      {/* ——— Dove si fa il trattamento ——— */}
       <section className="pa-section pa-where">
         <div className="pa-wrap">
           <div className="pa-head pa-head--split">

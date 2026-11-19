@@ -33,7 +33,7 @@ export function errori(c) {
   if (vuoto(c.email)) e.email = "Serve l'email: ti mandiamo lì la conferma"
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email.trim())) e.email = "L'email non sembra giusta"
   const cell = (c.cellulare || '').replace(/[\s./()-]/g, '')
-  if (!cell) e.cellulare = 'Serve il cellulare: la segreteria ti contatta qui per le visite'
+  if (!cell) e.cellulare = 'Serve il cellulare: la segreteria ti contatta qui per i trattamenti'
   else if (!/^\+?[0-9]{6,15}$/.test(cell)) e.cellulare = 'Il numero non sembra giusto'
   if (vuoto(c.indirizzo)) e.indirizzo = 'Scrivi via e numero civico'
   const italia = ITALIA.includes((c.nazione || '').trim().toLowerCase())

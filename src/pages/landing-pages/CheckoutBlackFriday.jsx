@@ -44,8 +44,8 @@ const EASE = [0.16, 1, 0.3, 1]
 
 const SEO = {
   path: '/black-friday-2026/pagamento',
-  title: 'Pagamento · Black Friday Mobilitas | 10 visite a metà prezzo',
-  description: 'Paga online le tue 10 visite del Black Friday Mobilitas: carta, PayPal o PayPal in 3 rate.',
+  title: 'Pagamento · Black Friday Mobilitas | 10 trattamenti a metà prezzo',
+  description: 'Paga online i tuoi 10 trattamenti del Black Friday Mobilitas: carta, PayPal o PayPal in 3 rate.',
   ogImage: '/trattamenti/og/collo_cervicale-e-spalle-supino_02_orizzontale.jpg',
   ogImageAlt: 'Trattamento osteopatico nello studio Mobilitas di Torino',
 }
@@ -108,19 +108,20 @@ function Riepilogo({ offerta }) {
         <p className="ckx-eyebrow">Il tuo ordine</p>
         <span className="ckx-save">Risparmi {euro(PREZZO_PIENO - importo)}</span>
       </div>
-      <h2 className="ckx-sum__title">{offerta?.nome ?? `Percorso ${VISITE} visite · Black Friday 2026`}</h2>
+      {/* Titolo scritto qui e non preso dal gestionale (offerta.nome), che può ancora dire «visite»: sul sito si dice «trattamenti» */}
+      <h2 className="ckx-sum__title">{`Percorso ${VISITE} trattamenti · Black Friday 2026`}</h2>
       <dl className="ckx-ledger">
-        <div><dt>{VISITE} visite osteopatiche</dt><dd><s>{euro(PREZZO_PIENO)}</s></dd></div>
+        <div><dt>{VISITE} trattamenti osteopatici</dt><dd><s>{euro(PREZZO_PIENO)}</s></dd></div>
         <div className="is-save"><dt>Sconto Black Friday</dt><dd>−{euro(PREZZO_PIENO - importo)}</dd></div>
         <div className="is-total"><dt>Totale<small>una volta sola</small></dt><dd>{euro(importo)}</dd></div>
       </dl>
-      <p className="ckx-sum__unit">{euro(importo / VISITE)} a visita invece di {euro(PREZZO_VISITA)}</p>
+      <p className="ckx-sum__unit">{euro(importo / VISITE)} a trattamento invece di {euro(PREZZO_VISITA)}</p>
       <div className="ckx-sum__more">
       <Countdown className="ckx-sum__count" etichetta="L'offerta finisce tra" />
       <ul className="ckx-trust">
         <li><ShieldCheck size={18} aria-hidden="true" /> <span><b>Pagamento protetto da PayPal</b>I dati della carta non passano da noi</span></li>
         <li><Mail size={18} aria-hidden="true" /> <span><b>Conferma subito</b>Ti arriva l'email appena hai pagato</span></li>
-        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Prenoti subito</b>Da solo, oppure chiamando la segreteria. Le visite non scadono</span></li>
+        <li><CalendarCheck size={18} aria-hidden="true" /> <span><b>Prenoti subito</b>Da solo, oppure chiamando la segreteria. I trattamenti non scadono</span></li>
       </ul>
       <div className="ckx-proof">
         <span className="ckx-proof__stars" aria-hidden="true">
@@ -293,7 +294,7 @@ export default function CheckoutBlackFriday() {
             <motion.div className="ckx-intro" {...entra()}>
               <Passi passo={passo} />
               <h1 className="bfx-h ckx-title">
-                Blocca le tue {VISITE} visite a <strong>metà prezzo</strong>
+                Blocca i tuoi {VISITE} trattamenti a <strong>metà prezzo</strong>
               </h1>
               <p className="ckx-intro__lead">
                 Due minuti: i tuoi dati, poi paghi <b>{euro(offerta.importo)}</b> invece di {euro(PREZZO_PIENO)} con carta, PayPal o in 3 rate.

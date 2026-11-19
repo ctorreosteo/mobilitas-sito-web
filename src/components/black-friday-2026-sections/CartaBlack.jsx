@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
 
 // Elemento firma dell'apertura di /black-friday-2026 (e del pagamento e della conferma): la carta Black Friday, con un
-// riflesso olografico verde e il 10 in rilievo: è quello che il paziente compra (10 visite, 5 in omaggio, 450€).
+// riflesso olografico verde e il 10 in rilievo: è quello che il paziente compra (10 trattamenti, 5 in omaggio, 450€).
 // Stesso linguaggio del biglietto 3D di /black-friday-2026-amico (AmicoKit → Invito): CSS 3D, nessuna libreria.
 // Entra ruotando e si posa; poi galleggia, un lampo di luce la attraversa e su desktop si inclina col puntatore
 // (la luce segue il puntatore). Con "riduci movimento" è ferma nella posa finale.
@@ -69,7 +69,7 @@ export default function CartaBlack({ visite, prezzo, prezzoPieno, scadenzaBreve,
                   </span>
                   <span className="bfx-card__ten">{visite}</span>
                   <span className="bfx-card__unit">
-                    visite
+                    trattamenti
                     <em>5 + 5 in omaggio</em>
                   </span>
                 </div>

@@ -49,7 +49,7 @@ export default function RichiestaInvito({ isOpen, onClose, invito }) {
 
   const compilato = form.nome.trim() && form.cognome.trim() && form.cellulare.trim() && form.orarioChiamata
   const puoiInviare = !invio && compilato && form.privacy
-  const titolo = `Richiedi la prima visita a ${PRIMA_VISITA_AMICO}€`
+  const titolo = `Richiedi il primo trattamento a ${PRIMA_VISITA_AMICO}€`
 
   return (
     <Dialog isOpen={isOpen} onClose={chiudi} closeDisabled={invio} title={titolo}>
@@ -162,7 +162,7 @@ export default function RichiestaInvito({ isOpen, onClose, invito }) {
             </>
           ) : (
             <>
-              Richiedi la prima visita a {PRIMA_VISITA_AMICO}€
+              Richiedi il primo trattamento a {PRIMA_VISITA_AMICO}€
               <ArrowRight size={20} strokeWidth={2.6} />
             </>
           )}

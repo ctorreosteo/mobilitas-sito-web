@@ -11,7 +11,7 @@ import StudioCollage from '../../components/landing/StudioCollage'
 import { FOTO_STUDIO, creaSceltaFoto } from '../../data/fotoTrattamenti'
 import { PREZZO_VISITA, SCADENZA, SCADENZA_TESTO, due, useMancano, useSeoOfferta } from '../../components/black-friday/offerta'
 import CartaBlack from '../../components/black-friday-2026-sections/CartaBlack'
-import { BannerPrezzo, Countdown, MazzoVisite } from '../../components/black-friday-2026-sections/BfxKit'
+import { AnnoVisite, BannerPrezzo, Countdown, GraficoRicadute, MazzoVisite, NonDisturbare } from '../../components/black-friday-2026-sections/BfxKit'
 import '../../styles/pages/condition-landing.css'
 import '../../styles/pages/cervicalgia.css'
 import '../../components/landing/prima-visita-landing.css'
@@ -21,7 +21,7 @@ import '../../styles/pages/black-friday-2026.css'
 // copioni diversi (il corpo che impara a stare teso; «perché lo facciamo»; «se oggi stai bene» e il tagliando della
 // macchina; «rimandi sempre» e la macchia sul vestito): i testi sono generici e riprendono i temi di tutti, senza
 // seguirne uno solo. Se cambia o si aggiunge un copione, ricontrollare apertura, «Perché lo facciamo» e «Perché dieci».
-// Generica anche nei dolori: tutti, nessuno specifico. Solo l'offerta 10 visite a 450€, da pagare online, con scadenza.
+// Generica anche nei dolori: tutti, nessuno specifico. Solo l'offerta 10 trattamenti a 450€, da pagare online, con scadenza.
 // "Porta un amico" non è più qui (strategia del 16/11/2026): i pazienti ricevono un messaggio con il link personale
 // da mandare all'amico, che arriva sull'invito /black-friday-2026-amico.
 // Grafica propria (redesign del 16/11/2026, apertura rifatta il 17/11/2026): notte blu; nell'apertura la carta Black
@@ -29,11 +29,13 @@ import '../../styles/pages/black-friday-2026.css'
 // Stile in styles/pages/black-friday-2026.css (prefisso bfx-), pezzi grafici in components/black-friday-2026-sections.
 // Dati comuni con /black-friday-2026-amico (scadenza, prezzi, SEO): components/black-friday/offerta.js.
 // Revisione del 18/11/2026: niente commerciale, si paga subito online, quindi la pagina deve dire tutto quello che
-// serve per decidere (cosa comprende, durata delle sedute, le visite non scadono, sono personali, come si paga, fattura,
+// serve per decidere (cosa comprende, durata delle sedute, i trattamenti non scadono, sono personali, come si paga, fattura,
 // cosa succede dopo): sta nella sezione «Prima di pagare». I numeri dell'offerta si dicono per esteso una volta sola,
 // nel banner del prezzo; altrove la pagina parla dei benefici, legati alle leve delle ads (schede «Ti riconosci?»).
-// Le visite si prenotano subito dopo il pagamento: da soli, oppure chiamando la segreteria.
+// I trattamenti si prenotano subito dopo il pagamento: da soli, oppure chiamando la segreteria.
 // Niente sezione «Dove siamo» con le mappe: sono già pazienti, sanno dove siamo (tolta il 18/11/2026).
+// Dal 19/11/2026 nei testi si parla di «trattamenti», mai di «visite» (anche nelle grafiche); nel codice i nomi
+// (VISITE, MazzoVisite…) sono rimasti quelli di prima.
 
 const SLUG = 'black-friday-2026'
 
@@ -41,7 +43,7 @@ const SLUG = 'black-friday-2026'
 const VISITE = 10
 const PREZZO_PIENO = 900
 const PREZZO_OFFERTA = 450
-// Prezzo della visita e scadenza: components/black-friday/offerta.js
+// Prezzo del singolo trattamento e scadenza: components/black-friday/offerta.js
 // Scadenza stampata sulla carta dell'apertura, «29/11»: dalla stessa data di offerta.js
 const SCADENZA_BREVE = SCADENZA.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Rome' })
 
@@ -52,7 +54,7 @@ const PAGINA_PAGAMENTO = '/black-friday-2026/pagamento'
 
 // Dopo il pagamento si prenota subito: in autonomia, oppure chiamando la segreteria (numero del sito, come nel menu)
 const TELEFONO = { href: 'tel:+393518198457', testo: '351 819 8457' }
-const WHATSAPP = { href: 'https://wa.me/393518198457?text=' + encodeURIComponent('Ciao, ho una domanda sulle 10 visite del Black Friday.') }
+const WHATSAPP = { href: 'https://wa.me/393518198457?text=' + encodeURIComponent('Ciao, ho una domanda sui 10 trattamenti del Black Friday.') }
 const usePagaOnline = () => {
   const navigate = useNavigate()
   return () => navigate(PAGINA_PAGAMENTO)
@@ -72,16 +74,16 @@ const FOTO_VALUTAZIONE = '/trattamenti/spalla_valutazione-in-piedi_01_orizzontal
 
 // ——— Contenuti ———
 
-// Perché dieci visite: una scheda per ogni copione delle ads, così ognuno ritrova il suo. «gain» è il beneficio, in
+// Perché dieci trattamenti: una scheda per ogni copione delle ads, così ognuno ritrova il suo. «gain» è il beneficio, in
 // evidenza sotto il racconto.
 const PERCHE_DIECI = [
   {
     tab: 'Ho male da tanto',
     title: 'Se hai avuto male per tanto tempo',
-    body: 'Il corpo impara a stare teso. Diventa un’abitudine, e un’abitudine non la cambi in un giorno: servono visite, una dopo l’altra.',
+    body: 'Il corpo impara a stare teso. Diventa un’abitudine, e un’abitudine non la cambi in un giorno: servono trattamenti, uno dopo l’altro.',
     gain: (
       <>
-        <b>Con dieci visite</b> il corpo ha il tempo di imparare un modo nuovo di stare, più sciolto. E il dolore smette di
+        <b>Con dieci trattamenti</b> il corpo ha il tempo di imparare un modo nuovo di stare, più sciolto. E il dolore smette di
         essere la tua normalità.
       </>
     ),
@@ -92,7 +94,7 @@ const PERCHE_DIECI = [
     body: 'È perché insieme abbiamo fatto un ottimo lavoro. Ma la vita di tutti i giorni può far tornare il dolore, spesso più forte di prima. È come il tagliando della macchina: non lo fai perché è rotta, lo fai perché va bene e vuoi che continui così.',
     gain: (
       <>
-        <b>Con dieci visite</b> tieni il risultato che hai ottenuto, invece di ricominciare da capo quando il dolore torna.
+        <b>Con dieci trattamenti</b> tieni il risultato che hai ottenuto, invece di ricominciare da capo quando il dolore torna.
       </>
     ),
   },
@@ -102,30 +104,26 @@ const PERCHE_DIECI = [
     body: 'La rata, le bollette, la spesa: e tu vieni dopo tutto il resto. Ma il dolore non aspetta il mese giusto. È come una macchia sul vestito: se la lavi subito va via, se aspetti si attacca.',
     gain: (
       <>
-        <b>Oggi ti costa la metà</b>, anche in tre rate, e le visite non scadono: le blocchi adesso, prima che il dolore si
-        attacchi, e le usi con calma.
+        <b>Oggi ti costa la metà</b>, anche in tre rate, e i trattamenti non scadono: li blocchi adesso, prima che il dolore si
+        attacchi, e li usi con calma.
       </>
     ),
   },
 ]
 
-// Una visita a confronto con il percorso: ogni riga riprende i testi della pagina e delle ads
+// Un trattamento a confronto con il percorso: ogni riga riprende i testi della pagina e delle ads
 const CONFRONTO = [
   { da: 'Lavora su dove fa male', a: <>Lavora sulla <strong>causa</strong></> },
   { da: 'Toglie il dolore di oggi', a: <>Dà al corpo il <strong>tempo</strong> di cambiare abitudine</> },
   { da: 'Rincorri il dolore quando torna', a: <><strong>Previeni</strong> le ricadute</> },
-  { da: 'Visite sparse, quando non ce la fai più', a: <>Un percorso <strong>continuo</strong></> },
+  { da: 'Trattamenti sparsi, quando non ce la fai più', a: <>Un percorso <strong>continuo</strong></> },
   { da: 'Dici di no: alla cena, alla passeggiata, al weekend fuori', a: <>Continui a dire di <strong>sì</strong></> },
 ]
 
-// Cosa ottieni con le 10 visite (non chiamarlo «pacchetto»): i benefici in breve, in elenco (i numeri sono nel banner)
-const BENEFICI = [
-  { t: 'Metà prezzo', b: 'ne paghi cinque, le altre cinque sono in omaggio.' },
-  { t: 'Il dolore smette di tornare', b: 'lavori sulla causa e non lo rincorri più ogni volta che si fa sentire.' },
-  { t: 'Con il tuo osteopata', b: 'lo stesso metodo che conosci, nello studio più comodo per te.' },
-  { t: 'Le visite non scadono', b: 'le usi con calma, al ritmo che ti consiglia il tuo osteopata in base a come stai.' },
-  { t: 'Prenoti subito', b: 'appena hai pagato, da solo oppure con una telefonata alla segreteria.' },
-]
+// Cosa ottieni con i 10 trattamenti (non chiamarlo «pacchetto»): i tre benefici scelti da Riccardo il 19/11/2026,
+// ciascuno con il suo disegno. Problema (il dolore che torna, con il grafico) · Prevenzione (tutto l'anno, a un
+// prezzo accessibile: «il tagliando» delle ads) · Coccola (un'ora al mese per staccare dallo stress).
+// Il prezzo in cifre qui non c'è: lo mostrano subito dopo il mazzo 5 + 5 e il biglietto.
 
 // Come funziona: tre passi in fila, la prenotazione è dentro il secondo
 const PASSI_OFFERTA = [
@@ -142,18 +140,18 @@ const PASSI_OFFERTA = [
       </>
     ),
   },
-  { title: 'Inizi il percorso', body: 'Le altre visite le fissi con il tuo osteopata, in base a come stai. Non scadono.' },
+  { title: 'Inizi il percorso', body: 'Gli altri trattamenti li fissi con il tuo osteopata, in base a come stai. Non scadono.' },
 ]
 
 // Prima di pagare: tutto quello che il paziente deve sapere, perché non parla con nessuno prima di pagare.
-// Fatti confermati da Riccardo il 18/11/2026: le visite non scadono, sono personali (non si dividono con familiari).
+// Fatti confermati da Riccardo il 18/11/2026: i trattamenti non scadono, sono personali (non si dividono con familiari).
 // Non scrivere che la fattura è detraibile. Durata delle sedute: come in data/faqPrimaVisita.jsx.
 const FAQ = [
   {
     question: <>Chi può usare l’<strong>offerta</strong>?</>,
     answer: (
       <>
-        È pensata per chi è <strong>già nostro paziente</strong>: dieci visite per continuare il lavoro che hai iniziato con
+        È pensata per chi è <strong>già nostro paziente</strong>: dieci trattamenti per continuare il lavoro che hai iniziato con
         il tuo osteopata.
       </>
     ),
@@ -162,25 +160,25 @@ const FAQ = [
     question: <>Cosa <strong>comprende</strong>?</>,
     answer: (
       <>
-        <strong>Dieci visite osteopatiche</strong> con il tuo osteopata, in uno dei nostri due studi a Torino: scegli tu
+        <strong>Dieci trattamenti osteopatici</strong> con il tuo osteopata, in uno dei nostri due studi a Torino: scegli tu
         quello più comodo. Ogni seduta dura circa <strong>40-55 minuti</strong>, in base al problema.
       </>
     ),
   },
   {
-    question: <>Entro quando devo <strong>usare</strong> le visite?</>,
+    question: <>Entro quando devo <strong>usare</strong> i trattamenti?</>,
     answer: (
       <>
-        <strong>Le visite non scadono.</strong> Le distribuisci con il tuo osteopata, in base a come stai. La data del{' '}
-        {SCADENZA_TESTO.replace('domenica ', '')} vale solo per pagarle a metà prezzo.
+        <strong>I trattamenti non scadono.</strong> Li distribuisci con il tuo osteopata, in base a come stai. La data del{' '}
+        {SCADENZA_TESTO.replace('domenica ', '')} vale solo per pagarli a metà prezzo.
       </>
     ),
   },
   {
-    question: <>Posso dividerle con un <strong>familiare</strong>?</>,
+    question: <>Posso dividerli con un <strong>familiare</strong>?</>,
     answer: (
       <>
-        No: le dieci visite sono <strong>personali</strong>, le usi solo tu.
+        No: i dieci trattamenti sono <strong>personali</strong>, li usi solo tu.
       </>
     ),
   },
@@ -206,7 +204,7 @@ const FAQ = [
     answer: (
       <>
         Ti arriva subito l’<strong>email di conferma</strong> con il numero dell’ordine (se non la trovi, guarda nello spam).
-        Poi <strong>prenoti la prima visita</strong>: da solo, oppure chiamando la segreteria al{' '}
+        Poi <strong>prenoti il primo trattamento</strong>: da solo, oppure chiamando la segreteria al{' '}
         <a className="bfx-link" href={TELEFONO.href}>
           {TELEFONO.testo}
         </a>
@@ -227,9 +225,9 @@ const FAQ = [
 
 const SEO = {
   path: '/black-friday-2026',
-  title: 'Black Friday Mobilitas | 10 visite osteopatiche a metà prezzo | Torino',
+  title: 'Black Friday Mobilitas | 10 trattamenti osteopatici a metà prezzo | Torino',
   description:
-    'Black Friday per i pazienti Mobilitas: 10 visite osteopatiche a 450€ invece di 900€, da pagare online. Fino a domenica 29 novembre.',
+    'Black Friday per i pazienti Mobilitas: 10 trattamenti osteopatici a 450€ invece di 900€, da pagare online. Fino a domenica 29 novembre.',
   ogImage: '/trattamenti/og/collo_cervicale-e-spalle-supino_02_orizzontale.jpg',
   ogImageAlt: 'Trattamento osteopatico nello studio Mobilitas di Torino',
 }
@@ -237,10 +235,10 @@ const SEO = {
 // ——— Pezzi della pagina ———
 
 // Bottone dell'offerta: porta al pagamento online. Testo in prima persona, polarizzante («Sì, voglio…»): chi lo tocca
-// sceglie le visite in omaggio. tone="light" sulla sezione panna: lì il verde non si usa, il bottone diventa blu.
+// sceglie i trattamenti in omaggio. tone="light" sulla sezione panna: lì il verde non si usa, il bottone diventa blu.
 // «nota» è la riga piccola sotto: di base il prezzo (apertura e offerta); più giù un beneficio, così il prezzo non si
 // ripete a ogni sezione.
-const TESTO_BOTTONE = 'Sì, voglio 5 visite in omaggio'
+const TESTO_BOTTONE = 'Sì, voglio 5 trattamenti in omaggio'
 
 function OffertaCtas({ tone = 'dark', className = '', nota }) {
   const pagaOnline = usePagaOnline()
@@ -288,7 +286,7 @@ function OffertaDock({ visible }) {
             type="button"
             className="bfx-dock__main"
             onClick={pagaOnline}
-            aria-label={`Sì, voglio le ${VISITE} visite del Black Friday, 5 in omaggio: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, fino a ${SCADENZA_TESTO}`}
+            aria-label={`Sì, voglio i ${VISITE} trattamenti del Black Friday, 5 in omaggio: paghi online ${PREZZO_OFFERTA}€ invece di ${PREZZO_PIENO}€, fino a ${SCADENZA_TESTO}`}
           >
             <span className="bfx-dock__info" aria-hidden="true">
               <span className="bfx-dock__price">
@@ -301,11 +299,11 @@ function OffertaDock({ visible }) {
                   <span className="bfx-dock__lbl">Scade tra</span> {mancano.giorni}g {due(mancano.ore)}:{due(mancano.min)}:{due(mancano.sec)}
                 </span>
               ) : (
-                <span className="bfx-dock__sub">{VISITE} visite, metà prezzo</span>
+                <span className="bfx-dock__sub">{VISITE} trattamenti, metà prezzo</span>
               )}
             </span>
             <span className="bfx-dock__cta" aria-hidden="true">
-              Sì, le voglio
+              Sì, li voglio
               <span className="bfx-dock__arrow">
                 <ArrowRight size={18} strokeWidth={2.6} />
               </span>
@@ -324,7 +322,7 @@ const entra = (delay) => ({
   transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1], delay },
 })
 
-// Perché dieci visite: tre schede, una per situazione. Il paziente tocca quella in cui si riconosce.
+// Perché dieci trattamenti: tre schede, una per situazione. Il paziente tocca quella in cui si riconosce.
 function Situazioni({ foto }) {
   const [attiva, setAttiva] = useState(0)
   const tabsRef = useRef(null)
@@ -432,7 +430,7 @@ export default function BlackFriday() {
 
   // I tre conti del banner del prezzo
   const fatti = [
-    { k: 'A visita', v: `${PREZZO_OFFERTA / VISITE}€`, prima: `${PREZZO_VISITA}€` },
+    { k: 'A trattamento', v: `${PREZZO_OFFERTA / VISITE}€`, prima: `${PREZZO_VISITA}€` },
     { k: 'Risparmi', v: `${risparmio}€`, t: 'restano a te' },
     { k: 'Con PayPal', v: '3 rate', t: 'senza interessi' },
   ]
@@ -450,7 +448,7 @@ export default function BlackFriday() {
 
           <h1 className="bfx-hero__title">
             <motion.span className="bfx-hero__l1" {...entra(0.05)}>
-              Dieci visite.
+              Dieci trattamenti.
             </motion.span>
             <motion.span className="bfx-hero__l2" {...entra(0.12)}>
               Ne paghi solo cinque.
@@ -467,7 +465,7 @@ export default function BlackFriday() {
               <HeroMedia
                 video={video}
                 loading={loading}
-                videoTitle="Black Friday Mobilitas: 10 visite a metà prezzo"
+                videoTitle="Black Friday Mobilitas: 10 trattamenti a metà prezzo"
                 audio
                 fallback={{ src: fotoHero, alt: 'Trattamento osteopatico nello studio Mobilitas' }}
               />
@@ -487,8 +485,8 @@ export default function BlackFriday() {
           </motion.div>
 
           <motion.p className="bfx-lead bfx-hero__sub" {...entra(0.28)}>
-            Per il Black Friday abbiamo pensato a chi è <strong>già nostro paziente</strong>: dieci visite con il tuo osteopata,
-            per togliere il dolore e <strong>non farlo tornare</strong>. Paghi online, prenoti subito e le visite non scadono.
+            Per il Black Friday abbiamo pensato a chi è <strong>già nostro paziente</strong>: dieci trattamenti con il tuo osteopata,
+            per togliere il dolore e <strong>non farlo tornare</strong>. Paghi online, prenoti subito e i trattamenti non scadono.
           </motion.p>
         </div>
       </header>
@@ -498,21 +496,45 @@ export default function BlackFriday() {
         <div className="bfx-wrap">
           <div className="bfx-deal__head">
             <h2 id="bfx-deal-t" className="bfx-h bfx-h2">
-              Cosa ottieni <span className="is-green">con le tue {VISITE} visite</span>
+              Cosa ottieni <span className="is-green">con i tuoi {VISITE} trattamenti</span>
             </h2>
-            <ul className="bfx-perks">
-              {BENEFICI.map((x) => (
-                <li key={x.t}>
-                  <i className="bfx-perks__ok" aria-hidden="true">
-                    <Check size={14} strokeWidth={3} />
-                  </i>
-                  <span>
-                    <b>{x.t}</b>: {x.b}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <p className="bfx-lead">
+              Dieci trattamenti, <strong>tre cose che rimandi da troppo tempo</strong>. Quest’anno smetti di rimandarle.
+            </p>
           </div>
+
+          <div className="bfx-gains">
+            <article className="bfx-gain is-main">
+              <p className="bfx-gain__eyebrow">Il tuo problema</p>
+              <h3 className="bfx-h bfx-h3">Non aspettare che il dolore torni</h3>
+              <p className="bfx-body">
+                Quando stai meglio è facile fermarsi. Ed è proprio lì che il dolore torna. Con dieci trattamenti continui a
+                lavorare sulla causa: <strong>il problema lo chiudi, non lo rimandi</strong>.
+              </p>
+              <GraficoRicadute />
+            </article>
+
+            <article className="bfx-gain">
+              <p className="bfx-gain__eyebrow">La prevenzione</p>
+              <h3 className="bfx-h bfx-h4">Ti curi tutto l’anno, non solo quando hai male</h3>
+              <p className="bfx-gain__p">
+                Come il tagliando della macchina: sistemi le piccole cose prima che diventino un fermo. E lo fai{' '}
+                <strong>al prezzo più basso dell’anno</strong>.
+              </p>
+              <AnnoVisite />
+            </article>
+
+            <article className="bfx-gain">
+              <p className="bfx-gain__eyebrow">La coccola</p>
+              <h3 className="bfx-h bfx-h4">Un’ora al mese solo per te</h3>
+              <p className="bfx-gain__p">
+                Niente lavoro, niente telefono, niente cose da fare per gli altri. Stacchi dallo stress e per un’ora{' '}
+                <strong>pensi solo al tuo benessere</strong>.
+              </p>
+              <NonDisturbare />
+            </article>
+          </div>
+
           <MazzoVisite visite={VISITE} />
 
           <div className="bfx-deal__offer">
@@ -521,7 +543,7 @@ export default function BlackFriday() {
               a={PREZZO_OFFERTA}
               visite={VISITE}
               fatti={fatti}
-              nota="Paghi online una volta sola, niente abbonamenti. Le visite non scadono."
+              nota="Paghi online una volta sola, niente abbonamenti. I trattamenti non scadono."
             />
             <div className="bfx-deal__close">
               <OffertaCtas />
@@ -547,12 +569,12 @@ export default function BlackFriday() {
         </div>
       </section>
 
-      {/* ——— Perché dieci visite: tre schede, una per copione ——— */}
+      {/* ——— Perché dieci trattamenti: tre schede, una per copione ——— */}
       <section className="bfx-section bfx-why" aria-labelledby="bfx-why-t">
         <div className="bfx-wrap">
           <div className="bfx-why__head">
             <h2 id="bfx-why-t" className="bfx-h bfx-h2 bfx-why__title">
-              Dieci visite possono sembrare tante.{' '}
+              Dieci trattamenti possono sembrare tanti.{' '}
               <span className="is-dim">Ma c’è una cosa che forse nessuno ti ha mai spiegato.</span>
             </h2>
             <p className="bfx-lead">Ti riconosci in una di queste situazioni? Tocca la tua.</p>
@@ -561,12 +583,12 @@ export default function BlackFriday() {
         </div>
       </section>
 
-      {/* ——— Cosa cambia: una visita a confronto con un percorso (la colonna del percorso è una carta che si accende) ——— */}
+      {/* ——— Cosa cambia: un trattamento a confronto con un percorso (la colonna del percorso è una carta che si accende) ——— */}
       <section className="bfx-section bfx-change" aria-labelledby="bfx-change-t">
         <div className="bfx-wrap">
           <div className="bfx-change__head">
             <h2 id="bfx-change-t" className="bfx-h bfx-h2">
-              Dieci visite non sono un costo in più. <span className="is-green">Sono il percorso completo.</span>
+              Dieci trattamenti non sono un costo in più. <span className="is-green">Sono il percorso completo.</span>
             </h2>
             {fotoBen && (
               <div className="bfx-change__photo" ref={benRef}>
@@ -587,7 +609,7 @@ export default function BlackFriday() {
               transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
             />
             <p className="bfx-vs__row is-head" style={{ '--r': 1 }} aria-hidden="true">
-              <span className="is-from">Una visita</span>
+              <span className="is-from">Un trattamento</span>
               <span className="is-to">Un percorso</span>
             </p>
             {CONFRONTO.map((r, i) => (
@@ -595,7 +617,7 @@ export default function BlackFriday() {
                 <span className="is-from">
                   <X className="bfx-vs__ico" size={16} strokeWidth={2} aria-hidden="true" />
                   <span>
-                    <span className="bfx-sr">Una visita: </span>
+                    <span className="bfx-sr">Un trattamento: </span>
                     {r.da}
                   </span>
                 </span>
@@ -612,7 +634,7 @@ export default function BlackFriday() {
             ))}
           </div>
 
-          <OffertaCtas className="bfx-change__cta" nota="Le visite non scadono" />
+          <OffertaCtas className="bfx-change__cta" nota="I trattamenti non scadono" />
         </div>
       </section>
 
@@ -703,7 +725,7 @@ export default function BlackFriday() {
             </h2>
             <p className="bfx-lead">
               Sei già stato da noi: sai come lavoriamo. Tutti i nostri osteopati usano lo <strong>stesso metodo</strong>:
-              ascoltano, ti visitano e trattano con le mani.
+              ascoltano, ti valutano e ti trattano con le mani.
             </p>
           </div>
           <StudioCollage />

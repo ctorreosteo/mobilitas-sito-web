@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-// Dati e hook comuni alle landing del Black Friday 2026: /black-friday-2026 (10 visite a 450€, da pagare online) e
+// Dati e hook comuni alle landing del Black Friday 2026: /black-friday-2026 (10 trattamenti a 450€, da pagare online) e
 // /black-friday-2026-amico (l'invito per l'amico, dal link personale che il paziente riceve per messaggio).
 // Se cambia l'offerta, cambiala qui e nei testi delle due pagine.
 
@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react'
 export const SCADENZA = new Date('2026-11-29T23:59:59+01:00')
 export const SCADENZA_TESTO = 'domenica 29 novembre'
 
-// Prezzo pieno di una visita e prima visita dell'amico (porta un amico)
+// Prezzo pieno di un trattamento e primo trattamento dell'amico (porta un amico); nei testi mai «visita»
 export const PREZZO_VISITA = 90
 export const PRIMA_VISITA_AMICO = 49
 
-// Porta un amico: ogni paziente può invitare al massimo 3 amici, quindi al massimo 3 visite gratis per lui
+// Porta un amico: ogni paziente può invitare al massimo 3 amici, quindi al massimo 3 trattamenti gratis per lui
 export const MAX_AMICI = 3
 
 // "Qualunque sia il suo problema": i problemi che trattiamo (le landing dei dolori)
