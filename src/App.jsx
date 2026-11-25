@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Layout from './components/Layout'
 import { APRI_CONSULTO } from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
+import HeatmapTracker from './components/tracking/HeatmapTracker'
 
 // Main website pages
 import Home from './pages/sito-web/Home'
@@ -101,6 +102,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <HeatmapTracker />
       <Routes>
         {/* Main website routes with layout */}
         <Route path="/" element={<Layout hideWhatsApp><Home /></Layout>} />

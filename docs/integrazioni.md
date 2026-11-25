@@ -98,6 +98,9 @@ Gli script sono in `index.html`.
 | Google Ads | `AW-16532564533` | |
 | Meta Pixel | `983687211094705` | `/mentorship` usa anche `751362634658136` |
 | Microsoft Clarity | `umgujv253c` | Disattivato su localhost e reti locali |
+| Heatmap interna | — | Click e scroll verso il gestionale (`POST /api/sito/eventi`). **Spenta** (`VITE_HEATMAP_ENABLED`) finché non ci sono backend e ok privacy. Codice in `components/tracking/`, specifiche in `docs/heatmap/SPEC.md` |
+
+Con `?hm_view=1` dentro un iframe (anteprima della heatmap nel gestionale) Google Ads, Meta Pixel e Clarity non partono, così aprire una pagina di conferma non registra conversioni finte.
 
 | Evento | Quando |
 |--------|--------|
