@@ -354,6 +354,22 @@ export function CaroselloBenefici({ voci, intervallo = 5000 }) {
     return () => clearTimeout(t)
   }, [auto, attiva, n, intervallo])
 
+  // Link diretto a una carta (email 5 del Black Friday: /black-friday-2026?utm…#problema | #prevenzione | #tempo):
+  // il carosello parte da quella carta, non gira da solo e viene portato in vista. Il ritardo lascia passare lo
+  // ScrollToTop del cambio pagina e il primo disegno della landing.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    const i = voci.findIndex((v) => v.id === id)
+    if (i < 0) return undefined
+    setAttiva(i)
+    setFermo(true)
+    const t = setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
+    }, 400)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Distanza dalla carta attiva, sul giro: −1 a sinistra, 0 al centro, 1 a destra
   const distanza = (i) => {
     let d = i - attiva
