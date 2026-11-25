@@ -47,7 +47,7 @@ export function dispositivoDa(larghezza) {
   return 'desktop'
 }
 
-const PAGINA_VALIDA = /^\/[a-z0-9\-/]*$/
+const PAGINA_VALIDA = /^\/[a-z0-9_\-/]*$/
 
 // Solo il percorso, minuscolo, senza slash finale. Mai la query string (es. ?code= di "porta un amico").
 export function normalizzaPagina(pathname) {

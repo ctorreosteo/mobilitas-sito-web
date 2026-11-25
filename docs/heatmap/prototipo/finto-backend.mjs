@@ -23,7 +23,7 @@ const SITO = process.env.SITO || 'http://localhost:5173'
 
 const MAX_BODY = 16 * 1024
 const MAX_EVENTI = 50
-const PAGINA_VALIDA = /^\/[a-z0-9\-/]*$/
+const PAGINA_VALIDA = /^\/[a-z0-9_\-/]*$/
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const DISPOSITIVI = new Set(['mobile', 'tablet', 'desktop'])
 

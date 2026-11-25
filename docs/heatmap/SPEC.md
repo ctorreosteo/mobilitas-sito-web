@@ -56,7 +56,7 @@ La pagina del gestionale **non disegna la heatmap**. Carica la landing in un ifr
 | `v` | `= 1` | versione del formato |
 | `sessione` | UUID | casuale, in `sessionStorage`, nessun cookie |
 | `pv` | stringa ≤ 16 | id della singola visita di pagina |
-| `pagina` | `^/[a-z0-9\-/]*$`, ≤ 255 | solo il percorso, mai la query string |
+| `pagina` | `^/[a-z0-9_\-/]*$`, ≤ 255 | solo il percorso, mai la query string |
 | `dispositivo` | `mobile` \| `tablet` \| `desktop` | <640, 640–1023, ≥1024 px |
 | `viewport_w` | 200–8000 | |
 | `viewport_h` | 200–8000 | altezza dello schermo: serve a disegnare la "fine del primo schermo" |
