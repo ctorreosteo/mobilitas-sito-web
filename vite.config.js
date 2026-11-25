@@ -1,9 +1,22 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import { execSync } from 'node:child_process'
+import process from 'node:process'
+
+// Identificativo della build per la heatmap (data + commit): serve a capire se una pagina è cambiata nel periodo.
+function idBuild() {
+  const data = new Date().toISOString().slice(0, 10)
+  try {
+    return `${data}-${execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()}`
+  } catch {
+    return data
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  process.env.VITE_HM_BUILD ||= idBuild()
 
   return {
     plugins: [react()],

@@ -13,17 +13,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://player.vimeo.com/api/player.js"></script>
     
+    <script>
+      // Vista heatmap del gestionale (?hm_view=1 in un iframe): nessun tracciamento esterno,
+      // altrimenti aprire una pagina di conferma farebbe partire conversioni finte.
+      window.__HM_VIEW = /[?&]hm_view=1(&|$)/.test(window.location.search) && window.self !== window.top;
+      if (window.__HM_VIEW) { window.gtag = function(){}; window.fbq = function(){}; window.clarity = function(){}; }
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16532564533"></script>
     <script>
+      if (!window.__HM_VIEW) {
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      window.gtag = function(){dataLayer.push(arguments);};
       gtag('js', new Date());
 
       gtag('config', 'AW-16532564533');
+      }
     </script>    
 
     <script type="text/javascript">
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.hostname.startsWith('192.168.') && !window.location.hostname.startsWith('10.') && window.location.hostname !== '') {
+        if (!window.__HM_VIEW && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.hostname.startsWith('192.168.') && !window.location.hostname.startsWith('10.') && window.location.hostname !== '') {
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -33,6 +41,7 @@
     </script>
 
     <script>
+      if (!window.__HM_VIEW) {
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -43,6 +52,7 @@
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '983687211094705');
       fbq('track', 'PageView');
+      }
       </script>
       <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=983687211094705&ev=PageView&noscript=1"

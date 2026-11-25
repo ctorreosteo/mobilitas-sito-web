@@ -23,3 +23,6 @@ dist/
 
 # Foto originali ad alta risoluzione (1,3 GB): restano in locale, il sito usa le versioni in public/trattamenti
 /Immagini - dolori/
+
+# Dati di prova del finto backend heatmap
+docs/heatmap/prototipo/eventi.jsonl

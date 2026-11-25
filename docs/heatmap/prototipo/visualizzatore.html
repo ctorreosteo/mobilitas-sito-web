@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Heatmap · Marketing — prototipo</title>
+<style>
+  :root {
+    --bg: #fafafa; --panel: #fff; --line: #ececee; --line-2: #f4f4f5;
+    --ink: #09090b; --mut: #71717a; --soft: #a1a1aa;
+    --warn: #a16207; --warn-bg: #fefce8;
+    --heat: linear-gradient(90deg, #3b5bdb, #22b8cf, #51cf66, #fcc419, #f03e3e);
+    --heat-rev: linear-gradient(90deg, #f03e3e, #fcc419, #51cf66, #22b8cf, #3b5bdb);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { margin: 0; font: 13.5px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; background: none; border: 0; padding: 0; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
+  kbd { font: 600 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; padding: 1px 5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; color: var(--mut); background: #fff; }
+
+  /* ---------- barra superiore ---------- */
+  .top { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 10px; padding: 10px 20px; background: rgba(250,250,250,.85); backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; margin-right: 6px; }
+  .brand b { font-size: 15px; letter-spacing: -.01em; }
+  .brand span { font-size: 11px; font-weight: 600; color: var(--warn); background: var(--warn-bg); padding: 2px 8px; border-radius: 999px; }
+  .sep { width: 1px; height: 22px; background: var(--line); }
+  .spazio { flex: 1; }
+
+  .seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--line-2); border-radius: 10px; }
+  .seg button { height: 28px; padding: 0 11px; border-radius: 7px; color: var(--mut); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: background .12s, color .12s; }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-pressed="true"] { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.03); }
+  .seg button .n { font-size: 11px; color: var(--soft); font-variant-numeric: tabular-nums; }
+  .seg svg { width: 15px; height: 15px; }
+
+  .scelta { position: relative; }
+  .scelta > button { height: 34px; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px 0 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font-weight: 600; max-width: 340px; }
+  .scelta > button:hover { border-color: #d4d4d8; }
+  .scelta > button .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .scelta > button .v { color: var(--soft); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .scelta > button svg { width: 14px; height: 14px; color: var(--soft); flex: none; }
+  .pop { position: absolute; top: calc(100% + 6px); left: 0; width: 380px; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.12); padding: 6px; display: none; }
+  .pop.on { display: block; }
+  .pop input { width: 100%; height: 34px; border: 0; border-bottom: 1px solid var(--line); padding: 0 8px; outline: none; margin-bottom: 4px; }
+  .pop ul { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow: auto; }
+  .pop li button { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; padding: 8px; border-radius: 8px; text-align: left; }
+  .pop li button:hover, .pop li button.attivo { background: var(--line-2); }
+  .pop li .p { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pop li .c { color: var(--mut); font-variant-numeric: tabular-nums; font-size: 12px; }
+  .pop li .b { grid-column: 1 / 3; height: 3px; border-radius: 2px; background: var(--line-2); overflow: hidden; }
+  .pop li .b i { display: block; height: 100%; background: var(--ink); opacity: .7; }
+  .pop .vuoto { padding: 14px 8px; color: var(--mut); }
+
+  .date { display: none; align-items: center; gap: 6px; }
+  .date.on { display: inline-flex; }
+  .date input, select.piccolo { height: 34px; border: 1px solid var(--line); border-radius: 10px; padding: 0 8px; background: #fff; }
+  .icona { width: 34px; height: 34px; display: inline-grid; place-items: center; border-radius: 10px; color: var(--mut); }
+  .icona:hover { background: var(--line-2); color: var(--ink); }
+  .icona svg { width: 17px; height: 17px; }
+  .icona.gira svg { animation: gira .7s linear; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  .scarica { position: relative; }
+  .btn-scarica { height: 34px; display: inline-flex; align-items: center; gap: 7px; padding: 0 13px; border-radius: 10px; background: var(--ink); color: #fff; font-weight: 600; }
+  .btn-scarica:hover { background: #27272a; }
+  .btn-scarica svg { width: 16px; height: 16px; }
+  .btn-scarica.lavora { opacity: .6; pointer-events: none; }
+  .menu { position: absolute; right: 0; top: calc(100% + 6px); width: 360px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.14); padding: 6px; display: none; z-index: 40; }
+  .menu.on { display: block; }
+  .menu button { width: 100%; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; text-align: left; padding: 10px; border-radius: 10px; }
+  .menu button:hover, .menu button:focus-visible { background: var(--line-2); }
+  .menu b { display: block; font-size: 13.5px; }
+  .menu small { display: block; color: var(--mut); font-size: 12px; line-height: 1.4; margin-top: 2px; }
+  .menu .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font: 700 11px ui-monospace, Menlo, monospace; color: #fff; }
+  .menu .ic.xls { background: #1d6f42; } .menu .ic.csv { background: #52525b; }
+  .menu-piede { border-top: 1px solid var(--line); margin-top: 4px; padding: 9px 10px 4px; font-size: 11.5px; color: var(--soft); }
+  .agg { font-size: 11.5px; color: var(--soft); white-space: nowrap; }
+
+  /* ---------- indicatori ---------- */
+  .kpi { display: flex; flex-wrap: wrap; padding: 14px 20px 0; }
+  .kpi div { padding: 4px 22px 4px 0; margin-right: 22px; border-right: 1px solid var(--line); cursor: help; }
+  .kpi div:last-child { border: 0; }
+  .kpi small { display: block; font-size: 11.5px; color: var(--mut); }
+  .kpi b { font-size: 22px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .kpi em { font-style: normal; font-size: 12px; color: var(--soft); margin-left: 4px; }
+  .avviso { margin: 12px 20px 0; padding: 9px 12px; border-radius: 10px; background: var(--warn-bg); color: var(--warn); font-size: 12.5px; display: none; }
+  .avviso.on { display: block; }
+
+  /* ---------- area principale ---------- */
+  .area { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; padding: 14px 20px 24px; align-items: start; }
+  .palco { position: relative; border-radius: 18px; background: radial-gradient(circle at 1px 1px, #e4e4e7 1px, transparent 0) 0 0 / 18px 18px, #f4f4f5; min-height: calc(100vh - 170px); }
+  .palco-top { position: sticky; top: 55px; z-index: 4; display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+  .vetro { background: rgba(255,255,255,.8); backdrop-filter: blur(10px); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .stato { font-size: 12px; color: var(--mut); padding: 6px 11px; border-radius: 999px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stato:empty { display: none; }
+  .stato b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .azioni { display: inline-flex; gap: 2px; border-radius: 10px; padding: 2px; }
+  .azioni .icona { width: 30px; height: 30px; border-radius: 8px; }
+  .scena { display: flex; justify-content: safe center; padding: 6px 24px 84px; overflow-x: auto; }
+  .legenda { position: sticky; bottom: 14px; z-index: 4; margin: -62px auto 14px; width: max-content; max-width: calc(100% - 28px); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 8px 14px; border-radius: 999px; font-size: 11.5px; color: var(--mut); }
+  .scala { display: inline-flex; align-items: center; gap: 6px; }
+  .scala i { width: 84px; height: 6px; border-radius: 4px; background: var(--heat); }
+  .scala.inv i { background: var(--heat-rev); }
+  .linea { display: inline-flex; align-items: center; gap: 6px; }
+  .linea i { width: 20px; border-top: 2px dashed var(--ink); }
+  .linea.punti i { border-top: 2px dotted var(--mut); }
+
+  .carica { position: absolute; inset: 60px 0 0; display: none; place-items: center; z-index: 3; pointer-events: none; }
+  .carica.on { display: grid; }
+  .carica div { width: 26px; height: 26px; border-radius: 50%; border: 2.5px solid #e4e4e7; border-top-color: var(--ink); animation: gira .7s linear infinite; }
+  .vuoto { padding: 90px 20px; text-align: center; color: var(--mut); }
+  .vuoto b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 4px; }
+
+  /* ---------- dispositivi: solo le forme, nessun marchio ---------- */
+  .dispositivo { transform-origin: top left; width: max-content; }
+  iframe { display: block; border: 0; background: #fff; }
+  /* iPhone */
+  .iphone { position: relative; padding: 12px; border-radius: 66px; background: linear-gradient(145deg, #3a3a3c, #1c1c1e 30%, #2c2c2e); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 40px 70px -28px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.12); }
+  .iphone .tasto { position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #48484a, #2c2c2e); }
+  .iphone .schermo { position: relative; border-radius: 54px; overflow: hidden; background: #000; box-shadow: 0 0 0 4px #050505; }
+  .iphone .barra-stato { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 8px 32px 0 52px; color: #fff; font: 600 16px -apple-system, system-ui, sans-serif; letter-spacing: -.01em; }
+  .iphone .barra-stato .ico { display: inline-flex; gap: 6px; align-items: center; }
+  .iphone .barra-stato svg { height: 12px; }
+  .iphone .isola { position: absolute; top: 12px; left: 50%; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; z-index: 2; }
+  .iphone .home { position: absolute; bottom: 8px; left: 50%; width: 136px; height: 5px; margin-left: -68px; border-radius: 3px; background: #fff; mix-blend-mode: difference; z-index: 2; pointer-events: none; }
+  /* iPad */
+  .ipad { padding: 22px; border-radius: 42px; background: linear-gradient(145deg, #3a3a3c, #1c1c1e 30%, #2c2c2e); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 40px 70px -28px rgba(0,0,0,.4), 0 0 0 1px rgba(0,0,0,.12); }
+  .ipad .schermo { border-radius: 20px; overflow: hidden; background: #fff; box-shadow: 0 0 0 3px #050505; }
+  /* MacBook Pro: le misure le imposta creaDispositivo (coperchio = schermo + cornice, base più larga) */
+  .mac { position: relative; display: flex; flex-direction: column; align-items: center; padding-bottom: 30px; }
+  .mac .coperchio { position: relative; padding: 14px 14px 22px; border-radius: 26px 26px 12px 12px; background: #080808;
+    box-shadow: inset 0 0 0 1px #262628, 0 0 0 1.5px #d4d4d8, 0 0 0 3px #a3a3a8, 0 1px 0 3px #8a8a8f; }
+  .mac .schermo { position: relative; border-radius: 13px 13px 3px 3px; overflow: hidden; background: #fff; }
+  /* barra dei menu di macOS con la notch al centro */
+  .mac .menubar { position: relative; height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px;
+    background: linear-gradient(90deg, #d7dbe6, #e9e4ee 45%, #e3e9ef); font: 500 14px -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: #1d1d1f; letter-spacing: -.005em; }
+  .mac .menubar .sx, .mac .menubar .dx { display: flex; align-items: center; gap: 20px; white-space: nowrap; }
+  .mac .menubar .sx b { font-weight: 700; }
+  .mac .menubar .dx { gap: 17px; }
+  .mac .menubar .dx svg { height: 15px; width: auto; }
+  .mac .notch { position: absolute; top: 0; left: 50%; width: 206px; height: 34px; margin-left: -103px; background: #080808; border-radius: 0 0 13px 13px; display: grid; place-items: center; z-index: 2; }
+  .mac .notch i { width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #4b5b80, #0b0e14 65%); margin-left: 34px; }
+  /* finestra di Safari a tutto schermo */
+  .mac .finestra { position: relative; height: 46px; display: flex; align-items: center; gap: 9px; padding: 0 16px; background: #f6f6f8; border-bottom: 1px solid #e1e1e6; color: #8e8e93; }
+  .mac .finestra > i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .mac .finestra > i:nth-child(1) { background: #ff5f57; } .mac .finestra > i:nth-child(2) { background: #febc2e; } .mac .finestra > i:nth-child(3) { background: #28c840; }
+  .mac .finestra .nav { display: inline-flex; gap: 14px; margin-left: 18px; }
+  .mac .finestra .nav svg, .mac .finestra .dx svg { width: 16px; height: 16px; }
+  .mac .finestra .url { position: absolute; left: 50%; transform: translateX(-50%); width: 40%; height: 30px; border-radius: 9px; background: #e9e9ee; display: flex; align-items: center; justify-content: center; gap: 7px; font: 500 13px -apple-system, system-ui, sans-serif; color: #3a3a3c; }
+  .mac .finestra .url svg { width: 10px; height: 12px; }
+  .mac .finestra .dx { margin-left: auto; display: inline-flex; gap: 16px; }
+  /* cerniera e base in alluminio */
+  .mac .cerniera { position: relative; z-index: 1; height: 13px; margin-top: 1px; border-radius: 0 0 10px 10px; background: linear-gradient(180deg, #050505 0%, #1c1c1e 40%, #3a3a3d 75%, #5c5c60 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+  .mac .base { position: relative; width: 100%; height: 22px; margin-top: -5px; border-radius: 3px 3px 30px 30px / 3px 3px 20px 20px;
+    background: linear-gradient(180deg, #f7f7f9 0%, #ececf0 16%, #d2d2d7 17%, #c6c6cb 55%, #a4a4a9 88%, #86868b 100%);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.18); }
+  .mac .base::before { content: ''; position: absolute; top: 3px; left: 50%; width: 13%; height: 9px; transform: translateX(-50%); border-radius: 0 0 12px 12px; background: linear-gradient(180deg, #a9a9ae, #d0d0d5); }
+  .mac .base::after { content: ''; position: absolute; left: 5%; right: 5%; bottom: -20px; height: 20px; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.3), transparent 70%); filter: blur(5px); }
+
+  /* ---------- pannello laterale ---------- */
+  .lato { position: sticky; top: 70px; display: grid; gap: 12px; }
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+  .box h2 { margin: 0; font-size: 13px; font-weight: 650; display: flex; justify-content: space-between; align-items: baseline; }
+  .box h2 span { font-weight: 500; color: var(--soft); font-size: 11.5px; }
+  .insight { display: grid; gap: 10px; margin: 12px 0 16px; }
+  .insight div { display: grid; grid-template-columns: 54px 1fr; gap: 10px; align-items: baseline; }
+  .insight b { font-size: 20px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .insight span { font-size: 12.5px; color: var(--mut); line-height: 1.4; }
+  .insight q { color: var(--ink); font-weight: 550; quotes: '«' '»'; }
+  .mappa { display: grid; grid-template-columns: 14px 1fr; gap: 10px; height: 400px; }
+  .scroll-bar { position: relative; height: 100%; border-radius: 7px; cursor: pointer; overflow: hidden; background: var(--line-2); }
+  .scroll-bar .vis { position: absolute; left: 0; right: 0; border: 2px solid var(--ink); border-radius: 6px; box-shadow: 0 0 0 2px rgba(255,255,255,.9) inset; transition: top .15s, height .15s; display: none; }
+  .scroll-bar .tick { position: absolute; left: 0; right: 0; height: 2px; margin-top: -1px; background: rgba(255,255,255,.95); }
+  .mappa-sez { position: relative; }
+  .sez { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; padding: 3px 6px; border-radius: 7px; font-size: 12px; text-align: left; }
+  .sez:hover { background: var(--line-2); }
+  .sez .pt { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .sez .pc { font-weight: 650; font-variant-numeric: tabular-nums; min-width: 32px; text-align: right; }
+  .sez .ti { color: #3f3f46; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .sez.meta .ti { color: var(--mut); font-style: italic; }
+  .sez.meta .pt { background: none !important; border: 2px dotted var(--mut); width: 9px; height: 9px; }
+  .sez.meta.meta-50 .pt { border: 0; background: var(--ink) !important; }
+  .elenco .sub { grid-column: 1 / 3; font-size: 11.5px; color: var(--soft); margin-top: -3px; }
+  .elenco .sub b { color: var(--mut); font-weight: 600; }
+  .qui { margin-top: 12px; font-size: 12.5px; color: var(--mut); }
+  .qui b { color: var(--ink); }
+  .elenco { list-style: none; margin: 8px -8px 0; padding: 0; max-height: 380px; overflow: auto; }
+  .elenco button { width: 100%; text-align: left; padding: 7px 8px; border-radius: 9px; display: grid; grid-template-columns: 1fr auto; gap: 5px 10px; }
+  .elenco button:hover { background: var(--line-2); }
+  .elenco .nome { font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .elenco .nome small { color: var(--soft); font-weight: 450; font-size: 12px; }
+  .elenco .num { font-variant-numeric: tabular-nums; color: var(--mut); font-size: 12px; }
+  .elenco .num b { color: var(--ink); font-weight: 600; }
+  .elenco .bar { grid-column: 1 / 3; height: 3px; border-radius: 2px; background: var(--line-2); overflow: hidden; }
+  .elenco .bar i { display: block; height: 100%; background: linear-gradient(90deg, #fcc419, #f03e3e); }
+  .tag { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 4px; background: var(--line-2); color: var(--mut); margin-left: 6px; vertical-align: 1px; }
+  .nota { margin: 4px 0 0; font-size: 12px; color: var(--soft); }
+
+  .aiuto-pop { position: fixed; right: 20px; top: 60px; z-index: 40; width: 340px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.14); padding: 16px 18px; display: none; font-size: 12.5px; color: #3f3f46; }
+  .aiuto-pop.on { display: block; }
+  .aiuto-pop h3 { margin: 0 0 8px; font-size: 13px; color: var(--ink); }
+  .aiuto-pop ul { margin: 0 0 14px; padding-left: 16px; display: grid; gap: 5px; }
+  .aiuto-pop table { width: 100%; border-collapse: collapse; }
+  .aiuto-pop td { padding: 3px 0; }
+  .aiuto-pop td:last-child { text-align: right; }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 12px); opacity: 0; transition: .18s; background: var(--ink); color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 12.5px; pointer-events: none; z-index: 50; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 1180px) { .area { grid-template-columns: 1fr; } .lato { position: static; grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><b>Heatmap</b><span>prototipo</span></div>
+
+  <div class="scelta">
+    <button type="button" id="btnPagina" aria-haspopup="listbox" aria-expanded="false" title="Cerca una pagina (/)">
+      <span class="t" id="paginaNome">—</span><span class="v" id="paginaVisite"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="pop" id="popPagine">
+      <input id="cercaPagina" placeholder="Cerca una pagina…" autocomplete="off" aria-label="Cerca una pagina" />
+      <ul id="listaPagine" role="listbox"></ul>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div class="seg" id="preset" role="group" aria-label="Periodo">
+    <button type="button" data-g="1">Oggi</button>
+    <button type="button" data-g="7">7 g</button>
+    <button type="button" data-g="30">30 g</button>
+    <button type="button" data-g="90">90 g</button>
+    <button type="button" data-g="0" title="Date a scelta">Date</button>
+  </div>
+  <div class="date" id="date"><input type="date" id="dal" aria-label="Dal" /><input type="date" id="al" aria-label="Al" /></div>
+  <select class="piccolo" id="versione" hidden aria-label="Versione del sito"></select>
+
+  <div class="sep"></div>
+  <div class="seg" id="dispositivi" role="group" aria-label="Dispositivo">
+    <button type="button" data-d="mobile" title="iPhone (M)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M10.5 5h3"/></svg>iPhone<span class="n" data-n="mobile"></span></button>
+    <button type="button" data-d="tablet" title="iPad (T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4.5" y="2.5" width="15" height="19" rx="2.4"/></svg>iPad<span class="n" data-n="tablet"></span></button>
+    <button type="button" data-d="desktop" title="Mac (D)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4.5" width="16" height="10.5" rx="1.6"/><path d="M2 18.5h20"/></svg>Mac<span class="n" data-n="desktop"></span></button>
+  </div>
+
+  <div class="spazio"></div>
+  <span class="agg" id="aggiornato"></span>
+  <div class="scarica">
+    <button type="button" class="btn-scarica" id="btnScarica" aria-haspopup="menu" aria-expanded="false" title="Scarica i dati (E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>Scarica</button>
+    <div class="menu" id="menuScarica" role="menu">
+      <button type="button" role="menuitem" data-f="xlsx"><span class="ic xls">XLS</span><span><b>Report Excel</b><small>Riepilogo con confronto sul periodo precedente, andamento giorno per giorno, elementi cliccati, scroll per sezione. Pronto da leggere.</small></span></button>
+      <button type="button" role="menuitem" data-f="csv"><span class="ic csv">CSV</span><span><b>Dati grezzi</b><small>Una riga per ogni click e scroll, per analisi in Excel, Google Sheets o altri strumenti.</small></span></button>
+      <div class="menu-piede" id="menuPiede"></div>
+    </div>
+  </div>
+  <button type="button" class="icona" id="btnAggiorna" title="Aggiorna i dati (R)" aria-label="Aggiorna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+  <button type="button" class="icona" id="btnAiuto" title="Come si legge e scorciatoie (?)" aria-label="Aiuto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><path d="M12 17.5h.01"/></svg></button>
+</header>
+
+<section class="kpi" aria-label="Indicatori">
+  <div title="Quante volte la pagina è stata aperta su questo dispositivo nel periodo."><small>Visite</small><b id="kVisite">–</b></div>
+  <div title="Click e tocchi registrati, inclusi header, barra CTA e popup."><small>Click</small><b id="kClick">–</b><em id="kClickSub"></em></div>
+  <div title="Quota di visite in cui il visitatore ha cliccato almeno una volta."><small>Visite con un click</small><b id="kInter">–</b></div>
+  <div title="In media, fino a che punto della pagina arriva un visitatore (100% = in fondo)."><small>Scroll medio</small><b id="kScroll">–</b></div>
+  <div title="Quota di visite che arrivano fino alla fine della pagina."><small>Arriva in fondo</small><b id="kFondo">–</b></div>
+  <div title="Tempo medio con la pagina aperta e visibile."><small>Tempo medio</small><b id="kTempo">–</b></div>
+</section>
+<div class="avviso" id="avviso" role="status"></div>
+
+<div class="area">
+  <section class="palco" id="palco" aria-label="Anteprima">
+    <div class="palco-top">
+      <div class="seg vetro" id="modi" role="group" aria-label="Cosa mostrare">
+        <button type="button" data-m="click" title="Click (1)">Click</button>
+        <button type="button" data-m="scroll" title="Scroll (2)">Scroll</button>
+        <button type="button" data-m="entrambi" title="Click + scroll (3)">Entrambi</button>
+      </div>
+      <span class="stato vetro" id="stato"></span>
+      <span class="spazio"></span>
+      <div class="azioni vetro">
+        <button type="button" class="icona" id="btnZoom" title="Adatta / dimensione reale (Z)" aria-label="Zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+        <button type="button" class="icona" id="btnSu" title="Torna all'inizio della pagina" aria-label="Inizio pagina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        <button type="button" class="icona" id="btnLink" title="Copia il link di questa vista" aria-label="Copia link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></button>
+        <a class="icona" id="btnApri" target="_blank" rel="noopener" title="Apri la pagina online" aria-label="Apri online"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+      </div>
+    </div>
+    <div class="scena"><div id="contenitore"></div></div>
+    <div class="legenda vetro" id="legenda"></div>
+    <div class="carica" id="carica"><div></div></div>
+  </section>
+
+  <aside class="lato">
+    <div class="box">
+      <h2>Scroll <span id="scrollVisite"></span></h2>
+      <div class="insight" id="insight"></div>
+      <div class="mappa">
+        <div class="scroll-bar" id="scrollBar" role="slider" tabindex="0" aria-label="Posizione nell'anteprima" aria-valuemin="0" aria-valuemax="100"><div id="tacche"></div><div class="vis" id="scrollVis"></div></div>
+        <div class="mappa-sez" id="mappaSez"></div>
+      </div>
+      <div class="qui" id="qui">La barra è tutta la pagina, dall'alto al basso. Clicca un titolo per andarci.</div>
+    </div>
+    <div class="box">
+      <h2>Più cliccati <span id="elementiTot"></span></h2>
+      <p class="nota">Clicca per trovarlo nella pagina.</p>
+      <ul class="elenco" id="elementi"></ul>
+    </div>
+  </aside>
+</div>
+
+<div class="aiuto-pop" id="aiutoPop" role="dialog" aria-label="Come si legge">
+  <h3>Come si legge</h3>
+  <ul>
+    <li><b>Click</b>: macchie dal blu (pochi) al rosso (tanti). Passa il mouse per il numero esatto.</li>
+    <li><b>Scroll</b>: rosso = la vedono quasi tutti, blu = pochi. Le linee tratteggiate segnano il 75 / 50 / 25%.</li>
+    <li>La linea a puntini è la <b>fine del primo schermo</b>.</li>
+    <li>Guarda iPhone e Mac separatamente: i layout sono diversi.</li>
+    <li>Puoi aprire le FAQ nell'anteprima: i click dentro compaiono.</li>
+    <li>«Non cliccabile» = click su testi o immagini: spesso il visitatore si aspettava un link.</li>
+    <li><span class="tag">fisso</span> = header, barra CTA, WhatsApp o popup: solo in classifica.</li>
+  </ul>
+  <h3>Scorciatoie</h3>
+  <table>
+    <tr><td>Click · Scroll · Entrambi</td><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td></tr>
+    <tr><td>iPhone · iPad · Mac</td><td><kbd>M</kbd> <kbd>T</kbd> <kbd>D</kbd></td></tr>
+    <tr><td>Cerca pagina</td><td><kbd>/</kbd></td></tr>
+    <tr><td>Aggiorna · Zoom</td><td><kbd>R</kbd> <kbd>Z</kbd></td></tr>
+    <tr><td>Scarica i dati</td><td><kbd>E</kbd></td></tr>
+  </table>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const SITO = '__SITO__'
+const ORIGINE_SITO = new URL(SITO).origin
+// viewport dei dispositivi (punti CSS) e altezza visibile dell'anteprima
+const DISPOSITIVI = { mobile: { w: 390, h: 760 }, tablet: { w: 820, h: 1000 }, desktop: { w: 1440, h: 820 } }
+const $ = (id) => document.getElementById(id)
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+const fmt = (n) => Number(n ?? 0).toLocaleString('it-IT')
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+// ---------- stato, salvato nel link ----------
+const h = new URLSearchParams(location.hash.slice(1))
+const stato = {
+  pagina: h.get('pagina'),
+  dispositivo: DISPOSITIVI[h.get('d')] ? h.get('d') : 'desktop',
+  modo: ['click', 'scroll', 'entrambi'].includes(h.get('modo')) ? h.get('modo') : 'click',
+  versione: h.get('v') || '',
+  zoom: 'adatta',
+  dati: null, pagine: [], iframe: null, chiave: null, pronto: false, posizione: null,
+}
+function premuto(gruppo, attr, valore) {
+  document.querySelectorAll(`#${gruppo} button`).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[attr] === String(valore))))
+}
+function impostaPeriodo(giorni) {
+  const oggi = new Date()
+  $('al').value = iso(oggi)
+  $('dal').value = iso(new Date(oggi.getTime() - (giorni - 1) * 864e5))
+  premuto('preset', 'g', giorni)
+  $('date').classList.remove('on')
+}
+if (h.get('dal') && h.get('al')) {
+  $('dal').value = h.get('dal'); $('al').value = h.get('al')
+  premuto('preset', 'g', 0); $('date').classList.add('on')
+} else impostaPeriodo(7)
+premuto('dispositivi', 'd', stato.dispositivo)
+premuto('modi', 'm', stato.modo)
+
+function salvaLink() {
+  const p = new URLSearchParams({ pagina: stato.pagina || '', dal: $('dal').value, al: $('al').value, d: stato.dispositivo, modo: stato.modo })
+  if (stato.versione) p.set('v', stato.versione)
+  history.replaceState(null, '', `#${p}`)
+}
+
+// ---------- dati ----------
+async function api(percorso, parametri) {
+  const qs = new URLSearchParams(Object.entries(parametri).filter(([, v]) => v))
+  const r = await fetch(`${percorso}?${qs}`)
+  const j = await r.json()
+  if (!j.success) throw new Error(j.message || 'Errore')
+  return j.data
+}
+async function caricaPagine() {
+  stato.pagine = await api('/api/heatmap/pagine', { dal: $('dal').value, al: $('al').value })
+  if (!stato.pagine.some((p) => p.pagina === stato.pagina)) stato.pagina = stato.pagine[0]?.pagina ?? null
+  mostraPaginaScelta()
+  await caricaDati()
+}
+async function caricaDati() {
+  salvaLink()
+  if (!stato.pagina) { stato.dati = null; return mostra() }
+  const q = { dal: $('dal').value, al: $('al').value, pagina: stato.pagina, dispositivo: stato.dispositivo, versione: stato.versione }
+  const [click, scroll] = await Promise.all([api('/api/heatmap/click', q), api('/api/heatmap/scroll', q)])
+  stato.dati = { click, scroll }
+  $('aggiornato').textContent = `aggiornato alle ${new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
+  mostra()
+}
+
+// ---------- scelta della pagina, con ricerca ----------
+function mostraPaginaScelta() {
+  const p = stato.pagine.find((x) => x.pagina === stato.pagina)
+  $('paginaNome').textContent = p ? p.pagina : 'Nessuna pagina con dati'
+  $('paginaVisite').textContent = p ? `${fmt(p.visite)} visite` : ''
+  for (const d of Object.keys(DISPOSITIVI)) document.querySelector(`[data-n="${d}"]`).textContent = p ? fmt(p.per_dispositivo?.[d]?.visite ?? 0) : ''
+  $('btnApri').href = p ? `${SITO}${p.pagina}` : '#'
+}
+function elencoPagine() {
+  const q = $('cercaPagina').value.trim().toLowerCase()
+  const lista = stato.pagine.filter((p) => p.pagina.includes(q))
+  const max = Math.max(1, ...stato.pagine.map((p) => p.visite))
+  $('listaPagine').innerHTML = lista.length
+    ? lista.map((p, i) => `<li><button type="button" role="option" data-p="${esc(p.pagina)}" class="${i === 0 ? 'attivo' : ''}"><span class="p">${esc(p.pagina)}</span><span class="c">${fmt(p.visite)} visite · ${fmt(p.click)} click</span><span class="b"><i style="width:${(p.visite / max) * 100}%"></i></span></button></li>`).join('')
+    : '<li class="vuoto">Nessuna pagina trovata</li>'
+}
+function apriPagine(apri) {
+  $('popPagine').classList.toggle('on', apri)
+  $('btnPagina').setAttribute('aria-expanded', String(apri))
+  if (apri) { $('cercaPagina').value = ''; elencoPagine(); $('cercaPagina').focus() }
+}
+function scegliPagina(p) { stato.pagina = p; stato.versione = ''; apriPagine(false); mostraPaginaScelta(); caricaDati() }
+
+// ---------- scroll ----------
+function raggiungono(fasce, pos) {
+  const f = [...(fasce ?? [])].sort((a, b) => a.fascia - b.fascia)
+  if (!f.length) return null
+  if (pos <= f[0].fascia) return f[0].pct
+  for (let i = 1; i < f.length; i++) {
+    const a = f[i - 1], b = f[i]
+    if (pos <= b.fascia) return a.pct + ((pos - a.fascia) / (b.fascia - a.fascia || 1)) * (b.pct - a.pct)
+  }
+  return f.at(-1).pct
+}
+const COLORI = [[0, [59, 91, 219]], [0.25, [34, 184, 207]], [0.5, [81, 207, 102]], [0.75, [252, 196, 25]], [1, [240, 62, 62]]]
+function colore(v) {
+  for (let i = 1; i < COLORI.length; i++) {
+    const [a, ca] = COLORI[i - 1], [b, cb] = COLORI[i]
+    if (v <= b) { const t = (v - a) / (b - a); return `rgb(${ca.map((c, k) => Math.round(c + (cb[k] - c) * t)).join(',')})` }
+  }
+  return 'rgb(240,62,62)'
+}
+
+// ---------- rendering ----------
+const durata = (ms) => { const s = Math.round((ms ?? 0) / 1000); return s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s` }
+function mostra() {
+  const c = stato.dati?.click, s = stato.dati?.scroll
+  $('kVisite').textContent = s ? fmt(s.visite) : '–'
+  $('kClick').textContent = c ? fmt(c.click) : '–'
+  $('kClickSub').textContent = c && s?.visite ? `${(c.click / s.visite).toLocaleString('it-IT', { maximumFractionDigits: 1 })} a visita` : ''
+  $('kInter').textContent = c && s?.visite ? `${Math.round((c.visite_con_click / s.visite) * 100)}%` : '–'
+  $('kScroll').textContent = s ? `${s.scroll_medio}%` : '–'
+  $('kFondo').textContent = s?.visite ? `${Math.round(s.fasce.find((f) => f.fascia === 100)?.pct ?? 0)}%` : '–'
+  $('kTempo').textContent = s ? durata(s.durata_media_ms) : '–'
+
+  const versioni = c?.versioni ?? []
+  const sel = $('versione')
+  sel.hidden = versioni.length < 2 && !stato.versione
+  if (!stato.versione) sel.innerHTML = '<option value="">Tutte le versioni</option>' + versioni.map((v) => `<option>${esc(v)}</option>`).join('')
+  const av = $('avviso')
+  av.classList.toggle('on', versioni.length > 1 && !stato.versione)
+  av.textContent = `Nel periodo il sito è stato aggiornato ${versioni.length - 1} ${versioni.length === 2 ? 'volta' : 'volte'}: l'anteprima mostra la pagina di oggi, i click su elementi spostati o tolti non compaiono. Per un confronto preciso scegli una versione.`
+
+  mostraElementi(); mostraScroll(); mostraLegenda(); preparaAnteprima(); inviaDati()
+}
+
+// Click senza etichetta: il tipo si ricava dall'ultimo tag del selettore.
+const CLICCABILI = { a: 'Link', button: 'Bottone', input: 'Campo del modulo', select: 'Campo del modulo', textarea: 'Campo del modulo', label: 'Etichetta del modulo', summary: 'Apertura FAQ' }
+const TIPI = { p: 'Testo', span: 'Testo', b: 'Testo', strong: 'Testo', em: 'Testo', small: 'Testo', li: 'Voce di elenco', h1: 'Titolo', h2: 'Titolo', h3: 'Titolo', h4: 'Titolo', h5: 'Titolo', h6: 'Titolo', img: 'Immagine', picture: 'Immagine', svg: 'Icona', video: 'Video', iframe: 'Video', section: 'Sezione', article: 'Riquadro', header: 'Intestazione', footer: 'Piè di pagina', div: 'Area della pagina', ol: 'Elenco', ul: 'Elenco' }
+function nomeElemento(e) {
+  if (e.etichetta) return esc(e.etichetta)
+  if (!e.sel) return 'Punto della pagina'
+  const ultimo = e.sel.split('>').pop().trim().replace(/:nth-of-type\(\d+\)/, '').replace(/^#.*/, 'div')
+  if (CLICCABILI[ultimo]) return CLICCABILI[ultimo]
+  return `${TIPI[ultimo] || 'Area della pagina'} <small>· non cliccabile</small>`
+}
+// quota di visitatori che arriva all'altezza dell'elemento (misurata dalla pagina vera)
+function visto(e) {
+  if (e.fisso) return '<span class="sub">sempre a schermo</span>'
+  const v = stato.misure?.visibilita?.find((x) => x.sel === e.sel)
+  return v?.raggiungono != null ? `<span class="sub">visto dal <b>${v.raggiungono}%</b> dei visitatori</span>` : ''
+}
+function mostraElementi() {
+  const lista = stato.dati?.click.elementi ?? []
+  const tot = stato.dati?.click.click || 0
+  $('elementiTot').textContent = tot ? `${fmt(tot)} click` : ''
+  if (!lista.length) { $('elementi').innerHTML = '<li class="nota" style="padding:10px 8px">Nessun click nel periodo.</li>'; return }
+  const max = lista[0].n
+  $('elementi').innerHTML = lista.map((e) => `<li><button type="button" data-sel="${esc(e.sel ?? '')}" title="${esc(e.sel ?? '')}">
+      <span class="nome">${nomeElemento(e)}${e.fisso ? '<span class="tag">fisso</span>' : ''}</span>
+      <span class="num"><b>${fmt(e.n)}</b> · ${Math.round((e.n / tot) * 100)}%</span>
+      ${visto(e)}
+      <span class="bar"><i style="width:${(e.n / max) * 100}%"></i></span></button></li>`).join('')
+}
+// Punto (0–100% della pagina) in cui la quota di visitatori scende sotto `soglia`
+function doveScende(fasce, soglia) {
+  for (let p = 0; p <= 100; p += 0.5) if ((raggiungono(fasce, p) ?? 100) < soglia) return p
+  return null
+}
+function sezioneA(pos) {
+  return (stato.misure?.sezioni ?? []).filter((x) => x.pct <= pos).at(-1) ?? null
+}
+
+function mostraScroll() {
+  const s = stato.dati?.scroll
+  const m = stato.misure ?? {}
+  const bar = $('scrollBar')
+  $('scrollVisite').textContent = s?.visite ? `${fmt(s.visite)} visite` : ''
+  if (!s?.visite) {
+    bar.style.background = ''; $('tacche').innerHTML = ''; $('mappaSez').innerHTML = ''
+    $('insight').innerHTML = '<span class="nota">Nessuna visita nel periodo.</span>'
+    return
+  }
+  const stop = []
+  for (let p = 0; p <= 100; p += 5) stop.push(`${colore((raggiungono(s.fasce, p) ?? 0) / 100)} ${p}%`)
+  bar.style.background = `linear-gradient(180deg, ${stop.join(',')})`
+
+  // tre frasi chiave
+  const fondo = Math.round(s.fasce.find((f) => f.fascia === 100)?.pct ?? 0)
+  const meta = doveScende(s.fasce, 50)
+  const sMeta = meta != null ? sezioneA(meta) : null
+  const righe = [[`${fondo}%`, 'dei visitatori arriva in fondo alla pagina']]
+  righe.push(meta != null
+    ? [`${Math.round(meta)}%`, `della pagina: qui si è già fermata metà dei visitatori${sMeta ? `, all'altezza di <q>${esc(sMeta.titolo)}</q>` : ''}`]
+    : ['½', 'più di metà dei visitatori arriva fino in fondo'])
+  if (m.primoSchermo) righe.push([`${Math.round(m.primoSchermo)}%`, 'della pagina si vede senza scorrere (primo schermo)'])
+  $('insight').innerHTML = righe.map(([n, t]) => `<div><b>${n}</b><span>${t}</span></div>`).join('')
+
+  // mappa: sezioni vere della pagina + primo schermo + metà dei visitatori
+  let sezioni = (m.sezioni ?? []).map((x) => ({ pct: x.pct, testo: x.titolo, val: x.raggiungono ?? Math.round(raggiungono(s.fasce, x.pct)) }))
+  sezioni = sezioni.filter((x, i, a) => i === 0 || x.pct - a[i - 1].pct >= 2.5).slice(0, 14)
+  const voci = [...sezioni]
+  if (m.primoSchermo) voci.push({ pct: m.primoSchermo, testo: 'fine del primo schermo', meta: 'schermo', val: Math.round(raggiungono(s.fasce, m.primoSchermo)) })
+  if (meta != null) voci.push({ pct: meta, testo: 'qui si è fermata metà dei visitatori', meta: '50', val: 50 })
+  if (!sezioni.length) for (const p of [25, 50, 75]) voci.push({ pct: p, testo: `${p}% della pagina`, val: Math.round(raggiungono(s.fasce, p)) })
+  voci.sort((a, b) => a.pct - b.pct)
+
+  // etichette senza sovrapposizioni: si spingono in giù, poi si ricompattano dal fondo
+  const H = $('mappaSez').clientHeight || 400, PASSO = 22
+  voci.forEach((v, i) => { v.y = Math.max((v.pct / 100) * H, i ? voci[i - 1].y + PASSO : 8) })
+  for (let i = voci.length - 1; i >= 0; i--) voci[i].y = Math.min(voci[i].y, i === voci.length - 1 ? H - 8 : voci[i + 1].y - PASSO)
+
+  $('tacche').innerHTML = voci.filter((v) => !v.meta).map((v) => `<span class="tick" style="top:${v.pct}%"></span>`).join('')
+  $('mappaSez').innerHTML = voci.map((v) => `<button type="button" class="sez${v.meta ? ` meta meta-${v.meta}` : ''}" style="top:${v.y}px" data-pct="${v.pct}" title="${esc(v.testo)} · ${Math.round(v.pct)}% della pagina">
+      <span class="pt" style="background:${colore(v.val / 100)}"></span><span class="pc">${v.val}%</span><span class="ti">${esc(v.testo)}</span></button>`).join('')
+  aggiornaPosizione()
+}
+
+function aggiornaPosizione() {
+  const p = stato.posizione, vis = $('scrollVis')
+  if (!p) { vis.style.display = 'none'; return }
+  vis.style.display = 'block'
+  vis.style.top = `${p.inizio}%`
+  vis.style.height = `${Math.max(p.fine - p.inizio, 2)}%`
+  $('scrollBar').setAttribute('aria-valuenow', String(Math.round(p.inizio)))
+  if (p.raggiungono != null) {
+    const sez = sezioneA((p.inizio + p.fine) / 2)
+    $('qui').innerHTML = `Stai guardando${sez ? ` <q>${esc(sez.titolo)}</q>,` : ''} il <b>${Math.round(p.inizio)}–${Math.round(p.fine)}%</b> della pagina: ci arriva <b>il ${p.raggiungono}%</b> dei visitatori.`
+  }
+}
+
+function mostraLegenda() {
+  const click = '<span class="scala"><span>pochi click</span><i></i><span>tanti</span></span>'
+  const scroll = '<span class="scala inv"><span>tutti</span><i></i><span>pochi</span></span><span class="linea"><i></i>75 · 50 · 25%</span>'
+  $('legenda').innerHTML = (stato.modo === 'click' ? click : stato.modo === 'scroll' ? scroll : click + scroll) + '<span class="linea punti"><i></i>primo schermo</span>'
+}
+
+// ---------- anteprima nei dispositivi (solo forme, nessun marchio) ----------
+const ICONE_STATO = '<span class="ico"><svg viewBox="0 0 18 12" fill="#fff"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" fill="#fff"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.4 10.4 0 0 0 8 .4 10.4 10.4 0 0 0 .8 3.3L2 4.6a8.6 8.6 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.6 6.6 0 0 0 8 4a6.6 6.6 0 0 0-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3Zm0 3.6c-.4 0-.8.2-1.1.4L8 11.6l1.1-1.8c-.3-.2-.7-.4-1.1-.4Z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#fff"/><rect x="24" y="4" width="2" height="4" rx="1" fill="#fff" opacity=".5"/></svg></span>'
+const ICONA_NAV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="#c7c7cc" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>'
+const ICONA_DX = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M8 21h11a2 2 0 0 0 2-2V8"/></svg>'
+const ICONE_MENUBAR = '<svg viewBox="0 0 28 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#1d1d1f" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#1d1d1f"/><rect x="25" y="4.5" width="2" height="4" rx="1" fill="#1d1d1f" opacity=".45"/></svg><svg viewBox="0 0 16 12" fill="#1d1d1f"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.4 10.4 0 0 0 8 .4 10.4 10.4 0 0 0 .8 3.3L2 4.6a8.6 8.6 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.6 6.6 0 0 0 8 4a6.6 6.6 0 0 0-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3Zm0 3.6c-.4 0-.8.2-1.1.4L8 11.6l1.1-1.8c-.3-.2-.7-.4-1.1-.4Z"/></svg><svg viewBox="0 0 16 16" fill="none" stroke="#1d1d1f" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="m11 11 3.5 3.5"/></svg><svg viewBox="0 0 18 14" fill="none" stroke="#1d1d1f" stroke-width="1.6"><rect x="1" y="1" width="16" height="5" rx="2.5"/><circle cx="5" cy="3.5" r="1.2" fill="#1d1d1f"/><rect x="1" y="8" width="16" height="5" rx="2.5"/><circle cx="13" cy="10.5" r="1.2" fill="#1d1d1f"/></svg>'
+const LUCCHETTO = '<svg viewBox="0 0 12 14" fill="#8e8e93"><path d="M3 6V4a3 3 0 0 1 6 0v2h.5A1.5 1.5 0 0 1 11 7.5v5A1.5 1.5 0 0 1 9.5 14h-7A1.5 1.5 0 0 1 1 12.5v-5A1.5 1.5 0 0 1 2.5 6H3Zm1.5 0h3V4a1.5 1.5 0 0 0-3 0v2Z"/></svg>'
+
+function creaDispositivo(tipo, iframe) {
+  const d = document.createElement('div')
+  d.className = 'dispositivo'
+  if (tipo === 'mobile') {
+    d.innerHTML = `<div class="iphone">
+      <span class="tasto" style="left:-3px;top:118px;height:32px"></span>
+      <span class="tasto" style="left:-3px;top:176px;height:60px"></span>
+      <span class="tasto" style="left:-3px;top:248px;height:60px"></span>
+      <span class="tasto" style="right:-3px;top:210px;height:96px"></span>
+      <div class="schermo"><div class="isola"></div><div class="barra-stato"><span>9:41</span>${ICONE_STATO}</div><div class="home"></div></div></div>`
+    d.querySelector('.schermo').insertBefore(iframe, d.querySelector('.home'))
+  } else if (tipo === 'tablet') {
+    d.innerHTML = '<div class="ipad"><div class="schermo"></div></div>'
+    d.querySelector('.schermo').appendChild(iframe)
+  } else {
+    const coperchio = DISPOSITIVI.desktop.w + 28
+    const ora = new Date()
+    const data = `${ora.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })}  ${ora.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
+    d.innerHTML = `<div class="mac" style="width:${Math.round(coperchio * 1.12)}px">
+      <div class="coperchio" style="width:${coperchio}px">
+        <div class="schermo">
+          <div class="menubar">
+            <div class="sx"><b>Safari</b><span>File</span><span>Modifica</span><span>Vista</span><span>Cronologia</span><span>Segnalibri</span><span>Finestra</span><span>Aiuto</span></div>
+            <div class="notch"><i></i></div>
+            <div class="dx">${ICONE_MENUBAR}<span>${data}</span></div>
+          </div>
+          <div class="finestra"><i></i><i></i><i></i>
+            <span class="nav">${ICONA_NAV}</span>
+            <span class="url">${LUCCHETTO}studiomobilitas.it${esc(stato.pagina)}</span>
+            <span class="dx">${ICONA_DX}</span></div></div></div>
+      <div class="cerniera" style="width:${Math.round(coperchio * 0.86)}px"></div>
+      <div class="base"></div></div>`
+    d.querySelector('.schermo').appendChild(iframe)
+  }
+  return d
+}
+
+function preparaAnteprima() {
+  const cont = $('contenitore')
+  if (!stato.pagina || !stato.dati) {
+    cont.innerHTML = '<div class="vuoto"><b>Nessun dato nel periodo</b>Allarga il periodo o cambia dispositivo.</div>'
+    stato.iframe = null; stato.chiave = null; $('carica').classList.remove('on'); $('stato').innerHTML = ''
+    return
+  }
+  const { w, h: alt } = DISPOSITIVI[stato.dispositivo]
+  const chiave = `${stato.pagina}|${stato.dispositivo}`
+  if (chiave !== stato.chiave) {
+    stato.chiave = chiave; stato.pronto = false; stato.posizione = null; stato.misure = null
+    $('carica').classList.add('on'); $('stato').innerHTML = ''
+    const f = document.createElement('iframe')
+    f.width = w; f.height = alt; f.title = `Anteprima di ${stato.pagina}`
+    f.src = `${SITO}${stato.pagina}?hm_view=1`
+    cont.replaceChildren(creaDispositivo(stato.dispositivo, f))
+    stato.iframe = f
+  }
+  adattaScala()
+}
+function adattaScala() {
+  const d = $('contenitore').querySelector('.dispositivo')
+  if (!d) return
+  const disponibile = $('palco').clientWidth - 48
+  const scala = stato.zoom === 'reale' ? 1 : Math.min(1, disponibile / d.offsetWidth)
+  d.style.transform = `scale(${scala})`
+  $('contenitore').style.width = `${d.offsetWidth * scala}px`
+  $('contenitore').style.height = `${d.offsetHeight * scala}px`
+}
+
+const inviaAlSito = (tipo, corpo = {}) => stato.iframe?.contentWindow?.postMessage({ type: `mobilitas-heatmap:${tipo}`, ...corpo }, ORIGINE_SITO)
+function inviaDati() {
+  if (!stato.pronto || !stato.dati) return
+  inviaAlSito('dati', {
+    click: stato.dati.click.punti,
+    scroll: stato.dati.scroll.fasce,
+    schermo: stato.dati.click.schermo_tipico,
+    elementi: stato.dati.click.elementi.filter((e) => e.sel && !e.fisso).map((e) => e.sel),
+    opzioni: { modo: stato.modo },
+  })
+}
+function toast(t) {
+  const el = $('toast'); el.textContent = t; el.classList.add('on')
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600)
+}
+
+window.addEventListener('message', (e) => {
+  if (!stato.iframe || e.source !== stato.iframe.contentWindow || e.origin !== ORIGINE_SITO) return
+  const m = e.data, tipo = String(m?.type || '').replace('mobilitas-heatmap:', '')
+  if (tipo === 'pronto') { stato.pronto = true; inviaDati() }
+  else if (tipo === 'stato') {
+    $('carica').classList.remove('on')
+    stato.misure = { sezioni: m.sezioni ?? [], visibilita: m.visibilita ?? [], primoSchermo: m.primoSchermo ?? null }
+    mostraScroll(); mostraElementi()
+    const parti = []
+    if (m.modo !== 'scroll') parti.push(`<b>${fmt(m.disegnati)}</b> click sulla mappa`)
+    if (m.modo === 'scroll') parti.push(`scroll di <b>${fmt(stato.dati?.scroll.visite)}</b> visite`)
+    if (m.nascosti) parti.push(`<b>${fmt(m.nascosti)}</b> in FAQ chiuse`)
+    if (m.nonTrovati) parti.push(`<b>${fmt(m.nonTrovati)}</b> su elementi non presenti`)
+    if (m.fissi) parti.push(`<b>${fmt(m.fissi)}</b> su elementi fissi`)
+    $('stato').innerHTML = parti.join(' · ')
+  } else if (tipo === 'posizione') { stato.posizione = m; aggiornaPosizione() }
+  else if (tipo === 'evidenziato' && !m.trovato) toast('Ora non è visibile: è un elemento fisso, un popup o una sezione chiusa.')
+})
+
+// ---------- scarico dei dati ----------
+const NOMI_DISP = { mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop' }
+const dataIt = (iso) => iso.split('-').reverse().join('/')
+const piuGiorni = (iso, n) => { const d = new Date(`${iso}T12:00:00`); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10) }
+const giorniTra = (a, b) => Math.round((Date.parse(`${b}T12:00:00`) - Date.parse(`${a}T12:00:00`)) / 864e5) + 1
+const nomeFile = (est) => `heatmap_${(stato.pagina || 'sito').replace(/^\//, '').replace(/\//g, '_') || 'home'}_${$('dal').value}_${$('al').value}.${est}`
+
+function scaricaBlob(blob, nome) {
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = nome
+  document.body.appendChild(a); a.click(); a.remove()
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000)
+}
+
+// Nome e tipo leggibili di un elemento (senza HTML), per i file
+function descrivi(e) {
+  if (e.fisso) return { nome: e.etichetta || 'Elemento fisso', tipo: 'fisso o popup' }
+  if (e.etichetta) return { nome: e.etichetta, tipo: 'cliccabile' }
+  if (!e.sel) return { nome: 'Punto della pagina', tipo: '' }
+  const ultimo = e.sel.split('>').pop().trim().replace(/:nth-of-type\(\d+\)/, '').replace(/^#.*/, 'div')
+  if (CLICCABILI[ultimo]) return { nome: CLICCABILI[ultimo], tipo: 'cliccabile' }
+  return { nome: TIPI[ultimo] || 'Area della pagina', tipo: 'non cliccabile' }
+}
+
+// --- Excel (.xlsx) minimo: zip non compresso + fogli con testo in linea ---
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0 } return t })()
+const crc32 = (b) => { let c = 0xffffffff; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0 }
+function zip(file) {
+  const enc = new TextEncoder(), parti = [], centrale = []
+  let offset = 0
+  for (const [nome, testo] of file) {
+    const n = enc.encode(nome), d = enc.encode(testo), crc = crc32(d)
+    const loc = new DataView(new ArrayBuffer(30))
+    loc.setUint32(0, 0x04034b50, true); loc.setUint16(4, 20, true); loc.setUint16(6, 0x0800, true)
+    loc.setUint16(12, 0x21, true); loc.setUint32(14, crc, true); loc.setUint32(18, d.length, true); loc.setUint32(22, d.length, true); loc.setUint16(26, n.length, true)
+    const cen = new DataView(new ArrayBuffer(46))
+    cen.setUint32(0, 0x02014b50, true); cen.setUint16(4, 20, true); cen.setUint16(6, 20, true); cen.setUint16(8, 0x0800, true)
+    cen.setUint16(14, 0x21, true); cen.setUint32(16, crc, true); cen.setUint32(20, d.length, true); cen.setUint32(24, d.length, true); cen.setUint16(28, n.length, true); cen.setUint32(42, offset, true)
+    parti.push(new Uint8Array(loc.buffer), n, d)
+    centrale.push(new Uint8Array(cen.buffer), n)
+    offset += 30 + n.length + d.length
+  }
+  const dim = centrale.reduce((s, x) => s + x.length, 0)
+  const fine = new DataView(new ArrayBuffer(22))
+  fine.setUint32(0, 0x06054b50, true); fine.setUint16(8, file.length, true); fine.setUint16(10, file.length, true); fine.setUint32(12, dim, true); fine.setUint32(16, offset, true)
+  return new Blob([...parti, ...centrale, new Uint8Array(fine.buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+}
+const xmlEsc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+const colonna = (i) => { let s = ''; for (i++; i; i = Math.floor((i - 1) / 26)) s = String.fromCharCode(65 + ((i - 1) % 26)) + s; return s }
+// foglio = { nome, righe: [[valore | {v, s}]], larghezze, blocca } — s: 1 intestazione, 2 titolo, 3 nota
+function foglioXml({ righe, larghezze = [], blocca = 0 }) {
+  const cols = larghezze.length ? `<cols>${larghezze.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('')}</cols>` : ''
+  const vista = blocca ? `<sheetViews><sheetView workbookViewId="0"><pane ySplit="${blocca}" topLeftCell="A${blocca + 1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>` : ''
+  const dati = righe.map((r, ri) => `<row r="${ri + 1}">${r.map((c, ci) => {
+    const cella = c && typeof c === 'object' ? c : { v: c }
+    if (cella.v == null || cella.v === '') return ''
+    const rif = `${colonna(ci)}${ri + 1}`, st = cella.s ? ` s="${cella.s}"` : ''
+    return typeof cella.v === 'number' && Number.isFinite(cella.v) ? `<c r="${rif}"${st}><v>${cella.v}</v></c>` : `<c r="${rif}"${st} t="inlineStr"><is><t xml:space="preserve">${xmlEsc(cella.v)}</t></is></c>`
+  }).join('')}</row>`).join('')
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">${vista}${cols}<sheetData>${dati}</sheetData></worksheet>`
+}
+function creaXlsx(fogli) {
+  const ns = 'http://schemas.openxmlformats.org'
+  const file = [
+    ['[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="${ns}/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${fogli.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`],
+    ['_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="${ns}/package/2006/relationships"><Relationship Id="rId1" Type="${ns}/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+    ['xl/workbook.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="${ns}/spreadsheetml/2006/main" xmlns:r="${ns}/officeDocument/2006/relationships"><sheets>${fogli.map((f, i) => `<sheet name="${xmlEsc(f.nome)}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>`],
+    ['xl/_rels/workbook.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="${ns}/package/2006/relationships">${fogli.map((_, i) => `<Relationship Id="rId${i + 1}" Type="${ns}/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${fogli.length + 1}" Type="${ns}/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
+    ['xl/styles.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="${ns}/spreadsheetml/2006/main"><fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="15"/><name val="Calibri"/></font><font><i/><sz val="10"/><color rgb="FF71717A"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF4F4F5"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFD4D4D8"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="4"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`],
+    ...fogli.map((f, i) => [`xl/worksheets/sheet${i + 1}.xml`, foglioXml(f)]),
+  ]
+  return zip(file)
+}
+
+const H = (...t) => t.map((v) => ({ v, s: 1 }))
+const tondo = (n, d = 1) => (n == null || !Number.isFinite(n) ? null : Math.round(n * 10 ** d) / 10 ** d)
+
+async function scaricaReport() {
+  const dal = $('dal').value, al = $('al').value, pagina = stato.pagina
+  const n = giorniTra(dal, al)
+  const pAl = piuGiorni(dal, -1), pDal = piuGiorni(dal, -n)
+  const disp = Object.keys(DISPOSITIVI)
+  const leggi = (d, a, b) => Promise.all([api('/api/heatmap/click', { pagina, dispositivo: d, dal: a, al: b }), api('/api/heatmap/scroll', { pagina, dispositivo: d, dal: a, al: b })])
+  const [ora, prima, giorni] = await Promise.all([
+    Promise.all(disp.map((d) => leggi(d, dal, al))),
+    Promise.all(disp.map((d) => leggi(d, pDal, pAl))),
+    api('/api/heatmap/giorni', { pagina, dal, al }),
+  ])
+  const ind = ([c, s]) => ({
+    visite: s.visite, click: c.click,
+    aVisita: s.visite ? c.click / s.visite : null,
+    interagisce: s.visite ? (c.visite_con_click / s.visite) * 100 : null,
+    scroll: s.visite ? s.scroll_medio : null,
+    fondo: s.visite ? s.fasce.find((f) => f.fascia === 100)?.pct ?? 0 : null,
+    tempo: s.visite ? s.durata_media_ms / 1000 : null,
+  })
+  const I = ora.map(ind), P = prima.map(ind)
+  const delta = (a, b, punti) => {
+    if (a == null || b == null) return '—'
+    if (punti) { const d = Math.round(a - b); return d === 0 ? '=' : `${d > 0 ? '+' : '−'}${Math.abs(d)} pt` }
+    if (!b) return a ? 'nuovo' : '—'
+    const d = Math.round(((a - b) / b) * 100); return d === 0 ? '=' : `${d > 0 ? '+' : '−'}${Math.abs(d)}%`
+  }
+  const voci = [['Visite', 'visite', false, 0], ['Click', 'click', false, 0], ['Click a visita', 'aVisita', false, 1], ['Visite con almeno un click (%)', 'interagisce', true, 0], ['Scroll medio (% della pagina)', 'scroll', true, 0], ['Arriva in fondo (% delle visite)', 'fondo', true, 0], ['Tempo medio sulla pagina (s)', 'tempo', false, 0]]
+  const versioni = [...new Set(ora.flatMap(([c]) => c.versioni))]
+
+  const riepilogo = [
+    [{ v: `Heatmap · ${pagina}`, s: 2 }],
+    ['Periodo', `${dataIt(dal)} – ${dataIt(al)} (${n} ${n === 1 ? 'giorno' : 'giorni'})`],
+    ['Confronto con', `${dataIt(pDal)} – ${dataIt(pAl)}, stessa durata`],
+    ['Versioni del sito nel periodo', versioni.join(', ') || '—'],
+    ['Esportato il', new Date().toLocaleString('it-IT')],
+    [],
+    H('Indicatore', ...disp.flatMap((d) => [NOMI_DISP[d], 'rispetto a prima'])),
+    ...voci.map(([nome, k, punti, dec]) => [nome, ...disp.flatMap((_, i) => [tondo(I[i][k], dec), delta(I[i][k], P[i][k], punti)])]),
+    [],
+    [{ v: '«rispetto a prima»: per conteggi e tempi la variazione in %, per le quote la differenza in punti (pt).', s: 3 }],
+  ]
+  const andamento = [H('Giorno', 'Dispositivo', 'Visite', 'Click', 'Scroll medio (%)', 'Arriva in fondo (%)'), ...giorni.map((g) => [dataIt(g.giorno), NOMI_DISP[g.dispositivo], g.visite, g.click, g.scroll_medio, g.in_fondo_pct])]
+  const visti = new Map((stato.misure?.visibilita ?? []).map((v) => [v.sel, v.raggiungono]))
+  const elementi = [H('Dispositivo', 'Posizione', 'Elemento', 'Tipo', 'Click', '% dei click', `Visto dal (%) · solo ${NOMI_DISP[stato.dispositivo]}`, 'Selettore')]
+  disp.forEach((d, i) => {
+    const [c] = ora[i]
+    c.elementi.forEach((e, k) => {
+      const { nome, tipo } = descrivi(e)
+      elementi.push([NOMI_DISP[d], k + 1, nome, tipo, e.n, c.click ? tondo((e.n / c.click) * 100) : null, d === stato.dispositivo ? visti.get(e.sel) ?? null : null, e.sel || ''])
+    })
+  })
+  const scroll = [H('Altezza della pagina (%)', ...disp.map((d) => `${NOMI_DISP[d]}: visitatori che ci arrivano (%)`))]
+  for (let f = 0; f <= 100; f += 10) scroll.push([f, ...ora.map(([, s]) => (s.visite ? tondo(s.fasce.find((x) => x.fascia === f)?.pct ?? 0) : null))])
+  const fogli = [
+    { nome: 'Riepilogo', righe: riepilogo, larghezze: [34, 12, 16, 12, 16, 12, 16] },
+    { nome: 'Andamento', righe: andamento, larghezze: [12, 12, 10, 10, 16, 18], blocca: 1 },
+    { nome: 'Elementi cliccati', righe: elementi, larghezze: [12, 10, 44, 16, 8, 11, 26, 60], blocca: 1 },
+    { nome: 'Scroll', righe: scroll, larghezze: [24, 32, 32, 32], blocca: 1 },
+  ]
+  const sezioni = stato.misure?.sezioni ?? []
+  if (sezioni.length) fogli.push({ nome: `Sezioni (${NOMI_DISP[stato.dispositivo]})`, righe: [H('Sezione', 'Posizione nella pagina (%)', 'La vede (% dei visitatori)'), ...sezioni.map((x) => [x.titolo, tondo(x.pct), x.raggiungono])], larghezze: [60, 24, 26], blocca: 1 })
+  fogli.push({ nome: 'Come leggere', larghezze: [30, 100], righe: [
+    [{ v: 'Come leggere il report', s: 2 }],
+    ['Mobile / Tablet / Desktop', 'Schermi sotto 640 px / da 640 a 1023 px / da 1024 px in su.'],
+    ['Visita', 'Una apertura della pagina. La stessa persona che la riapre conta due volte.'],
+    ['Scroll medio', 'Fino a che punto della pagina arriva in media un visitatore (100% = in fondo).'],
+    ['Arriva in fondo', 'Quota di visite che arrivano alla fine della pagina.'],
+    ['Visto dal', 'Quota di visitatori che arriva all\'altezza dell\'elemento: misurata sulla pagina di oggi.'],
+    ['Non cliccabile', 'Click su testi o immagini: spesso il visitatore si aspettava un link.'],
+    ['Fisso o popup', 'Header, barra CTA mobile, WhatsApp o finestre: non hanno un posto fisso nella pagina.'],
+    ['Sezioni', 'Titoli della pagina di oggi, misurati sul dispositivo aperto al momento dello scarico.'],
+  ] })
+  scaricaBlob(creaXlsx(fogli), nomeFile('xlsx'))
+}
+
+async function scaricaCsv() {
+  const righe = await api('/api/heatmap/eventi', { pagina: stato.pagina, dal: $('dal').value, al: $('al').value })
+  const num = (v, d = 1) => (v == null ? '' : String(tondo(v, d)).replace('.', ','))
+  const cella = (v) => { const t = String(v ?? ''); return /[;"\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t }
+  const intest = ['Data e ora', 'Giorno', 'Dispositivo', 'Tipo evento', 'Visita', 'Elemento', 'Etichetta', 'Tipo elemento', 'X (% larghezza)', 'Y (px dall\'alto)', 'Scroll massimo (%)', 'Tempo sulla pagina (s)', 'Larghezza schermo (px)', 'Versione del sito', 'Selettore']
+  const corpo = righe.map((r) => {
+    const d = new Date(r.avvenuto_il)
+    const el = r.tipo === 'click' ? descrivi({ sel: r.selettore, etichetta: r.etichetta, fisso: r.fisso }) : { nome: '', tipo: '' }
+    return [d.toLocaleString('it-IT'), d.toLocaleDateString('it-IT'), NOMI_DISP[r.dispositivo], r.tipo, r.visita, el.nome, r.etichetta ?? '', el.tipo, num(r.x_pct), r.y_px ?? '', r.scroll_max_pct ?? '', num(r.durata_ms != null ? r.durata_ms / 1000 : null), r.viewport_w ?? '', r.versione ?? '', r.selettore ?? ''].map(cella).join(';')
+  })
+  // separatore ";" e BOM: si apre bene nell'Excel italiano
+  scaricaBlob(new Blob(['﻿' + [intest.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeFile('csv'))
+  return righe.length
+}
+
+function apriScarica(apri) {
+  $('menuScarica').classList.toggle('on', apri)
+  $('btnScarica').setAttribute('aria-expanded', String(apri))
+  if (apri) $('menuPiede').textContent = `${stato.pagina || '—'} · ${dataIt($('dal').value)} – ${dataIt($('al').value)} · tutti i dispositivi`
+}
+async function scarica(formato) {
+  apriScarica(false)
+  if (!stato.pagina) return toast('Nessuna pagina con dati nel periodo.')
+  const b = $('btnScarica'); b.classList.add('lavora')
+  try {
+    if (formato === 'xlsx') { await scaricaReport(); toast('Report Excel scaricato') }
+    else { const n = await scaricaCsv(); toast(`Dati grezzi scaricati: ${fmt(n)} righe`) }
+  } catch (err) { toast(`Scarico non riuscito: ${err.message}`) }
+  finally { b.classList.remove('lavora') }
+}
+
+// ---------- interazioni ----------
+$('btnScarica').addEventListener('click', () => apriScarica(!$('menuScarica').classList.contains('on')))
+$('menuScarica').addEventListener('click', (e) => { const b = e.target.closest('button[data-f]'); if (b) scarica(b.dataset.f) })
+function cambiaModo(m) { stato.modo = m; premuto('modi', 'm', m); salvaLink(); mostraLegenda(); inviaAlSito('modo', { modo: m }) }
+function cambiaDispositivo(d) { stato.dispositivo = d; premuto('dispositivi', 'd', d); caricaDati() }
+function aggiorna() {
+  const b = $('btnAggiorna'); b.classList.remove('gira'); void b.offsetWidth; b.classList.add('gira')
+  caricaPagine().then(() => toast('Dati aggiornati'))
+}
+
+$('btnPagina').addEventListener('click', () => apriPagine(!$('popPagine').classList.contains('on')))
+$('cercaPagina').addEventListener('input', elencoPagine)
+$('cercaPagina').addEventListener('keydown', (e) => {
+  const voci = [...$('listaPagine').querySelectorAll('button')]
+  let i = voci.findIndex((v) => v.classList.contains('attivo'))
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); voci[i]?.classList.remove('attivo')
+    i = (i + (e.key === 'ArrowDown' ? 1 : -1) + voci.length) % voci.length
+    voci[i]?.classList.add('attivo'); voci[i]?.scrollIntoView({ block: 'nearest' })
+  } else if (e.key === 'Enter' && voci[i]) scegliPagina(voci[i].dataset.p)
+  else if (e.key === 'Escape') apriPagine(false)
+})
+$('listaPagine').addEventListener('click', (e) => { const b = e.target.closest('button[data-p]'); if (b) scegliPagina(b.dataset.p) })
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.scelta')) apriPagine(false)
+  if (!e.target.closest('#aiutoPop, #btnAiuto')) $('aiutoPop').classList.remove('on')
+  if (!e.target.closest('.scarica')) apriScarica(false)
+})
+document.querySelectorAll('#preset button').forEach((b) => b.addEventListener('click', () => {
+  const g = Number(b.dataset.g)
+  if (g === 0) { premuto('preset', 'g', 0); $('date').classList.add('on'); $('dal').focus(); return }
+  impostaPeriodo(g); caricaPagine()
+}))
+for (const id of ['dal', 'al']) $(id).addEventListener('change', caricaPagine)
+$('versione').addEventListener('change', (e) => { stato.versione = e.target.value; caricaDati() })
+document.querySelectorAll('#dispositivi button').forEach((b) => b.addEventListener('click', () => cambiaDispositivo(b.dataset.d)))
+document.querySelectorAll('#modi button').forEach((b) => b.addEventListener('click', () => cambiaModo(b.dataset.m)))
+$('btnAggiorna').addEventListener('click', aggiorna)
+$('btnAiuto').addEventListener('click', () => $('aiutoPop').classList.toggle('on'))
+$('btnZoom').addEventListener('click', () => { stato.zoom = stato.zoom === 'adatta' ? 'reale' : 'adatta'; adattaScala(); toast(stato.zoom === 'reale' ? 'Dimensione reale' : 'Adattata allo spazio') })
+$('btnSu').addEventListener('click', () => inviaAlSito('vai', { pct: 0 }))
+$('btnLink').addEventListener('click', async () => { try { await navigator.clipboard.writeText(location.href); toast('Link copiato: apre questa stessa vista') } catch { toast(location.href) } })
+$('elementi').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-sel]')
+  if (!b) return
+  if (!b.dataset.sel) return toast('Questo click non è legato a un elemento preciso.')
+  inviaAlSito('evidenzia', { sel: b.dataset.sel })
+})
+$('mappaSez').addEventListener('click', (e) => { const b = e.target.closest('.sez'); if (b) inviaAlSito('vai', { pct: Number(b.dataset.pct) }) })
+$('scrollBar').addEventListener('click', (e) => { const r = e.currentTarget.getBoundingClientRect(); inviaAlSito('vai', { pct: ((e.clientY - r.top) / r.height) * 100 }) })
+$('scrollBar').addEventListener('keydown', (e) => {
+  const passo = e.key === 'ArrowDown' ? 10 : e.key === 'ArrowUp' ? -10 : 0
+  if (passo && stato.posizione) { e.preventDefault(); inviaAlSito('vai', { pct: (stato.posizione.inizio + stato.posizione.fine) / 2 + passo }) }
+})
+document.addEventListener('keydown', (e) => {
+  if (e.target.closest('input, select, textarea') || e.metaKey || e.ctrlKey || e.altKey) return
+  const k = e.key.toLowerCase()
+  const azioni = { 1: () => cambiaModo('click'), 2: () => cambiaModo('scroll'), 3: () => cambiaModo('entrambi'), m: () => cambiaDispositivo('mobile'), t: () => cambiaDispositivo('tablet'), d: () => cambiaDispositivo('desktop'), r: aggiorna, z: () => $('btnZoom').click(), e: () => apriScarica(!$('menuScarica').classList.contains('on')), '/': () => apriPagine(true), '?': () => $('aiutoPop').classList.toggle('on'), escape: () => { apriPagine(false); apriScarica(false); $('aiutoPop').classList.remove('on') } }
+  if (azioni[k]) { e.preventDefault(); azioni[k]() }
+})
+window.addEventListener('resize', adattaScala)
+
+caricaPagine().catch((err) => {
+  $('contenitore').innerHTML = `<div class="vuoto"><b>Non riesco a leggere i dati</b>${esc(err.message)}. Il finto backend è acceso?</div>`
+})
+</script>
+</body>
+</html>
